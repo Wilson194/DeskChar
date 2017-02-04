@@ -1,9 +1,31 @@
 Abstract class:
 	ABC
 
+===================================================================================
 Graphic library:
 	PyQt5
 
+===================================================================================
 Database:
 	sqllite3
 
+===================================================================================
+XML export:
+	django templates
+
+
+from django.template.loader import render_to_string
+
+def my_serialize(query_set):
+    xml = render_to_string('xml_template.xml', {'query_set': query_set})
+
+    return xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<textFields>
+     {% for object in query_set %}
+     <textField id="{{ object.pk }}" text="{{ object.my_field }}" />
+     {% endfor %}
+</textFields>
+
+===================================================================================
