@@ -1,0 +1,9 @@
+Abstract class:
+	ABC
+
+Graphic library:
+	PyQt5
+
+Database:
+	sqllite3
+
