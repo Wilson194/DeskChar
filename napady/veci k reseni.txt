@@ -1,0 +1,9 @@
+Jaký bude systém dobrodružství?
+	1) vše kromì dobrodružství bude spoleènì a celé se to bude sdružovat do dobrodružtsví
+	2) Vše bude unikátní pro dobrodružství ( import postav,pøedmìtù, .... z jiných dobrodružství)
+
+Jak v diagramu vyøešit neduplikování diagramù?
+	Pøedmìty jsou dva:
+		1) pøedmìt pro exml pro hráèe
+		2) pøedmìt pro PJ
+	Ale vlastnì je to jedna a ta samá vìc. Pouze v nìkterých pøípadech má funkce navíc
