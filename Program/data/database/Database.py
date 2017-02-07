@@ -8,14 +8,21 @@ class Database:
         self.cursor = connection.cursor()
 
 
-    def create_table(self, name: str, columns=None):
+    def create_table(self, name: str, columns=None, foreigns=None):
         if columns is None:
             columns = []
+
+        if foreigns is None:
+            foreigns = []
 
         sql = 'CREATE TABLE ' + name + ' ('
 
         for column in columns:
             sql += column.to_sql() + ','
+
+        for foreign in foreigns:
+            sql += foreign.to_sql()
+            sql += ','
 
         sql = sql[:-1] + ');'
 
@@ -83,22 +90,22 @@ class Column:
 
         self.value_type = value_type
         self.primary = primary
-        self.autoincrement = unique
-        self.unique = autoincrement
+        self.autoincrement = autoincrement
+        self.unique = unique
         self.not_null = not_null
 
 
     def to_sql(self):
         sql = self.name + ' ' + self.value_type + ' '
 
+        if self.autoincrement:
+            sql += 'AUTO INCREMENT' + ' '
+
         if self.primary:
             sql += 'PRIMARY KEY' + ' '
 
         if self.unique:
             sql += 'UNIQUE' + ' '
-
-        if self.autoincrement:
-            sql += 'AUTO INCREMENT' + ' '
 
         if self.not_null:
             sql += 'NOT NULL' + ' '
@@ -118,3 +125,17 @@ def array_to_string(array, separator):
     string = string[:-len(separator)]
 
     return string
+
+
+class Foreign:
+    def __init__(self, column, target_table, target_column):
+        self.column = column
+        self.target_table = target_table
+        self.target_column = target_column
+
+
+    def to_sql(self):
+        sql = 'FOREIGN KEY(' + self.column
+        sql += ') REFERENCES ' + self.target_table
+        sql += '(' + self.target_column + ')'
+        return sql

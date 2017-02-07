@@ -13,6 +13,17 @@ database.create_table('Vek', columns)
 
 database.add_column('Vek', Column('Height', 'INTEGER'))
 
+columns = [
+    Column('ID', 'INTEGER', True, False, True),
+    Column('Target', 'INTEGER'),
+]
+
+foreigns = [
+    Foreign('Target', 'Vek', 'ID')
+]
+
+database.create_table('Translate', columns, foreigns)
+
 database.insert('Vek', {
     'Name': 'Honza',
     'Age': 25,
@@ -24,7 +35,6 @@ database.insert('Vek', {
     'Age': 28,
     'Height': 175
 })
-
 
 for i in database.select('Vek', {'Name': 'Honza'}):
     print(i['ID'], i['Name'])
