@@ -1,5 +1,4 @@
-Jaký bude systém dobrodružství?
-	1) vše kromì dobrodružství bude spoleènì a celé se to bude sdružovat do dobrodružtsví
+Jaký bude systém dobrodružství? 
 	2) Vše bude unikátní pro dobrodružství ( import postav,pøedmìtù, .... z jiných dobrodružství)
 
 Jak v diagramu vyøešit neduplikování diagramù?
