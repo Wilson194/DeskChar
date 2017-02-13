@@ -3,9 +3,9 @@ import sqlite3
 
 class Database:
     def __init__(self, database_name):
-        connection = sqlite3.connect(database_name)
-        connection.row_factory = sqlite3.Row
-        self.cursor = connection.cursor()
+        self.connection = sqlite3.connect('test.db')
+        self.connection.row_factory = sqlite3.Row
+        self.cursor = self.connection.cursor()
 
 
     def create_table(self, name: str, columns=None, foreigns=None):
@@ -52,6 +52,25 @@ class Database:
         sql += ');'
 
         self.cursor.execute(sql)
+        self.connection.commit()
+
+        return self.cursor.lastrowid
+
+
+    def update(self, table_name: str, id: int, values: dict):
+        sql = 'UPDATE ' + table_name + ' SET '
+        for key, value in values.items():
+            sql += key + ' = '
+            if value is str:
+                sql += "'" + value + "'"
+            else:
+                sql += str(value)
+            if not key == list(values.keys())[-1]:
+                sql += ', '
+        sql += ' WHERE ID = ' + str(id)
+
+        self.cursor.execute(sql)
+        self.connection.commit()
 
 
     def select_all(self, table_name: str):
@@ -72,21 +91,52 @@ class Database:
         return self.cursor.execute(sql).fetchall()
 
 
+    def select_translate(self, target_id, type, lang) -> dict:
+        sql = "SELECT * FROM translates WHERE target_id = " + str(target_id)
+        sql += " AND type = '" + type + "'"
+        sql += " AND language_code = '" + lang + "'"
+
+        result = self.cursor.execute(sql).fetchall()
+
+        data = {}
+        for row in result:
+            data[row['name']] = row['value']
+
+        return data
+
+
     def delete(self, table_name: str, ID: int):
         sql = 'DELETE FROM ' + table_name + ' WHERE ID = ' + str(ID)
 
         self.cursor.execute(sql)
+        self.connection.commit()
+
+
+    def delete_where(self, table_name: str, statmens: dict):
+        sql = 'DELETE FROM ' + table_name + ' WHERE '
+        for key, value in statmens.items():
+            if type(value) == str:
+                sql += key + " = '" + value + "'"
+            else:
+                sql += key + " = " + str(value)
+            sql += ' AND '
+        sql = sql[:-4]
+        self.cursor.execute(sql)
+        self.connection.commit()
 
 
 class Column:
     data_types = ['INTEGER', 'TEXT', 'REAL', 'NUMERIC', 'DATE', 'DATETIME']
 
 
-    def __init__(self, name, value_type, primary=False, unique=False, autoincrement=False, not_null=False):
+    def __init__(self, name, value_type, primary=False, unique=False,
+                 autoincrement=False, not_null=False):
         self.name = name
 
         if value_type not in self.data_types:
-            raise ValueError('Bad type of column, use one of these: ' + array_to_string(self.data_types, ', '))
+            raise ValueError(
+                'Bad type of column, use one of these: ' + array_to_string(
+                    self.data_types, ', '))
 
         self.value_type = value_type
         self.primary = primary
@@ -98,33 +148,19 @@ class Column:
     def to_sql(self):
         sql = self.name + ' ' + self.value_type + ' '
 
-        if self.autoincrement:
-            sql += 'AUTO INCREMENT' + ' '
-
         if self.primary:
             sql += 'PRIMARY KEY' + ' '
 
         if self.unique:
             sql += 'UNIQUE' + ' '
 
+        if self.autoincrement:
+            sql += 'AUTOINCREMENT' + ' '
+
         if self.not_null:
             sql += 'NOT NULL' + ' '
 
         return sql
-
-
-def array_to_string(array, separator):
-    string = ''
-    for value in array:
-        if type(value) == str:
-            string += "'" + value + "'"
-        else:
-            string += str(value)
-        string += separator
-
-    string = string[:-len(separator)]
-
-    return string
 
 
 class Foreign:
@@ -139,3 +175,19 @@ class Foreign:
         sql += ') REFERENCES ' + self.target_table
         sql += '(' + self.target_column + ')'
         return sql
+
+
+def array_to_string(array, separator):
+    string = ''
+    for value in array:
+        if type(value) == str:
+            string += "'" + value + "'"
+        elif value is None:
+            string += 'null'
+        else:
+            string += str(value)
+        string += separator
+
+    string = string[:-len(separator)]
+
+    return string

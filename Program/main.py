@@ -1,42 +1,39 @@
-from data.database.Database import *
+from structure.items.Item import *
+from database.DatabaseTables import *
+from database.ObjectDatabase import *
+from ItemDAO import *
+
+# DatabaseTables().create_tables()
+
+a = Database('a')
+
+# item = Item(None, 'cs', 'Ohnivy mec', 'Mec planouci samotnym ohnem pekelnym',
+#             None, 25, 25)
+#
+# ItemDAO().create_item(item)
+#
+# ItemDAO().delete_item(1)
 
 
-database = Database(':memory:')
 
-columns = [
-    Column('ID', 'INTEGER', True),
-    Column('Name', 'TEXT', False, False),
-    Column('Age', 'INTEGER')
-]
+i = Item(1,'cs','Test','Test','Item')
+i.a = 5
+ObjectDatabase('test').insert_object(i)
 
-database.create_table('Vek', columns)
+#
+# print(i.__name__())
+# print (i.__dict__.items())
+# for j in i.__dict__:
+#     print(j)
 
-database.add_column('Vek', Column('Height', 'INTEGER'))
 
-columns = [
-    Column('ID', 'INTEGER', True, False, True),
-    Column('Target', 'INTEGER'),
-]
-
-foreigns = [
-    Foreign('Target', 'Vek', 'ID')
-]
-
-database.create_table('Translate', columns, foreigns)
-
-database.insert('Vek', {
-    'Name': 'Honza',
-    'Age': 25,
-    'Height': 180
-})
-
-database.insert('Vek', {
-    'Name': 'Petr',
-    'Age': 28,
-    'Height': 175
-})
-
-for i in database.select('Vek', {'Name': 'Honza'}):
-    print(i['ID'], i['Name'])
-
-database.drop_table('Vek')
+# ItemDAO().update_item(i)
+#
+#
+#
+# values = {
+#     'weight': 30,
+#     'amount': 25,
+#     'capacity': 5
+# }
+# a.update('Item', 3, values)
