@@ -1,5 +1,6 @@
 from data.DAO.interface.IItemDAO import *
 from data.database.Database import *
+from data.database.ObjectDatabase import *
 
 
 class ItemDAO(IItemDAO):
@@ -11,51 +12,11 @@ class ItemDAO(IItemDAO):
 
 
     def create_item(self, item: Item):
-        int_values = {
-            'parent_id': item.parent_id,
-            'weight': item.weight,
-            'price': item.price,
-            'amount': item.amount,
-            'type': 'Money'
-        }
-        id = self.database.insert(self.DATABASE_TABLE, int_values)
-
-        str_values = {
-            'name': item.name,
-            'description': item.description,
-        }
-
-        for name, value in str_values.items():
-            trans_values = {
-                'language_code': item.lang,
-                'target_id': id,
-                'name': name,
-                'value': value,
-                'type': 'Item',
-            }
-            self.database.insert('translates', trans_values)
+        return ObjectDatabase(':memory:').insert_object(item)
 
 
     def update_item(self, item: Item):
-        if item.id is None:
-            raise ValueError('Cant update none existing item')
-
-        result = self.database.select(self.DATABASE_TABLE, {'ID': item.id})
-        if not result:
-            raise ValueError('Cant update none existing item')
-
-        int_values = {
-            'parent_id': item.parent_id,
-            'price': item.price,
-            'weight': item.weight,
-        }
-
-        self.database.update(self.DATABASE_TABLE, item.id, int_values)
-
-        str_values = {
-            'name': item.description,
-            'description': item.description
-        }
+        ObjectDatabase(':memory:').update_object(item)
 
 
     def delete_item(self, item_id: int):

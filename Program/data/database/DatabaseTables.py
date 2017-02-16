@@ -3,7 +3,7 @@ from Database import *
 
 class DatabaseTables:
     def create_tables(self):
-        database = Database(':memory:')
+        database = Database('test.db')
 
         languages_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -16,14 +16,14 @@ class DatabaseTables:
         translate_columns = [
             Column('ID', 'INTEGER', True, False, True),
             Column('target_id', 'INTEGER', False, False, False, True),
-            Column('language_code', 'TEXT'),
+            Column('lang', 'TEXT'),
             Column('type', 'TEXT'),
             Column('name', 'TEXT'),
             Column('value', 'TEXT')
         ]
 
         translate_foreign = [
-            Foreign('language_code', 'languages', 'code')
+            Foreign('lang', 'languages', 'code')
         ]
 
         database.create_table('translates', translate_columns,

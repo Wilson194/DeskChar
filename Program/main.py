@@ -5,7 +5,7 @@ from ItemDAO import *
 
 # DatabaseTables().create_tables()
 
-a = Database('a')
+a = Database('test.db')
 
 # item = Item(None, 'cs', 'Ohnivy mec', 'Mec planouci samotnym ohnem pekelnym',
 #             None, 25, 25)
@@ -16,10 +16,11 @@ a = Database('a')
 
 
 
-i = Item(1,'cs','Test','Test','Item')
-i.a = 5
-ObjectDatabase('test').insert_object(i)
+i = Item(6,'cs','Ohnivy mec','Vely ohnivy mec zkazy','Weapon')
+# i.a = 5
+# ObjectDatabase('test.db').update_object(i)
 
+print(ItemDAO().get_all_items()[0].lang)
 #
 # print(i.__name__())
 # print (i.__dict__.items())

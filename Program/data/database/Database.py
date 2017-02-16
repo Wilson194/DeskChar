@@ -61,7 +61,7 @@ class Database:
         sql = 'UPDATE ' + table_name + ' SET '
         for key, value in values.items():
             sql += key + ' = '
-            if value is str:
+            if type(value) is str:
                 sql += "'" + value + "'"
             else:
                 sql += str(value)
@@ -94,7 +94,7 @@ class Database:
     def select_translate(self, target_id, type, lang) -> dict:
         sql = "SELECT * FROM translates WHERE target_id = " + str(target_id)
         sql += " AND type = '" + type + "'"
-        sql += " AND language_code = '" + lang + "'"
+        sql += " AND lang = '" + lang + "'"
 
         result = self.cursor.execute(sql).fetchall()
 
