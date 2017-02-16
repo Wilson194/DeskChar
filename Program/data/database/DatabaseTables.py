@@ -64,3 +64,13 @@ class DatabaseTables:
             database.create_table('Ability', ability_columns)
         except OperationalError:
             pass
+
+        spell_columns = [
+            Column('ID', 'INTEGER', True, False, True),
+            Column('cast_time', 'INTEGER')
+        ]
+
+        try:
+            database.create_table('Spell', spell_columns)
+        except OperationalError:
+            pass

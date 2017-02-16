@@ -3,7 +3,7 @@ import sqlite3
 
 class Database:
     def __init__(self, database_name):
-        self.connection = sqlite3.connect('test.db')
+        self.connection = sqlite3.connect(database_name)
         self.connection.row_factory = sqlite3.Row
         self.cursor = self.connection.cursor()
 
@@ -103,7 +103,7 @@ class Database:
     def select_translate(self, target_id, type, lang) -> dict:
         sql = "SELECT * FROM translates WHERE target_id = " + str(target_id)
         sql += " AND type = '" + type + "'"
-        sql += " AND language_code = '" + lang + "'"
+        sql += " AND lang = '" + lang + "'"
 
         result = self.cursor.execute(sql).fetchall()
 

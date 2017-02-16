@@ -57,9 +57,11 @@ class Item(Object):
     def amount(self, value):
         self.__amount = value
 
+
     @property
     def type(self):
         return self.__type
+
 
     @type.setter
     def type(self, value):

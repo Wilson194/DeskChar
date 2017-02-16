@@ -4,18 +4,19 @@ from data.database.ObjectDatabase import *
 
 class AbilityDAO(IAbilityDAO):
     DATABASE_TABLE = 'Ability'
+    DATABASE_DRIVER = 'test.db'
 
 
     def __init__(self):
-        self.database = Database(':memory:')
+        self.database = Database(self.DATABASE_DRIVER)
 
 
     def create_ability(self, ability: Ability) -> int:
-        return ObjectDatabase(':memory:').insert_object(ability)
+        return ObjectDatabase(self.DATABASE_DRIVER).insert_object(ability)
 
 
     def update_ability(self, ability: Ability) -> None:
-        ObjectDatabase(':memory:').update_object(ability)
+        ObjectDatabase(self.DATABASE_DRIVER).update_object(ability)
 
 
     def delete_ability(self, ability_id: int) -> None:
