@@ -2,8 +2,10 @@ from structure.items.Item import *
 from database.DatabaseTables import *
 from database.ObjectDatabase import *
 from ItemDAO import *
+from AbilityDAO import *
+from structure.abilities.Ability import *
 
-# DatabaseTables().create_tables()
+DatabaseTables().create_tables()
 
 a = Database('test.db')
 
@@ -16,12 +18,16 @@ a = Database('test.db')
 
 
 
-i = Item(6,'cs','Ohnivy mec','Vely ohnivy mec zkazy','Weapon')
+ab = Ability(None,'cs','Hledani stop', 'Schopnost hledani stop na zemi', '2x hod kostkou')
+AbilityDAO().create_ability(ab)
+
+
+# i = Item(6,'cs','Ohnivy mec','Vely ohnivy mec zkazy','Weapon')
 # i.a = 5
 # ObjectDatabase('test.db').update_object(i)
 
-print(ItemDAO().get_all_items()[0].lang)
-#
+# print(ItemDAO().get_all_items()[0].lang)
+
 # print(i.__name__())
 # print (i.__dict__.items())
 # for j in i.__dict__:

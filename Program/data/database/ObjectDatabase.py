@@ -19,7 +19,11 @@ class ObjectDatabase(Database):
                 str_values[substr(key, obj.__name__())] = value
             else:
                 continue
-        db_id = self.insert(obj.__name__()[-1], int_values)
+
+        if not int_values:
+            db_id = self.insert_null(obj.__name__()[-1])
+        else:
+            db_id = self.insert(obj.__name__()[-1], int_values)
 
         for key, value in str_values.items():
             data_dict = {

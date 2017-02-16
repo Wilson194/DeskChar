@@ -2,10 +2,16 @@ from general.Object import *
 
 
 class Ability(Object):
-    def __init__(self, id: int = None, name: str = None,
+    def __init__(self, id: int = None, lang: str = None, name: str = None,
                  description: str = None, chance: str = None):
-        super().__init__(id, name, description)
+        super().__init__(id, lang, name, description)
         self.__chance = chance
+
+
+    def __name__(self):
+        names = super().__name__()
+        names.append('Ability')
+        return names
 
 
     @property
@@ -26,4 +32,3 @@ class Ability(Object):
             return True
 
         return False
-

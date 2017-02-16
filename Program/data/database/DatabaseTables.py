@@ -1,4 +1,5 @@
 from Database import *
+from sqlite3 import OperationalError
 
 
 class DatabaseTables:
@@ -11,7 +12,10 @@ class DatabaseTables:
             Column('code', 'TEXT', False, True, False, True),
         ]
 
-        database.create_table('languages', languages_columns)
+        try:
+            database.create_table('languages', languages_columns)
+        except OperationalError:
+            pass
 
         translate_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -26,8 +30,11 @@ class DatabaseTables:
             Foreign('lang', 'languages', 'code')
         ]
 
-        database.create_table('translates', translate_columns,
-                              translate_foreign)
+        try:
+            database.create_table('translates', translate_columns,
+                                  translate_foreign)
+        except OperationalError:
+            pass
 
         item_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -44,4 +51,16 @@ class DatabaseTables:
             Column('gold', 'INTEGER')
         ]
 
-        database.create_table('Item', item_columns)
+        try:
+            database.create_table('Item', item_columns)
+        except OperationalError:
+            pass
+
+        ability_columns = [
+            Column('ID', 'INTEGER', True, False, True),
+        ]
+
+        try:
+            database.create_table('Ability', ability_columns)
+        except OperationalError:
+            pass

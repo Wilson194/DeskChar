@@ -56,6 +56,13 @@ class Database:
 
         return self.cursor.lastrowid
 
+    def insert_null(self, table_name:str):
+        sql = 'INSERT INTO ' + table_name + ' VALUES(NULL)'
+        self.cursor.execute(sql)
+        self.connection.commit()
+
+        return self.cursor.lastrowid
+
 
     def update(self, table_name: str, id: int, values: dict):
         sql = 'UPDATE ' + table_name + ' SET '
@@ -68,6 +75,8 @@ class Database:
             if not key == list(values.keys())[-1]:
                 sql += ', '
         sql += ' WHERE ID = ' + str(id)
+
+
 
         self.cursor.execute(sql)
         self.connection.commit()
@@ -94,7 +103,7 @@ class Database:
     def select_translate(self, target_id, type, lang) -> dict:
         sql = "SELECT * FROM translates WHERE target_id = " + str(target_id)
         sql += " AND type = '" + type + "'"
-        sql += " AND lang = '" + lang + "'"
+        sql += " AND language_code = '" + lang + "'"
 
         result = self.cursor.execute(sql).fetchall()
 
