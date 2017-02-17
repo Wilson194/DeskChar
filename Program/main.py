@@ -1,54 +1,35 @@
-from structure.items.Item import *
-from database.DatabaseTables import *
-from database.ObjectDatabase import *
-from ItemDAO import *
-from AbilityDAO import *
-from Spell import *
-from SpellDAO import *
-from structure.abilities.Ability import *
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 
-DatabaseTables().create_tables()
+"""
+ZetCode PyQt5 tutorial
 
-a = Database('test.db')
+This is a Tetris game clone.
 
-# item = Item(None, 'cs', 'Ohnivy mec', 'Mec planouci samotnym ohnem pekelnym',
-#             None, 25, 25)
-#
-# ItemDAO().create_item(item)
-#
-# ItemDAO().delete_item(1)
+author: Jan Bodnar
+website: zetcode.com
+last edited: January 2015
+"""
 
+import sys, random
+from PyQt5.QtWidgets import QMainWindow, QFrame, QDesktopWidget, QApplication
+from PyQt5.QtCore import Qt, QBasicTimer, pyqtSignal
+from PyQt5.QtGui import QPainter, QColor
+from presentation.main import *
 
 
-# ab = Ability(None,'cs','Hledani stop', 'Schopnost hledani stop na zemi', '2x hod kostkou')
-# AbilityDAO().create_ability(ab)
+if __name__ == '__main__':
+    app = QApplication([])
+    main_window = MainWindow()
 
-sp = Spell(None, 'cs', 'Ohnivá koule', 'Vypálíš ohnivou kouli jako ďas',
-           '25 mana', '50 mana', '20 sáhů', 'velký', 2, '2 dny')
+    translator = QtCore.QTranslator()
+    translator.load("resources/translate/main_CS.qm")
+    app.installTranslator(translator)
 
-# SpellDAO().create_spell(sp)
+    print('Localization loaded: '
+          , translator.load('main_CS.qm',
+                            'resources/translate'))  # name, dir
 
-spell = SpellDAO().get_all_spells()[0]
-print(spell.name)
-# i = Item(6,'cs','Ohnivy mec','Vely ohnivy mec zkazy','Weapon')
-# i.a = 5
-# ObjectDatabase('test.db').update_object(i)
+    print(app.tr('Apple'))
 
-# print(ItemDAO().get_all_items()[0].lang)
-
-# print(i.__name__())
-# print (i.__dict__.items())
-# for j in i.__dict__:
-#     print(j)
-
-
-# ItemDAO().update_item(i)
-#
-#
-#
-# values = {
-#     'weight': 30,
-#     'amount': 25,
-#     'capacity': 5
-# }
-# a.update('Item', 3, values)
+    sys.exit(app.exec_())
