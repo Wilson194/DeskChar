@@ -6,6 +6,7 @@ from presentation.MainMenu import MainMenu
 from presentation.StatusBar import StatusBar
 from presentation.TreeWidget import TreeWidget
 from presentation.MainFrame import MainFrame
+from data.DAO.SpellDAO import SpellDAO
 
 
 class MainWindow(QMainWindow):
@@ -20,6 +21,12 @@ class MainWindow(QMainWindow):
 
         central_frame = MainFrame(self)
         self.setCentralWidget(central_frame)
-        TreeWidget(self.centralWidget())
+
+        tree = TreeWidget(self.centralWidget())
+        tree2 = TreeWidget(self.centralWidget())
+
+
+        central_frame.grid.addWidget(tree, 1, 1)
+        central_frame.grid.addWidget(tree2, 1, 2)
 
         self.show()
