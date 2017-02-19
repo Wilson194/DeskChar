@@ -6,6 +6,8 @@ class DatabaseTables:
     def create_tables(self):
         database = Database('test.db')
 
+        # ///////////// Languages \\\\\\\\\\\\\\\\\\
+
         languages_columns = [
             Column('ID', 'INTEGER', True, False, True),
             Column('name', 'TEXT', False, False, False, True),
@@ -16,6 +18,8 @@ class DatabaseTables:
             database.create_table('languages', languages_columns)
         except OperationalError:
             pass
+
+        # ///////////// Translate \\\\\\\\\\\\\\\\\\
 
         translate_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -35,6 +39,8 @@ class DatabaseTables:
                                   translate_foreign)
         except OperationalError:
             pass
+
+        # ///////////// Items \\\\\\\\\\\\\\\\\\
 
         item_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -56,6 +62,8 @@ class DatabaseTables:
         except OperationalError:
             pass
 
+        # ///////////// Ability \\\\\\\\\\\\\\\\\\
+
         ability_columns = [
             Column('ID', 'INTEGER', True, False, True),
         ]
@@ -65,6 +73,8 @@ class DatabaseTables:
         except OperationalError:
             pass
 
+        # ///////////// Spell \\\\\\\\\\\\\\\\\\
+
         spell_columns = [
             Column('ID', 'INTEGER', True, False, True),
             Column('cast_time', 'INTEGER')
@@ -72,5 +82,25 @@ class DatabaseTables:
 
         try:
             database.create_table('Spell', spell_columns)
+        except OperationalError:
+            pass
+
+        # ///////////// Player tree structure \\\\\\\\\\\\\\\\\\
+
+        structure_columns = [
+            Column('ID', 'INTEGER', True, False, True),
+            Column('target_id', 'INTEGER'),
+            Column('target_type', 'INTEGER'),
+            Column('parent_id', 'INTEGER'),
+            Column('type', 'INTEGER', False, False, False, True),
+            Column('name', 'TEXT')
+        ]
+
+        structure_foreigns = [
+            Foreign('parent_id','player_tree_structure', 'ID', 'CASCADE')
+        ]
+
+        try:
+            database.create_table('player_tree_structure', structure_columns, structure_foreigns)
         except OperationalError:
             pass

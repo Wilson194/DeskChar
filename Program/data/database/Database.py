@@ -5,6 +5,7 @@ class Database:
     def __init__(self, database_name):
         self.connection = sqlite3.connect(database_name)
         self.connection.row_factory = sqlite3.Row
+        self.connection.execute('pragma foreign_keys = on;')
         self.cursor = self.connection.cursor()
 
 
@@ -56,7 +57,8 @@ class Database:
 
         return self.cursor.lastrowid
 
-    def insert_null(self, table_name:str):
+
+    def insert_null(self, table_name: str):
         sql = 'INSERT INTO ' + table_name + ' VALUES(NULL)'
         self.cursor.execute(sql)
         self.connection.commit()
@@ -76,8 +78,6 @@ class Database:
                 sql += ', '
         sql += ' WHERE ID = ' + str(id)
 
-
-
         self.cursor.execute(sql)
         self.connection.commit()
 
@@ -90,10 +90,13 @@ class Database:
     def select(self, table_name, row_filter: dict):
         sql = 'SELECT * FROM ' + table_name + ' WHERE '
         for key, value in row_filter.items():
-            sql += key + ' = '
             if type(value) == str:
+                sql += key + ' = '
                 sql += "'" + value + "'"
+            elif value is None:
+                sql += key + ' ISNULL '
             else:
+                sql += key + ' = '
                 sql += str(value)
             if not key == list(row_filter.keys())[-1]:
                 sql += ' AND '
@@ -173,16 +176,19 @@ class Column:
 
 
 class Foreign:
-    def __init__(self, column, target_table, target_column):
+    def __init__(self, column, target_table, target_column, delete=None):
         self.column = column
         self.target_table = target_table
         self.target_column = target_column
+        self.delete = delete
 
 
     def to_sql(self):
         sql = 'FOREIGN KEY(' + self.column
         sql += ') REFERENCES ' + self.target_table
         sql += '(' + self.target_column + ')'
+        if self.delete == 'CASCADE':
+            sql += ' ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED'
         return sql
 
 

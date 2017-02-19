@@ -7,11 +7,9 @@ from database.DatabaseTables import *
 
 
 if __name__ == '__main__':
+    DatabaseTables().create_tables()
     app = QApplication([])
     main_window = MainWindow()
-
-    DatabaseTables().create_tables()
-
 
 
     sys.exit(app.exec_())

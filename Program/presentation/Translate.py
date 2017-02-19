@@ -13,8 +13,8 @@ class Translate(metaclass=Singleton):
 
 
     def translate(self, value):
-        if value in self.translate_dict:
-            return self.translate_dict[value]
+        if str(value) in self.translate_dict:
+            return self.translate_dict[str(value)]
         else:
             return 'Missing trans'
 
