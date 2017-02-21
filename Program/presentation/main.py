@@ -1,14 +1,12 @@
-import sys, random
-from PyQt5.QtWidgets import QMainWindow, QMenuBar, QLabel, QWidget, QGridLayout
 from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PyQt5.QtWidgets import QMainWindow, QWidget, QGridLayout
 
-from structure.enums.ObjectType import ObjectType
-from managers.PlayerTreeManager import PlayerTreeManager
 from presentation.MainMenu import MainMenu
 from presentation.StatusBar import StatusBar
-from presentation.TreeWidget import TreeWidget
 from presentation.layouts.SpellLayout import SpellLayout
+from structure.enums.ObjectType import ObjectType
+from widgets.TreeWidget import TreeWidget
+from presentation.widgets.TabWidget import TabWidget
 
 
 class MainWindow(QMainWindow):
@@ -33,27 +31,32 @@ class MainWindow(QMainWindow):
         self.splitter.setHandleWidth(15)
 
         tree = TreeWidget(self.splitter, ObjectType.SPELL)
+        tree.item_doubleclick_signal.connect(self.test)
         # tree.set_items(PlayerTreeManager().get_spell_tree())
 
-        self.tabWidget = QtWidgets.QTabWidget(self.splitter)
-        self.tabWidget.setObjectName("tabWidget")
-        self.tab = QtWidgets.QWidget()
-        self.tab.setObjectName("tab")
-        self.tabWidget.addTab(self.tab, "CS")
+        self.tabWidget = TabWidget(self.splitter)
+        # self.tabWidget.setObjectName("tabWidget")
+        # self.tab = QtWidgets.QWidget()
+        # self.tab.setObjectName("tab")
+        # self.tabWidget.addTab(self.tab, "CS")
 
-        SpellLayout(self.tab)
+        # SpellLayout(self.tab)
 
-        self.tab_2 = QtWidgets.QWidget()
-        self.tab_2.setObjectName("tab_2")
-        self.tabWidget.addTab(self.tab_2, "EN")
-
-        self.tab_2 = QtWidgets.QWidget()
-        self.tab_2.setObjectName("tab_2")
-        self.tabWidget.addTab(self.tab_2, "+")
+        # self.tab_2 = QtWidgets.QWidget()
+        # self.tab_2.setObjectName("tab_2")
+        # self.tabWidget.addTab(self.tab_2, "EN")
+        #
+        # self.tab_2 = QtWidgets.QWidget()
+        # self.tab_2.setObjectName("tab_2")
+        # self.tabWidget.addTab(self.tab_2, "+")
 
         self.grid_layout.addWidget(self.splitter, 0, 0, 1, 1)
         self.setCentralWidget(self.centralWidget)
 
         self.splitter.setSizes([200, 600])
-        self.setGeometry(2000,50,800,800)
+        self.setGeometry(2000, 50, 800, 800)
         self.show()
+
+
+    def test(self, item):
+        print(item)

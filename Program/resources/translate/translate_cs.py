@@ -27,7 +27,7 @@ translate = {
     'NodeType.OBJECT'    : 'Objekt',
 
     'Delete'             : 'Smazat',
-    'Add_subfolder'      : 'Přidat podsložku',
+    'New_item'           : 'Přidat objekt',
 
 
     'tip.New_root_node'  : 'Přidat kořenový objekt'

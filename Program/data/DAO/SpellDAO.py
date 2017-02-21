@@ -28,16 +28,17 @@ class SpellDAO(ISpellDAO):
     def get_spell(self, spell_id: int, lang: str = None) -> Spell:
         if lang is None:
             lang = 'cs'
-        data = self.database.select(self.DATABASE_TABLE, {'ID': spell_id})[0]
+        data = dict(self.database.select(self.DATABASE_TABLE, {'ID': spell_id})[0])
         tr_data = self.database.select_translate(spell_id, self.DATABASE_TABLE,
                                                  lang)
-        ability = Spell(spell_id, lang, tr_data['name'],
-                        tr_data['description'], tr_data['mana_cost_initial'],
-                        tr_data['mana_cost_continual'], tr_data['range'],
-                        tr_data['scope'], data['cast_time'],
-                        tr_data['duration'])
 
-        return ability
+        spell = Spell(spell_id, lang, tr_data.get('name', ''),
+                      tr_data.get('description', ''), tr_data.get('mana_cost_initial', ''),
+                      tr_data.get('mana_cost_continual', ''), tr_data.get('range', ''),
+                      tr_data.get('scope', ''), data.get('cast_time', ''),
+                      tr_data.get('duration', ''))
+
+        return spell
 
 
     def get_all_spells(self, lang=None) -> list:

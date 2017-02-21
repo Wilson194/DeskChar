@@ -4,6 +4,7 @@
 from PyQt5.QtWidgets import QApplication
 from presentation.main import *
 from database.DatabaseTables import *
+import sys
 
 
 if __name__ == '__main__':

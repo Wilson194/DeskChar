@@ -59,7 +59,7 @@ class Database:
 
 
     def insert_null(self, table_name: str):
-        sql = 'INSERT INTO ' + table_name + ' VALUES(NULL)'
+        sql = 'INSERT INTO ' + table_name + '(ID) VALUES(NULL)'
         self.cursor.execute(sql)
         self.connection.commit()
 
@@ -72,6 +72,8 @@ class Database:
             sql += key + ' = '
             if type(value) is str:
                 sql += "'" + value + "'"
+            elif value is None:
+                sql += 'null'
             else:
                 sql += str(value)
             if not key == list(values.keys())[-1]:
