@@ -12,6 +12,4 @@ class MainFrame(QFrame):
 
 
     def init_ui(self):
-
         self.setLayout(self.grid)
-

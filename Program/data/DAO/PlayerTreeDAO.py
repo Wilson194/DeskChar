@@ -23,6 +23,10 @@ class PlayerTreeDAO:
 
         return map_objects(data)
 
+    def get_node(self, id):
+        data = self.database.select(self.TABLE_NAME, {'ID':id})
+        return map_objects(data)[0]
+
 
     def get_children_nodes(self, target_type: int, parent_id: int):
         data = self.database.select(self.TABLE_NAME,
@@ -30,16 +34,36 @@ class PlayerTreeDAO:
         return map_objects(data)
 
 
+    def update_node(self, node):
+        if isinstance(node, Folder):
+            values = {
+                'parent_id': node.parent_id,
+                'name'     : node.name
+            }
+        else:
+            values = {
+                'target_id': node.object.id,
+                'parent_id': node.parent_id,
+                'name'     : node.name
+            }
+        self.database.update(self.TABLE_NAME, node.id, values)
+
+
     def insert_node(self, node):
         if isinstance(node, Folder):
             values = {
-                'target_type': ObjectType.SPELL.value,
+                'target_type': ObjectType.SPELL.value,  # TODO
                 'parent_id'  : node.parent_id,
                 'type'       : NodeType.FOLDER.value,
                 'name'       : node.name
             }
         else:
             values = {
+                'target_type': ObjectType.SPELL.value,  # TODO
+                'target_id'  : node.object.id,
+                'parent_id'  : node.parent_id,
+                'type'       : NodeType.OBJECT.value,
+                'name'       : node.name
 
             }
         self.database.insert(self.TABLE_NAME, values)

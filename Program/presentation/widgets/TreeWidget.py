@@ -12,8 +12,11 @@ from presentation.Translate import Translate as TR
 class TreeWidget(QtWidgets.QFrame):
     """
     Tree widget for tree structure for templates (Spells, Items, Abilities, ...)
+    data(0,5) -> ID
+    data(0,6) -> Type
     """
 
+    item_doubleclick_signal = QtCore.pyqtSignal(object)
 
     def __init__(self, parent, data_type: ObjectType = None):
         super().__init__(parent)
@@ -47,10 +50,43 @@ class TreeWidget(QtWidgets.QFrame):
         self.treeWidget.setHeaderLabel(TR().tr(self.__data_type))
         self.treeWidget.header().setDefaultAlignment(QtCore.Qt.AlignCenter)
 
+        self.treeWidget.setDragDropMode(self.treeWidget.InternalMove)
+        self.treeWidget.setDragEnabled(True)
+        self.treeWidget.setDropIndicatorShown(True)
+
+        self.main_drop_event = self.treeWidget.dropEvent
+        self.treeWidget.dropEvent = self.custom_drop_event
+
         self.frame_layout.addWidget(self.treeWidget)
 
         self.init_buttons()
         self.init_context_menu()
+
+
+    def custom_drop_event(self, event):
+        """
+        Custom drop event, call base drop event and update structure of tre
+        :param event: drop event
+        """
+        self.main_drop_event(event)
+
+        count_root = self.treeWidget.topLevelItemCount()
+        for i in range(count_root):
+            self.update_structure(self.treeWidget.topLevelItem(i))
+
+        self.draw_data()
+
+
+    def update_structure(self, node, parent_id=None):
+        """
+        Update sructure of tree (recursion)
+        :param node: Current node in tree
+        :param parent: parent_id
+        """
+        self.tree_manager.update_node_parent(node.data(0, 5), parent_id)
+        child_count = node.childCount()
+        for n in range(child_count):
+            self.update_structure(node.child(n), node.data(0, 5))
 
 
     def init_context_menu(self):
@@ -59,7 +95,7 @@ class TreeWidget(QtWidgets.QFrame):
         """
         self.treeWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.treeWidget.customContextMenuRequested.connect(self.openMenu)
-        self.treeWidget.itemDoubleClicked.connect(self.test)
+        self.treeWidget.itemDoubleClicked.connect(self.double_click_item)
 
 
     def openMenu(self, position):
@@ -68,21 +104,20 @@ class TreeWidget(QtWidgets.QFrame):
         :param position: selected item in tree
         """
         indexes = self.treeWidget.selectedIndexes()
-        menu = QtWidgets.QMenu()
 
         item_type = indexes[0].data(6)
         item_id = indexes[0].data(5)
         if item_type == NodeType.FOLDER.value:
+            menu = QtWidgets.QMenu()
             delete_action = QtWidgets.QAction(TR().tr('Delete'), menu)
             delete_action.setData(QtCore.QVariant('delete'))
             menu.addAction(delete_action)
             folder_action = QtWidgets.QAction(TR().tr('New_item'), menu)
             folder_action.setData(QtCore.QVariant('new'))
             menu.addAction(folder_action)
-
-        action = menu.exec_(self.treeWidget.viewport().mapToGlobal(position))
-
-        self.contest_nemu_actions(action, item_id)
+            action = menu.exec_(self.treeWidget.viewport().mapToGlobal(position))
+            if action:
+                self.contest_nemu_actions(action, item_id)
 
 
     def contest_nemu_actions(self, action, item_id):
@@ -91,14 +126,14 @@ class TreeWidget(QtWidgets.QFrame):
         :param action: selected action
         :param item_id: item id (ID in player tree structure)
         """
-
         if action.data() == 'delete':
             self.tree_manager.delete_node(item_id)
             self.draw_data()
         elif action.data() == 'new':
             data, choice = NewTreeItem.get_data()
             if choice:
-                self.tree_manager.create_node(NodeType(int(data['type'])), data['name'], item_id)
+                self.tree_manager.create_node(NodeType(int(data['type'])), data['name'], item_id,
+                                              self.__data_type)
                 self.draw_data()
 
 
@@ -143,7 +178,8 @@ class TreeWidget(QtWidgets.QFrame):
         """
         data, choice = NewTreeItem.get_data()
         if choice:
-            self.tree_manager.create_node(NodeType(int(data['type'])), data['name'])
+            self.tree_manager.create_node(NodeType(int(data['type'])), data['name'], None,
+                                          self.__data_type)
             self.draw_data()
 
 
@@ -169,7 +205,8 @@ class TreeWidget(QtWidgets.QFrame):
 
         it = QtWidgets.QTreeWidgetItemIterator(self.treeWidget)
         while it.value():
-            if it.value().data(0, 5) in expanded_indexes and expanded_indexes[it.value().data(0, 5)]:
+            if it.value().data(0, 5) in expanded_indexes and \
+                    expanded_indexes[it.value().data(0, 5)]:
                 it.value().setExpanded(True)
             it += 1
 
@@ -202,5 +239,5 @@ class TreeWidget(QtWidgets.QFrame):
                 tree_item.setData(0, 6, QtCore.QVariant(NodeType.OBJECT.value))
 
 
-    def test(self,item):
-        print(item.data(0,5))
+    def double_click_item(self, item):
+        self.item_doubleclick_signal.emit(item)
