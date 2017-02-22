@@ -26,4 +26,7 @@ class LangManager:
 
     def create_lang(self, name, code):
         lang = Lang(None, name, code)
-        self.DAO.create_lang(lang)
+        id = self.DAO.create_lang(lang)
+        lang.id = id
+        return lang
+

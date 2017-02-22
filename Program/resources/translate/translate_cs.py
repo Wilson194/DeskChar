@@ -19,6 +19,9 @@ translate = {
     'Folder'             : 'Složka',
     'Object'             : 'Objekt',
     'Type'               : 'Typ',
+    'Code'               : 'Kód',
+    'Select_lang'        : 'Vybrat jazyk',
+    'Create_new_lang'    : 'Vytvořit nový',
 
 
     'ObjectType.SPELL'   : 'Kouzla',

@@ -1,3 +1,0 @@
-Sdružování do skupin:
-	Možnost dìdit pøednastavení attributù pro dìti (zaškrtávátko)
-	
