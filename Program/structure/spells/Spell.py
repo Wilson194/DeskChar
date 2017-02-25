@@ -1,3 +1,4 @@
+from structure.enums.ObjectType import ObjectType
 from general.Object import *
 
 
@@ -20,6 +21,11 @@ class Spell(Object):
         names = super().__name__()
         names.append('Spell')
         return names
+
+
+    @property
+    def object_type(self):
+        return ObjectType.SPELL
 
 
     @property

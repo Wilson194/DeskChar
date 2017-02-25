@@ -7,6 +7,11 @@ from presentation.Translate import Translate as TR
 
 
 class NewTreeItem(QtWidgets.QDialog):
+    """
+    Dialog for creating new item in tree widget
+    """
+
+
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -14,6 +19,9 @@ class NewTreeItem(QtWidgets.QDialog):
 
 
     def init_ui(self):
+        """
+        Init basic layout
+        """
         self.layout = QtWidgets.QGridLayout(self)
 
         self.type_label = QtWidgets.QLabel(self)
@@ -44,16 +52,25 @@ class NewTreeItem(QtWidgets.QDialog):
         self.layout.addWidget(self.buttonBox, 2, 0, 1, 2, QtCore.Qt.AlignHCenter)
 
 
-    def get_inputs(self):
+    def get_inputs(self) -> dict:
+        """
+        Get inputs from dialog
+        :return: dictionary of data (name,value)
+        """
         data = {
             'name': self.name_input.text(),
-            'type': self.type_input.currentIndex()+1
+            'type': self.type_input.currentIndex() + 1
         }
         return data
 
 
     @staticmethod
-    def get_data(parent=None):
+    def get_data(parent=None) -> tuple:
+        """
+        Create new dialog and return data from dialog (name,type)
+        :param parent: parent object for creating dialog
+        :return: tuple of data and result by buttons(true,false)
+        """
         dialog = NewTreeItem(parent)
         result = dialog.exec_()
 

@@ -31,24 +31,13 @@ class MainWindow(QMainWindow):
         self.splitter.setHandleWidth(15)
 
         tree = TreeWidget(self.splitter, ObjectType.SPELL)
-        tree.item_doubleclick_signal.connect(self.test)
-        # tree.set_items(PlayerTreeManager().get_spell_tree())
 
-        self.tabWidget = TabWidget(self.splitter)
+        self.tabWidget = TabWidget(self.splitter, 6, ObjectType.SPELL)
+
+        tree.item_doubleclick_signal.connect(self.tabWidget.tree_item_clicked)
+
         # self.tabWidget.setObjectName("tabWidget")
-        # self.tab = QtWidgets.QWidget()
-        # self.tab.setObjectName("tab")
-        # self.tabWidget.addTab(self.tab, "CS")
 
-        # SpellLayout(self.tab)
-
-        # self.tab_2 = QtWidgets.QWidget()
-        # self.tab_2.setObjectName("tab_2")
-        # self.tabWidget.addTab(self.tab_2, "EN")
-        #
-        # self.tab_2 = QtWidgets.QWidget()
-        # self.tab_2.setObjectName("tab_2")
-        # self.tabWidget.addTab(self.tab_2, "+")
 
         self.grid_layout.addWidget(self.splitter, 0, 0, 1, 1)
         self.setCentralWidget(self.centralWidget)

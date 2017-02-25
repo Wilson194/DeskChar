@@ -1,8 +1,10 @@
 from PyQt5 import QtCore, QtGui
 from PyQt5 import QtWidgets
 from business.managers.LangManager import LangManager
+from business.managers.PlayerTreeManager import PlayerTreeManager
 from presentation.dialogs.NewLangTab import NewLangTab
-from presentation.layouts.SpellLayout import SpellLayout
+from business.managers.TabWidgetManager import TabWidgetManager
+from structure.enums.ObjectType import ObjectType
 
 
 class TabWidget(QtWidgets.QFrame):
@@ -11,10 +13,16 @@ class TabWidget(QtWidgets.QFrame):
     """
 
 
-    def __init__(self, parent):
+    def __init__(self, parent, target_id, target_type):
         super().__init__(parent)
 
+        self.layouts_changed = []
+
         self.lang_manager = LangManager()
+        self.tab_manager = TabWidgetManager()
+
+        self.target_id = target_id
+        self.target_type = target_type
 
         self.init_ui()
 
@@ -37,9 +45,64 @@ class TabWidget(QtWidgets.QFrame):
         self.tab_bar.clicked.connect(self.tab_clicked)
         self.tab_bar.right_clicked.connect(self.tab_right_clicked)
 
+        self.init_data()
+
         self.new_tab = QtWidgets.QWidget()
 
-        self.tab_widget.addTab(self.new_tab, '+')
+
+    def init_data(self):
+        """
+        Init data, create language tabs
+        """
+        data = self.tab_manager.get_data(self.target_id, self.target_type)
+        for one in data:
+            tab = QtWidgets.QWidget()
+            lang = self.lang_manager.get_lang_by_code(one.lang)
+            tab_text = lang.name + ' (' + lang.code + ')'
+            layout = self.tab_manager.get_layout(self.target_type, tab)
+            layout.map_data(one)
+            tab.setLayout(layout)
+            self.tab_widget.insertTab(self.tab_bar.count(), tab, tab_text)
+            layout.data_changed_signal.connect(self.data_changed_slot)
+
+        self.new_tab = QtWidgets.QWidget()
+
+        self.tab_widget.insertTab(self.tab_bar.count(), self.new_tab, '+')
+
+
+    def change_object(self, target_id, target_type):
+        """
+        change object that mapped on tabs
+        :param target_id: id of object
+        :param target_type: type object
+        """
+        self.tab_widget.clear()
+        self.target_id = target_id
+        self.target_type = target_type
+        self.init_data()
+
+
+    def tree_item_clicked(self, item):
+        """
+        Function for mapping tree item click
+        :param item: tree item in tree widget, has data
+        """
+
+        for layout in self.layouts_changed:
+            layout.save_data()
+        self.layouts_changed.clear()
+        item_tree_id = item.data(0, 5)
+        item = PlayerTreeManager().get_object(item_tree_id)
+        self.change_object(item.id, ObjectType(item.object_type))
+
+
+    def data_changed_slot(self, layout):
+        """
+        Function slot for add layout changes
+        :param layout: changed layout
+        """
+        if layout not in self.layouts_changed:
+            self.layouts_changed.append(layout)
 
 
     def tab_clicked(self, i):
@@ -53,10 +116,18 @@ class TabWidget(QtWidgets.QFrame):
             data, choice = NewLangTab.get_data()
             if choice:
                 lang = self.lang_manager.get_lang(data['id'])
+                for tab_index in range(num_tabs - 1):
+                    tab = self.tab_widget.widget(tab_index)
+                    exist_lang = tab.layout().object.lang
+                    if lang.code == exist_lang:
+                        return
                 new_tab = QtWidgets.QWidget()
                 self.tab_widget.insertTab(i, new_tab, lang.name + ' (' + lang.code + ')')
                 self.tab_widget.setCurrentIndex(i)
-                new_tab.setLayout(SpellLayout(new_tab))
+                obj = self.tab_manager.get_empty_object(self.target_type, self.target_id, lang.code)
+                new_tab.setLayout(self.tab_manager.get_layout(self.target_type, new_tab))
+                new_tab.layout().object = obj
+                new_tab.layout().data_changed_signal.connect(self.data_changed_slot)
 
 
     def tab_right_clicked(self, i):

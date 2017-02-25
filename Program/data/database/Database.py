@@ -1,20 +1,34 @@
 import sqlite3
+from structure.general.Singleton import Singleton
 
 
-class Database:
+class Database(metaclass=Singleton):
+    """
+    Class for hanling all database commands
+    """
+
+
     def __init__(self, database_name):
         self.connection = sqlite3.connect(database_name)
         self.connection.row_factory = sqlite3.Row
-        self.connection.execute('pragma foreign_keys = on;')
+        self.connection.execute('PRAGMA foreign_keys = ON;')
+        self.connection.execute('PRAGMA ENCODING = `UTF-8`')
         self.cursor = self.connection.cursor()
 
 
     def create_table(self, name: str, columns=None, foreigns=None):
-        if columns is None:
-            columns = []
+        """
+        Create table in database
+        :param name: name of table
+        :param columns: list of object Column
+        :param foreigns: list of object Foreign
+        """
 
         if foreigns is None:
             foreigns = []
+
+        if columns is None:
+            columns = []
 
         sql = 'CREATE TABLE ' + name + ' ('
 
@@ -31,21 +45,40 @@ class Database:
 
 
     def truncate_table(self, table_name: str):
+        """
+        Truncate table
+        :param table_name: table name
+        """
         sql = 'DELETE FROM ' + table_name
         self.cursor.execute(sql)
 
 
     def add_column(self, table_name: str, column):
+        """
+        Add column to table
+        :param table_name: table name
+        :param column: Column object
+        """
         sql = 'ALTER TABLE ' + table_name + ' ADD COLUMN ' + column.to_sql()
         self.cursor.execute(sql)
 
 
     def drop_table(self, table_name: str):
+        """
+        Drop data from table
+        :param table_name: name of table
+        """
         sql = 'DROP TABLE ' + table_name
         self.cursor.execute(sql)
 
 
-    def insert(self, table_name: str, values: dict):
+    def insert(self, table_name: str, values: dict) -> int:
+        """
+        Insert data into table
+        :param table_name: name of table
+        :param values: dictionary of pairs (name,value)
+        :return: autoincrement ID
+        """
         sql = 'INSERT INTO ' + table_name + '('
         sql += array_to_string(values.keys(), ', ')
         sql += ') VALUES ('
@@ -58,7 +91,12 @@ class Database:
         return self.cursor.lastrowid
 
 
-    def insert_null(self, table_name: str):
+    def insert_null(self, table_name: str) -> int:
+        """
+        insert only null to get autoincrement
+        :param table_name: name of table
+        :return: autoincrement ID
+        """
         sql = 'INSERT INTO ' + table_name + '(ID) VALUES(NULL)'
         self.cursor.execute(sql)
         self.connection.commit()
@@ -67,6 +105,12 @@ class Database:
 
 
     def update(self, table_name: str, id: int, values: dict):
+        """
+        Update data in database
+        :param table_name: name of table
+        :param id: id of column in table
+        :param values: dictionry of values (name,value)
+        """
         sql = 'UPDATE ' + table_name + ' SET '
         for key, value in values.items():
             sql += key + ' = '
@@ -84,12 +128,23 @@ class Database:
         self.connection.commit()
 
 
-    def select_all(self, table_name: str):
+    def select_all(self, table_name: str) -> list:
+        """
+        Select all data from table
+        :param table_name: name of table
+        :return: list of sqlite3.Row
+        """
         sql = 'SELECT * FROM ' + table_name
         return self.cursor.execute(sql).fetchall()
 
 
-    def select(self, table_name, row_filter: dict):
+    def select(self, table_name: str, row_filter: dict) -> list:
+        """
+        Select all data filtred by filter, can compare only =
+        :param table_name: name of table
+        :param row_filter: dictionary of filter (name,value)
+        :return: list of sqlite3.Row
+        """
         sql = 'SELECT * FROM ' + table_name + ' WHERE '
         for key, value in row_filter.items():
             if type(value) == str:
@@ -106,6 +161,13 @@ class Database:
 
 
     def select_translate(self, target_id, type, lang) -> dict:
+        """
+        Select all data from translate table for target
+        :param target_id: id of target object
+        :param type: type of target object
+        :param lang: lang
+        :return: dictionary of (name, value)
+        """
         sql = "SELECT * FROM translates WHERE target_id = " + str(target_id)
         sql += " AND type = '" + type + "'"
         sql += " AND lang = '" + lang + "'"
@@ -120,15 +182,26 @@ class Database:
 
 
     def delete(self, table_name: str, ID: int):
+        """
+        Delete column from database by ID
+        :param table_name: name of table
+        :param ID: ID which you want to delete
+        """
         sql = 'DELETE FROM ' + table_name + ' WHERE ID = ' + str(ID)
 
         self.cursor.execute(sql)
         self.connection.commit()
 
 
-    def delete_where(self, table_name: str, statmens: dict):
+    def delete_where(self, table_name: str, statements: dict):
+        """
+        Delete columns from database by statements, can compare only =
+        :param table_name: name of table
+        :param statements: dictionary of filer (name, value)
+        :return:
+        """
         sql = 'DELETE FROM ' + table_name + ' WHERE '
-        for key, value in statmens.items():
+        for key, value in statements.items():
             if type(value) == str:
                 sql += key + " = '" + value + "'"
             else:
@@ -140,6 +213,9 @@ class Database:
 
 
 class Column:
+    """
+    Class for handling column in database
+    """
     data_types = ['INTEGER', 'TEXT', 'REAL', 'NUMERIC', 'DATE', 'DATETIME']
 
 
@@ -159,7 +235,11 @@ class Column:
         self.not_null = not_null
 
 
-    def to_sql(self):
+    def to_sql(self) -> str:
+        """
+        Convert column to sql statement
+        :return: sql string
+        """
         sql = self.name + ' ' + self.value_type + ' '
 
         if self.primary:
@@ -178,6 +258,11 @@ class Column:
 
 
 class Foreign:
+    """
+    Class for handling foreign keys for database
+    """
+
+
     def __init__(self, column, target_table, target_column, delete=None):
         self.column = column
         self.target_table = target_table
@@ -185,7 +270,11 @@ class Foreign:
         self.delete = delete
 
 
-    def to_sql(self):
+    def to_sql(self) -> str:
+        """
+        Convert class to sql statement
+        :return: sql string
+        """
         sql = 'FOREIGN KEY(' + self.column
         sql += ') REFERENCES ' + self.target_table
         sql += '(' + self.target_column + ')'
@@ -194,7 +283,13 @@ class Foreign:
         return sql
 
 
-def array_to_string(array, separator):
+def array_to_string(array: list, separator: str) -> str:
+    """
+    Convert array to string, separate by separator
+    :param array: given array
+    :param separator: separator
+    :return: converted array to string
+    """
     string = ''
     for value in array:
         if type(value) == str:

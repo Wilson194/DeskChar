@@ -1,10 +1,19 @@
-from Database import *
+from data.database.Database import Database
 from sqlite3 import OperationalError
 
 
 class DatabaseTables:
+    """
+    Class that create all tables in database
+    """
+
+
     def create_tables(self):
-        database = Database('test.db')
+        """
+        Try to create all tables in database
+        :return:
+        """
+        database = Database('test.db')  # TODO
 
         # ///////////// Languages \\\\\\\\\\\\\\\\\\
 
@@ -97,7 +106,7 @@ class DatabaseTables:
         ]
 
         structure_foreigns = [
-            Foreign('parent_id','player_tree_structure', 'ID', 'CASCADE')
+            Foreign('parent_id', 'player_tree_structure', 'ID', 'CASCADE')
         ]
 
         try:

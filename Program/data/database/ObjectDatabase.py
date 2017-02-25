@@ -1,9 +1,20 @@
-from Database import *
+from data.database.Database import *
 from structure.general.Object import Object
 
 
 class ObjectDatabase(Database):
-    def insert_object(self, obj: Object):
+    """
+    Class that extend class Database, can handlig mapping object to database
+    Object need function __name__ that return list of table names (hierarchy)
+    """
+
+
+    def insert_object(self, obj: Object) -> int:
+        """
+        Insert object to database, map translates to translate table
+        :param obj: given object
+        :return: id of autoincrement
+        """
         str_values = {}
         int_values = {}
         for key, value in obj.__dict__.items():
@@ -27,11 +38,11 @@ class ObjectDatabase(Database):
 
         for key, value in str_values.items():
             data_dict = {
-                'lang': obj.lang,
+                'lang'     : obj.lang,
                 'target_id': db_id,
-                'type': obj.__name__()[-1],
-                'name': key,
-                'value': value
+                'type'     : obj.__name__()[-1],
+                'name'     : key,
+                'value'    : value
             }
             self.insert('translates', data_dict)
 
@@ -39,6 +50,10 @@ class ObjectDatabase(Database):
 
 
     def update_object(self, obj: Object):
+        """
+        Update object in database, update all translate columns
+        :param obj: given object
+        """
         if obj.id is None:
             raise ValueError('Cant update object without ID')
         data = self.select(obj.__name__()[-1], {'ID': obj.id})
@@ -67,19 +82,28 @@ class ObjectDatabase(Database):
 
         translates = self.select('translates',
                                  {'target_id': obj.id,
-                                  'type': obj.__name__()[-1],
-                                  'lang': obj.lang})
+                                  'type'     : obj.__name__()[-1],
+                                  'lang'     : obj.lang})
 
         for key, value in str_values.items():
-            db_id = get_id(key, translates)
-            if db_id is None:
-                pass
-            else:
+            db_line = get_line(key, translates)
+
+            if db_line is None:
                 data_dict = {
-                    'name': key,
-                    'value': value
+                    'name'     : key,
+                    'value'    : value,
+                    'lang'     : obj.lang,
+                    'target_id': obj.id,
+                    'type'     : obj.__name__()[-1]
                 }
-                self.update('translates', db_id, data_dict)
+                self.insert('translates', data_dict)
+            else:
+                if db_line['value'] != value:
+                    data_dict = {
+                        'name' : key,
+                        'value': value
+                    }
+                    self.update('translates', db_line['ID'], data_dict)
 
 
 def compare(name: str, objects: list) -> bool:
@@ -95,8 +119,8 @@ def substr(string: str, objects: list):
             return string.split(one)[1][2:]
 
 
-def get_id(key: str, data):
+def get_line(key: str, data):
     for line in data:
         if line['name'] == key:
-            return line['ID']
+            return line
     return None

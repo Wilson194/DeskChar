@@ -4,6 +4,11 @@ from presentation.Translate import Translate as TR
 
 
 class MainMenu:
+    """
+    Class for creating main menu on window
+    """
+
+
     def __init__(self, menu_bar: QMenuBar):
         self.menu_bar = menu_bar
 
@@ -11,6 +16,10 @@ class MainMenu:
 
 
     def init_ui(self):
+        """
+        Init basic UI
+        :return:
+        """
         exit_action = QAction(QIcon('resources/icons/exit.png'), TR().tr('Menu_exit'),
                               self.menu_bar)
         exit_action.setShortcut('Ctrl+Q')

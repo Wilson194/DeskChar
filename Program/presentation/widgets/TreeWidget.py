@@ -196,11 +196,8 @@ class TreeWidget(QtWidgets.QFrame):
             it += 1
 
         self.treeWidget.clear()
-        if self.__data_type is ObjectType.SPELL:
-            items = self.tree_manager.get_spell_tree()
-        else:
-            items = []
 
+        items = self.tree_manager.get_tree(self.__data_type)
         self.set_items(items)
 
         it = QtWidgets.QTreeWidgetItemIterator(self.treeWidget)
@@ -240,4 +237,5 @@ class TreeWidget(QtWidgets.QFrame):
 
 
     def double_click_item(self, item):
-        self.item_doubleclick_signal.emit(item)
+        if item.data(0,6) is not 1:
+            self.item_doubleclick_signal.emit(item)

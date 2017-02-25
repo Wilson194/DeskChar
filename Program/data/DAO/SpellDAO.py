@@ -1,10 +1,12 @@
 from data.DAO.interface.ISpellDAO import *
 from database.ObjectDatabase import *
+from structure.enums.ObjectType import ObjectType
 
 
 class SpellDAO(ISpellDAO):
     DATABASE_TABLE = 'Spell'
     DATABASE_DRIVER = 'test.db'
+    TYPE = ObjectType.SPELL
 
 
     def __init__(self):
@@ -50,3 +52,12 @@ class SpellDAO(ISpellDAO):
             item = self.get_spell(line['ID'], lang)
             items.append(item)
         return items
+
+
+    def get_languages(self, id):
+        data = self.database.select('translates', {'target_id': id, 'type': 'Spell'})
+        languages = []
+        for line in data:
+            if line['lang'] not in languages:
+                languages.append(line['lang'])
+        return languages

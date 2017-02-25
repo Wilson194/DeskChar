@@ -11,12 +11,18 @@
 #         icon = sheet.crop((a - 25, b - 25, a, b))  # Problem here
 #         icon.save("resources/icons/{}.png".format(count))
 #         count += 1
+from Database import Database
 from Spell import Spell
 from SpellDAO import SpellDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 
-s = Spell(None, 'cs', 'Ohnivá koule', 'Velká ohnivá koule', 'a', 'b', 'c', 'd', 1, 'f')
-SpellDAO().create_spell(s)
+# s = Spell(6, 'cs', 'Ohnivá koule', 'Velká ohnivá koule', 'a', 'b', 'c', 'd', 1, 'f')
+# SpellDAO().update_spell(s)
+
+# print(SpellDAO().get_languages(6))
+
+d  = Database('test.db')
+print(d.select_all('translates'))
 
 # p = PlayerTreeDAO()
 #
