@@ -3,6 +3,8 @@ from data.xml.templates.XMLTemplate import XMLTemplate
 from structure.enums.Classes import Classes
 from lxml import etree
 
+from structure.spells.Spell import Spell
+
 
 class XMLSpell(XMLTemplate):
     ROOT_NAME = 'spell'
@@ -14,15 +16,32 @@ class XMLSpell(XMLTemplate):
 
     def get_object(self, root) -> object:
         data = {}
-        for element in self.root_element:
-            if 'lang' in element.attrib.keys():
-                if element.tag in data:
-                    data[element.tag][element.attrib['lang']] = element.text
-                else:
-                    data[element.tag] = {}
-                    data[element.tag][element.attrib['lang']] = element.text
-            else:
-                data[element.tag] = element.text
+        langs = self.get_langs(root)
+        expr = "./{}[@lang='{}']"
+        for lang in langs:
+            name_x = root.xpath(expr.format('name', lang))
+            name = name_x[0].text if len(name_x) > 0 else ""
+            desc_x = root.xpath(expr.format('description', lang))
+            desc = desc_x[0].text if len(desc_x) > 0 else ""
+            mani_x = root.xpath(expr.format('manaInitial', lang))
+            mani = mani_x[0].text if len(mani_x) > 0 else ""
+            manc_x = root.xpath(expr.format('manaContinual', lang))
+            manc = manc_x[0].text if len(manc_x) > 0 else ""
+            rang_x = root.xpath(expr.format('range', lang))
+            rang = rang_x[0].text if len(rang_x) > 0 else ""
+            scop_x = root.xpath(expr.format('scope', lang))
+            scop = scop_x[0].text if len(scop_x) > 0 else ""
+            cati_x = root.xpath(expr.format('castTime', lang))
+            cati = cati_x[0].text if len(cati_x) > 0 else ""
+            dura_x = root.xpath(expr.format('duration', lang))
+            dura = dura_x[0].text if len(dura_x) > 0 else ""
+            clas_x = root.xpath(expr.format('class', lang))
+            clas = clas_x[0].text if len(clas_x) > 0 else ""
+
+            obj = Spell(None, lang, name, desc, mani, manc,
+                        rang, scop, cati, dura, clas)
+            data[lang] = obj
+
         return data
 
 

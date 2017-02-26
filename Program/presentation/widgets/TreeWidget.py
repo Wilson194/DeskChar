@@ -28,7 +28,7 @@ class TreeWidget(QtWidgets.QFrame):
         self.checking = False
         self.export_menu = ExportMenu(self)
 
-        self.export_menu.export_button_signal.connect(self.export_data)
+        self.export_menu.export_button_signal.connect(self.export_data_slot)
 
         self.init_ui()
         self.draw_data()
@@ -68,7 +68,7 @@ class TreeWidget(QtWidgets.QFrame):
         self.init_context_menu()
 
 
-    def custom_drop_event(self, event):
+    def custom_drop_event(self, event: object):
         """
         Custom drop event, call base drop event and update structure of tre
         :param event: drop event
@@ -82,11 +82,11 @@ class TreeWidget(QtWidgets.QFrame):
         self.draw_data()
 
 
-    def update_structure(self, node, parent_id=None):
+    def update_structure(self, node: object, parent_id: int = None):
         """
         Update sructure of tree (recursion)
         :param node: Current node in tree
-        :param parent: parent_id
+        :param parent_id: parent_id
         """
         self.tree_manager.update_node_parent(node.data(0, 5), parent_id)
         child_count = node.childCount()
@@ -100,7 +100,7 @@ class TreeWidget(QtWidgets.QFrame):
         """
         self.treeWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.treeWidget.customContextMenuRequested.connect(self.openMenu)
-        self.treeWidget.itemDoubleClicked.connect(self.double_click_item)
+        self.treeWidget.itemDoubleClicked.connect(self.double_click_item_slot)
 
 
     def openMenu(self, position):
@@ -154,6 +154,19 @@ class TreeWidget(QtWidgets.QFrame):
                                        QtWidgets.QSizePolicy.Minimum)
         buttons_layout.addItem(spacer)
 
+        # Import button
+        import_button = QtWidgets.QPushButton(self)
+        import_button.setObjectName('TreeImportButton')
+        import_icon = QtGui.QIcon()
+        import_icon.addPixmap(QtGui.QPixmap("resources/icons/import.png"),
+                              QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        import_button.setIcon(import_icon)
+        import_button.clicked.connect(lambda: self.import_data_slot())
+        import_button.setStatusTip(TR().tr('tip.Import_templates'))
+
+        buttons_layout.addWidget(import_button)
+
+        # Export button
         export_button = QtWidgets.QPushButton(self)
         export_button.setObjectName('TreeExportButton')
         export_icon = QtGui.QIcon()
@@ -165,6 +178,7 @@ class TreeWidget(QtWidgets.QFrame):
 
         buttons_layout.addWidget(export_button)
 
+        # New button
         new_button = QtWidgets.QPushButton(self)
         new_button.setObjectName('TreeNewButton')
         new_icon = QtGui.QIcon()
@@ -176,6 +190,7 @@ class TreeWidget(QtWidgets.QFrame):
 
         buttons_layout.addWidget(new_button)
 
+        # Delete button
         delete_button = QtWidgets.QPushButton(self)
         delete_button.setObjectName('TreeNewButton')
         delete_icon = QtGui.QIcon()
@@ -259,7 +274,11 @@ class TreeWidget(QtWidgets.QFrame):
                 tree_item.setCheckState(0, QtCore.Qt.Unchecked)
 
 
-    def export_data(self):
+    def export_data_slot(self):
+        """
+        Slot for export all selected objects in tree to file
+        :return:
+        """
         it = QtWidgets.QTreeWidgetItemIterator(self.treeWidget)
         checked_items = []
         while it.value():
@@ -276,12 +295,29 @@ class TreeWidget(QtWidgets.QFrame):
             self.tree_manager.export_to_xml(checked_items, fileName)
 
 
-    def double_click_item(self, item):
+    def import_data_slot(self, parent=None):
+        options = QtWidgets.QFileDialog.Options()
+        options |= QtWidgets.QFileDialog.DontUseNativeDialog
+        types = "Xml Files (*.xml)"
+        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()",
+                                                            "", types, options=options)
+        self.tree_manager.import_from_xml(fileName,self.__data_type)
+        self.draw_data()
+
+
+    def double_click_item_slot(self, item):
+        """
+        Emit double click signal
+        :param item: item clicked on
+        """
         if item.data(0, 6) is not 1:
             self.item_doubleclick_signal.emit(item)
 
 
 class ExportMenu(QtWidgets.QHBoxLayout):
+    """
+    Class for pop up menu in tree widget for xport
+    """
     export_button_signal = QtCore.pyqtSignal()
 
 
@@ -291,6 +327,9 @@ class ExportMenu(QtWidgets.QHBoxLayout):
 
 
     def create_menu(self):
+        """
+        Create pop up menu with buttons
+        """
         self.__parent.checking = True
         self.__parent.draw_data()
         self.export_menu_layout = QtWidgets.QHBoxLayout()
@@ -308,6 +347,9 @@ class ExportMenu(QtWidgets.QHBoxLayout):
 
 
     def export_buttons_cancel_slot(self):
+        """
+        Action when clicked on cancel button
+        """
         self.__parent.checking = False
 
         while self.export_menu_layout.count():

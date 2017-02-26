@@ -1,3 +1,4 @@
+from data.database.ObjectDatabase import ObjectDatabase
 from data.xml.ParserHandler import ParserHandler
 from structure.tree.Object import Object
 from structure.tree.Folder import Folder
@@ -120,6 +121,20 @@ class PlayerTreeManager:
         exporting = []
         for id in selected:
             node = self.treeDAO.get_node(id)
-            exporting.append((ObjectType.SPELL, node.object.id))
+            exporting.append((ObjectType.SPELL, node.object.id))  # TODO
 
-        ParserHandler().create_xml(exporting,path)
+        ParserHandler().create_xml(exporting, path)
+
+
+    def import_from_xml(self, file_path, type):
+        objects = ParserHandler().import_xml(file_path)
+        for object in objects:
+            default = object.pop('cs')  # TODO: default lang
+            default_id = ObjectDatabase('test.db').insert_object(default)
+            default.id = default_id
+            for lang in object.values():
+                lang.id = default_id
+                ObjectDatabase('test.db').update_object(lang)
+
+            node = Object(None, default.name, None, default)
+            self.treeDAO.insert_node(node, ObjectType.SPELL)
