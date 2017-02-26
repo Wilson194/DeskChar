@@ -1,4 +1,4 @@
-from data.database.Database import Database
+from data.database.Database import Database, Column, Foreign
 from sqlite3 import OperationalError
 
 
@@ -86,7 +86,8 @@ class DatabaseTables:
 
         spell_columns = [
             Column('ID', 'INTEGER', True, False, True),
-            Column('cast_time', 'INTEGER')
+            Column('cast_time', 'INTEGER'),
+            Column('drd_class', 'INTEGER')
         ]
 
         try:

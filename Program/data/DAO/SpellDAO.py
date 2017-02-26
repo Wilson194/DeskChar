@@ -1,5 +1,5 @@
 from data.DAO.interface.ISpellDAO import *
-from database.ObjectDatabase import *
+from data.database.ObjectDatabase import *
 from structure.enums.ObjectType import ObjectType
 
 
@@ -38,7 +38,7 @@ class SpellDAO(ISpellDAO):
                       tr_data.get('description', ''), tr_data.get('mana_cost_initial', ''),
                       tr_data.get('mana_cost_continual', ''), tr_data.get('range', ''),
                       tr_data.get('scope', ''), data.get('cast_time', ''),
-                      tr_data.get('duration', ''))
+                      tr_data.get('duration', ''), data.get('drd_class', 1))
 
         return spell
 
@@ -61,3 +61,24 @@ class SpellDAO(ISpellDAO):
             if line['lang'] not in languages:
                 languages.append(line['lang'])
         return languages
+
+
+    def get_all_data(self, spell_id) -> dict:
+        data = {}
+        int_data = dict(self.database.select(self.DATABASE_TABLE, {'ID': spell_id})[0])
+        tr_data = self.database.select('translates', {'target_id': spell_id, 'type': 'Spell'})
+        for key, value in int_data.items():
+            data[key] = value
+
+        for line in tr_data:
+            name = line['name']
+            lang = line['lang']
+            value = line['value']
+
+            if name in data:
+                data[name][lang] = value
+            else:
+                data[name] = {}
+                data[name][lang] = value
+
+        return data

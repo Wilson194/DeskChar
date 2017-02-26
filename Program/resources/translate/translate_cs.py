@@ -15,6 +15,7 @@ translate = {
     'Scope'              : 'Rozsah',
     'Cast_time'          : 'Doba vyčarování',
     'Duration'           : 'Trvání',
+    'Class'              : 'Povolání',
 
     'Folder'             : 'Složka',
     'Object'             : 'Objekt',
@@ -28,6 +29,12 @@ translate = {
 
     'NodeType.FOLDER'    : 'Složka',
     'NodeType.OBJECT'    : 'Objekt',
+
+    'Classes.ALCHEMIST'  : 'Alchymista',
+    'Classes.MAGICIAN'   : 'Mág',
+    'Classes.RANGER'     : 'Hraničář',
+    'Classes.THIEF'      : 'Zloděj',
+    'Classes.WARRIOR'    : 'Válečník',
 
     'Delete'             : 'Smazat',
     'New_item'           : 'Přidat objekt',

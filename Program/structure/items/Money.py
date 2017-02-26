@@ -1,4 +1,4 @@
-from Item import *
+from structure.items.Item import *
 
 
 class Money(Item):

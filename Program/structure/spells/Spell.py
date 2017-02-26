@@ -1,13 +1,13 @@
 from structure.enums.ObjectType import ObjectType
-from general.Object import *
-
+from structure.general.Object import *
+from structure.enums.Classes import Classes
 
 class Spell(Object):
     def __init__(self, id: int = None, lang: str = None, name: str = None,
                  description: str = None, mana_cost_initial: str = None,
                  mana_cost_continual: str = None, range: str = None,
                  scope: str = None, cast_time: int = None,
-                 duration: str = None):
+                 duration: str = None, drd_class: Classes = None):
         super().__init__(id, lang, name, description)
         self.__mana_cost_initial = mana_cost_initial
         self.__mana_cost_continual = mana_cost_continual
@@ -15,6 +15,7 @@ class Spell(Object):
         self.__scope = scope
         self.__cast_time = cast_time
         self.__duration = duration
+        self.__drd_class = drd_class
 
 
     def __name__(self):
@@ -86,6 +87,14 @@ class Spell(Object):
     @duration.setter
     def duration(self, value):
         self.__duration = value
+
+    @property
+    def drd_class(self):
+        return self.__drd_class
+
+    @drd_class.setter
+    def drd_class(self, value):
+        self.__drd_class = value
 
 
     def __eq__(self, other):

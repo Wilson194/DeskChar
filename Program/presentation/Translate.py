@@ -1,5 +1,4 @@
 from structure.general.Singleton import Singleton
-import os, sys
 
 
 class Translate(metaclass=Singleton):
@@ -8,12 +7,13 @@ class Translate(metaclass=Singleton):
     """
 
 
-    def __init__(self, lang=None):
+    def __init__(self, lang_code=None):
+        if lang_code is None:
+            lang_code = 'cs'
         variables = {}
 
-        print(os.getcwd())
-        exec(open('resources/translate/translate_cs.py', encoding='utf-8').read(),
-             variables)  # TODO
+        exec(open('resources/translate/translate_' + lang_code + '.py', encoding='utf-8').read(),
+             variables)
 
         self.translate_dict = variables['translate']
 

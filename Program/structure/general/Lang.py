@@ -46,7 +46,6 @@ class Lang:
     def code(self) -> str:
         """
         2 char long
-        :return:
         """
         return self.__code
 

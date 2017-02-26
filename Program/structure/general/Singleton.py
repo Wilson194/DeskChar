@@ -1,4 +1,7 @@
 class Singleton(type):
+    """
+    Class for creating singleton class, usage: metaclass=Singleton
+    """
     _instances = {}
 
 

@@ -1,3 +1,4 @@
+from data.xml.ParserHandler import ParserHandler
 from structure.tree.Object import Object
 from structure.tree.Folder import Folder
 from structure.enums.NodeType import NodeType
@@ -113,3 +114,12 @@ class PlayerTreeManager:
         """
         node = self.treeDAO.get_node(node_id)
         return node.object
+
+
+    def export_to_xml(self, selected, path):
+        exporting = []
+        for id in selected:
+            node = self.treeDAO.get_node(id)
+            exporting.append((ObjectType.SPELL, node.object.id))
+
+        ParserHandler().create_xml(exporting,path)

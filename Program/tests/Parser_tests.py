@@ -1,6 +1,6 @@
 import unittest
 from lxml import etree
-from data.xml.Parser import *
+from data.xml.ParserHandler import *
 
 xml = '''
 <spell>

@@ -5,6 +5,7 @@ from business.managers.PlayerTreeManager import PlayerTreeManager
 from presentation.dialogs.NewLangTab import NewLangTab
 from business.managers.TabWidgetManager import TabWidgetManager
 from structure.enums.ObjectType import ObjectType
+from presentation.Synchronizer import Synchronizer as Sync
 
 
 class TabWidget(QtWidgets.QFrame):
@@ -91,6 +92,7 @@ class TabWidget(QtWidgets.QFrame):
         for layout in self.layouts_changed:
             layout.save_data()
         self.layouts_changed.clear()
+        Sync().delete_data('Input_synchronize')
         item_tree_id = item.data(0, 5)
         item = PlayerTreeManager().get_object(item_tree_id)
         self.change_object(item.id, ObjectType(item.object_type))
@@ -128,6 +130,8 @@ class TabWidget(QtWidgets.QFrame):
                 new_tab.setLayout(self.tab_manager.get_layout(self.target_type, new_tab))
                 new_tab.layout().object = obj
                 new_tab.layout().data_changed_signal.connect(self.data_changed_slot)
+        else:
+            pass
 
 
     def tab_right_clicked(self, i):

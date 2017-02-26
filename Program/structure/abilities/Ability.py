@@ -1,4 +1,4 @@
-from general.Object import *
+from structure.general.Object import *
 
 
 class Ability(Object):

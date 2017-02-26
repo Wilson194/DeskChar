@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtGui
 from PyQt5 import QtWidgets
 
 from structure.enums.NodeType import NodeType
-from managers.PlayerTreeManager import PlayerTreeManager
+from business.managers.PlayerTreeManager import PlayerTreeManager
 from structure.enums.ObjectType import ObjectType
 from structure.tree.Folder import Folder
 from presentation.dialogs.NewTreeItem import NewTreeItem
@@ -18,12 +18,17 @@ class TreeWidget(QtWidgets.QFrame):
 
     item_doubleclick_signal = QtCore.pyqtSignal(object)
 
+
     def __init__(self, parent, data_type: ObjectType = None):
         super().__init__(parent)
 
         self.tree_manager = PlayerTreeManager()
 
         self.__data_type = data_type
+        self.checking = False
+        self.export_menu = ExportMenu(self)
+
+        self.export_menu.export_button_signal.connect(self.export_data)
 
         self.init_ui()
         self.draw_data()
@@ -149,13 +154,24 @@ class TreeWidget(QtWidgets.QFrame):
                                        QtWidgets.QSizePolicy.Minimum)
         buttons_layout.addItem(spacer)
 
+        export_button = QtWidgets.QPushButton(self)
+        export_button.setObjectName('TreeExportButton')
+        export_icon = QtGui.QIcon()
+        export_icon.addPixmap(QtGui.QPixmap("resources/icons/export.png"),
+                              QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        export_button.setIcon(export_icon)
+        export_button.clicked.connect(self.export_menu.create_menu)
+        export_button.setStatusTip(TR().tr('tip.Export_templates'))
+
+        buttons_layout.addWidget(export_button)
+
         new_button = QtWidgets.QPushButton(self)
         new_button.setObjectName('TreeNewButton')
         new_icon = QtGui.QIcon()
         new_icon.addPixmap(QtGui.QPixmap("resources/icons/plus.png"),
                            QtGui.QIcon.Normal, QtGui.QIcon.Off)
         new_button.setIcon(new_icon)
-        new_button.clicked.connect(self.__button_new)
+        new_button.clicked.connect(self.__button_new_action)
         new_button.setStatusTip(TR().tr('tip.New_root_node'))
 
         buttons_layout.addWidget(new_button)
@@ -172,7 +188,7 @@ class TreeWidget(QtWidgets.QFrame):
         self.frame_layout.addLayout(buttons_layout)
 
 
-    def __button_new(self):
+    def __button_new_action(self):
         """
         Clicked action on new button
         """
@@ -226,16 +242,81 @@ class TreeWidget(QtWidgets.QFrame):
                 folder_icon.addPixmap(QtGui.QPixmap("resources/icons/open.png"),
                                       QtGui.QIcon.Normal, QtGui.QIcon.Off)
                 tree_item.setIcon(0, folder_icon)
+                tree_item.setFlags(
+                    tree_item.flags() | QtCore.Qt.ItemIsTristate | QtCore.Qt.ItemIsUserCheckable)
                 self.set_items(item.children, tree_item)
                 tree_item.setData(0, 6, QtCore.QVariant(NodeType.FOLDER.value))
             else:
                 object_icon = QtGui.QIcon()
-                object_icon.addPixmap(QtGui.QPixmap("resources/icons/book.png"),
+                object_icon.addPixmap(QtGui.QPixmap(self.__data_type.icon()),
                                       QtGui.QIcon.Normal, QtGui.QIcon.Off)
                 tree_item.setIcon(0, object_icon)
+                tree_item.setFlags(
+                    tree_item.flags() | QtCore.Qt.ItemIsUserCheckable)
                 tree_item.setData(0, 6, QtCore.QVariant(NodeType.OBJECT.value))
+
+            if self.checking:
+                tree_item.setCheckState(0, QtCore.Qt.Unchecked)
+
+
+    def export_data(self):
+        it = QtWidgets.QTreeWidgetItemIterator(self.treeWidget)
+        checked_items = []
+        while it.value():
+            if it.value().checkState(0) and it.value().data(0, 6) is NodeType.OBJECT.value:
+                checked_items.append(it.value().data(0, 5))
+            it += 1
+
+        options = QtWidgets.QFileDialog.Options()
+        options |= QtWidgets.QFileDialog.DontUseNativeDialog
+        types = "All Files (*);;Xml Files (*.xml)"
+        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self, "QFileDialog.getSaveFileName()",
+                                                            "", types, options=options)
+        if fileName:
+            self.tree_manager.export_to_xml(checked_items, fileName)
 
 
     def double_click_item(self, item):
-        if item.data(0,6) is not 1:
+        if item.data(0, 6) is not 1:
             self.item_doubleclick_signal.emit(item)
+
+
+class ExportMenu(QtWidgets.QHBoxLayout):
+    export_button_signal = QtCore.pyqtSignal()
+
+
+    def __init__(self, parent):
+        super().__init__()
+        self.__parent = parent
+
+
+    def create_menu(self):
+        self.__parent.checking = True
+        self.__parent.draw_data()
+        self.export_menu_layout = QtWidgets.QHBoxLayout()
+        self.export_menu_layout.setSpacing(5)
+        self.export_menu_layout.setObjectName("Buttons layout")
+
+        button_export = QtWidgets.QPushButton("Export")
+        button_cancel = QtWidgets.QPushButton("Cancel")
+        self.export_menu_layout.addWidget(button_export)
+        button_export.clicked.connect(self.export_button_signal)
+        button_cancel.clicked.connect(self.export_buttons_cancel_slot)
+        self.export_menu_layout.addWidget(button_cancel)
+
+        self.__parent.frame_layout.insertLayout(1, self.export_menu_layout)
+
+
+    def export_buttons_cancel_slot(self):
+        self.__parent.checking = False
+
+        while self.export_menu_layout.count():
+            item = self.export_menu_layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
+            else:
+                self.export_menu_layout.clearLayout(item.layout())
+
+        self.__parent.frame_layout.removeItem(self.export_menu_layout)
+        self.__parent.draw_data()

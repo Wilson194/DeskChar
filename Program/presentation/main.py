@@ -3,9 +3,8 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QGridLayout
 
 from presentation.MainMenu import MainMenu
 from presentation.StatusBar import StatusBar
-from presentation.layouts.SpellLayout import SpellLayout
 from structure.enums.ObjectType import ObjectType
-from widgets.TreeWidget import TreeWidget
+from presentation.widgets.TreeWidget import TreeWidget
 from presentation.widgets.TabWidget import TabWidget
 
 
