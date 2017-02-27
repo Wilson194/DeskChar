@@ -1,5 +1,6 @@
 from data.DAO.interface.IAbilityDAO import *
 from data.database.ObjectDatabase import *
+from structure.enums.ObjectType import ObjectType
 
 
 class AbilityDAO(IAbilityDAO):
@@ -46,3 +47,13 @@ class AbilityDAO(IAbilityDAO):
             item = self.get_ability(line['ID'], lang)
             items.append(item)
         return items
+
+
+    def get_languages(self, id):
+        data = self.database.select('translates',
+                                    {'target_id': id, 'type': ObjectType.ABILITY.value})
+        languages = []
+        for line in data:
+            if line['lang'] not in languages:
+                languages.append(line['lang'])
+        return languages

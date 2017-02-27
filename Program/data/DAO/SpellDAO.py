@@ -31,7 +31,7 @@ class SpellDAO(ISpellDAO):
         if lang is None:
             lang = 'cs'
         data = dict(self.database.select(self.DATABASE_TABLE, {'ID': spell_id})[0])
-        tr_data = self.database.select_translate(spell_id, self.DATABASE_TABLE,
+        tr_data = self.database.select_translate(spell_id, ObjectType.SPELL.value,
                                                  lang)
 
         spell = Spell(spell_id, lang, tr_data.get('name', ''),
@@ -55,7 +55,7 @@ class SpellDAO(ISpellDAO):
 
 
     def get_languages(self, id):
-        data = self.database.select('translates', {'target_id': id, 'type': 'Spell'})
+        data = self.database.select('translates', {'target_id': id, 'type': ObjectType.SPELL.value})
         languages = []
         for line in data:
             if line['lang'] not in languages:
@@ -66,7 +66,8 @@ class SpellDAO(ISpellDAO):
     def get_all_data(self, spell_id) -> dict:
         data = {}
         int_data = dict(self.database.select(self.DATABASE_TABLE, {'ID': spell_id})[0])
-        tr_data = self.database.select('translates', {'target_id': spell_id, 'type': 'Spell'})
+        tr_data = self.database.select('translates',
+                                       {'target_id': spell_id, 'type': ObjectType.SPELL.value})
         for key, value in int_data.items():
             data[key] = value
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from PyQt5 import QtWidgets, QtCore
 from abc import abstractmethod
 from presentation.Synchronizer import Synchronizer as Sync

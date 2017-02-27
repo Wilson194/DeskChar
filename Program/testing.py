@@ -1,3 +1,6 @@
+# !/usr/bin/python3
+# -*- coding: utf-8 -*-
+
 # from PIL import Image
 # from os import mkdir
 #
@@ -19,32 +22,54 @@
 
 
 
-xml = '''
-<spell>
-    <class>MAGICIAN</class>
-    <description lang="cs">Velká ohnivá koule zla, která pálí a ničí vše v místě, kam se rozhodne dopadnout.</description>
-    <duration lang="cs">Efekt okamžitý, pálí to pak ještě půl dne...</duration>
-    <manaContinual lang="cs">0</manaContinual>
-    <manaInitial lang="cs">5 + 1.25 ^ sáhy rozsahu</manaInitial>
-    <name lang="cs">Ohnivá koule</name>
-    <range lang="cs">0 - 50 sáhů</range>
-    <scope lang="cs">Dle dodané magenergie</scope>
-    <name lang="en">Fireball</name>
-    <description lang="en">Big fiery ball of evil, which burns and destroys everything in the impact zone.</description>
-    <manaInitial lang="en">5 + 1.25 ^ fathoms in scope</manaInitial>
-    <manaContinual lang="en">0</manaContinual>
-    <range lang="en">0 - 50 fathoms</range>
-    <scope lang="en">According to supplied magenergie</scope>
-    <duration lang="en">Effect is immidiate, but you can feel it for another half a day...</duration>
-    <castTime>2</castTime>
-</spell>
-'''
-from lxml import etree
+"""
+ZetCode PyQt5 tutorial
 
-xml_root = etree.fromstring(xml)
+In this example, we receive data from
+a QInputDialog dialog.
 
-# print(xml_root.findall('name'))
-expr = "//{}[@lang='{}']".format('name','cs')
+author: Jan Bodnar
+website: zetcode.com
+last edited: January 2015
+"""
 
-a = xml_root.xpath(expr)[0]
-print(a.text)
+import sys
+import sip
+from PyQt5.QtWidgets import (QWidget, QPushButton, QLineEdit, QTextEdit,
+                             QInputDialog, QApplication)
+
+from PyQt5 import QtCore
+
+class Example(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+
+
+    def initUI(self):
+        QtCore.
+        self.btn = QPushButton('Dialog', self)
+        self.btn.move(20, 20)
+        self.btn.clicked.connect(self.showDialog)
+
+        self.le = QTextEdit(self)
+        self.le.move(130, 22)
+
+        self.setGeometry(300, 300, 290, 150)
+        self.setWindowTitle('Input dialog')
+        self.show()
+
+
+    def showDialog(self):
+        sip.setapi('QString', 2)
+        self.le.insertPlainText('pppppéčpppp')
+
+        print(type(self.le.toPlainText()))
+
+
+if __name__ == '__main__':
+    sip.setapi('QString',2)
+    app = QApplication(sys.argv)
+    ex = Example()
+    sys.exit(app.exec_())

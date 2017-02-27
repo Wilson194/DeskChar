@@ -31,15 +31,17 @@ class XMLSpell(XMLTemplate):
             rang = rang_x[0].text if len(rang_x) > 0 else ""
             scop_x = root.xpath(expr.format('scope', lang))
             scop = scop_x[0].text if len(scop_x) > 0 else ""
-            cati_x = root.xpath(expr.format('castTime', lang))
-            cati = cati_x[0].text if len(cati_x) > 0 else ""
+            cati_x = root.xpath("./castTime")
+            cati = int(cati_x[0].text) if len(cati_x) > 0 else 0
             dura_x = root.xpath(expr.format('duration', lang))
             dura = dura_x[0].text if len(dura_x) > 0 else ""
-            clas_x = root.xpath(expr.format('class', lang))
+            clas_x = root.xpath('./class')
             clas = clas_x[0].text if len(clas_x) > 0 else ""
 
+            clas_num = Classes.by_name(Classes, clas)
+
             obj = Spell(None, lang, name, desc, mani, manc,
-                        rang, scop, cati, dura, clas)
+                        rang, scop, cati, dura, clas_num.value)
             data[lang] = obj
 
         return data

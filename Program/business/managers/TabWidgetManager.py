@@ -1,3 +1,4 @@
+from data.DAO.AbilityDAO import AbilityDAO
 from structure.enums.ObjectType import ObjectType
 from data.DAO.SpellDAO import SpellDAO
 from presentation.layouts.SpellLayout import SpellLayout
@@ -22,11 +23,14 @@ class TabWidgetManager:
         :return: List of object
         """
         data = []
+
         if target_type is ObjectType.SPELL:
             langs = SpellDAO().get_languages(target_id)
             for lang in langs:
                 spell = SpellDAO().get_spell(target_id, lang)
                 data.append(spell)
+        elif target_type is ObjectType.ABILITY:
+            pass
 
         return data
 

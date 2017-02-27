@@ -34,6 +34,11 @@ class TreeWidget(QtWidgets.QFrame):
         self.draw_data()
 
 
+    def keyPressEvent(self, key_event):
+        if key_event.key() == QtCore.Qt.Key_Return:
+            self.item_doubleclick_signal.emit(self.treeWidget.selectedItems()[0])
+
+
     def init_ui(self):
         """
         Create basic UI frames and layouts
@@ -120,6 +125,20 @@ class TreeWidget(QtWidgets.QFrame):
             folder_action = QtWidgets.QAction(TR().tr('New_item'), menu)
             folder_action.setData(QtCore.QVariant('new'))
             menu.addAction(folder_action)
+            delete_action = QtWidgets.QAction(TR().tr('Import'), menu)
+            delete_action.setData(QtCore.QVariant('import'))
+            menu.addAction(delete_action)
+            delete_action = QtWidgets.QAction(TR().tr('Rename'), menu)
+            delete_action.setData(QtCore.QVariant('rename'))
+            menu.addAction(delete_action)
+            action = menu.exec_(self.treeWidget.viewport().mapToGlobal(position))
+            if action:
+                self.contest_nemu_actions(action, item_id)
+        else:
+            menu = QtWidgets.QMenu()
+            delete_action = QtWidgets.QAction(TR().tr('Delete'), menu)
+            delete_action.setData(QtCore.QVariant('delete'))
+            menu.addAction(delete_action)
             action = menu.exec_(self.treeWidget.viewport().mapToGlobal(position))
             if action:
                 self.contest_nemu_actions(action, item_id)
@@ -140,6 +159,18 @@ class TreeWidget(QtWidgets.QFrame):
                 self.tree_manager.create_node(NodeType(int(data['type'])), data['name'], item_id,
                                               self.__data_type)
                 self.draw_data()
+        elif action.data() == 'import':
+            self.import_data_slot(item_id)
+
+        elif action.data() == 'rename':
+            obj = self.tree_manager.get_node(item_id)
+            text, ok = QtWidgets.QInputDialog.getText(self, 'Input Dialog',
+                                                      TR().tr('New_name'), text=obj.name)
+            if ok:
+                obj.name = text
+                self.tree_manager.update_node(obj)
+
+            self.draw_data()
 
 
     def init_buttons(self):
@@ -189,16 +220,6 @@ class TreeWidget(QtWidgets.QFrame):
         new_button.setStatusTip(TR().tr('tip.New_root_node'))
 
         buttons_layout.addWidget(new_button)
-
-        # Delete button
-        delete_button = QtWidgets.QPushButton(self)
-        delete_button.setObjectName('TreeNewButton')
-        delete_icon = QtGui.QIcon()
-        delete_icon.addPixmap(QtGui.QPixmap("resources/icons/minus.png"),
-                              QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        delete_button.setIcon(delete_icon)
-
-        buttons_layout.addWidget(delete_button)
 
         self.frame_layout.addLayout(buttons_layout)
 
@@ -296,13 +317,18 @@ class TreeWidget(QtWidgets.QFrame):
 
 
     def import_data_slot(self, parent=None):
+        """
+        Slot for import xml from file
+        :param parent: parent node, import to witch folder
+        """
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         types = "Xml Files (*.xml)"
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()",
                                                             "", types, options=options)
-        self.tree_manager.import_from_xml(fileName,self.__data_type)
-        self.draw_data()
+        if fileName:
+            self.tree_manager.import_from_xml(fileName, self.__data_type, parent)
+            self.draw_data()
 
 
     def double_click_item_slot(self, item):

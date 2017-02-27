@@ -32,10 +32,10 @@ class DatabaseTables:
 
         translate_columns = [
             Column('ID', 'INTEGER', True, False, True),
-            Column('target_id', 'INTEGER', False, False, False, True),
+            Column('target_id', 'INTEGER', not_null=True),
             Column('lang', 'TEXT'),
-            Column('type', 'TEXT'),
-            Column('name', 'TEXT'),
+            Column('type', 'INTEGER', not_null=True),
+            Column('name', 'TEXT', not_null=True),
             Column('value', 'TEXT')
         ]
 
@@ -75,6 +75,8 @@ class DatabaseTables:
 
         ability_columns = [
             Column('ID', 'INTEGER', True, False, True),
+            Column('drd_race', 'INTEGER'),
+
         ]
 
         try:

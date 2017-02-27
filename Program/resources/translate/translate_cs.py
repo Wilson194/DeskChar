@@ -38,7 +38,10 @@ translate = {
 
     'Delete'              : 'Smazat',
     'New_item'            : 'Přidat objekt',
+    'Import'              : 'Importovat',
+    'Rename'              : 'Přejmenovat',
 
+    'New_name'            : 'Nový název',
 
     'tip.New_root_node'   : 'Přidat kořenový objekt',
     'tip.Import_templates': 'Importovat šabblony',

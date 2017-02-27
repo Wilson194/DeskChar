@@ -18,7 +18,8 @@ class ParserHandler:
 
 
     def import_xml(self, file_path):
-        root = etree.parse(file_path).getroot()
+        utf8_parser = etree.XMLParser(encoding='utf-8')
+        root = etree.parse(file_path, utf8_parser).getroot()
         objects = []
 
         for child in root:
@@ -27,4 +28,3 @@ class ParserHandler:
                 objects.append(obj)
 
         return objects
-

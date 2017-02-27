@@ -143,13 +143,14 @@ class SpellLayout(Layout):
         """
         Update data in object from inputs and update in manager
         """
-        self.object.name = self.name_input.toPlainText()
-        self.object.description = self.description_input.toPlainText()
-        self.object.mana_cost_initial = self.mana_cost_initial_input.toPlainText()
-        self.object.mana_cost_continual = self.mana_cost_continual_input.toPlainText()
-        self.object.range = self.range_input.toPlainText()
-        self.object.scope = self.scope_input.toPlainText()
+        self.object.name = self.name_input.toPlainText().encode('utf-8').decode('utf-8')
+        self.object.description = self.description_input.toPlainText().encode('utf-8').decode('utf-8')
+        self.object.mana_cost_initial = self.mana_cost_initial_input.toPlainText().encode('utf-8').decode('utf-8')
+        self.object.mana_cost_continual = self.mana_cost_continual_input.toPlainText().encode('utf-8').decode('utf-8')
+        self.object.range = self.range_input.toPlainText().encode('utf-8').decode('utf-8')
+        self.object.scope = self.scope_input.toPlainText().encode('utf-8').decode('utf-8')
         self.object.cast_time = self.cast_time_input.value()
-        self.object.duration = self.duration_input.toPlainText()
+        self.object.duration = self.duration_input.toPlainText().encode('utf-8').decode('utf-8')
         self.object.drd_class = self.class_input.currentIndex() + 1
+
         self.spell_manager.update_spell(self.object)

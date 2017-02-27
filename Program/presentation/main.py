@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QMainWindow, QWidget, QGridLayout
 
 from presentation.MainMenu import MainMenu
@@ -15,6 +15,9 @@ class MainWindow(QMainWindow):
 
 
     def init_ui(self):
+        self.setWindowTitle('DeskChar')
+        self.setWindowIcon(QtGui.QIcon('resources/icons/char.png'))
+
         MainMenu(self.menuBar())
         StatusBar(self.statusBar())
 
@@ -43,8 +46,8 @@ class MainWindow(QMainWindow):
 
         self.splitter.setSizes([200, 600])
         self.setGeometry(2000, 50, 800, 800)
+        # self.showMaximized()
         self.show()
-
 
     def test(self, item):
         print(item)

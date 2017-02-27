@@ -10,6 +10,7 @@ import sys
 if __name__ == '__main__':
     DatabaseTables().create_tables()
     app = QApplication([])
+    app.processEvents()
 
     main_window = MainWindow()
 

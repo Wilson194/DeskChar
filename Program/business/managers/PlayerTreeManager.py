@@ -1,3 +1,4 @@
+from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
 from data.xml.ParserHandler import ParserHandler
 from structure.tree.Object import Object
@@ -73,6 +74,23 @@ class PlayerTreeManager:
         self.treeDAO.delete_node(id)
 
 
+    def get_node(self, id: int):
+        """
+        Get node by ID
+        :param id: id of node
+        :return: Node
+        """
+        return self.treeDAO.get_node(id)
+
+
+    def update_node(self, node):
+        """
+        Update node in database
+        :param node: Updated node
+        """
+        self.treeDAO.update_node(node)
+
+
     def update_node_parent(self, node_id, parent_id):
         """
         Update parent of node, check if parent is Folder
@@ -126,8 +144,9 @@ class PlayerTreeManager:
         ParserHandler().create_xml(exporting, path)
 
 
-    def import_from_xml(self, file_path, type):
+    def import_from_xml(self, file_path, type, parent=None):
         objects = ParserHandler().import_xml(file_path)
+        ObjectDatabase('test.db').set_many(True)
         for object in objects:
             default = object.pop('cs')  # TODO: default lang
             default_id = ObjectDatabase('test.db').insert_object(default)
@@ -136,5 +155,8 @@ class PlayerTreeManager:
                 lang.id = default_id
                 ObjectDatabase('test.db').update_object(lang)
 
-            node = Object(None, default.name, None, default)
+            node = Object(None, default.name, parent, default)
             self.treeDAO.insert_node(node, ObjectType.SPELL)
+
+        ObjectDatabase('test.db').insert_many_execute()
+        ObjectDatabase('test.db').set_many(False)

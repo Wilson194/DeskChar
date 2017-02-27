@@ -14,6 +14,11 @@ class Database(metaclass=Singleton):
         self.connection.execute('PRAGMA foreign_keys = ON;')
         self.connection.execute('PRAGMA ENCODING = `UTF-8`')
         self.cursor = self.connection.cursor()
+        self.__sql_buffer = ""
+        self.__sql_many_state = False
+
+    def set_many(self, value):
+        self.__sql_many_state = value
 
 
     def create_table(self, name: str, columns=None, foreigns=None):
@@ -72,7 +77,7 @@ class Database(metaclass=Singleton):
         self.cursor.execute(sql)
 
 
-    def insert(self, table_name: str, values: dict) -> int:
+    def insert(self, table_name: str, values: dict, not_many=False) -> int:
         """
         Insert data into table
         :param table_name: name of table
@@ -85,10 +90,23 @@ class Database(metaclass=Singleton):
         sql += array_to_string(values.values(), ', ')
         sql += ');'
 
-        self.cursor.execute(sql)
-        self.connection.commit()
+        if self.__sql_many_state and not_many is False:
+            self.__sql_buffer += sql
+        else:
+            self.cursor.execute(sql)
+            self.connection.commit()
 
         return self.cursor.lastrowid
+
+
+
+    def insert_many_execute(self):
+        self.connection.isolation_level = None
+        self.cursor.execute('BEGIN TRANSACTION')
+        for i in self.__sql_buffer.split(';'):
+            self.cursor.execute(i)
+        self.__sql_buffer = ""
+        self.cursor.execute('COMMIT')
 
 
     def insert_null(self, table_name: str) -> int:
@@ -104,7 +122,7 @@ class Database(metaclass=Singleton):
         return self.cursor.lastrowid
 
 
-    def update(self, table_name: str, id: int, values: dict):
+    def update(self, table_name: str, id: int, values: dict, not_many=False):
         """
         Update data in database
         :param table_name: name of table
@@ -114,7 +132,8 @@ class Database(metaclass=Singleton):
         sql = 'UPDATE ' + table_name + ' SET '
         for key, value in values.items():
             sql += key + ' = '
-            if type(value) is str:
+            if type(value) is str or type(value) is bytes:
+                value = value.replace("'","''")
                 sql += "'" + value + "'"
             elif value is None:
                 sql += 'null'
@@ -123,9 +142,12 @@ class Database(metaclass=Singleton):
             if not key == list(values.keys())[-1]:
                 sql += ', '
         sql += ' WHERE ID = ' + str(id)
-
-        self.cursor.execute(sql)
-        self.connection.commit()
+        sql += ';'
+        if self.__sql_many_state and not_many is False:
+            self.__sql_buffer += sql
+        else:
+            self.cursor.execute(sql)
+            self.connection.commit()
 
 
     def select_all(self, table_name: str) -> list:
@@ -169,7 +191,7 @@ class Database(metaclass=Singleton):
         :return: dictionary of (name, value)
         """
         sql = "SELECT * FROM translates WHERE target_id = " + str(target_id)
-        sql += " AND type = '" + type + "'"
+        sql += " AND type = '" + str(type) + "'"
         sql += " AND lang = '" + lang + "'"
 
         result = self.cursor.execute(sql).fetchall()
@@ -293,6 +315,7 @@ def array_to_string(array: list, separator: str) -> str:
     string = ''
     for value in array:
         if type(value) == str:
+            value = value.replace("'", "''")
             string += "'" + value + "'"
         elif value is None:
             string += 'null'

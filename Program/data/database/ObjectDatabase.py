@@ -1,4 +1,5 @@
 from data.database.Database import *
+from structure.enums.ObjectType import ObjectType
 from structure.general.Object import Object
 
 
@@ -34,13 +35,13 @@ class ObjectDatabase(Database):
         if not int_values:
             db_id = self.insert_null(obj.__name__()[-1])
         else:
-            db_id = self.insert(obj.__name__()[-1], int_values)
+            db_id = self.insert(obj.__name__()[-1], int_values, True)
 
         for key, value in str_values.items():
             data_dict = {
                 'lang'     : obj.lang,
                 'target_id': db_id,
-                'type'     : obj.__name__()[-1],
+                'type'     : ObjectType.by_name(ObjectType, obj.__name__()[-1]).value,
                 'name'     : key,
                 'value'    : value
             }
@@ -74,7 +75,7 @@ class ObjectDatabase(Database):
                 continue
             elif 'id' in key:
                 continue
-            elif type(value) is str:
+            elif type(value) is str or type(value) is bytes:
                 str_values[substr(key, obj.__name__())] = value
             else:
                 continue
@@ -82,9 +83,8 @@ class ObjectDatabase(Database):
 
         translates = self.select('translates',
                                  {'target_id': obj.id,
-                                  'type'     : obj.__name__()[-1],
+                                  'type'     : ObjectType.by_name(ObjectType, obj.__name__()[-1]).value,
                                   'lang'     : obj.lang})
-
         for key, value in str_values.items():
             db_line = get_line(key, translates)
 
@@ -94,7 +94,7 @@ class ObjectDatabase(Database):
                     'value'    : value,
                     'lang'     : obj.lang,
                     'target_id': obj.id,
-                    'type'     : obj.__name__()[-1]
+                    'type'     : ObjectType.by_name(ObjectType, obj.__name__()[-1]).value
                 }
                 self.insert('translates', data_dict)
             else:
