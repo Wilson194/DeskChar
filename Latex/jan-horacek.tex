@@ -92,10 +92,9 @@ Aplikace umožní hráčům snadno připravit svoje postavy a veškeré šablony
 
 \section{Požadavky}
 
-\section{Business procesy}
 
 
-Sběr požadavků je jedna z~prvních činností, které se musí provést na začátku analýzy projektu. Je zapotřebí sepsat veškeré funkční a nefunkční požadavky, na základě kterých bude vznikat návrh a výsledný program. Na základě požadavků se dají vytvořit první odhady na rozsah projektu a na jeho cenu. Tento odhad je velice nepřesný, ale zákazníci vyžadují předběžnou cenu, již na základě jejich požadavků na program. 
+Sběr požadavků je jedna z~prvních činností, které se musí provést na začátku analýzy projektu. Je zapotřebí sepsat veškeré funkční a nefunkční požadavky, na základě kterých bude vznikat návrh a výsledný program. Na základě požadavků se dají vytvořit první odhady na rozsah projektu a~na jeho cenu. Tento odhad je velice nepřesný, ale zákazníci vyžadují předběžnou cenu, již na základě jejich požadavků na program. 
 	
 \subsection{Funkční požadavky}
 \subsubsection{Funkcionalita pro hráče}
@@ -138,10 +137,35 @@ Na mapu půjdou umisťovat odkazy na vytvoření postavy, příšery, předměty
 \\
 \textbf{Export dobrodružství pro tisk:} Aplikace bude umožňovat exportování celého dobrodružství do přehledného formátu, který je vhodný pro tisk. 
 \subsection{Nefunkční požadavky}
+
 \textbf{Podpora operačních systémů Windows a Linux:} program půjde spustit pod operačnímy systémy Windows a Linux. U operačního systému Windows budou podporovány všechny verze, které jsou novější než Windows XP. Program bude spustitelný pomocí exe souboru. U operačního systému Linux budou podporovány standardní linuxové distribuce. Program bude spustitelný pomocí sh souboru.\\
 \\
 \textbf{Jazyková podpora} program bude umožňovat přepínání jazyků a případnou lokalizaci pro další jazyky. V základu bude podporován český jazyk a anglický jazyk.
 
+
+
+\section{Případy užití}
+Případy užití popisují jednotlivé činnosti, které uživatel provádí, při práci s~aplikací. Diagram byl rozdělen na tři hlavní části pro větší přehlednost.
+\subsection{Práce se šablonami}
+\begin{figure}\centering
+	\includegraphics[width=0.8\textwidth]{images/usecase_sablony}
+	\caption[Usecase šablony]{Ukázkový obrázek v~plovoucím prostředí}\label{fig:float}
+\end{figure}
+
+Případ užití týkající se práci se šablonami namodelovaný na obrázku \ref{fig:float} je oddělený od ostatních, protože obsahuje veškeré činnosti, které od aplikace vyžaduje hráč. Jedná se o~veškerou práci se šablonami pro mobilní aplikaci MobChar.\\
+\\
+\textbf{Práce se šablonami:} uživatel si bude moci vytvořit nové šablony nebo editovat stávající. Veškeré parametry, které je možné do xml šablony zapsat, lze jednoduše upravovat\\
+\\
+\textbf{Import šablon z XML souboru:} program bude umožňovat import šablon ze strukturovaných xml souborů, které vytváří mobilní aplikace MobChar a samotný program. Importované šablony se přidají do databáze.\\
+\\
+\textbf{Sdružování šablon do skupin:} veškeré šablony půjde rozřazovat do stromové struktury pro větší přehlednost, pomocí vytváření složek a jednoduchého drag and drop systému. Takto rozřazené šablony budou umožňovat přehlednější práci a export do xml souborů.\\
+\\
+\textbf{Export šablon pro mobilní aplikaci:} program bude umožňovat vytvářet xml soubory ve formátu, se kterým umí pracovat mobilní aplikace MobChar. Lze vyexportovat veškeré šablony do jednoho souboru nebo vybrat, které šablony se mají exportovat.\\
+\\
+\textbf{Export šablon do pdf pro tisknutí:} veškeré šablony je možné exportovat do formátu pdf, které je vhodné a přehledné pro tisk.\\
+\\
+\textbf{Tvorba překladů šablon:} každá šablona může být přeložena do libovolného počtu jazyků. Při exportu šablon se všechny jazykové překlady exportují.\\
+\\
 
 
 
@@ -167,7 +191,9 @@ Na mapu půjdou umisťovat odkazy na vytvoření postavy, příšery, předměty
 	\item[DrD] Dračí doupě
 	\item[RPG] Role-playing game
 	\item[PJ] Pán jeskyně
-	\item[DAO] Data access object	
+	\item[DAO] Data access object
+	\item[MobChar] Mobile character
+	\item[DeskChar] Desktop character	
 \end{description}
 
  
