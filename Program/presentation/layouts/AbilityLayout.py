@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 from PyQt5 import QtWidgets, QtGui, QtCore
+
+from business.managers.AbilityManager import AbilityManager
 from presentation.Translate import Translate as TR
+from structure.abilities.Ability import Ability
+from structure.enums.Races import Races
 from structure.spells.Spell import Spell
 from business.managers.SpellManager import SpellManager
 from structure.enums.Classes import Classes
 from presentation.layouts.Layout import Layout
 
 
-class SpellLayout(Layout):
+class AbilityLayout(Layout):
     """
     Layout for editing spell templates
     """
@@ -18,7 +22,7 @@ class SpellLayout(Layout):
 
         self.init_ui()
 
-        self.spell_manager = SpellManager()
+        self.ability_manager = AbilityManager()
         self.object = None
 
 
@@ -56,101 +60,70 @@ class SpellLayout(Layout):
         self.class_input.currentIndexChanged.connect(self.data_changed)
         self.synchronize(self.class_input)
         self.input_grid.addWidget(self.class_input, 1, 1)
+        self.class_input.addItem(TR().tr('Select_value'))
         for drd_class in Classes:
             data = {'value': drd_class}
             self.class_input.addItem(TR().tr(str(drd_class)), QtCore.QVariant(data))
 
+        # Race
+        race_label = QtWidgets.QLabel(TR().tr('Race') + ':')
+        self.input_grid.addWidget(race_label, 2, 0)
+        self.race_input = QtWidgets.QComboBox()
+        self.race_input.setObjectName("Race_input")
+        self.race_input.currentIndexChanged.connect(self.data_changed)
+        self.synchronize(self.race_input)
+        self.input_grid.addWidget(self.race_input, 2, 1)
+        self.race_input.addItem(TR().tr('Select_value'))
+        for drd_race in Races:
+            data = {'value': drd_race}
+            self.race_input.addItem(TR().tr(str(drd_race)), QtCore.QVariant(data))
+
         # Description
         self.description_label = QtWidgets.QLabel()
         self.description_label.setText(TR().tr('Description') + ':')
-        self.input_grid.addWidget(self.description_label, 2, 0, 1, 1)
+        self.input_grid.addWidget(self.description_label, 3, 0, 1, 1)
         self.description_input = QtWidgets.QPlainTextEdit()
-        self.input_grid.addWidget(self.description_input, 2, 1, 1, 1)
+        self.input_grid.addWidget(self.description_input, 3, 1, 1, 1)
         self.description_input.textChanged.connect(self.data_changed)
 
-        # Mana cost initial
-        self.mana_cost_initial_label = QtWidgets.QLabel()
-        self.mana_cost_initial_label.setText(TR().tr('Mana_cost_initial') + ':')
-        self.input_grid.addWidget(self.mana_cost_initial_label, 3, 0, 1, 1)
-        self.mana_cost_initial_input = QtWidgets.QPlainTextEdit()
-        self.input_grid.addWidget(self.mana_cost_initial_input, 3, 1, 1, 1)
-        self.mana_cost_initial_input.textChanged.connect(self.data_changed)
-
-        # Mana cost continual
-        self.mana_cost_continual_label = QtWidgets.QLabel()
-        self.mana_cost_continual_label.setText(
-            TR().tr('Mana_cost_continual') + ':')
-        self.input_grid.addWidget(self.mana_cost_continual_label, 4, 0, 1, 1)
-        self.mana_cost_continual_input = QtWidgets.QPlainTextEdit()
-        self.input_grid.addWidget(self.mana_cost_continual_input, 4, 1, 1, 1)
-        self.mana_cost_continual_input.textChanged.connect(self.data_changed)
-
-        # Range
-        self.range_label = QtWidgets.QLabel()
-        self.range_label.setText(TR().tr('Range') + ':')
-        self.input_grid.addWidget(self.range_label, 5, 0, 1, 1)
-        self.range_input = QtWidgets.QPlainTextEdit()
-        self.input_grid.addWidget(self.range_input, 5, 1, 1, 1)
-        self.range_input.textChanged.connect(self.data_changed)
-
-        # Scope
-        self.scope_label = QtWidgets.QLabel()
-        self.scope_label.setText(TR().tr('Scope') + ':')
-        self.input_grid.addWidget(self.scope_label, 6, 0, 1, 1)
-        self.scope_input = QtWidgets.QPlainTextEdit()
-        self.input_grid.addWidget(self.scope_input, 6, 1, 1, 1)
-        self.scope_input.textChanged.connect(self.data_changed)
-
-        # Cast time
-        self.cast_time_label = QtWidgets.QLabel()
-        self.cast_time_label.setText(TR().tr('Cast_time') + ':')
-        self.input_grid.addWidget(self.cast_time_label, 7, 0, 1, 1)
-        self.cast_time_input = QtWidgets.QSpinBox()
-        self.synchronize(self.cast_time_input)
-        self.input_grid.addWidget(self.cast_time_input, 7, 1, 1, 1)
-        self.cast_time_input.valueChanged.connect(self.data_changed)
-
-        # Duration
-        self.duration_label = QtWidgets.QLabel()
-        self.duration_label.setText(TR().tr('Duration') + ':')
-        self.input_grid.addWidget(self.duration_label, 8, 0, 1, 1)
-        self.duration_input = QtWidgets.QPlainTextEdit()
-        self.input_grid.addWidget(self.duration_input, 8, 1, 1, 1)
-        self.duration_input.textChanged.connect(self.data_changed)
+        # Chance
+        self.chance_label = QtWidgets.QLabel()
+        self.chance_label.setText(TR().tr('Chance') + ':')
+        self.input_grid.addWidget(self.chance_label, 4, 0, 1, 1)
+        self.chance_input = QtWidgets.QPlainTextEdit()
+        self.input_grid.addWidget(self.chance_input, 4, 1, 1, 1)
+        self.chance_input.textChanged.connect(self.data_changed)
 
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, spell: Spell):
+    def map_data(self, ability: Ability):
         """
         Mapa data from object to inputs in layout
-        :param spell: Spell object
+        :param ability: Ability object
         """
-        self.object = spell
-        self.header.setText(spell.name)
-        self.name_input.setPlainText(spell.name)
-        self.description_input.setPlainText(spell.description)
-        self.mana_cost_initial_input.setPlainText(spell.mana_cost_initial)
-        self.mana_cost_continual_input.setPlainText(spell.mana_cost_continual)
-        self.range_input.setPlainText(spell.range)
-        self.scope_input.setPlainText(spell.scope)
-        self.cast_time_input.setValue(spell.cast_time)
-        self.duration_input.setPlainText(spell.duration)
-        self.class_input.setCurrentIndex(spell.drd_class - 1)
+        self.object = ability
+        self.header.setText(ability.name)
+        self.name_input.setPlainText(ability.name)
+        self.description_input.setPlainText(ability.description)
+        self.chance_input.setPlainText(ability.chance)
+        class_index = ability.drd_class - 2 if ability.drd_class is not None else 0
+        race_index = ability.drd_race - 2 if ability.drd_race is not None else 0
+
+        self.class_input.setCurrentIndex(class_index)
+        self.race_input.setCurrentIndex(race_index)
 
 
     def save_data(self):
         """
         Update data in object from inputs and update in manager
         """
-        self.object.name = self.name_input.toPlainText().encode('utf-8').decode('utf-8')
-        self.object.description = self.description_input.toPlainText().encode('utf-8').decode('utf-8')
-        self.object.mana_cost_initial = self.mana_cost_initial_input.toPlainText().encode('utf-8').decode('utf-8')
-        self.object.mana_cost_continual = self.mana_cost_continual_input.toPlainText().encode('utf-8').decode('utf-8')
-        self.object.range = self.range_input.toPlainText().encode('utf-8').decode('utf-8')
-        self.object.scope = self.scope_input.toPlainText().encode('utf-8').decode('utf-8')
-        self.object.cast_time = self.cast_time_input.value()
-        self.object.duration = self.duration_input.toPlainText().encode('utf-8').decode('utf-8')
-        self.object.drd_class = self.class_input.currentIndex() + 1
+        self.object.name = self.name_input.toPlainText()
+        self.object.description = self.description_input.toPlainText()
+        self.object.chance = self.chance_input.toPlainText()
+        class_index = self.class_input.currentIndex()
+        race_index = self.race_input.currentIndex()
+        self.object.drd_class = class_index + 2 if class_index > 0 else None
+        self.object.drd_race = race_index + 2 if race_index > 0 else None
 
-        self.spell_manager.update_spell(self.object)
+        self.ability_manager.update_ability(self.object)

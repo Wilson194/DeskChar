@@ -1,6 +1,10 @@
-from data.database.Database import Database
+from business.managers.LangManager import LangManager
+from data.DAO.AbilityDAO import AbilityDAO
+from data.DAO.ItemDAO import ItemDAO
 from data.database.ObjectDatabase import ObjectDatabase
 from data.xml.ParserHandler import ParserHandler
+from structure.abilities.Ability import Ability
+from structure.items.Item import Item
 from structure.tree.Object import Object
 from structure.tree.Folder import Folder
 from structure.enums.NodeType import NodeType
@@ -120,12 +124,21 @@ class PlayerTreeManager:
             obj = Spell()
             spell_id = SpellDAO().create_spell(obj)
             obj.id = spell_id
+        elif object_type.value is ObjectType.ABILITY.value:
+            obj = Ability()
+            ability_id = AbilityDAO().create_ability(obj)
+            obj.id = ability_id
+        elif object_type.value is ObjectType.ITEM.value:
+            obj = Item()
+            item_id = ItemDAO().create_item(obj)
+            obj.id = item_id
         else:
             obj = None
+
         return obj
 
 
-    def get_object(self, node_id):
+    def get_object(self, node_id: int):
         """
         Get node by id
         :param node_id: id of node
@@ -135,28 +148,45 @@ class PlayerTreeManager:
         return node.object
 
 
-    def export_to_xml(self, selected, path):
+    def export_to_xml(self, selected: list, path: str):
+        """
+        Export selected templates to xml
+        :param selected: list of selected node in tree
+        :param path: path to file, where will be final file
+        """
         exporting = []
         for id in selected:
             node = self.treeDAO.get_node(id)
-            exporting.append((ObjectType.SPELL, node.object.id))  # TODO
+            exporting.append((ObjectType.SPELL, node.object.id))  # TODO: change default SPELL
 
         ParserHandler().create_xml(exporting, path)
 
 
     def import_from_xml(self, file_path, type, parent=None):
+        """
+        Import templates from XML file
+        :param file_path: path to XML file
+        :param type:
+        :param parent: parent node id
+        """
         objects = ParserHandler().import_xml(file_path)
         ObjectDatabase('test.db').set_many(True)
+
+        if not LangManager().lang_exists('cs'):  # TODO : default lang
+            LangManager().create_lang('Čeština', 'cs')
+
         for object in objects:
             default = object.pop('cs')  # TODO: default lang
             default_id = ObjectDatabase('test.db').insert_object(default)
             default.id = default_id
             for lang in object.values():
+                if not LangManager().lang_exists(lang.lang):  # TODO : default lang
+                    LangManager().create_lang(lang.lang, lang.lang)
                 lang.id = default_id
                 ObjectDatabase('test.db').update_object(lang)
 
             node = Object(None, default.name, parent, default)
-            self.treeDAO.insert_node(node, ObjectType.SPELL)
+            self.treeDAO.insert_node(node, ObjectType.SPELL) # TODO: chance default SPELL
 
         ObjectDatabase('test.db').insert_many_execute()
         ObjectDatabase('test.db').set_many(False)

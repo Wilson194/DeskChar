@@ -1,9 +1,10 @@
-from PyQt5 import QtCore, QtGui
+from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 from business.managers.LangManager import LangManager
 from business.managers.PlayerTreeManager import PlayerTreeManager
 from presentation.dialogs.NewLangTab import NewLangTab
 from business.managers.TabWidgetManager import TabWidgetManager
+from presentation.layouts.Layout import Layout
 from structure.enums.ObjectType import ObjectType
 from presentation.Synchronizer import Synchronizer as Sync
 
@@ -14,7 +15,7 @@ class TabWidget(QtWidgets.QFrame):
     """
 
 
-    def __init__(self, parent, target_id, target_type):
+    def __init__(self, parent, target_id: int, target_type: ObjectType):
         super().__init__(parent)
 
         self.layouts_changed = []
@@ -55,23 +56,24 @@ class TabWidget(QtWidgets.QFrame):
         """
         Init data, create language tabs
         """
-        data = self.tab_manager.get_data(self.target_id, self.target_type)
-        for one in data:
-            tab = QtWidgets.QWidget()
-            lang = self.lang_manager.get_lang_by_code(one.lang)
-            tab_text = lang.name + ' (' + lang.code + ')'
-            layout = self.tab_manager.get_layout(self.target_type, tab)
-            layout.map_data(one)
-            tab.setLayout(layout)
-            self.tab_widget.insertTab(self.tab_bar.count(), tab, tab_text)
-            layout.data_changed_signal.connect(self.data_changed_slot)
+        if self.target_id:
+            data = self.tab_manager.get_data(self.target_id, self.target_type)
+            for one in data:
+                tab = QtWidgets.QWidget()
+                lang = self.lang_manager.get_lang_by_code(one.lang)
+                tab_text = lang.name + ' (' + lang.code + ')'
+                layout = self.tab_manager.get_layout(self.target_type, tab)
+                layout.map_data(one)
+                tab.setLayout(layout)
+                self.tab_widget.insertTab(self.tab_bar.count(), tab, tab_text)
+                layout.data_changed_signal.connect(self.data_changed_slot)
 
-        self.new_tab = QtWidgets.QWidget()
+            self.new_tab = QtWidgets.QWidget()
 
-        self.tab_widget.insertTab(self.tab_bar.count(), self.new_tab, '+')
+            self.tab_widget.insertTab(self.tab_bar.count(), self.new_tab, '+')
 
 
-    def change_object(self, target_id, target_type):
+    def change_object(self, target_id: int, target_type: ObjectType):
         """
         change object that mapped on tabs
         :param target_id: id of object
@@ -98,7 +100,7 @@ class TabWidget(QtWidgets.QFrame):
         self.change_object(item.id, ObjectType(item.object_type))
 
 
-    def data_changed_slot(self, layout):
+    def data_changed_slot(self, layout: Layout):
         """
         Function slot for add layout changes
         :param layout: changed layout
@@ -107,7 +109,7 @@ class TabWidget(QtWidgets.QFrame):
             self.layouts_changed.append(layout)
 
 
-    def tab_clicked(self, i):
+    def tab_clicked(self, i: int):
         """
         Action when click on tab
         :param i: num of tab you click on
@@ -134,7 +136,7 @@ class TabWidget(QtWidgets.QFrame):
             pass
 
 
-    def tab_right_clicked(self, i):
+    def tab_right_clicked(self, i: int):
         print('right', i)
 
 

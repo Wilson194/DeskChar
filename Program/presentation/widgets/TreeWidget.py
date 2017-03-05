@@ -35,6 +35,10 @@ class TreeWidget(QtWidgets.QFrame):
 
 
     def keyPressEvent(self, key_event):
+        """
+        Map key shortcuts
+        :param key_event: key event
+        """
         if key_event.key() == QtCore.Qt.Key_Return:
             self.item_doubleclick_signal.emit(self.treeWidget.selectedItems()[0])
 

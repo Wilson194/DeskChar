@@ -1,6 +1,8 @@
-from data.DAO.interface.IItemDAO import *
-from data.database.Database import *
-from data.database.ObjectDatabase import *
+from data.DAO.interface.IItemDAO import IItemDAO
+from data.database.Database import Database
+from data.database.ObjectDatabase import ObjectDatabase
+from structure.enums.ObjectType import ObjectType
+from structure.items.Item import Item
 
 
 class ItemDAO(IItemDAO):
@@ -48,3 +50,17 @@ class ItemDAO(IItemDAO):
                     data['parent_id'], data['weight'], data['price'])
 
         return item
+
+    def get_languages(self, id: int) -> list:
+        """
+        Get list of all languages of one item
+        :param id: id of item
+        :return: list of language codes
+        """
+        data = self.database.select('translates',
+                                    {'target_id': id, 'type': ObjectType.ITEM.value})
+        languages = []
+        for line in data:
+            if line['lang'] not in languages:
+                languages.append(line['lang'])
+        return languages

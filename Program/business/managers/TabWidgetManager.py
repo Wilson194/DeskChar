@@ -1,8 +1,13 @@
 from data.DAO.AbilityDAO import AbilityDAO
+from data.DAO.ItemDAO import ItemDAO
+from presentation.layouts.ItemLayout import ItemLayout
+from structure.abilities.Ability import Ability
 from structure.enums.ObjectType import ObjectType
 from data.DAO.SpellDAO import SpellDAO
 from presentation.layouts.SpellLayout import SpellLayout
+from structure.items.Item import Item
 from structure.spells.Spell import Spell
+from presentation.layouts.AbilityLayout import AbilityLayout
 
 
 class TabWidgetManager:
@@ -29,8 +34,18 @@ class TabWidgetManager:
             for lang in langs:
                 spell = SpellDAO().get_spell(target_id, lang)
                 data.append(spell)
+
         elif target_type is ObjectType.ABILITY:
-            pass
+            langs = AbilityDAO().get_languages(target_id)
+            for lang in langs:
+                ability = AbilityDAO().get_ability(target_id, lang)
+                data.append(ability)
+
+        elif target_type is ObjectType.ITEM:
+            langs = ItemDAO().get_languages(target_id)
+            for lang in langs:
+                item = ItemDAO().get_item(target_id, lang)
+                data.append(item)
 
         return data
 
@@ -44,6 +59,11 @@ class TabWidgetManager:
         """
         if target_type is ObjectType.SPELL:
             return SpellLayout(parent)
+        if target_type is ObjectType.ABILITY:
+            return AbilityLayout(parent)
+        if target_type is ObjectType.ITEM:
+            return ItemLayout(parent)
+
 
 
     def get_empty_object(self, target_type: ObjectType, id: int, lang: str) -> object:
@@ -56,5 +76,9 @@ class TabWidgetManager:
         """
         if target_type is ObjectType.SPELL:
             return Spell(id, lang)
+        if target_type is ObjectType.ABILITY:
+            return Ability(id, lang)
+        if target_type is ObjectType.ITEM:
+            return Item(id, lang)
 
         return None

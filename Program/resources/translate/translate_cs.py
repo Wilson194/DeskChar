@@ -7,6 +7,10 @@ translate = {
     'Menu_help'           : '&Nápověda',
     'Menu_about'          : '&O aplikaci',
 
+    'Menu.spell'          : 'Šablony kouzel',
+    'Menu.ability'        : 'Šablony schopností',
+    'Menu.templates'      : 'Šablony',
+
     'Name'                : 'Jméno',
     'Description'         : 'Popis',
     'Mana_cost_initial'   : 'Počáteční cena',
@@ -23,9 +27,11 @@ translate = {
     'Code'                : 'Kód',
     'Select_lang'         : 'Vybrat jazyk',
     'Create_new_lang'     : 'Vytvořit nový',
+    'Select_value'        : 'Vyberte možnost',
 
 
     'ObjectType.SPELL'    : 'Kouzla',
+    'ObjectType.ABILITY'  : 'Schopnosti',
 
     'NodeType.FOLDER'     : 'Složka',
     'NodeType.OBJECT'     : 'Objekt',
@@ -35,6 +41,14 @@ translate = {
     'Classes.RANGER'      : 'Hraničář',
     'Classes.THIEF'       : 'Zloděj',
     'Classes.WARRIOR'     : 'Válečník',
+
+    'Races.BARBARIAN'     : 'Barbar',
+    'Races.DWARF'         : 'Trpaslík',
+    'Races.ELF'           : 'Elf',
+    'Races.HOBBIT'        : 'Hobit',
+    'Races.HUMAN'         : 'Člověk',
+    'Races.KROLL'         : 'Krol',
+    'Races.KUDUK'         : 'Kuduk',
 
     'Delete'              : 'Smazat',
     'New_item'            : 'Přidat objekt',

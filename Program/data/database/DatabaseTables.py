@@ -76,6 +76,7 @@ class DatabaseTables:
         ability_columns = [
             Column('ID', 'INTEGER', True, False, True),
             Column('drd_race', 'INTEGER'),
+            Column('drd_class', 'INTEGER'),
 
         ]
 

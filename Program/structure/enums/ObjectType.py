@@ -10,6 +10,8 @@ class ObjectType(AutoNumber):
     def icon(self):
         if self is ObjectType.SPELL:
             return 'resources/icons/book.png'
+        if self is ObjectType.ABILITY:
+            return 'resources/icons/map.png'
 
         return 'resources/icons/book.png'
 

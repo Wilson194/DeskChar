@@ -1,19 +1,19 @@
-from data.DAO.AbilityDAO import AbilityDAO
-from structure.abilities.Ability import Ability
+from data.DAO.ItemDAO import ItemDAO
+from structure.items.Item import Item
 
 
-class AbilityManager:
+class ItemManager:
     def __init__(self):
-        self.DAO = AbilityDAO()
+        self.DAO = ItemDAO()
 
 
-    def update_ability(self, ability: Ability):
-        self.DAO.update_ability(ability)
+    def update_item(self, item: Item):
+        self.DAO.update_item(item)
 
 
     def create_empty(self, lang):
-        ability = Ability(None, lang)
-        id = self.DAO.create_ability(ability)
-        ability.id = id
+        item = Item(None, lang)
+        id = self.DAO.create_item(item)
+        item.id = id
 
-        return ability
+        return item
