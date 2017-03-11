@@ -6,6 +6,7 @@ from presentation.StatusBar import StatusBar
 from structure.enums.ObjectType import ObjectType
 from presentation.widgets.TreeWidget import TreeWidget
 from presentation.widgets.TabWidget import TabWidget
+from presentation.Toolbar import ToolBar
 
 
 class MainWindow(QMainWindow):
@@ -23,6 +24,7 @@ class MainWindow(QMainWindow):
 
         self.setMenuWidget(MainMenu())
         self.setStatusBar(StatusBar())
+        self.toolBar = ToolBar(parent=self)
 
         self.setObjectName('MainWindow')
 
@@ -33,6 +35,7 @@ class MainWindow(QMainWindow):
         self.grid_layout.setObjectName('Grid layout')
 
         self.menuWidget().templates_menu_signal.connect(self.redraw_central_widget)
+        self.toolBar.templates_tool_signal.connect(self.redraw_central_widget)
 
         self.setCentralWidget(self.centralWidget)
         self.setGeometry(200, 50, 800, 800)
