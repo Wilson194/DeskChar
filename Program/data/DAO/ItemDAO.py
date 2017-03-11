@@ -14,33 +14,33 @@ class ItemDAO(IItemDAO):
         self.database = Database(self.DATABASE_DRIVER)
 
 
-    def create_item(self, item: Item):
+    def create(self, item: Item):
         return ObjectDatabase(self.DATABASE_DRIVER).insert_object(item)
 
 
-    def update_item(self, item: Item):
+    def update(self, item: Item):
         ObjectDatabase(self.DATABASE_DRIVER).update_object(item)
 
 
-    def delete_item(self, item_id: int):
+    def delete(self, item_id: int):
         self.database.delete(self.DATABASE_TABLE, item_id)
         self.database.delete_where('translates',
                                    {'target_id': item_id, 'type': 'Item'})
 
 
-    def get_all_items(self, lang=None) -> list:
+    def get_all(self, lang=None) -> list:
         if lang is None:
             lang = 'cs'
         lines = self.database.select_all('Item')
 
         items = []
         for line in lines:
-            item = self.get_item(line['ID'], lang)
+            item = self.get(line['ID'], lang)
             items.append(item)
         return items
 
 
-    def get_item(self, item_id: int, lang=None) -> Item:
+    def get(self, item_id: int, lang=None) -> Item:
         if lang is None:
             lang = 'cs'
         data = self.database.select(self.DATABASE_TABLE, {'ID': item_id})[0]

@@ -1,28 +1,28 @@
 from abc import ABC, abstractmethod
-from structure.spells.Spell import *
+from structure.spells.Spell import Spell
 
 
 class ISpellDAO(ABC):
     @abstractmethod
-    def create_spell(self, spell: Spell) -> int:
+    def create(self, spell: Spell) -> int:
         pass
 
 
     @abstractmethod
-    def update_spell(self, spell: Spell) -> None:
+    def update(self, spell: Spell) -> None:
         pass
 
 
     @abstractmethod
-    def delete_spell(self, spell_id: int) -> None:
+    def delete(self, spell_id: int) -> None:
         pass
 
 
     @abstractmethod
-    def get_spell(self, spell: int) -> Spell:
+    def get(self, spell: int) -> Spell:
         pass
 
 
     @abstractmethod
-    def get_all_spells(self) -> list:
+    def get_all(self) -> list:
         pass

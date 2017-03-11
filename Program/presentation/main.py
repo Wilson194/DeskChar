@@ -22,7 +22,7 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QtGui.QIcon('resources/icons/char.png'))
 
         self.setMenuWidget(MainMenu())
-        StatusBar(self.statusBar())
+        self.setStatusBar(StatusBar())
 
         self.setObjectName('MainWindow')
 
@@ -32,16 +32,10 @@ class MainWindow(QMainWindow):
         self.grid_layout = QGridLayout(self.centralWidget)
         self.grid_layout.setObjectName('Grid layout')
 
-        # tree = TreeWidget(self.splitter, ObjectType.ABILITY)
-        # self.tabWidget = TabWidget(self.splitter, 6, ObjectType.ABILITY)
-        # tree.item_doubleclick_signal.connect(self.tabWidget.tree_item_clicked)
-
-        # self.tabWidget.setObjectName("tabWidget")
-
         self.menuWidget().templates_menu_signal.connect(self.redraw_central_widget)
 
         self.setCentralWidget(self.centralWidget)
-        self.setGeometry(2000, 50, 800, 800)
+        self.setGeometry(200, 50, 800, 800)
         # self.showMaximized()
         self.show()
 

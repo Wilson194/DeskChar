@@ -1,17 +1,19 @@
+from data.DAO.AbilityDAO import AbilityDAO
 from data.DAO.SpellDAO import SpellDAO
 from data.xml.templates.XMLTemplate import XMLTemplate
+from structure.abilities.Ability import Ability
 from structure.enums.Classes import Classes
 from lxml import etree
 
-from structure.spells.Spell import Spell
+from structure.enums.Races import Races
 
 
-class XMLSpell(XMLTemplate):
-    ROOT_NAME = 'spell'
+class XMLAbility(XMLTemplate):
+    ROOT_NAME = 'ability'
 
 
     def __init__(self):
-        self.DAO = SpellDAO()
+        self.DAO = AbilityDAO()
 
 
     def get_object(self, root) -> object:
@@ -21,18 +23,14 @@ class XMLSpell(XMLTemplate):
         for lang in langs:
             name = self.get_value(root, 'name', lang)
             desc = self.get_value(root, 'description', lang)
-            mani = self.get_value(root, 'manaInitial', lang)
-            manc = self.get_value(root, 'manaContinual', lang)
-            rang = self.get_value(root, 'range', lang)
-            scop = self.get_value(root, 'scope', lang)
-            cati = self.get_value(root, 'castTime')
-            dura = self.get_value(root, 'duration', lang)
+            chan = self.get_value(root, 'chance', lang)
             clas = self.get_value(root, 'class', None, False)
+            race = self.get_value(root, 'race', None, False)
 
             clas_num = Classes.by_name(Classes, clas)
+            race_num = Races.by_name(Races, race)
 
-            obj = Spell(None, lang, name, desc, mani, manc,
-                        rang, scop, cati, dura, clas_num.value)
+            obj = Ability(None, lang, name, desc, chan, race_num, clas_num)
             data[lang] = obj
 
         return data
@@ -51,6 +49,9 @@ class XMLSpell(XMLTemplate):
             elif key == 'drd_class':
                 ele = etree.SubElement(root, self.remap_names(key))
                 ele.text = Classes(value).xml_name()
+            elif key == 'drd_race':
+                ele = etree.SubElement(root, self.remap_names(key))
+                ele.text = Races(value).xml_name()
             else:
                 ele = etree.SubElement(root, self.remap_names(key))
                 ele.text = str(value)
@@ -59,14 +60,4 @@ class XMLSpell(XMLTemplate):
 
 
     def remap_names(self, name: str) -> str:
-        if name == 'mana_cost_initial':
-            return 'manaInitial'
-        if name == 'mana_cost_continual':
-            return 'manaContinual'
-        if name == 'drd_class':
-            return 'class'
-        if name == 'ID':
-            return 'id'
-        if name == 'cast_time':
-            return 'castTime'
         return name

@@ -1,18 +1,12 @@
 from business.managers.LangManager import LangManager
-from data.DAO.AbilityDAO import AbilityDAO
-from data.DAO.ItemDAO import ItemDAO
 from data.database.ObjectDatabase import ObjectDatabase
 from data.xml.ParserHandler import ParserHandler
-from structure.abilities.Ability import Ability
-from structure.items.Item import Item
 from structure.tree.Object import Object
 from structure.tree.Folder import Folder
 from structure.enums.NodeType import NodeType
 from structure.tree.Node import Node
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from structure.enums.ObjectType import ObjectType
-from data.DAO.SpellDAO import SpellDAO
-from structure.spells.Spell import Spell
 
 
 class PlayerTreeManager:
@@ -120,20 +114,8 @@ class PlayerTreeManager:
         :param object_type: obkect type
         :return: Object if created, None otherwise
         """
-        if object_type.value is ObjectType.SPELL.value:
-            obj = Spell()
-            spell_id = SpellDAO().create_spell(obj)
-            obj.id = spell_id
-        elif object_type.value is ObjectType.ABILITY.value:
-            obj = Ability()
-            ability_id = AbilityDAO().create_ability(obj)
-            obj.id = ability_id
-        elif object_type.value is ObjectType.ITEM.value:
-            obj = Item()
-            item_id = ItemDAO().create_item(obj)
-            obj.id = item_id
-        else:
-            obj = None
+        obj = object_type.instance()()
+        obj.id = object_type.instance().DAO()().create(obj)
 
         return obj
 
@@ -157,7 +139,7 @@ class PlayerTreeManager:
         exporting = []
         for id in selected:
             node = self.treeDAO.get_node(id)
-            exporting.append((ObjectType.SPELL, node.object.id))  # TODO: change default SPELL
+            exporting.append((node.object.object_type, node.object.id))  # TODO: change default SPELL
 
         ParserHandler().create_xml(exporting, path)
 
@@ -186,7 +168,7 @@ class PlayerTreeManager:
                 ObjectDatabase('test.db').update_object(lang)
 
             node = Object(None, default.name, parent, default)
-            self.treeDAO.insert_node(node, ObjectType.SPELL) # TODO: chance default SPELL
+            self.treeDAO.insert_node(node, default.object_type)  # TODO: chance default SPELL
 
         ObjectDatabase('test.db').insert_many_execute()
         ObjectDatabase('test.db').set_many(False)

@@ -9,6 +9,7 @@ translate = {
 
     'Menu.spell'          : 'Šablony kouzel',
     'Menu.ability'        : 'Šablony schopností',
+    'Menu.item'           : 'Předměty',
     'Menu.templates'      : 'Šablony',
 
     'Name'                : 'Jméno',
@@ -20,6 +21,8 @@ translate = {
     'Cast_time'           : 'Doba vyčarování',
     'Duration'            : 'Trvání',
     'Class'               : 'Povolání',
+    'Race'                : 'Rasa',
+    'Chance'              : 'Šance',
 
     'Folder'              : 'Složka',
     'Object'              : 'Objekt',

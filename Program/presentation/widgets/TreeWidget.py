@@ -7,6 +7,7 @@ from structure.enums.ObjectType import ObjectType
 from structure.tree.Folder import Folder
 from presentation.dialogs.NewTreeItem import NewTreeItem
 from presentation.Translate import Translate as TR
+from structure.tree.Object import Object
 
 
 class TreeWidget(QtWidgets.QFrame):
@@ -40,7 +41,8 @@ class TreeWidget(QtWidgets.QFrame):
         :param key_event: key event
         """
         if key_event.key() == QtCore.Qt.Key_Return:
-            self.item_doubleclick_signal.emit(self.treeWidget.selectedItems()[0])
+            if self.treeWidget.selectedItems()[0].data(0,6) is NodeType.OBJECT.value:
+                self.item_doubleclick_signal.emit(self.treeWidget.selectedItems()[0])
 
 
     def init_ui(self):
@@ -63,6 +65,11 @@ class TreeWidget(QtWidgets.QFrame):
         self.treeWidget.setFont(font)
         self.treeWidget.setHeaderLabel(TR().tr(self.__data_type))
         self.treeWidget.header().setDefaultAlignment(QtCore.Qt.AlignCenter)
+        self.treeWidget.header().setFrameStyle(QtWidgets.QFrame.StyledPanel)
+        self.treeWidget.header().setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.treeWidget.header().setLineWidth(5)
+
+        # self.treeWidget.header().setFrameShadow(QtWidgets.QFrame.Plain)
 
         self.treeWidget.setDragDropMode(self.treeWidget.InternalMove)
         self.treeWidget.setDragEnabled(True)

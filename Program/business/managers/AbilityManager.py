@@ -8,12 +8,12 @@ class AbilityManager:
 
 
     def update_ability(self, ability: Ability):
-        self.DAO.update_ability(ability)
+        self.DAO.update(ability)
 
 
     def create_empty(self, lang):
         ability = Ability(None, lang)
-        id = self.DAO.create_ability(ability)
+        id = self.DAO.create(ability)
         ability.id = id
 
         return ability

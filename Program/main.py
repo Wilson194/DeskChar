@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5.QtWidgets import QApplication
-from presentation.main import *
-from data.database.DatabaseTables import *
+from presentation.main import MainWindow
+from data.database.DatabaseTables import DatabaseTables
 import sys
 
 

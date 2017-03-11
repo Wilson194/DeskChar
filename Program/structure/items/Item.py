@@ -18,6 +18,23 @@ class Item(Object):
         return names
 
 
+    @staticmethod
+    def DAO():
+        from data.DAO.ItemDAO import ItemDAO
+        return ItemDAO
+
+
+    @staticmethod
+    def XmlClass():
+        return None
+
+
+    @staticmethod
+    def layout():
+        from presentation.layouts.ItemLayout import ItemLayout
+        return ItemLayout
+
+
     @property
     def parent_id(self):
         return self.__parent_id

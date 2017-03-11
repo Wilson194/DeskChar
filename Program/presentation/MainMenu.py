@@ -55,9 +55,9 @@ class MainMenu(QMenuBar):
 
 
     def init_player_ui(self):
-        spell_templates = QAction(TR().tr('Menu.spell'), self)
-        ability_templates = QAction(TR().tr('Menu.ability'), self)
-        item_templates = QAction(TR().tr('Menu.item'), self)
+        spell_templates = QAction(QIcon('resources/icons/book.png'), TR().tr('Menu.spell'), self)
+        ability_templates = QAction(QIcon('resources/icons/map.png'), TR().tr('Menu.ability'), self)
+        item_templates = QAction(QIcon('resources/icons/axe.png'), TR().tr('Menu.item'), self)
 
         ability_templates.triggered.connect(
             lambda: self.templates_menu_signal.emit(ObjectType.ABILITY))

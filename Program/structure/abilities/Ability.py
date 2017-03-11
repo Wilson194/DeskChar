@@ -20,6 +20,24 @@ class Ability(Object):
         return names
 
 
+    @staticmethod
+    def DAO():
+        from data.DAO.AbilityDAO import AbilityDAO
+        return AbilityDAO
+
+
+    @staticmethod
+    def layout():
+        from presentation.layouts.AbilityLayout import AbilityLayout
+        return AbilityLayout
+
+
+    @staticmethod
+    def XmlClass():
+        from data.xml.templates.XMLAbility import XMLAbility
+        return XMLAbility
+
+
     @property
     def object_type(self):
         return ObjectType.ABILITY

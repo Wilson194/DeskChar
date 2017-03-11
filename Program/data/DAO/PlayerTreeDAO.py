@@ -1,6 +1,3 @@
-from data.DAO.AbilityDAO import AbilityDAO
-from data.DAO.ItemDAO import ItemDAO
-from data.DAO.SpellDAO import SpellDAO
 from data.database.Database import Database
 from structure.enums.ObjectType import ObjectType
 from structure.enums.NodeType import NodeType
@@ -117,15 +114,7 @@ def map_objects(data: dict) -> list:
         if row['type'] is NodeType.FOLDER.value:
             obj = Folder(row['ID'], row['name'], row['parent_id'])
         elif row['type'] is NodeType.OBJECT.value:
-            if row['target_type'] is ObjectType.ITEM.value:
-                target_object = ItemDAO().get_item(row['target_id'])
-            elif row['target_type'] is ObjectType.SPELL.value:
-                target_object = SpellDAO().get_spell(row['target_id'])
-            elif row['target_type'] is ObjectType.ABILITY.value:
-                target_object = AbilityDAO().get_ability(row['target_id'])
-            else:
-                target_object = None
-
+            target_object = ObjectType(row['target_type']).instance().DAO()().get(row['target_id'])
             obj = Object(row['ID'], row['name'], row['parent_id'], target_object)
         else:
             obj = None

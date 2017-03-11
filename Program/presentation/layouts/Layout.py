@@ -2,6 +2,7 @@
 from PyQt5 import QtWidgets, QtCore
 from abc import abstractmethod
 from presentation.Synchronizer import Synchronizer as Sync
+from presentation.Translate import Translate as TR
 
 
 class Layout(QtWidgets.QVBoxLayout):
@@ -55,6 +56,49 @@ class Layout(QtWidgets.QVBoxLayout):
                 one.setCurrentIndex(obj.currentIndex())
             elif isinstance(one, QtWidgets.QSpinBox):
                 one.setValue(obj.value())
+
+
+    def text_box(self, grid, name, xposition, yposition, synchonize=False):
+        label = QtWidgets.QLabel()
+        label.setText(TR().tr(name) + ':')
+        grid.addWidget(label, yposition, xposition, 1, 1)
+        input = QtWidgets.QPlainTextEdit()
+        grid.addWidget(input, yposition, xposition + 1, 1, 1)
+        input.textChanged.connect(self.data_changed)
+        if synchonize:
+            self.synchronize(input)
+
+        return input
+
+
+    def combo_box(self, grid, name, data, xposition, yposition, synchonize=False):
+        label = QtWidgets.QLabel(TR().tr(name) + ':')
+        grid.addWidget(label, yposition, xposition)
+        input = QtWidgets.QComboBox()
+        input.setObjectName(name + "_input")
+        input.currentIndexChanged.connect(self.data_changed)
+        if synchonize:
+            self.synchronize(input)
+        grid.addWidget(input, yposition, xposition + 1)
+        input.addItem(TR().tr('Select_value'))
+        for value in data:
+            Qdata = {'value': value}
+            input.addItem(TR().tr(str(value)), QtCore.QVariant(Qdata))
+
+        return input
+
+
+    def spin_box(self, grid, name, xposition, yposition, synchronize=False):
+        label = QtWidgets.QLabel()
+        label.setText(TR().tr(name) + ':')
+        grid.addWidget(label, yposition, xposition, 1, 1)
+        input = QtWidgets.QSpinBox()
+        if synchronize:
+            self.synchronize(input)
+        grid.addWidget(input, yposition, xposition+1, 1, 1)
+        input.valueChanged.connect(self.data_changed)
+
+        return input
 
 
     @abstractmethod

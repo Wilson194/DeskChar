@@ -1,6 +1,8 @@
-from data.DAO.interface.ISpellDAO import *
-from data.database.ObjectDatabase import *
+from data.DAO.interface.ISpellDAO import ISpellDAO
+from data.database.Database import Database
+from data.database.ObjectDatabase import ObjectDatabase
 from structure.enums.ObjectType import ObjectType
+from structure.spells.Spell import Spell
 
 
 class SpellDAO(ISpellDAO):
@@ -13,7 +15,7 @@ class SpellDAO(ISpellDAO):
         self.database = Database(self.DATABASE_DRIVER)
 
 
-    def create_spell(self, spell: Spell) -> int:
+    def create(self, spell: Spell) -> int:
         """
         Create new spell in database
         :param spell: Spell object
@@ -22,7 +24,7 @@ class SpellDAO(ISpellDAO):
         return ObjectDatabase(self.DATABASE_DRIVER).insert_object(spell)
 
 
-    def update_spell(self, spell: Spell):
+    def update(self, spell: Spell):
         """
         Update spell in database
         :param spell: Spell object with new data
@@ -30,7 +32,7 @@ class SpellDAO(ISpellDAO):
         ObjectDatabase(self.DATABASE_DRIVER).update_object(spell)
 
 
-    def delete_spell(self, spell_id: int):
+    def delete(self, spell_id: int):
         """
         Delete spell from database and all his translates
         :param spell_id: id of spell
@@ -40,7 +42,7 @@ class SpellDAO(ISpellDAO):
                                    {'target_id': spell_id, 'type': 'Item'})
 
 
-    def get_spell(self, spell_id: int, lang: str = None) -> Spell:
+    def get(self, spell_id: int, lang: str = None) -> Spell:
         """
         Get spell from database
         :param spell_id: id of spell
@@ -62,7 +64,7 @@ class SpellDAO(ISpellDAO):
         return spell
 
 
-    def get_all_spells(self, lang=None) -> list:
+    def get_all(self, lang=None) -> list:
         """
         Get list of all spells from database, only one lang
         :param lang: lang code
@@ -73,7 +75,7 @@ class SpellDAO(ISpellDAO):
         lines = self.database.select_all(self.DATABASE_TABLE)
         items = []
         for line in lines:
-            item = self.get_spell(line['ID'], lang)
+            item = self.get(line['ID'], lang)
             items.append(item)
         return items
 

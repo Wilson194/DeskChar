@@ -8,12 +8,12 @@ class ItemManager:
 
 
     def update_item(self, item: Item):
-        self.DAO.update_item(item)
+        self.DAO.update(item)
 
 
     def create_empty(self, lang):
         item = Item(None, lang)
-        id = self.DAO.create_item(item)
+        id = self.DAO.create(item)
         item.id = id
 
         return item

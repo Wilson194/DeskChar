@@ -19,57 +19,10 @@
 # from structure.enums.Classes import Classes
 #
 # print(Classes.ALCHEMIST)
+from structure.enums.Classes import Classes
+from structure.enums.Races import Races
 
 
+a = Classes.ALCHEMIST
 
-"""
-ZetCode PyQt5 tutorial
-
-In this example, we receive data from
-a QInputDialog dialog.
-
-author: Jan Bodnar
-website: zetcode.com
-last edited: January 2015
-"""
-
-import sys
-import sip
-from PyQt5.QtWidgets import (QWidget, QPushButton, QLineEdit, QTextEdit,
-                             QInputDialog, QApplication)
-
-from PyQt5 import QtCore
-
-class Example(QWidget):
-    def __init__(self):
-        super().__init__()
-
-        self.initUI()
-
-
-    def initUI(self):
-        QtCore.
-        self.btn = QPushButton('Dialog', self)
-        self.btn.move(20, 20)
-        self.btn.clicked.connect(self.showDialog)
-
-        self.le = QTextEdit(self)
-        self.le.move(130, 22)
-
-        self.setGeometry(300, 300, 290, 150)
-        self.setWindowTitle('Input dialog')
-        self.show()
-
-
-    def showDialog(self):
-        sip.setapi('QString', 2)
-        self.le.insertPlainText('pppppéčpppp')
-
-        print(type(self.le.toPlainText()))
-
-
-if __name__ == '__main__':
-    sip.setapi('QString',2)
-    app = QApplication(sys.argv)
-    ex = Example()
-    sys.exit(app.exec_())
+print(Races.by_name(Races, 'dwarf'))

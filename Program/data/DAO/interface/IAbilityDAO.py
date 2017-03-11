@@ -1,28 +1,27 @@
 from abc import ABC, abstractmethod
-from structure.abilities.Ability import *
 
 
 class IAbilityDAO(ABC):
     @abstractmethod
-    def create_ability(self, ability: Ability) -> int:
+    def create(self, ability) -> int:
         pass
 
 
     @abstractmethod
-    def update_ability(self, ability: Ability) -> None:
+    def update(self, ability) -> None:
         pass
 
 
     @abstractmethod
-    def delete_ability(self, ability_id: int) -> None:
+    def delete(self, ability_id: int) -> None:
         pass
 
 
     @abstractmethod
-    def get_ability(self, ability_id: int) -> Ability:
+    def get(self, ability_id: int):
         pass
 
 
     @abstractmethod
-    def get_all_abilities(self) -> list:
+    def get_all(self) -> list:
         pass

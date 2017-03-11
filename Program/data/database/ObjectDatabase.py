@@ -1,5 +1,7 @@
 from data.database.Database import *
+from structure.enums.Classes import Classes
 from structure.enums.ObjectType import ObjectType
+from structure.enums.Races import Races
 from structure.general.Object import Object
 
 
@@ -29,6 +31,10 @@ class ObjectDatabase(Database):
                 continue
             elif type(value) is str:
                 str_values[substr(key, obj.__name__())] = value
+            elif type(value) is Classes:
+                int_values[substr(key, obj.__name__())] = value.value
+            elif type(value) is Races:
+                int_values[substr(key, obj.__name__())] = value.value
             else:
                 continue
 

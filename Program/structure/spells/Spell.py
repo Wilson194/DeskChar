@@ -2,6 +2,7 @@ from structure.enums.ObjectType import ObjectType
 from structure.general.Object import *
 from structure.enums.Classes import Classes
 
+
 class Spell(Object):
     def __init__(self, id: int = None, lang: str = None, name: str = None,
                  description: str = None, mana_cost_initial: str = None,
@@ -22,6 +23,24 @@ class Spell(Object):
         names = super().__name__()
         names.append('Spell')
         return names
+
+
+    @staticmethod
+    def DAO():
+        from data.DAO.SpellDAO import SpellDAO
+        return SpellDAO
+
+
+    @staticmethod
+    def XmlClass():
+        from data.xml.templates.XMLSpell import XMLSpell
+        return XMLSpell
+
+
+    @staticmethod
+    def layout():
+        from presentation.layouts.SpellLayout import SpellLayout
+        return SpellLayout
 
 
     @property
@@ -88,9 +107,11 @@ class Spell(Object):
     def duration(self, value):
         self.__duration = value
 
+
     @property
     def drd_class(self):
         return self.__drd_class
+
 
     @drd_class.setter
     def drd_class(self, value):
