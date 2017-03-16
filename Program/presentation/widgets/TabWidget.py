@@ -62,7 +62,7 @@ class TabWidget(QtWidgets.QFrame):
                 tab = QtWidgets.QWidget()
                 lang = self.lang_manager.get_lang_by_code(one.lang)
                 tab_text = lang.name + ' (' + lang.code + ')'
-                layout = self.tab_manager.get_layout(self.target_type, tab)
+                layout = one.layout()(tab)
                 layout.map_data(one)
                 tab.setLayout(layout)
                 self.tab_widget.insertTab(self.tab_bar.count(), tab, tab_text)
@@ -129,7 +129,7 @@ class TabWidget(QtWidgets.QFrame):
                 self.tab_widget.insertTab(i, new_tab, lang.name + ' (' + lang.code + ')')
                 self.tab_widget.setCurrentIndex(i)
                 obj = self.tab_manager.get_empty_object(self.target_type, self.target_id, lang.code)
-                new_tab.setLayout(self.tab_manager.get_layout(self.target_type, new_tab))
+                new_tab.setLayout(obj.layout()(new_tab))
                 new_tab.layout().object = obj
                 new_tab.layout().data_changed_signal.connect(self.data_changed_slot)
         else:

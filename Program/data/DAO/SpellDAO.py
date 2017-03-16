@@ -3,9 +3,10 @@ from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
 from structure.enums.ObjectType import ObjectType
 from structure.spells.Spell import Spell
+from data.DAO.DAO import DAO
 
 
-class SpellDAO(ISpellDAO):
+class SpellDAO(DAO, ISpellDAO):
     DATABASE_TABLE = 'Spell'
     DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.SPELL

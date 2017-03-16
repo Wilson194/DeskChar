@@ -12,6 +12,8 @@ class ObjectType(AutoNumber):
             return 'resources/icons/book.png'
         if self is ObjectType.ABILITY:
             return 'resources/icons/map.png'
+        if self is ObjectType.ITEM:
+            return 'resources/icons/axe.png'
 
         return 'resources/icons/book.png'
 

@@ -45,21 +45,23 @@ class PlayerTreeManager:
 
 
     def create_node(self, node_type: NodeType, name: str, parent_id: int = None,
-                    object_type: ObjectType = None):
+                    object_type: ObjectType = None, target_object: object = None):
         """
         Create new node
         :param node_type: Node type
         :param name:  name of node
         :param parent_id: parent id
         :param object_type: Type of object
+        :param target_object: instance of target object
         :return: New node object
         """
         if node_type.value is NodeType.FOLDER.value:
             node = Folder(None, name, parent_id)
         else:
-            obj = self.create_empty_object(object_type)
+            id = target_object.DAO()().create(target_object())
+            obj = target_object(id)
             node = Object(None, name, parent_id, obj)
-        id = self.treeDAO.insert_node(node, object_type)
+        id = self.treeDAO.insert_node(node, object_type)  # TODO : remove object_type
         node.id = id
         return node
 
@@ -139,16 +141,19 @@ class PlayerTreeManager:
         exporting = []
         for id in selected:
             node = self.treeDAO.get_node(id)
-            exporting.append((node.object.object_type, node.object.id))  # TODO: change default SPELL
+            print(node.object.object_type)
+            exporting.append(
+                (node.object.object_type, node.object.id))
 
         ParserHandler().create_xml(exporting, path)
 
 
-    def import_from_xml(self, file_path, type, parent=None):
+    def import_from_xml(self, file_path, type, parent=None, strict: bool = False):
         """
         Import templates from XML file
         :param file_path: path to XML file
         :param type:
+        :param strict:
         :param parent: parent node id
         """
         objects = ParserHandler().import_xml(file_path)
@@ -158,17 +163,20 @@ class PlayerTreeManager:
             LangManager().create_lang('Čeština', 'cs')
 
         for object in objects:
+            if strict and object[list(object.keys())[0]].object_type != type:
+                continue
+
             default = object.pop('cs')  # TODO: default lang
-            default_id = ObjectDatabase('test.db').insert_object(default)
+            default_id = ObjectDatabase('test.db').insert_object(default, type.name.title())
             default.id = default_id
             for lang in object.values():
                 if not LangManager().lang_exists(lang.lang):  # TODO : default lang
                     LangManager().create_lang(lang.lang, lang.lang)
                 lang.id = default_id
-                ObjectDatabase('test.db').update_object(lang)
+                ObjectDatabase('test.db').update_object(lang, type.name.title())
 
             node = Object(None, default.name, parent, default)
-            self.treeDAO.insert_node(node, default.object_type)  # TODO: chance default SPELL
+            self.treeDAO.insert_node(node, default.object_type)
 
         ObjectDatabase('test.db').insert_many_execute()
         ObjectDatabase('test.db').set_many(False)

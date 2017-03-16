@@ -7,7 +7,7 @@ class ItemManager:
         self.DAO = ItemDAO()
 
 
-    def update_item(self, item: Item):
+    def update(self, item: Item):
         self.DAO.update(item)
 
 

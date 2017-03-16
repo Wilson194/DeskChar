@@ -44,6 +44,16 @@ class Ability(Object):
 
 
     @property
+    def children(self):
+        return []
+
+
+    @property
+    def icon(self):
+        return 'resources/icons/map.png'
+
+
+    @property
     def chance(self):
         return self.__chance
 

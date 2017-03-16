@@ -1,4 +1,6 @@
 from lxml import etree
+
+from structure.enums.Items import Items
 from structure.enums.ObjectType import ObjectType
 
 
@@ -8,6 +10,7 @@ class ParserHandler:
 
         for type, id in data:
             child = type.instance().XmlClass()().create_xml(id)
+            print(type)
             root.append(child)
 
         with open(path, 'w', encoding='UTF-8') as out:
@@ -20,8 +23,13 @@ class ParserHandler:
         objects = []
 
         for child in root:
-            obj = ObjectType.by_name(ObjectType, str(child.tag)).instance().XmlClass()().get_object(
-                child)
+            obj_type = ObjectType.by_name(ObjectType, str(child.tag))
+            if obj_type:
+                obj = ObjectType.by_name(ObjectType,
+                                         str(child.tag)).instance().XmlClass()().get_object(child)
+            else:
+                obj = Items.by_name(Items, str(child.tag)).instance().XmlClass()().get_object(child)
+
             objects.append(obj)
 
         return objects

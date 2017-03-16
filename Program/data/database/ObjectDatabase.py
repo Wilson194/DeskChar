@@ -1,7 +1,10 @@
 from data.database.Database import *
 from structure.enums.Classes import Classes
+from structure.enums.Handling import Handling
+from structure.enums.Items import Items
 from structure.enums.ObjectType import ObjectType
 from structure.enums.Races import Races
+from structure.enums.WeaponWeight import WeaponWeight
 from structure.general.Object import Object
 
 
@@ -12,18 +15,23 @@ class ObjectDatabase(Database):
     """
 
 
-    def insert_object(self, obj: Object) -> int:
+    def insert_object(self, obj: Object, database_table: str = None) -> int:
         """
         Insert object to database, map translates to translate table
         :param obj: given object
+        :param database_table: database table name
         :return: id of autoincrement
         """
+        database_name = database_table if database_table else obj.__name__()[-1]
+
         str_values = {}
         int_values = {}
         for key, value in obj.__dict__.items():
             if not compare(key, obj.__name__()):
                 continue
-            if type(value) is int:
+            elif type(value) in (Classes, Races, Handling, WeaponWeight, Items):
+                int_values[substr(key, obj.__name__())] = value.value
+            elif type(value) is int:
                 int_values[substr(key, obj.__name__())] = value
             elif 'type' in key:
                 int_values[substr(key, obj.__name__())] = value
@@ -31,23 +39,19 @@ class ObjectDatabase(Database):
                 continue
             elif type(value) is str:
                 str_values[substr(key, obj.__name__())] = value
-            elif type(value) is Classes:
-                int_values[substr(key, obj.__name__())] = value.value
-            elif type(value) is Races:
-                int_values[substr(key, obj.__name__())] = value.value
             else:
                 continue
 
         if not int_values:
-            db_id = self.insert_null(obj.__name__()[-1])
+            db_id = self.insert_null(database_name)
         else:
-            db_id = self.insert(obj.__name__()[-1], int_values, True)
+            db_id = self.insert(database_name, int_values, True)
 
         for key, value in str_values.items():
             data_dict = {
                 'lang'     : obj.lang,
                 'target_id': db_id,
-                'type'     : ObjectType.by_name(ObjectType, obj.__name__()[-1]).value,
+                'type'     : obj.object_type.value if obj.object_type else None,
                 'name'     : key,
                 'value'    : value
             }
@@ -56,14 +60,15 @@ class ObjectDatabase(Database):
         return db_id
 
 
-    def update_object(self, obj: Object):
+    def update_object(self, obj: Object, database_table: str = None):
         """
         Update object in database, update all translate columns
         :param obj: given object
         """
+        database_name = database_table if database_table else obj.__name__()[-1]
         if obj.id is None:
             raise ValueError('Cant update object without ID')
-        data = self.select(obj.__name__()[-1], {'ID': obj.id})
+        data = self.select(database_name, {'ID': obj.id})
 
         if not data:
             raise ValueError('Cant update none existing object')
@@ -75,8 +80,10 @@ class ObjectDatabase(Database):
                 continue
             if type(value) is int:
                 int_values[substr(key, obj.__name__())] = value
+            elif type(value) in [WeaponWeight, Handling]:
+                int_values[substr(key, obj.__name__())] = value.value
             elif 'type' in key:
-                int_values[substr(key, obj.__name__())] = value
+                int_values[substr(key, obj.__name__())] = value.value
             elif 'lang' in key:
                 continue
             elif 'id' in key:
@@ -85,11 +92,11 @@ class ObjectDatabase(Database):
                 str_values[substr(key, obj.__name__())] = value
             else:
                 continue
-        self.update(obj.__name__()[-1], obj.id, int_values)
+        self.update(database_name, obj.id, int_values)
 
         translates = self.select('translates',
                                  {'target_id': obj.id,
-                                  'type'     : ObjectType.by_name(ObjectType, obj.__name__()[-1]).value,
+                                  'type'     : obj.object_type.value,
                                   'lang'     : obj.lang})
         for key, value in str_values.items():
             db_line = get_line(key, translates)
@@ -100,7 +107,7 @@ class ObjectDatabase(Database):
                     'value'    : value,
                     'lang'     : obj.lang,
                     'target_id': obj.id,
-                    'type'     : ObjectType.by_name(ObjectType, obj.__name__()[-1]).value
+                    'type'     : obj.object_type.value
                 }
                 self.insert('translates', data_dict)
             else:

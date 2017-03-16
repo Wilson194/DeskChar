@@ -19,10 +19,7 @@
 # from structure.enums.Classes import Classes
 #
 # print(Classes.ALCHEMIST)
-from structure.enums.Classes import Classes
-from structure.enums.Races import Races
 
+from structure.enums.ObjectType import ObjectType
 
-a = Classes.ALCHEMIST
-
-print(Races.by_name(Races, 'dwarf'))
+print(ObjectType.ITEM.name.title())

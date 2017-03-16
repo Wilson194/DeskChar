@@ -1,3 +1,4 @@
+from data.DAO.ItemDAO import ItemDAO
 from structure.enums.ObjectType import ObjectType
 
 
@@ -45,4 +46,4 @@ class TabWidgetManager:
         :param lang: lang code of object
         :return: New empty object
         """
-        return target_type.instance()(id, lang)
+        return ItemDAO().get(id, lang)

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from PyQt5 import QtWidgets, QtGui, QtCore
 from business.managers.ItemManager import ItemManager
-from structure.items.Item import Item
 from presentation.layouts.Layout import Layout
+from structure.items.RangeWeapon import RangeWeapon
 
 
-class ItemLayout(Layout):
+class RangeWeaponLayout(Layout):
     """
     Layout for editing spell templates
     """
@@ -24,7 +24,7 @@ class ItemLayout(Layout):
         """
         Init basic UI
         """
-        self.setObjectName('Spell layout')
+        self.setObjectName('Range weapon layout')
 
         self.header = QtWidgets.QLabel()
         font = QtGui.QFont()
@@ -42,11 +42,17 @@ class ItemLayout(Layout):
         self.description_input = self.text_box(self.input_grid, 'Description', 0, 1)
         self.weight_input = self.spin_box(self.input_grid, 'Weight', 0, 2, True)
         self.price_input = self.spin_box(self.input_grid, 'Price', 0, 3, True)
+        self.initiative_input = self.spin_box(self.input_grid, 'Initiative', 0, 4, True)
+        self.strength_input = self.spin_box(self.input_grid, 'Strength', 0, 5, True)
+        self.rampancy_input = self.spin_box(self.input_grid, 'Rampancy', 0, 6, True)
+        self.rangeLow_input = self.spin_box(self.input_grid, 'RangeLow', 0, 7, True)
+        self.rangeMedium_input = self.spin_box(self.input_grid, 'RangeMedium', 0, 8, True)
+        self.rangeHigh_input = self.spin_box(self.input_grid, 'RangeHigh', 0, 9, True)
 
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, item: Item):
+    def map_data(self, item: RangeWeapon):
         """
         Mapa data from object to inputs in layout
         :param item: Item object
@@ -57,6 +63,12 @@ class ItemLayout(Layout):
         self.description_input.setPlainText(item.description)
         self.weight_input.setValue(item.weight)
         self.price_input.setValue(item.price)
+        self.initiative_input.setValue(item.initiative)
+        self.strength_input.setValue(item.strength)
+        self.rampancy_input.setValue(item.rampancy)
+        self.rangeLow_input.setValue(item.rangeLow)
+        self.rangeMedium_input.setValue(item.rangeMedium)
+        self.rangeHigh_input.setValue(item.rangeHigh)
 
 
     def save_data(self):
@@ -67,5 +79,11 @@ class ItemLayout(Layout):
         self.object.description = self.description_input.toPlainText()
         self.object.weight = self.weight_input.value()
         self.object.price = self.price_input.value()
+        self.object.initiative = self.initiative_input.value()
+        self.object.strength = self.strength_input.value()
+        self.object.rampancy = self.rampancy_input.value()
+        self.object.rangeLow = self.rangeLow_input.value()
+        self.object.rangeMedium = self.rangeMedium_input.value()
+        self.object.rangeHigh = self.rangeHigh_input.value()
 
         self.item_manager.update(self.object)

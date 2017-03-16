@@ -17,6 +17,7 @@ class Database(metaclass=Singleton):
         self.__sql_buffer = ""
         self.__sql_many_state = False
 
+
     def set_many(self, value):
         self.__sql_many_state = value
 
@@ -99,7 +100,6 @@ class Database(metaclass=Singleton):
         return self.cursor.lastrowid
 
 
-
     def insert_many_execute(self):
         self.connection.isolation_level = None
         self.cursor.execute('BEGIN TRANSACTION')
@@ -133,7 +133,7 @@ class Database(metaclass=Singleton):
         for key, value in values.items():
             sql += key + ' = '
             if type(value) is str or type(value) is bytes:
-                value = value.replace("'","''")
+                value = value.replace("'", "''")
                 sql += "'" + value + "'"
             elif value is None:
                 sql += 'null'

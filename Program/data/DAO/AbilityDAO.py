@@ -1,3 +1,4 @@
+from data.DAO.DAO import DAO
 from data.DAO.interface.IAbilityDAO import IAbilityDAO
 from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
@@ -5,7 +6,7 @@ from structure.abilities.Ability import Ability
 from structure.enums.ObjectType import ObjectType
 
 
-class AbilityDAO(IAbilityDAO):
+class AbilityDAO(DAO, IAbilityDAO):
     DATABASE_TABLE = 'Ability'
     DATABASE_DRIVER = 'test.db'
 

@@ -1,21 +1,33 @@
-from structure.general.Object import *
+from structure.enums.ObjectType import ObjectType
+from structure.general.Object import Object
+from structure.enums.Items import Items
 
 
 class Item(Object):
     def __init__(self, id=None, lang=None, name=None, description=None,
-                 type=None, parent_id=None, weight=None, price=None):
+                 parent_id=None, weight=None, price=None):
         super().__init__(id, lang, name, description)
         self.__parent_id = parent_id
         self.__weight = weight
         self.__price = price
-        self.__amount = 1
-        self.__type = type
+        self.__type = Items.GENERIC
 
 
     def __name__(self):
         names = super().__name__()
         names.append('Item')
         return names
+
+
+    @property
+    def children(self):
+        from structure.items.Armor import Armor
+        from structure.items.Money import Money
+        from structure.items.Container import Container
+        from structure.items.MeleeWeapon import MeleeWeapon
+        from structure.items.RangeWeapon import RangeWeapon
+        from structure.items.ThrowableWeapon import ThrowableWeapon
+        return [Armor, Money, Container, MeleeWeapon, RangeWeapon, ThrowableWeapon]
 
 
     @staticmethod
@@ -26,13 +38,24 @@ class Item(Object):
 
     @staticmethod
     def XmlClass():
-        return None
+        from data.xml.templates.XMLItem import XMLItem
+        return XMLItem
 
 
     @staticmethod
     def layout():
         from presentation.layouts.ItemLayout import ItemLayout
         return ItemLayout
+
+
+    @property
+    def object_type(self):
+        return ObjectType.ITEM
+
+
+    @property
+    def icon(self):
+        return 'resources/icons/tools.png'
 
 
     @property
@@ -66,23 +89,8 @@ class Item(Object):
 
 
     @property
-    def amount(self):
-        return self.__amount
-
-
-    @amount.setter
-    def amount(self, value):
-        self.__amount = value
-
-
-    @property
     def type(self):
         return self.__type
-
-
-    @type.setter
-    def type(self, value):
-        self.__type = value
 
 
     def __eq__(self, other):

@@ -23,6 +23,24 @@ translate = {
     'Class'               : 'Povolání',
     'Race'                : 'Rasa',
     'Chance'              : 'Šance',
+    'Weight'              : 'Váha',
+    'Price'               : 'Cena',
+    'Copper'              : 'Mědáky',
+    'Silver'              : 'Stříbrňáky',
+    'Gold'                : 'Zlaťáky',
+    'Initiative'          : 'Iniciativa',
+    'Strength'            : 'Síla',
+    'Rampancy'            : 'Útočnost',
+    'RangeLow'            : 'Range low',
+    'RangeMedium'         : 'Range medium',
+    'RangeHigh'           : 'Range high',
+    'Defence'             : 'Obrana',
+    'WeaponWeight'        : 'Váha zbraně',
+    'Handling'            : 'Držení',
+    'Length'              : 'Délka',
+    'Size'                : 'Velikost',
+    'Quality'             : 'Kvalita',
+
 
     'Folder'              : 'Složka',
     'Object'              : 'Objekt',
@@ -35,6 +53,7 @@ translate = {
 
     'ObjectType.SPELL'    : 'Kouzla',
     'ObjectType.ABILITY'  : 'Schopnosti',
+    'ObjectType.ITEM'     : 'Předměty',
 
     'NodeType.FOLDER'     : 'Složka',
     'NodeType.OBJECT'     : 'Objekt',
@@ -52,6 +71,13 @@ translate = {
     'Races.HUMAN'         : 'Člověk',
     'Races.KROLL'         : 'Krol',
     'Races.KUDUK'         : 'Kuduk',
+
+    'Handling.ONE_HANDED' : 'Jednoruční',
+    'Handling.TWO_HANDED' : 'Obouruční',
+
+    'WeaponWeight.LIGHT'  : 'Lehká',
+    'WeaponWeight.MIDDLE' : 'Střední',
+    'WeaponWeight.HEAVY'  : 'Těžká',
 
     'Delete'              : 'Smazat',
     'New_item'            : 'Přidat objekt',

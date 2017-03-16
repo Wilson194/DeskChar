@@ -44,6 +44,16 @@ class Spell(Object):
 
 
     @property
+    def children(self):
+        return []
+
+
+    @property
+    def icon(self):
+        return 'resources/icons/book.png'
+
+
+    @property
     def object_type(self):
         return ObjectType.SPELL
 

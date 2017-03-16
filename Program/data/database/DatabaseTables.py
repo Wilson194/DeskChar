@@ -57,13 +57,25 @@ class DatabaseTables:
             Column('type', 'INTEGER', False, False, False, True),
             Column('price', 'INTEGER'),
             Column('weight', 'INTEGER'),
-            Column('amount', 'INTEGER'),
             Column('capacity', 'INTEGER'),
             Column('quality', 'INTEGER'),
-            Column('armor_size', 'INTEGER'),
+            Column('size', 'INTEGER'),
             Column('copper', 'INTEGER'),
             Column('silver', 'INTEGER'),
-            Column('gold', 'INTEGER')
+            Column('gold', 'INTEGER'),
+            Column('weightA', 'INTEGER'),
+            Column('weightB', 'INTEGER'),
+            Column('weightC', 'INTEGER'),
+            Column('strength', 'INTEGER'),
+            Column('rampancy', 'INTEGER'),
+            Column('length', 'INTEGER'),
+            Column('defence', 'INTEGER'),
+            Column('initiative', 'INTEGER'),
+            Column('rangeLow', 'INTEGER'),
+            Column('rangeMedium', 'INTEGER'),
+            Column('rangeHigh', 'INTEGER'),
+            Column('weaponWeight', 'INTEGER'),
+            Column('handling', 'INTEGER'),
         ]
 
         try:

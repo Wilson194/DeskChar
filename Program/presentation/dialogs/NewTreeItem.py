@@ -12,9 +12,10 @@ class NewTreeItem(QtWidgets.QDialog):
     """
 
 
-    def __init__(self, parent=None):
+    def __init__(self, objects: list, parent=None):
         super().__init__(parent)
 
+        self.__objects = objects
         self.init_ui()
 
 
@@ -30,8 +31,12 @@ class NewTreeItem(QtWidgets.QDialog):
         self.type_input = QtWidgets.QComboBox(self)
         self.layout.addWidget(self.type_input, 0, 1)
 
-        for item in NodeType:
-            self.type_input.addItem(TR().tr(item), QtCore.QVariant(item.value))
+        data = {'NodeType': NodeType.FOLDER}
+        self.type_input.addItem(TR().tr(NodeType.FOLDER), QtCore.QVariant(data))
+
+        for obj in self.__objects:
+            data = {'NodeType': NodeType.OBJECT, 'Object': obj}
+            self.type_input.addItem(str(obj().__name__()[-1]), QtCore.QVariant(data))
 
         self.name_label = QtWidgets.QLabel(self)
         self.name_label.setText(TR().tr('Name') + ' :')
@@ -57,23 +62,28 @@ class NewTreeItem(QtWidgets.QDialog):
         Get inputs from dialog
         :return: dictionary of data (name,value)
         """
+
+        current = self.type_input.currentData()
         data = {
-            'name': self.name_input.text(),
-            'type': self.type_input.currentIndex() + 1
+            'name'    : self.name_input.text(),
+            'NodeType': current['NodeType'] if 'NodeType' in current else None,
+            'Object'  : current['Object'] if 'Object' in current else None
         }
         return data
 
 
     @staticmethod
-    def get_data(parent=None) -> tuple:
+    def get_data(objects: list, parent=None) -> tuple:
         """
         Create new dialog and return data from dialog (name,type)
+        :param objects: List of object that can be created
+        :objects list of object to create
         :param parent: parent object for creating dialog
         :return: tuple of data and result by buttons(true,false)
         """
-        dialog = NewTreeItem(parent)
+        dialog = NewTreeItem(objects, parent)
         result = dialog.exec_()
 
         data = dialog.get_inputs()
 
-        return (data, result == QtWidgets.QDialog.Accepted)
+        return data, result == QtWidgets.QDialog.Accepted

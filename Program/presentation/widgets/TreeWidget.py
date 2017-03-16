@@ -41,7 +41,7 @@ class TreeWidget(QtWidgets.QFrame):
         :param key_event: key event
         """
         if key_event.key() == QtCore.Qt.Key_Return:
-            if self.treeWidget.selectedItems()[0].data(0,6) is NodeType.OBJECT.value:
+            if self.treeWidget.selectedItems()[0].data(0, 6) is NodeType.OBJECT.value:
                 self.item_doubleclick_signal.emit(self.treeWidget.selectedItems()[0])
 
 
@@ -61,7 +61,7 @@ class TreeWidget(QtWidgets.QFrame):
         self.treeWidget = QtWidgets.QTreeWidget(self)
         self.treeWidget.setObjectName("treeWidget")
         font = QtGui.QFont()
-        font.setPointSize(13)
+        font.setPointSize(15)
         self.treeWidget.setFont(font)
         self.treeWidget.setHeaderLabel(TR().tr(self.__data_type))
         self.treeWidget.header().setDefaultAlignment(QtCore.Qt.AlignCenter)
@@ -126,36 +126,37 @@ class TreeWidget(QtWidgets.QFrame):
         """
         indexes = self.treeWidget.selectedIndexes()
 
-        item_type = indexes[0].data(6)
-        item_id = indexes[0].data(5)
-        if item_type == NodeType.FOLDER.value:
-            menu = QtWidgets.QMenu()
-            delete_action = QtWidgets.QAction(TR().tr('Delete'), menu)
-            delete_action.setData(QtCore.QVariant('delete'))
-            menu.addAction(delete_action)
-            folder_action = QtWidgets.QAction(TR().tr('New_item'), menu)
-            folder_action.setData(QtCore.QVariant('new'))
-            menu.addAction(folder_action)
-            delete_action = QtWidgets.QAction(TR().tr('Import'), menu)
-            delete_action.setData(QtCore.QVariant('import'))
-            menu.addAction(delete_action)
-            delete_action = QtWidgets.QAction(TR().tr('Rename'), menu)
-            delete_action.setData(QtCore.QVariant('rename'))
-            menu.addAction(delete_action)
-            action = menu.exec_(self.treeWidget.viewport().mapToGlobal(position))
-            if action:
-                self.contest_nemu_actions(action, item_id)
-        else:
-            menu = QtWidgets.QMenu()
-            delete_action = QtWidgets.QAction(TR().tr('Delete'), menu)
-            delete_action.setData(QtCore.QVariant('delete'))
-            menu.addAction(delete_action)
-            action = menu.exec_(self.treeWidget.viewport().mapToGlobal(position))
-            if action:
-                self.contest_nemu_actions(action, item_id)
+        if indexes:
+            item_type = indexes[0].data(6)
+            item_id = indexes[0].data(5)
+            if item_type == NodeType.FOLDER.value:
+                menu = QtWidgets.QMenu()
+                delete_action = QtWidgets.QAction(TR().tr('Delete'), menu)
+                delete_action.setData(QtCore.QVariant('delete'))
+                menu.addAction(delete_action)
+                folder_action = QtWidgets.QAction(TR().tr('New_item'), menu)
+                folder_action.setData(QtCore.QVariant('new'))
+                menu.addAction(folder_action)
+                delete_action = QtWidgets.QAction(TR().tr('Import'), menu)
+                delete_action.setData(QtCore.QVariant('import'))
+                menu.addAction(delete_action)
+                delete_action = QtWidgets.QAction(TR().tr('Rename'), menu)
+                delete_action.setData(QtCore.QVariant('rename'))
+                menu.addAction(delete_action)
+                action = menu.exec_(self.treeWidget.viewport().mapToGlobal(position))
+                if action:
+                    self.contest_menu_actions(action, item_id)
+            else:
+                menu = QtWidgets.QMenu()
+                delete_action = QtWidgets.QAction(TR().tr('Delete'), menu)
+                delete_action.setData(QtCore.QVariant('delete'))
+                menu.addAction(delete_action)
+                action = menu.exec_(self.treeWidget.viewport().mapToGlobal(position))
+                if action:
+                    self.contest_menu_actions(action, item_id)
 
 
-    def contest_nemu_actions(self, action, item_id):
+    def contest_menu_actions(self, action, item_id):
         """
             Do action based on contest menu selected
         :param action: selected action
@@ -165,10 +166,11 @@ class TreeWidget(QtWidgets.QFrame):
             self.tree_manager.delete_node(item_id)
             self.draw_data()
         elif action.data() == 'new':
-            data, choice = NewTreeItem.get_data()
+            data, choice = NewTreeItem.get_data(
+                self.__data_type.instance()().children + [self.__data_type.instance()])
             if choice:
-                self.tree_manager.create_node(NodeType(int(data['type'])), data['name'], item_id,
-                                              self.__data_type)
+                self.tree_manager.create_node(data['NodeType'], data['name'], item_id,
+                                              self.__data_type, data['Object'])
                 self.draw_data()
         elif action.data() == 'import':
             self.import_data_slot(item_id)
@@ -239,10 +241,13 @@ class TreeWidget(QtWidgets.QFrame):
         """
         Clicked action on new button
         """
-        data, choice = NewTreeItem.get_data()
+
+        data, choice = NewTreeItem.get_data(
+            self.__data_type.instance()().children + [self.__data_type.instance()])
         if choice:
-            self.tree_manager.create_node(NodeType(int(data['type'])), data['name'], None,
-                                          self.__data_type)
+            self.tree_manager.create_node(data['NodeType'], data['name'], None,
+                                          self.__data_type,
+                                          data['Object'] if 'Object' in data else None)
             self.draw_data()
 
 
@@ -294,9 +299,8 @@ class TreeWidget(QtWidgets.QFrame):
                 self.set_items(item.children, tree_item)
                 tree_item.setData(0, 6, QtCore.QVariant(NodeType.FOLDER.value))
             else:
-                object_icon = QtGui.QIcon()
-                object_icon.addPixmap(QtGui.QPixmap(self.__data_type.icon()),
-                                      QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                icon = self.__data_type.instance().DAO()().get(item.object.id).icon
+                object_icon = QtGui.QIcon(icon)
                 tree_item.setIcon(0, object_icon)
                 tree_item.setFlags(
                     tree_item.flags() | QtCore.Qt.ItemIsUserCheckable)
@@ -338,7 +342,7 @@ class TreeWidget(QtWidgets.QFrame):
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()",
                                                             "", types, options=options)
         if fileName:
-            self.tree_manager.import_from_xml(fileName, self.__data_type, parent)
+            self.tree_manager.import_from_xml(fileName, self.__data_type, parent, True)
             self.draw_data()
 
 

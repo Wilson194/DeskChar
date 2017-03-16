@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from PyQt5 import QtWidgets, QtGui, QtCore
 from business.managers.ItemManager import ItemManager
+from structure.items.Armor import Armor
 from structure.items.Item import Item
 from presentation.layouts.Layout import Layout
 
 
-class ItemLayout(Layout):
+class ArmorLayout(Layout):
     """
     Layout for editing spell templates
     """
@@ -24,7 +25,7 @@ class ItemLayout(Layout):
         """
         Init basic UI
         """
-        self.setObjectName('Spell layout')
+        self.setObjectName('Armor layout')
 
         self.header = QtWidgets.QLabel()
         font = QtGui.QFont()
@@ -40,13 +41,17 @@ class ItemLayout(Layout):
 
         self.name_input = self.text_box(self.input_grid, 'Name', 0, 0)
         self.description_input = self.text_box(self.input_grid, 'Description', 0, 1)
-        self.weight_input = self.spin_box(self.input_grid, 'Weight', 0, 2, True)
-        self.price_input = self.spin_box(self.input_grid, 'Price', 0, 3, True)
+        self.price_input = self.spin_box(self.input_grid, 'Price', 0, 2, True)
+        self.quality_input = self.spin_box(self.input_grid, 'Quality', 0, 3, True)
+        self.weightA_input = self.spin_box(self.input_grid, 'WeightA', 0, 4, True)
+        self.weightB_input = self.spin_box(self.input_grid, 'WeightB', 0, 5, True)
+        self.weightC_input = self.spin_box(self.input_grid, 'WeightC', 0, 6, True)
+        self.size_input = self.spin_box(self.input_grid, 'Size', 0, 7, True)
 
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, item: Item):
+    def map_data(self, item: Armor):
         """
         Mapa data from object to inputs in layout
         :param item: Item object
@@ -55,8 +60,12 @@ class ItemLayout(Layout):
         self.header.setText(item.name)
         self.name_input.setPlainText(item.name)
         self.description_input.setPlainText(item.description)
-        self.weight_input.setValue(item.weight)
         self.price_input.setValue(item.price)
+        self.quality_input.setValue(item.quality)
+        self.weightA_input.setValue(item.weightA)
+        self.weightB_input.setValue(item.weightB)
+        self.weightC_input.setValue(item.weightC)
+        self.size_input.setValue(item.size)
 
 
     def save_data(self):
@@ -65,7 +74,11 @@ class ItemLayout(Layout):
         """
         self.object.name = self.name_input.toPlainText()
         self.object.description = self.description_input.toPlainText()
-        self.object.weight = self.weight_input.value()
         self.object.price = self.price_input.value()
+        self.object.quality = self.quality_input.value()
+        self.object.weightA = self.weightB_input.value()
+        self.object.weightB = self.weightB_input.value()
+        self.object.weightC = self.weightC_input.value()
+        self.object.size = self.size_input.value()
 
         self.item_manager.update(self.object)

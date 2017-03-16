@@ -27,7 +27,7 @@ class Translate(metaclass=Singleton):
         if str(value) in self.translate_dict:
             return self.translate_dict[str(value)]
         else:
-            return 'Missing trans'
+            return 'Missing trans <' + str(value) + '>'
 
 
     def tr(self, value):

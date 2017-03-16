@@ -63,6 +63,7 @@ class Layout(QtWidgets.QVBoxLayout):
         label.setText(TR().tr(name) + ':')
         grid.addWidget(label, yposition, xposition, 1, 1)
         input = QtWidgets.QPlainTextEdit()
+        input.setObjectName(name)
         grid.addWidget(input, yposition, xposition + 1, 1, 1)
         input.textChanged.connect(self.data_changed)
         if synchonize:
@@ -75,6 +76,7 @@ class Layout(QtWidgets.QVBoxLayout):
         label = QtWidgets.QLabel(TR().tr(name) + ':')
         grid.addWidget(label, yposition, xposition)
         input = QtWidgets.QComboBox()
+        input.setObjectName(name)
         input.setObjectName(name + "_input")
         input.currentIndexChanged.connect(self.data_changed)
         if synchonize:
@@ -93,6 +95,9 @@ class Layout(QtWidgets.QVBoxLayout):
         label.setText(TR().tr(name) + ':')
         grid.addWidget(label, yposition, xposition, 1, 1)
         input = QtWidgets.QSpinBox()
+        input.setMaximum(10000)
+        input.setMinimum(-20)
+        input.setObjectName(name)
         if synchronize:
             self.synchronize(input)
         grid.addWidget(input, yposition, xposition+1, 1, 1)

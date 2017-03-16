@@ -23,6 +23,5 @@ class LoadingBar(QtWidgets.QDialog):
 
 
     def onProgress(self):
-        print(self.current)
         self.current += 1
         self.progressBar.setValue(self.current)

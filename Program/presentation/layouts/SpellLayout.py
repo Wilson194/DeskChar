@@ -47,7 +47,7 @@ class SpellLayout(Layout):
         self.range_input = self.text_box(self.input_grid, 'Range', 0, 5)
         self.scope_input = self.text_box(self.input_grid, 'Scope', 0, 6)
         self.cast_time_input = self.spin_box(self.input_grid, 'Cast_time', 0, 7, True)
-        self.duration_input = self.text_box(self.input_grid, 'Duration', 0, 6)
+        self.duration_input = self.text_box(self.input_grid, 'Duration', 0, 8)
 
         self.addLayout(self.input_grid)
 
@@ -89,6 +89,5 @@ class SpellLayout(Layout):
 
         class_index = self.class_input.currentIndex()
         self.object.drd_class = class_index if class_index > 0 else None
-        self.object.drd_class = self.class_input.currentIndex()
 
         self.spell_manager.update_spell(self.object)

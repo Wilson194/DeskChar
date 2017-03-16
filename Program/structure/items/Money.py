@@ -3,12 +3,41 @@ from structure.items.Item import *
 
 class Money(Item):
     def __init__(self, id: int = None, lang=None, name: str = None,
-                 description: str = None, parent_id: int = None):
+                 description: str = None, parent_id: int = None, copper: int = None,
+                 silver: int = None, gold: int = None):
         super().__init__(id, lang, name, description, parent_id)
 
-        self.__copper = 0
-        self.__silver = 0
-        self.__gold = 0
+        self.__copper = copper
+        self.__silver = silver
+        self.__gold = gold
+        self.__type = Items.MONEY
+
+
+    def __name__(self):
+        names = super().__name__()
+        names.append('Money')
+        return names
+
+
+    @staticmethod
+    def XmlClass():
+        return None
+
+
+    @staticmethod
+    def layout():
+        from presentation.layouts.MoneyLayout import MoneyLayout
+        return MoneyLayout
+
+
+    @property
+    def icon(self):
+        return 'resources/icons/coin.png'
+
+
+    @property
+    def object_type(self):
+        return Items.MONEY
 
 
     @property

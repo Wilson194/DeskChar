@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 from PyQt5 import QtWidgets, QtGui, QtCore
+from business.managers.AbilityManager import AbilityManager
 from business.managers.ItemManager import ItemManager
+from presentation.Translate import Translate as TR
+from structure.items.Container import Container
 from structure.items.Item import Item
 from presentation.layouts.Layout import Layout
 
 
-class ItemLayout(Layout):
+class ContainerLayout(Layout):
     """
     Layout for editing spell templates
     """
@@ -24,7 +27,7 @@ class ItemLayout(Layout):
         """
         Init basic UI
         """
-        self.setObjectName('Spell layout')
+        self.setObjectName('Container layout')
 
         self.header = QtWidgets.QLabel()
         font = QtGui.QFont()
@@ -42,11 +45,12 @@ class ItemLayout(Layout):
         self.description_input = self.text_box(self.input_grid, 'Description', 0, 1)
         self.weight_input = self.spin_box(self.input_grid, 'Weight', 0, 2, True)
         self.price_input = self.spin_box(self.input_grid, 'Price', 0, 3, True)
+        self.capacity_input = self.spin_box(self.input_grid, 'Capacity', 0, 4, True)
 
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, item: Item):
+    def map_data(self, item: Container):
         """
         Mapa data from object to inputs in layout
         :param item: Item object
@@ -56,7 +60,8 @@ class ItemLayout(Layout):
         self.name_input.setPlainText(item.name)
         self.description_input.setPlainText(item.description)
         self.weight_input.setValue(item.weight)
-        self.price_input.setValue(item.price)
+        self.price_input.setValue(item.price if item.price else 0)
+        self.capacity_input.setValue(item.capacity if item.capacity else 0)
 
 
     def save_data(self):
@@ -67,5 +72,6 @@ class ItemLayout(Layout):
         self.object.description = self.description_input.toPlainText()
         self.object.weight = self.weight_input.value()
         self.object.price = self.price_input.value()
+        self.object.capacity = self.capacity_input.value()
 
         self.item_manager.update(self.object)
