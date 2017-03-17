@@ -1,7 +1,7 @@
 from structure.enums.AutoNumber import AutoNumber
 
 
-class Items(AutoNumber):
+class ModifierValueTypes(AutoNumber):
     TO_TOTAL = ()
     FROM_BASE = ()
     FROM_TOTAL = ()

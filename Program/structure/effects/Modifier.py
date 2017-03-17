@@ -1,16 +1,16 @@
-from structure.general.Object import Object
+from structure.effects.Effect import Effect
+from structure.enums.ModifierValueTypes import ModifierValueTypes
+from structure.enums.ObjectType import ObjectType
 
 
-class Modifier(Object):
-    def __init__(self, id: int = None, lang: str = None, name: str = None,
-                 description: str = None, id_parent_effect: int = None,
-                 id_target: int = None, value_type: int = None,
-                 value_target: int = None,
-                 value: int = None):
-        super().__init__(id, lang, name, description)
-
-        self.__id_parent_effect = id_parent_effect
-        self.__id_target = id_target
+class Modifier:
+    def __init__(self, id: int = None, parent_effect: Effect = None, target_type: ObjectType = None,
+                 target_id: int = None, value_type: ModifierValueTypes = None,
+                 value_target: int = None, value: int = None):
+        self.__id = id
+        self.__parent_effect = parent_effect
+        self.__target_type = target_type
+        self.__target_id = target_id
         self.__value_type = value_type
         self.__value_target = value_target
         self.__value = value
@@ -23,13 +23,43 @@ class Modifier(Object):
 
 
     @property
-    def id_target(self):
-        return self.__id_target
+    def id(self):
+        return self.__id
 
 
-    @id_target.setter
-    def id_target(self, value):
-        self.__id_target = value
+    @id.setter
+    def id(self, value):
+        self.__id = value
+
+
+    @property
+    def parent_effect(self):
+        return self.__parent_effect
+
+
+    @parent_effect.setter
+    def parent_effect(self, value):
+        self.__parent_effect = value
+
+
+    @property
+    def target_type(self):
+        return self.__target_type
+
+
+    @target_type.setter
+    def target_type(self, value):
+        self.__target_type = value
+
+
+    @property
+    def target_id(self):
+        return self.__target_id
+
+
+    @target_id.setter
+    def target_id(self, value):
+        self.__target_id = value
 
 
     @property
@@ -60,13 +90,3 @@ class Modifier(Object):
     @value.setter
     def value(self, value):
         self.__value = value
-
-
-    @property
-    def id_parent_effect(self):
-        return self.__id_parent_effect
-
-
-    @id_parent_effect.setter
-    def id_parent_effect(self, value):
-        self.__id_parent_effect = value
