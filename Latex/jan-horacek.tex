@@ -81,10 +81,15 @@ Ve třetí kapitole se věnuji implementaci a testování celé aplikace a jejic
 	\section{Cíl práce}
 Cílem práce je vytvořit desktopovou aplikaci pro práci se šablonami a pro přípravu dobrodružství.
 
-Aplikace umožní hráčům snadno připravit svoje postavy a veškeré šablony pro mobilní aplikaci Mobchar přehledně z počítače. Dále také umožní pánům jeskyně připravit propracované dobrodružství, které si následně budou moci exportovat do mobilní aplikace nebo vytisknout v přehledném formátu.
+Aplikace DeskChar bude součástí balíčku aplikací, které slouží
 
 	\section{Dračí doupě}
 
+\chapter{Současný stav}
+
+\section{Existující aplikace}
+
+\section{Projekt MobChar}
 
 
 
@@ -138,7 +143,7 @@ Na mapu půjdou umisťovat odkazy na vytvoření postavy, příšery, předměty
 \textbf{Export dobrodružství pro tisk:} Aplikace bude umožňovat exportování celého dobrodružství do přehledného formátu, který je vhodný pro tisk. 
 \subsection{Nefunkční požadavky}
 
-\textbf{Podpora operačních systémů Windows a Linux:} program půjde spustit pod operačnímy systémy Windows a Linux. U operačního systému Windows budou podporovány všechny verze, které jsou novější než Windows XP. Program bude spustitelný pomocí exe souboru. U operačního systému Linux budou podporovány standardní linuxové distribuce. Program bude spustitelný pomocí sh souboru.\\
+\textbf{Podpora operačních systémů Windows a Linux:} program půjde spustit pod operačnímy systémy Windows a Linux. U operačního systému Windows budou podporovány všechny verze, které jsou novější než Windows XP. Program bude spustitelný pomocí exe souboru. U operačního systému Linux budou podporovány standardní linuxové distribuce. Program bude spustitelný pomocí bash souboru.\\
 \\
 \textbf{Jazyková podpora} program bude umožňovat přepínání jazyků a případnou lokalizaci pro další jazyky. V základu bude podporován český jazyk a anglický jazyk.
 
@@ -149,25 +154,26 @@ Případy užití popisují jednotlivé činnosti, které uživatel provádí, p
 \subsection{Práce se šablonami}
 \begin{figure}\centering
 	\includegraphics[width=0.8\textwidth]{images/usecase_sablony}
-	\caption[Usecase šablony]{Ukázkový obrázek v~plovoucím prostředí}\label{fig:float}
+	\caption[Usecase šablony]{Ukázkový obrázek v~plovoucím prostředí}\label{fig:uc_sablony}
 \end{figure}
 
-Případ užití týkající se práci se šablonami namodelovaný na obrázku \ref{fig:float} je oddělený od ostatních, protože obsahuje veškeré činnosti, které od aplikace vyžaduje hráč. Jedná se o~veškerou práci se šablonami pro mobilní aplikaci MobChar.\\
+Případ užití týkající se práci se šablonami namodelovaný na obrázku \ref{fig:uc_sablony} je oddělený od ostatních, protože obsahuje veškeré činnosti, které od aplikace vyžaduje hráč. Jedná se o~veškerou práci se šablonami pro mobilní aplikaci MobChar.\\
 \\
-\textbf{Práce se šablonami:} uživatel si bude moci vytvořit nové šablony nebo editovat stávající. Veškeré parametry, které je možné do xml šablony zapsat, lze jednoduše upravovat\\
+\textbf{Vytváření a editace šablon:} uživatel si bude moci vytvořit nové šablony nebo editovat stávající. Veškeré parametry, které je možné do xml šablony zapsat, lze jednoduše upravovat v přehledném formuláři.\\
 \\
-\textbf{Import šablon z XML souboru:} program bude umožňovat import šablon ze strukturovaných xml souborů, které vytváří mobilní aplikace MobChar a samotný program. Importované šablony se přidají do databáze.\\
+\textbf{Import šablon z XML souboru:} program bude umožňovat import šablon ze strukturovaných xml souborů, které vytváří mobilní aplikace MobChar a samotný program. Importované šablony se přidají do databáze a lze je následně upravovat nebo překládat. \\
 \\
-\textbf{Sdružování šablon do skupin:} veškeré šablony půjde rozřazovat do stromové struktury pro větší přehlednost, pomocí vytváření složek a jednoduchého drag and drop systému. Takto rozřazené šablony budou umožňovat přehlednější práci a export do xml souborů.\\
+\textbf{Sdružování šablon do skupin:} veškeré šablony půjde rozřazovat do stromové struktury pro větší přehlednost, pomocí vytváření složek a jednoduchého drag and drop systému. Takto rozřazené šablony budou umožňovat přehlednější práci a jednoduší export do xml souborů.\\
 \\
-\textbf{Export šablon pro mobilní aplikaci:} program bude umožňovat vytvářet xml soubory ve formátu, se kterým umí pracovat mobilní aplikace MobChar. Lze vyexportovat veškeré šablony do jednoho souboru nebo vybrat, které šablony se mají exportovat.\\
+\textbf{Export šablon:} veškeré vytvořené šablony lze z aplikace exportovat. K dispozici jsou různé druhy exportu. První možnost je export pro mobilní aplikace MobChar. Aplikace vytvoří strukturované XML soubory, které odpovídají formátu, který používá mobilní aplikace MobChar. Další možností exportu je PDF formát, který slouží pro tisknutí šablon do přehledného almanachu, který umožní využít šablony i hráčům, kteří mobilní aplikaci nemají nebo ji nechtějí použít. \\
 \\
-\textbf{Export šablon do pdf pro tisknutí:} veškeré šablony je možné exportovat do formátu pdf, které je vhodné a přehledné pro tisk.\\
+\textbf{Tvorba překladů šablon:} každá šablona může být přeložena do libovolného počtu jazyků. Při exportu šablon se všechny jazykové překlady exportují. Pomocí záložek se lze přepínat mezi jazyky.\\
 \\
-\textbf{Tvorba překladů šablon:} každá šablona může být přeložena do libovolného počtu jazyků. Při exportu šablon se všechny jazykové překlady exportují.\\
-\\
-
-
+\subsection{Tvorba dobrodružství}
+\begin{figure}\centering
+	\includegraphics[width=0.8\textwidth]{images/usecase_sablony}
+	\caption[Usecase šablony]{Ukázkový obrázek v~plovoucím prostředí}\label{fig:uc_sablony}
+\end{figure}
 
 
 
