@@ -1,4 +1,5 @@
 from data.database.Database import *
+from structure.enums.AutoNumber import AutoNumber
 from structure.enums.Classes import Classes
 from structure.enums.Handling import Handling
 from structure.enums.Items import Items
@@ -23,22 +24,21 @@ class ObjectDatabase(Database):
         :return: id of autoincrement
         """
         database_name = database_table if database_table else obj.__name__()[-1]
-
         str_values = {}
         int_values = {}
         for key, value in obj.__dict__.items():
             if not compare(key, obj.__name__()):
                 continue
-            elif type(value) in (Classes, Races, Handling, WeaponWeight, Items):
-                int_values[substr(key, obj.__name__())] = value.value
-            elif type(value) is int:
-                int_values[substr(key, obj.__name__())] = value
-            elif 'type' in key:
-                int_values[substr(key, obj.__name__())] = value
-            elif 'lang' in key:
+            else:
+                key = substr(key, obj.__name__())
+            if key not in obj.TABLE_SCHEMA:
                 continue
+            elif isinstance(value, AutoNumber):
+                int_values[key] = value.value
+            elif type(value) is int:
+                int_values[key] = value
             elif type(value) is str:
-                str_values[substr(key, obj.__name__())] = value
+                str_values[key] = value
             else:
                 continue
 

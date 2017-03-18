@@ -4,6 +4,12 @@ from structure.enums.Classes import Classes
 
 
 class Spell(Object):
+    TABLE_SCHEMA = [
+        'id', 'name', 'description', 'mana_cost_initial', 'mana_cost_continual', 'range', 'scope',
+        'cast_time', 'duration', 'drd_class'
+    ]
+
+
     def __init__(self, id: int = None, lang: str = None, name: str = None,
                  description: str = None, mana_cost_initial: str = None,
                  mana_cost_continual: str = None, range: str = None,

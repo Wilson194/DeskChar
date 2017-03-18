@@ -4,6 +4,9 @@ from structure.enums.Items import Items
 
 
 class Item(Object):
+    TABLE_SCHEMA = ['id', 'name', 'description', 'weight', 'price', 'type']
+
+
     def __init__(self, id=None, lang=None, name=None, description=None,
                  parent_id=None, weight=None, price=None):
         super().__init__(id, lang, name, description)

@@ -5,6 +5,9 @@ from structure.general.Object import Object
 
 
 class Ability(Object):
+    TABLE_SCHEMA = ['id', 'name', 'description', 'chance', 'drd_race', 'drd_class']
+
+
     def __init__(self, id: int = None, lang: str = None, name: str = None,
                  description: str = None, chance: str = None, drd_race: Races = None,
                  drd_class: Classes = None):

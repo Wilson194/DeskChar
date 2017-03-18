@@ -3,6 +3,10 @@ from structure.items.Item import Item
 
 
 class RangeWeapon(Item):
+    TABLE_SCHEMA = ['id', 'name', 'description', 'weight', 'price', 'initiative', 'strength',
+                    'rampancy', 'rangeLow', 'rangeMedium', 'rangeHigh', 'type']
+
+
     def __init__(self, id: int = None, lang=None, name: str = None,
                  description: str = None, parent_id: int = None, weight: int = None,
                  price: int = None,
@@ -41,11 +45,6 @@ class RangeWeapon(Item):
     @property
     def icon(self):
         return 'resources/icons/bow.png'
-
-
-    @property
-    def object_type(self):
-        return Items.RANGED_WEAPON
 
 
     @property
