@@ -20,6 +20,7 @@
 #
 # print(Classes.ALCHEMIST)
 
+from structure.enums.AutoNumber import AutoNumber
 from structure.enums.ObjectType import ObjectType
 
-print(ObjectType.ITEM.name.title())
+print(isinstance(ObjectType.ITEM, AutoNumber))

@@ -55,9 +55,11 @@ class MainMenu(QMenuBar):
 
 
     def init_player_ui(self):
-        spell_templates = QAction(QIcon('resources/icons/book.png'), TR().tr('Menu.spell'), self)
-        ability_templates = QAction(QIcon('resources/icons/map.png'), TR().tr('Menu.ability'), self)
-        item_templates = QAction(QIcon('resources/icons/axe.png'), TR().tr('Menu.item'), self)
+        spell_templates = QAction(QIcon(ObjectType.SPELL.icon()), TR().tr('Menu.spell'), self)
+        ability_templates = QAction(QIcon(ObjectType.ABILITY.icon()), TR().tr('Menu.ability'), self)
+        item_templates = QAction(QIcon(ObjectType.ITEM.icon()), TR().tr('Menu.item'), self)
+        modifier_templates = QAction(QIcon(ObjectType.MODIFIER.icon()), TR().tr('Menu.modifier'),
+                                     self)
 
         ability_templates.triggered.connect(
             lambda: self.templates_menu_signal.emit(ObjectType.ABILITY))
@@ -65,8 +67,11 @@ class MainMenu(QMenuBar):
             lambda: self.templates_menu_signal.emit(ObjectType.SPELL))
         item_templates.triggered.connect(
             lambda: self.templates_menu_signal.emit(ObjectType.ITEM))
+        modifier_templates.triggered.connect(
+            lambda: self.templates_menu_signal.emit(ObjectType.MODIFIER))
 
         file_menu = self.addMenu(TR().tr('Menu.templates'))
         file_menu.addAction(spell_templates)
         file_menu.addAction(ability_templates)
         file_menu.addAction(item_templates)
+        file_menu.addAction(modifier_templates)

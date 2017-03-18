@@ -54,7 +54,7 @@ class DatabaseTables:
         item_columns = [
             Column('ID', 'INTEGER', True, False, True),
             Column('parent_id', 'INTEGER'),
-            Column('type', 'INTEGER', False, False, False, True),
+            Column('type', 'INTEGER', not_null=True),
             Column('price', 'INTEGER'),
             Column('weight', 'INTEGER'),
             Column('capacity', 'INTEGER'),
@@ -110,6 +110,21 @@ class DatabaseTables:
         except OperationalError:
             pass
 
+            # ///////////// Modifier \\\\\\\\\\\\\\\\\\
+
+            modifier_columns = [
+                Column('ID', 'INTEGER', True, False, True),
+                Column('value', 'INTEGER', not_null=True),
+                Column('value_type', 'INTEGER', not_null=True),
+                Column('value_type_target', 'INTEGER', not_null=True),
+                Column('value_attribute_target', 'INTEGER', not_null=True)
+            ]
+
+            try:
+                database.create_table('Modifier', modifier_columns)
+            except OperationalError:
+                pass
+
         # ///////////// Player tree structure \\\\\\\\\\\\\\\\\\
 
         structure_columns = [
@@ -117,7 +132,7 @@ class DatabaseTables:
             Column('target_id', 'INTEGER'),
             Column('target_type', 'INTEGER'),
             Column('parent_id', 'INTEGER'),
-            Column('type', 'INTEGER', False, False, False, True),
+            Column('type', 'INTEGER', not_null=True),
             Column('name', 'TEXT')
         ]
 

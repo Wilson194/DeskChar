@@ -4,13 +4,16 @@ from structure.items.Item import Item
 
 
 class ThrowableWeapon(Item):
+    TABLE_SCHEMA = ['id', 'name', 'description', 'weight', 'price', 'initiative', 'strength',
+                    'rampancy', 'rangeLow', 'rangeMedium', 'rangeHigh', 'defence', 'weaponWeight',
+                    'type']
+
+
     def __init__(self, id: int = None, lang=None, name: str = None,
                  description: str = None, parent_id: int = None, weight: int = None,
-                 price: int = None,
-                 initiative: int = None, strength: int = None, rampancy: int = None,
-                 rangeLow: int = None, rangeMedium: int = None, rangeHigh: int = None,
-                 defence: int = None,
-                 weaponWeight: WeaponWeight = None):
+                 price: int = None, initiative: int = None, strength: int = None,
+                 rampancy: int = None, rangeLow: int = None, rangeMedium: int = None,
+                 rangeHigh: int = None, defence: int = None, weaponWeight: WeaponWeight = None):
         super().__init__(id, lang, name, description, parent_id, weight, price)
 
         self.__initiative = initiative
@@ -46,11 +49,6 @@ class ThrowableWeapon(Item):
     @property
     def icon(self):
         return 'resources/icons/dagger.png'
-
-
-    @property
-    def object_type(self):
-        return Items.THROWABLE_WEAPON
 
 
     @property

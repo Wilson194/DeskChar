@@ -2,6 +2,9 @@ from structure.items.Item import *
 
 
 class Money(Item):
+    TABLE_SCHEMA = ['id', 'name', 'description', 'copper', 'silver', 'gold', 'type']
+
+
     def __init__(self, id: int = None, lang=None, name: str = None,
                  description: str = None, parent_id: int = None, copper: int = None,
                  silver: int = None, gold: int = None):
@@ -34,10 +37,6 @@ class Money(Item):
     def icon(self):
         return 'resources/icons/coin.png'
 
-
-    @property
-    def object_type(self):
-        return Items.MONEY
 
 
     @property

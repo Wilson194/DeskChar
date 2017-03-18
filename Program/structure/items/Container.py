@@ -3,6 +3,9 @@ from structure.items.Item import Item
 
 
 class Container(Item):
+    TABLE_SCHEMA = ['id', 'name', 'description', 'weight', 'price', 'capacity', 'type']
+
+
     def __init__(self, id: int = None, lang=None, name: str = None,
                  description: str = None, parent_id: int = None, weight: int = None,
                  price: int = None, capacity: int = None):
@@ -33,11 +36,6 @@ class Container(Item):
     @property
     def icon(self):
         return 'resources/icons/bag.png'
-
-
-    @property
-    def object_type(self):
-        return Items.CONTAINER
 
 
     @property

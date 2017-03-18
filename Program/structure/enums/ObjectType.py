@@ -5,6 +5,8 @@ class ObjectType(AutoNumber):
     ITEM = ()
     SPELL = ()
     ABILITY = ()
+    MODIFIER = ()
+    EFFECT = ()
 
 
     def icon(self):
@@ -14,6 +16,10 @@ class ObjectType(AutoNumber):
             return 'resources/icons/map.png'
         if self is ObjectType.ITEM:
             return 'resources/icons/axe.png'
+        if self is ObjectType.MODIFIER:
+            return 'resources/icons/axe.png'
+        if self is ObjectType.EFFECT:
+            return 'resources/icons/axe.png'
 
         return 'resources/icons/book.png'
 
@@ -22,6 +28,8 @@ class ObjectType(AutoNumber):
         from structure.items.Item import Item
         from structure.spells.Spell import Spell
         from structure.abilities.Ability import Ability
+        from structure.effects.Effect import Effect
+        from structure.effects.Modifier import Modifier
 
         if self == ObjectType.ITEM:
             return Item
@@ -29,6 +37,10 @@ class ObjectType(AutoNumber):
             return Spell
         if self == ObjectType.ABILITY:
             return Ability
+        if self == ObjectType.MODIFIER:
+            return Modifier
+        if self == ObjectType.EFFECT:
+            return Effect
 
 
     def by_name(self, name: str):
@@ -39,3 +51,7 @@ class ObjectType(AutoNumber):
             return self.SPELL
         if name == 'ABILITY':
             return self.ABILITY
+        if name == 'MODIFIER':
+            return self.MODIFIER
+        if name == 'EFFECT':
+            return self.EFFECT

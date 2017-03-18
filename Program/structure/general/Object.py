@@ -2,6 +2,13 @@ from abc import ABC, abstractmethod
 
 
 class Object(ABC):
+    TABLE_SCHEMA = [
+        'id',
+        'name',
+        'description'
+    ]
+
+
     @abstractmethod
     def __init__(self, id: int, lang: str, name: str, description: str):
         self.__id = id
@@ -52,6 +59,7 @@ class Object(ABC):
 
     def __eq__(self, other):
         return self.__name == other.name and self.__description == other.description
+
 
     @abstractmethod
     def __name__(self):

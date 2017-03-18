@@ -29,7 +29,6 @@ class ParserHandler:
                                          str(child.tag)).instance().XmlClass()().get_object(child)
             else:
                 obj = Items.by_name(Items, str(child.tag)).instance().XmlClass()().get_object(child)
-
             objects.append(obj)
 
         return objects

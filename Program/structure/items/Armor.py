@@ -3,6 +3,10 @@ from structure.items.Item import Item
 
 
 class Armor(Item):
+    TABLE_SCHEMA = ['id', 'name', 'description', 'price', 'quality', 'weightA', 'weightB',
+                    'weightC', 'size', 'type']
+
+
     def __init__(self, id: int = None, lang=None, name: str = None,
                  description: str = None, parent_id: int = None,
                  price: int = None, quality: int = None,
@@ -38,11 +42,6 @@ class Armor(Item):
     @property
     def icon(self):
         return 'resources/icons/armor.png'
-
-
-    @property
-    def object_type(self):
-        return Items.ARMOR
 
 
     @property

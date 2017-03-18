@@ -158,12 +158,12 @@ class PlayerTreeManager:
         """
         objects = ParserHandler().import_xml(file_path)
         ObjectDatabase('test.db').set_many(True)
-
         if not LangManager().lang_exists('cs'):  # TODO : default lang
             LangManager().create_lang('Čeština', 'cs')
 
         for object in objects:
             if strict and object[list(object.keys())[0]].object_type != type:
+                print(object[list(object.keys())[0]].object_type, '==', type)
                 continue
 
             default = object.pop('cs')  # TODO: default lang
