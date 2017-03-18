@@ -78,20 +78,23 @@ class ObjectDatabase(Database):
         for key, value in obj.__dict__.items():
             if not compare(key, obj.__name__()):
                 continue
-            if type(value) is int:
-                int_values[substr(key, obj.__name__())] = value
-            elif type(value) in [WeaponWeight, Handling]:
-                int_values[substr(key, obj.__name__())] = value.value
-            elif 'type' in key:
-                int_values[substr(key, obj.__name__())] = value.value
-            elif 'lang' in key:
-                continue
-            elif 'id' in key:
-                continue
-            elif type(value) is str or type(value) is bytes:
-                str_values[substr(key, obj.__name__())] = value
             else:
+                key = substr(key, obj.__name__())
+
+            if key not in obj.TABLE_SCHEMA:
                 continue
+            elif isinstance(value, AutoNumber):
+                int_values[key] = value.value
+            elif type(value) is int:
+                int_values[key] = value
+            elif type(value) is str or type(value) is bytes:
+                str_values[key] = value
+            else:
+                print('preskocim:', key, value)
+                continue
+
+        print(int_values)
+        print(str_values)
         self.update(database_name, obj.id, int_values)
 
         translates = self.select('translates',
@@ -109,6 +112,7 @@ class ObjectDatabase(Database):
                     'target_id': obj.id,
                     'type'     : obj.object_type.value
                 }
+
                 self.insert('translates', data_dict)
             else:
                 if db_line['value'] != value:

@@ -68,10 +68,8 @@ class SpellLayout(Layout):
         self.cast_time_input.setValue(spell.cast_time)
         self.duration_input.setPlainText(spell.duration)
 
-        class_index = spell.drd_class if spell.drd_class is not None else 0
+        class_index = spell.drd_class.value if spell.drd_class is not None else 0
         self.class_input.setCurrentIndex(class_index)
-
-        self.class_input.setCurrentIndex(spell.drd_class)
 
 
     def save_data(self):

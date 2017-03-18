@@ -21,7 +21,7 @@ class IModifierDAO(ABC):
 
 
     @abstractmethod
-    def get(self, modifier_id: int) -> Modifier:
+    def get(self, modifier_id: int, lang: str) -> Modifier:
         pass
 
 

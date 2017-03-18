@@ -141,7 +141,6 @@ class PlayerTreeManager:
         exporting = []
         for id in selected:
             node = self.treeDAO.get_node(id)
-            print(node.object.object_type)
             exporting.append(
                 (node.object.object_type, node.object.id))
 
@@ -163,7 +162,6 @@ class PlayerTreeManager:
 
         for object in objects:
             if strict and object[list(object.keys())[0]].object_type != type:
-                print(object[list(object.keys())[0]].object_type, '==', type)
                 continue
 
             default = object.pop('cs')  # TODO: default lang

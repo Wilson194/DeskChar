@@ -110,20 +110,20 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-            # ///////////// Modifier \\\\\\\\\\\\\\\\\\
+        # ///////////// Modifier \\\\\\\\\\\\\\\\\\
 
-            modifier_columns = [
-                Column('ID', 'INTEGER', True, False, True),
-                Column('value', 'INTEGER', not_null=True),
-                Column('value_type', 'INTEGER', not_null=True),
-                Column('value_type_target', 'INTEGER', not_null=True),
-                Column('value_attribute_target', 'INTEGER', not_null=True)
-            ]
+        modifier_columns = [
+            Column('ID', 'INTEGER', True, False, True),
+            Column('value', 'INTEGER'),
+            Column('valueType', 'INTEGER'),
+            Column('targetType', 'INTEGER'),
+            Column('valueTargetAttribute', 'INTEGER')
+        ]
 
-            try:
-                database.create_table('Modifier', modifier_columns)
-            except OperationalError:
-                pass
+        try:
+            database.create_table('Modifier', modifier_columns)
+        except OperationalError:
+            pass
 
         # ///////////// Player tree structure \\\\\\\\\\\\\\\\\\
 

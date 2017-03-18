@@ -10,7 +10,6 @@ class ParserHandler:
 
         for type, id in data:
             child = type.instance().XmlClass()().create_xml(id)
-            print(type)
             root.append(child)
 
         with open(path, 'w', encoding='UTF-8') as out:

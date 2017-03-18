@@ -128,7 +128,11 @@ class TabWidget(QtWidgets.QFrame):
                 new_tab = QtWidgets.QWidget()
                 self.tab_widget.insertTab(i, new_tab, lang.name + ' (' + lang.code + ')')
                 self.tab_widget.setCurrentIndex(i)
-                obj = self.tab_manager.get_empty_object(self.target_type, self.target_id, lang.code)
+                # obj = self.tab_manager.get_empty_object(self.target_type, self.target_id, lang.code)
+                # id = self.target_type.instance()().DAO()().create(
+                #     self.target_type.instance()(None, lang.code))
+                obj = self.target_type.instance()().DAO()().get(self.target_id, lang.code)
+
                 new_tab.setLayout(obj.layout()(new_tab))
                 new_tab.layout().object = obj
                 new_tab.layout().data_changed_signal.connect(self.data_changed_slot)

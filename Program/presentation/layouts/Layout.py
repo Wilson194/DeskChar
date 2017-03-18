@@ -58,7 +58,41 @@ class Layout(QtWidgets.QVBoxLayout):
                 one.setValue(obj.value())
 
 
-    def text_box(self, grid, name, xposition, yposition, synchonize=False):
+    def text_line(self, grid: object, name: str, xposition: int, yposition: int,
+                  synchronize: bool = False) -> object:
+        """
+        Widget for text line input
+        :param grid: parent grid
+        :param name: Name of label
+        :param xposition: grid position x
+        :param yposition:  grid position y
+        :param synchronize: bool, if true, value is synchronized trough all languages
+        :return: input object
+        """
+        label = QtWidgets.QLabel()
+        label.setText(TR().tr(name) + ':')
+        grid.addWidget(label, yposition, xposition, 1, 1)
+        input = QtWidgets.QLineEdit()
+        input.setObjectName(name)
+        grid.addWidget(input, yposition, xposition + 1, 1, 1)
+        input.textChanged.connect(self.data_changed)
+        if synchronize:
+            self.synchronize(input)
+
+        return input
+
+
+    def text_box(self, grid: object, name: str, xposition: int, yposition: int,
+                 synchronize: bool = False) -> object:
+        """
+        Widget for text box
+        :param grid: parent grid
+        :param name: Name of label
+        :param xposition: grid position x
+        :param yposition: grid position y
+        :param synchronize: bool, if true, value is synchronized trough all languages
+        :return: input object
+        """
         label = QtWidgets.QLabel()
         label.setText(TR().tr(name) + ':')
         grid.addWidget(label, yposition, xposition, 1, 1)
@@ -66,20 +100,30 @@ class Layout(QtWidgets.QVBoxLayout):
         input.setObjectName(name)
         grid.addWidget(input, yposition, xposition + 1, 1, 1)
         input.textChanged.connect(self.data_changed)
-        if synchonize:
+        if synchronize:
             self.synchronize(input)
 
         return input
 
 
-    def combo_box(self, grid, name, data, xposition, yposition, synchonize=False):
+    def combo_box(self, grid: object, name: str, data: object, xposition: int, yposition: int,
+                  synchronize: bool = False) -> object:
+        """
+        Widget for combobox
+        :param grid: parent grid
+        :param name: Name of label
+        :param data: List of data for combobox (enum)
+        :param xposition: grid position x
+        :param yposition: grid position y
+        :param synchronize: bool, if true, value is synchronized trough all languages
+        :return: input object
+        """
         label = QtWidgets.QLabel(TR().tr(name) + ':')
         grid.addWidget(label, yposition, xposition)
         input = QtWidgets.QComboBox()
-        input.setObjectName(name)
         input.setObjectName(name + "_input")
         input.currentIndexChanged.connect(self.data_changed)
-        if synchonize:
+        if synchronize:
             self.synchronize(input)
         grid.addWidget(input, yposition, xposition + 1)
         input.addItem(TR().tr('Select_value'))
@@ -90,7 +134,17 @@ class Layout(QtWidgets.QVBoxLayout):
         return input
 
 
-    def spin_box(self, grid, name, xposition, yposition, synchronize=False):
+    def spin_box(self, grid: object, name: str, xposition: int, yposition: int,
+                 synchronize: bool = False) -> object:
+        """
+        Widget for numbers, limit (-20,10000)
+        :param grid: parent grid
+        :param name: Name of label
+        :param xposition: grid position x
+        :param yposition: grid position y
+        :param synchronize: bool, if true, value is synchronized trough all languages
+        :return: input object
+        """
         label = QtWidgets.QLabel()
         label.setText(TR().tr(name) + ':')
         grid.addWidget(label, yposition, xposition, 1, 1)
@@ -100,7 +154,7 @@ class Layout(QtWidgets.QVBoxLayout):
         input.setObjectName(name)
         if synchronize:
             self.synchronize(input)
-        grid.addWidget(input, yposition, xposition+1, 1, 1)
+        grid.addWidget(input, yposition, xposition + 1, 1, 1)
         input.valueChanged.connect(self.data_changed)
 
         return input

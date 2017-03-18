@@ -20,7 +20,10 @@
 #
 # print(Classes.ALCHEMIST)
 
-from structure.enums.AutoNumber import AutoNumber
-from structure.enums.ObjectType import ObjectType
+a = [False, False, False]
 
-print(isinstance(ObjectType.ITEM, AutoNumber))
+
+print (a)
+a = [True, True, True]
+
+print (a)

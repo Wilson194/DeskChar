@@ -1,4 +1,3 @@
-from structure.effects.Effect import Effect
 from structure.enums.ModifierValueTypes import ModifierValueTypes
 from structure.enums.ObjectType import ObjectType
 from structure.general.Object import Object
@@ -6,21 +5,19 @@ from structure.general.Object import Object
 
 class Modifier(Object):
     TABLE_SCHEMA = [
-        'id', 'value', 'value_type', 'value_type_target', 'value_attribute_target'
+        'id', 'value', 'valueType', 'targetType', 'valueTargetAttribute', 'name', 'description'
     ]
 
 
-    def __init__(self, lang: str, name: str, description: str, id: int = None,
-                 parent_effect: Effect = None, target_type: ObjectType = None,
-                 target_id: int = None, value_type: ModifierValueTypes = None,
-                 value_target: int = None, value: int = None):
+    def __init__(self, id: int = None, lang: str = None, name: str = None, description: str = None,
+                 valueType: object = None, value: int = None, valueTargetAttribute: object = None,
+                 targetType: ObjectType = None):
         super().__init__(id, lang, name, description)
-        self.__parent_effect = parent_effect
-        self.__target_type = target_type
-        self.__target_id = target_id
-        self.__value_type = value_type
-        self.__value_target = value_target
+
+        self.__valueType = valueType
         self.__value = value
+        self.__valueTargetAttribute = valueTargetAttribute
+        self.__targetType = targetType
 
 
     def __name__(self):
@@ -53,62 +50,22 @@ class Modifier(Object):
 
     @property
     def icon(self):
-        return 'resources/icons/book.png'
+        return 'resources/icons/potionGreen.png'
 
 
     @property
     def object_type(self):
-        return ObjectType.SPELL
+        return ObjectType.MODIFIER
 
 
     @property
-    def parent_effect(self):
-        return self.__parent_effect
+    def valueType(self):
+        return self.__valueType
 
 
-    @parent_effect.setter
-    def parent_effect(self, value):
-        self.__parent_effect = value
-
-
-    @property
-    def target_type(self):
-        return self.__target_type
-
-
-    @target_type.setter
-    def target_type(self, value):
-        self.__target_type = value
-
-
-    @property
-    def target_id(self):
-        return self.__target_id
-
-
-    @target_id.setter
-    def target_id(self, value):
-        self.__target_id = value
-
-
-    @property
-    def value_type(self):
-        return self.__value_type
-
-
-    @value_type.setter
-    def value_type(self, value):
-        self.__value_type = value
-
-
-    @property
-    def value_target(self):
-        return self.__value_target
-
-
-    @value_target.setter
-    def value_target(self, value):
-        self.__value_target = value
+    @valueType.setter
+    def valueType(self, value):
+        self.__valueType = value
 
 
     @property
@@ -119,3 +76,23 @@ class Modifier(Object):
     @value.setter
     def value(self, value):
         self.__value = value
+
+
+    @property
+    def valueTargetAttribute(self):
+        return self.__valueTargetAttribute
+
+
+    @valueTargetAttribute.setter
+    def valueTargetAttribute(self, value):
+        self.__valueTargetAttribute = value
+
+
+    @property
+    def targetType(self):
+        return self.__targetType
+
+
+    @targetType.setter
+    def targetType(self, value):
+        self.__targetType = value

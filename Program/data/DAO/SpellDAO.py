@@ -1,6 +1,7 @@
 from data.DAO.interface.ISpellDAO import ISpellDAO
 from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
+from structure.enums.Classes import Classes
 from structure.enums.ObjectType import ObjectType
 from structure.spells.Spell import Spell
 from data.DAO.DAO import DAO
@@ -55,12 +56,13 @@ class SpellDAO(DAO, ISpellDAO):
         data = dict(self.database.select(self.DATABASE_TABLE, {'ID': spell_id})[0])
         tr_data = self.database.select_translate(spell_id, ObjectType.SPELL.value,
                                                  lang)
-
+        drdClassIndex = data.get('drd_class', None)
+        drdClass = Classes(drdClassIndex) if drdClassIndex is not None else None
         spell = Spell(spell_id, lang, tr_data.get('name', ''),
                       tr_data.get('description', ''), tr_data.get('mana_cost_initial', ''),
                       tr_data.get('mana_cost_continual', ''), tr_data.get('range', ''),
                       tr_data.get('scope', ''), data.get('cast_time', 0),
-                      tr_data.get('duration', ''), data.get('drd_class', 1))
+                      tr_data.get('duration', ''), drdClass)
 
         return spell
 

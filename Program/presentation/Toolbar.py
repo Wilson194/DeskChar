@@ -18,14 +18,17 @@ class ToolBar(QToolBar):
     def init_ui(self):
         toolbar = self.__parent.addToolBar('TemplateToolBar')
 
-        spell_action = QAction(QIcon('resources/icons/book.png'), 'Spells', self.__parent)
+        spell_action = QAction(QIcon(ObjectType.SPELL.icon()), 'Spells', self.__parent)
         toolbar.addAction(spell_action)
 
-        ability_action = QAction(QIcon('resources/icons/map.png'), 'Abilities', self.__parent)
+        ability_action = QAction(QIcon(ObjectType.ABILITY.icon()), 'Abilities', self.__parent)
         toolbar.addAction(ability_action)
 
-        items_action = QAction(QIcon('resources/icons/axe.png'), 'Items', self.__parent)
+        items_action = QAction(QIcon(ObjectType.ITEM.icon()), 'Items', self.__parent)
         toolbar.addAction(items_action)
+
+        modifier_action = QAction(QIcon(ObjectType.MODIFIER.icon()), 'Modifiers', self.__parent)
+        toolbar.addAction(modifier_action)
 
         spell_action.triggered.connect(
             lambda: self.templates_tool_signal.emit(ObjectType.SPELL))
@@ -35,3 +38,6 @@ class ToolBar(QToolBar):
 
         items_action.triggered.connect(
             lambda: self.templates_tool_signal.emit(ObjectType.ITEM))
+
+        modifier_action.triggered.connect(
+            lambda: self.templates_tool_signal.emit(ObjectType.MODIFIER))

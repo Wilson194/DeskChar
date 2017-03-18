@@ -17,7 +17,7 @@ class ObjectType(AutoNumber):
         if self is ObjectType.ITEM:
             return 'resources/icons/axe.png'
         if self is ObjectType.MODIFIER:
-            return 'resources/icons/axe.png'
+            return 'resources/icons/potionGreen.png'
         if self is ObjectType.EFFECT:
             return 'resources/icons/axe.png'
 

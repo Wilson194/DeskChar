@@ -32,3 +32,18 @@ class DAO:
                 data[name][lang] = value
 
         return data
+
+
+    def get_languages(self, id: int) -> list:
+        """
+        Get list of all languages codes for this spell
+        :param id: id of spell
+        :return: list of langs codes
+        """
+        data = Database(self.DATABASE_DRIVER).select('translates',
+                                                     {'target_id': id, 'type': self.TYPE.value})
+        languages = []
+        for line in data:
+            if line['lang'] not in languages:
+                languages.append(line['lang'])
+        return languages
