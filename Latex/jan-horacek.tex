@@ -79,33 +79,43 @@ Ve třetí kapitole se věnuji implementaci a testování celé aplikace a jejic
 
 
 	\section{Cíl práce}
-Cílem práce je vytvořit desktopovou aplikaci pro práci se šablonami a pro přípravu dobrodružství.
-
-Aplikace DeskChar bude součástí balíčku aplikací, které slouží
-
+Cílem této práce je vytvořit desktopovou aplikaci, které rozšíří již existují balíček mobilních aplikací MobChar o nové funkcionality. Hlavním účelem aplikace bude vytváření dobrodružství pro Dračí doupě. Jednou z hlavních funkcionalit je tvorba xml souborů, se kterými umí pracovat mobilní aplikace MobChar.
 	\section{Dračí doupě}
 
+
 \chapter{Současný stav}
+	\section{Projekt MobChar}
+Aplikace MobChar vznikla jako samostatná aplikace, která měla sloužit jako osobní deník hráče pro hru Dračí doupě. Postupem času se rozšiřovala a měnila základní struktura. Nynější stav již umožňuje vytváření rozšíření pro další hry na hrdiny jako jsou například Dungeons~\&~Dragons. V této chvíli jsou již plně funkční rozšíření pro Dračí doupě a Dungeons~\&~Dragons a vznikají další.\\
+\\
+V rámci aplikace MobChar vzniká další rozšíření, ne však pro osobní deník hráče, ale pro pána jeskyně. Jednoduchá aplikace, ve které budou k dispozici údaje o všech hráčích a údaje od právě probíhajícím dobrodružství. Protože tvorba dobrodružství je poměrně náročná činnost, která vyžaduje napsání mnoho textu, připravení velkého množství šablon a další, bylo by velice nepraktické toto dobrodružství vytvářet na mobilním zařízení. Proto vzniká desktopová aplikace DeskChar, jejíž hlavním cílem bude vytváření dobrodružství a šablon pro mobilní aplikace.
 
-\section{Existující aplikace}
+	\section{Existující aplikace}
+Díky rozsáhlé komunitě okolo her na hrdiny jako jsou Dračí doupě a Dungeons~\&~Dragons vzniklo již mnoho aplikací, které mají hraní či přípravu dobrodružství usnadnit. Můžeme najít desítky různých editorů map, které jsou více či méně povedené a propracované. Mezi nejzajímavější bych asi zařadil Dungeon Painter Studio, který se převážně zaměřuje na tvorbu rozsáhlých map nebo například Donjon, který se zaměřuje na generování náhodných map a další objektů jako jsou například obchody,truhly, počasí a další. Všechny tyto aplikace vám vygenerují PDF soubor, který si můžete následně vytisknout a vzít sebou na herní sezení. Žádná z těchto aplikací nenabízí mobilní prohlížeč dobrodružství, nebo export do nějakého formátu, který by se dal na mobilních zařízení jednoduše prohlížet. Přeci jenom PDF soubor formátu A4 s mnoho údaji, není příliš přehledný, obzvlášť na malých obrazovkách. \\
+\\
+\textbf{Dungeon Painter Studion} je aplikace, která se zaměřuje na tvorbu map a následné generování PDF souborů. Existuje online verze, která je zdarma, která však nenabízí veškeré funkcionality plné verze. Ale i v této zjednodušené verzi dokážete vytvořit velmi propracované mapy. Plná verze je již desktopová aplikace, která je placená (stojí  přibližně 400 korun). Je možné zde vytvořit opravdu krásná a poutavá dobrodružství včetně stínování, světelných efektů a mnoho dalšího. Podle mého názoru, je však až zbytečně složitý a pro větší pánů jeskyně, příliš zdlouhavý. Vytvoření jedné mapy zabere opravdu hodně času a ve většině případů takto propracované mapy nejsou pro hraní důležité. Bohužel v základní verzi není možné s mapou propojit předměty a příšery z dobrodružství, což považuji za jednu z nejdůležitějších funkcionalit. \\
+\\
+\textbf{Donjon} je online aplikace, která se zaměřuje na generování náhodných lokací. Můžeme si zde navolit základní nastavení jako je velikost mapy, velikost místností a další. Finální verzi mapy již upravit však nemůžeme. K mapě dostaneme popis jednotlivých místností v poměrně nepřehledné tabulce. Tento formát bez dodatečných úprav v obrázkovém editoru nelze rozumě vytisknout. Aplikace nabízí generování další prvků, jako například poklady, obchody a další, bohužel však tyto vygenerované prvky se jíž nedají propojit s vygenerovanou mapou. 
 
-\section{Projekt MobChar}
+
+
+
+
 
 
 
 \chapter{Analýza}
-
-\section{Požadavky}
+	\section{Požadavky}
 
 
 
 Sběr požadavků je jedna z~prvních činností, které se musí provést na začátku analýzy projektu. Je zapotřebí sepsat veškeré funkční a nefunkční požadavky, na základě kterých bude vznikat návrh a výsledný program. Na základě požadavků se dají vytvořit první odhady na rozsah projektu a~na jeho cenu. Tento odhad je velice nepřesný, ale zákazníci vyžadují předběžnou cenu, již na základě jejich požadavků na program. 
 	
 \subsection{Funkční požadavky}
+Funkční požadavky jsou rozděleny do dvou částí, funkcionalita pro hráče a funkcionalita pro pána jeskyně. Tyto sekce jsou rozdělené, protože popisují stejný program, ale z pohledu jiného uživatele.
 \subsubsection{Funkcionalita pro hráče}
 Funkční požadavky, které program bude poskytovat zejména pro hráče pro práci se šablonami.\\
 \\
-\textbf{Tvorba a editace šablon pro MobChar:} program bude umožňovat vytvářet nové šabolny pro mobilní aplikaci MobChar. Bude také umožňovat editovat stávající šablony. Jednotlivé šablony lze přehledně uspořádat do stromové struktury.\\
+\textbf{Tvorba a editace šablon pro MobChar:} program bude umožňovat vytvářet nové šablony pro mobilní aplikaci MobChar. Bude také umožňovat editovat stávající šablony. Jednotlivé šablony lze přehledně uspořádat do stromové struktury.\\
 \\
 Šablony se kterými bude možné pracovat:
 				\begin{itemize}
@@ -149,33 +159,67 @@ Na mapu půjdou umisťovat odkazy na vytvoření postavy, příšery, předměty
 
 
 
-\section{Případy užití}
+	\section{Případy užití}
 Případy užití popisují jednotlivé činnosti, které uživatel provádí, při práci s~aplikací. Diagram byl rozdělen na tři hlavní části pro větší přehlednost.
 \subsection{Práce se šablonami}
 \begin{figure}\centering
-	\includegraphics[width=0.8\textwidth]{images/usecase_sablony}
-	\caption[Usecase šablony]{Ukázkový obrázek v~plovoucím prostředí}\label{fig:uc_sablony}
+	\includegraphics[width=0.8\textwidth]{images/usecase_sablony.pdf}
+	\caption[Případy užití pro šablony]{Případy užití pro práci se šablonami}\label{fig:uc_sablony}
 \end{figure}
 
-Případ užití týkající se práci se šablonami namodelovaný na obrázku \ref{fig:uc_sablony} je oddělený od ostatních, protože obsahuje veškeré činnosti, které od aplikace vyžaduje hráč. Jedná se o~veškerou práci se šablonami pro mobilní aplikaci MobChar.\\
+Případ užití týkající se práci se šablonami namodelovaný na obrázku \ref{fig:uc_sablony} se týká veškeré práce se šablonami. Dobrodružství a postavy jsou složené z jednotlivých šablon, které se dají využít i samostatně. Nakonec i dobrodružství a postava mají formát šablony, které v sobě obsahují další šablony.\\
 \\
-\textbf{Vytváření a editace šablon:} uživatel si bude moci vytvořit nové šablony nebo editovat stávající. Veškeré parametry, které je možné do xml šablony zapsat, lze jednoduše upravovat v přehledném formuláři.\\
+\textbf{Vytváření a editace šablon:} uživatel si bude moci vytvořit nové šablony nebo editovat stávající. Veškeré parametry, které je možné do šablony zapsat, lze jednoduše upravovat v přehledném formuláři. Uživatel si může vytvořit libovolný počet šablon, které se na základě návazností sdružují na větších celků (dobrodružství, postava).\\
 \\
-\textbf{Import šablon z XML souboru:} program bude umožňovat import šablon ze strukturovaných xml souborů, které vytváří mobilní aplikace MobChar a samotný program. Importované šablony se přidají do databáze a lze je následně upravovat nebo překládat. \\
+\textbf{Import šablon z XML souboru:} program bude umožňovat import šablon ze strukturovaných xml souborů, které vytváří mobilní aplikace MobChar a také samotný program. Importované šablony se přidají do databáze a lze s nimi následně provádět stejné činnosti jako s nově vytvořenými. Import je možný buď hromadný, který se pokusí ze souboru dostat veškeré dostupné informace a přidat je do aplikace do příslušná místa, nebo lokální import, který ze souboru vytáhne pouze šablony o daném typu.\\
 \\
-\textbf{Sdružování šablon do skupin:} veškeré šablony půjde rozřazovat do stromové struktury pro větší přehlednost, pomocí vytváření složek a jednoduchého drag and drop systému. Takto rozřazené šablony budou umožňovat přehlednější práci a jednoduší export do xml souborů.\\
+\textbf{Sdružování šablon do skupin:} veškeré šablony půjde rozřazovat do stromové struktury pro větší přehlednost a jednoduší práci s nimi. Pomocí vytváření složek a jednoduchého drag and drop systému bude rozřazování velice jednoduché a intuitivní. Díky rozřazení do složek je následná práce se šablonami velice usnadněná, ať už se jedná o export nebo přiřazování do rodičovských šablon.\\
 \\
-\textbf{Export šablon:} veškeré vytvořené šablony lze z aplikace exportovat. K dispozici jsou různé druhy exportu. První možnost je export pro mobilní aplikace MobChar. Aplikace vytvoří strukturované XML soubory, které odpovídají formátu, který používá mobilní aplikace MobChar. Další možností exportu je PDF formát, který slouží pro tisknutí šablon do přehledného almanachu, který umožní využít šablony i hráčům, kteří mobilní aplikaci nemají nebo ji nechtějí použít. \\
+\textbf{Export šablon:} veškeré vytvořené šablony lze z aplikace exportovat. K dispozici jsou různé druhy exportu. První možnost je export pro mobilní aplikace MobChar. Aplikace vytvoří strukturované XML soubory, které odpovídají formátu, který používá mobilní aplikace MobChar. Další možností exportu je PDF formát, který slouží pro tisknutí šablon do přehledného almanachu, který umožní využít šablony i hráčům, kteří mobilní aplikaci nemají nebo ji nechtějí použít. Poslední možnost exportu, je klasické uložení celého stavu šablon do jednoho xml souboru, který bude využívat stejnou strukturu šablon. \\
 \\
-\textbf{Tvorba překladů šablon:} každá šablona může být přeložena do libovolného počtu jazyků. Při exportu šablon se všechny jazykové překlady exportují. Pomocí záložek se lze přepínat mezi jazyky.\\
+\textbf{Tvorba překladů šablon:} ke každé šabloně vytvořené nebo importované do aplikace lze vytvořit neomezený počet překladů. Překlady se vytváří v rámci jedné šablony, pomocí přehledného přepínaní mezi jazyky. Veškeré hodnoty, pro které překlad nemá smysl (číselné hodnoty, povolání, atd.) budou synchronizování napříč všemi jazyky.\\
 \\
-\subsection{Tvorba dobrodružství}
+
+	\section{Business procesy}
+Business proces (někdy též nazývaný podnikový nebo obchodní proces) je tok práce nebo činnosti. Dají se zaznamenávat pomocí textu nebo přehledných modelů. Modely business procesů se snaží přehledně do diagramu zanést jednotlivé procesy, které bude uživatel s danou aplikací nebo doménou provádět. Já jsem zvolil UML diagram aktivit pro zachycení business procesů v mé práci.
+\subsection{Vytváření šablon} \label{sec:vytvareni_sablon}
 \begin{figure}\centering
-	\includegraphics[width=0.8\textwidth]{images/usecase_sablony}
-	\caption[Usecase šablony]{Ukázkový obrázek v~plovoucím prostředí}\label{fig:uc_sablony}
+	\includegraphics[width=0.8\textwidth]{images/bussiness_sablony}
+	\caption[Business proces vytváření šablon]{Model bussines procesů vytváření šablon}\label{fig:bp_sablony}
 \end{figure}
+Diagram \ref{fig:bp_sablony} popisuje základní proces práce se šablonami. Proces popisuje vytvoření šablon a~následné nahrání do mobilní aplikace. Šablony vytvoříme v~programu nebo případně importujeme z~xml souboru vytvořeném buď aplikací nebo například aplikací MobChar. Samozřejmě import a~vytvoření nových šablon můžeme kombinovat. Při tomto procesu nevzniká pouze jedna šablona, ale celý soubor šablon, obvykle jednoho typu. Provedeme veškeré potřebné úpravy a~vytvoříme překlady (pokud jsou nějaké zapotřebí). Danou šablonu následně exportujeme do strukturovaného souboru XML ve~formátu, který podporuje aplikace MobChar. Uživatel mobilní aplikace si vytvořený soubor nahraje do zařízení a~následně provede import do aplikace. Nyní již může s~novou šablonou pracovat.
 
+\subsection{Vytváření dobrodružství}
+\begin{figure}\centering
+	\includegraphics[width=0.8\textwidth]{images/business_dobrodruzstvi}
+	\caption[Business proces vytváření dobrodružství]{Model bussines procesů vytváření dobrodružství}\label{fig:bp_dobrodruzsvi}
+\end{figure}
+Diagram \ref{fig:bp_dobrodruzsvi} popisuje proces, při kterém vzniká nové dobrodružství. Jak už jsem dříve zmiňoval, tak dobrodružství je také šablona. Protože se jedná o hlavní šablonu, která v sobě obsahuje větší počet šablon různých druhů, rozhodl jsem se vytváření dobrodružství popsat více do podrobna. Na začátku procesu vytvoříme nové dobrodružství nebo importujeme již existující a dále budeme upravovat již stávající hodnoty. V bodě \textbf{Vytváření a editace objektů} se jedná o businnes proces popsaný v kapitole \ref{sec:vytvareni_sablon},ve kterém vytvoříme veškeré potřebné objekty, které budou součástí dobrodružství. Do dobrodružství veškeré šablony přidáme a rozřadíme podle potřeby ( podle částí dobrodružství, podle typu šablony atd.). Když máme veškeré úpravy hotové, můžeme výsledné dobrodružství exportovat. Zde si můžeme vybrat zda budeme exportovat dobrodružství pro tisk do formátu PDF nebo pro MobChar ve formátu XML.\\
+\textbf{Formát pro tisk:} Vybereme části, které chceme exportovat (nemusíme exportovat celé dobrodružství naráz) a provedeme export. Vytvoří se nám přehledný PDF soubor který následně můžeme vytisknout nebo nahrát do zařízení, které umí pracovat s formátem PDF.\\
+\textbf{Formát pro MobChar:} Při exportu do formátu XML se vždy exportuje celé dobrodružství. Nedají se vybrat pouze některé části. Aplikace vytvoří XML soubor. Uživatel následně získaný soubor nahraje do zařízení a importuje ho do aplikace. Takto vytvořené dobrodružství je určené pro MobChar rozšíření pro pána jeskyně.
 
+	\section{Doménový model}
+Doménový model má za úkol popsat strukturu tříd v aplikaci a jejich vazby mezi nimi. Pro zaznamenání se využívá UML diagram. Diagram nepopisuje jednotlivé funkce tříd ani proměnné, které slouží k implementaci tříd, ale zachycuje pouze základní strukturu.
+\subsection{Stromová struktura}
+\begin{figure}\centering
+	\includegraphics[width=0.8\textwidth]{images/domain_struktura}
+	\caption[Analytický doménový model stromové struktury]{Analytický doménový model stromové struktury}\label{fig:dm_stromova_struktura}
+\end{figure}
+Diagram na obrázku \ref{fig:dm_stromova_struktura} popisuje strukturu objektů, které slouží pro uchování všech objektů (šablon) a jejich rozřazení do stromové struktury. Veškeré šablony využívají tuto stromovou strukturu. Třída Folder (složka) slouží pouze k rozřazování jednotlivých objektů do skupin. Složka má pouze jménu a může obsahovat libovolný počet složek nebo objektů. ObjektNode pak slouží k uchování šablony. Objekt již nemůže mít žádné podřazené složky nebo objekty. Objektem se zde myslí veškeré šablony, které se dají v aplikaci vytvořit. Dolní část objektů (Item, Spell, atd.) jsou objekty, které jsou totožné s aplikací MobChar a slouží k uchování šablon pro základní aplikaci. Pokud vás zajímá podrobnější popis těchto objektů, nahlédněte do bakalářské práce týkající se MobCharu. O proti tomu, objekty na pravé straně diagramu (Map item, Scenarion, atd.) jsou objekty, které slouží k vytvoření dobrodružství. \textbf{TODO} %TODO
+
+\section{Model architektury}
+\begin{figure}\centering
+	\includegraphics[width=0.8\textwidth]{images/architektura}
+	\caption[Model architektury]{Model architektury}\label{fig:architektura}
+\end{figure}
+Model architektury popisuje formální popis systému případně jeho detailní plán na úrovni komponent vedoucí k jeho implementaci.\\
+\\
+Zvolil jsem třívrstvou architekturu z důvodu dobré přehlednosti a jednoduchém nahrazení jedné z části, bez zásahu do ostatních vrstev. Veškeré vrstvy mezi sebou komunikují na základe definovaného rozhraní.\\
+\subsection{Vrstvy}
+\textbf{Prezentační vrstva} zobrazuje informace pro uživatele. Jedná se o grafickou část celé aplikace. Kontroluje zadané vstupy, nijak však získané data nezpracovává.\\
+\textbf{Business vrstva} je základní logická část aplikace. Leží zde jádro aplikace, její logika a funkce pro zpracování dat.\\
+\textbf{Datová vrstva} je vrstva, která se stará o práci s daty. Zajišťuje komunikaci s databází a práci s XML soubory.\\
+\subsection{Rozhraní}
 
 \chapter{Návrh}
 
