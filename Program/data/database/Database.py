@@ -169,7 +169,11 @@ class Database(metaclass=Singleton):
         """
         sql = 'SELECT * FROM ' + table_name + ' WHERE '
         for key, value in row_filter.items():
-            if type(value) == str:
+            if type(value) is tuple:
+                sql += key + ' '
+                sql += value[0] + ' '
+                sql += "'" + value[1] + "'"
+            elif type(value) == str:
                 sql += key + ' = '
                 sql += "'" + value + "'"
             elif value is None:

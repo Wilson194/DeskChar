@@ -32,6 +32,15 @@ class PlayerTreeManager:
         return roots
 
 
+    def search_tree_nodes(self, object_type: ObjectType, text: str) -> list:
+        roots = self.treeDAO.get_nodes_search(object_type, text)
+
+        for root in roots:
+            self.__create_tree(root, object_type)
+
+        return roots
+
+
     def __create_tree(self, node: Node, type: ObjectType):
         """
         Recursive function for create tree with children
@@ -166,7 +175,7 @@ class PlayerTreeManager:
 
     def get_object(self, node_id: int):
         """
-        Get node by id
+        Get object from node
         :param node_id: id of node
         :return: Node if exist, None otherwise
         """

@@ -23,7 +23,7 @@ class Effect(Object):
 
     @property
     def treeChildren(self):
-        return [ObjectType.EFFECT]
+        return [ObjectType.MODIFIER]
 
 
     @staticmethod

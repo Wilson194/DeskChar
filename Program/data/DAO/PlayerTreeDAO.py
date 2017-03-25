@@ -29,6 +29,11 @@ class PlayerTreeDAO:
         return map_objects(data)
 
 
+    def get_nodes_search(self, targetType: ObjectType, text: str):
+        data = self.database.select(self.TABLE_NAME, {'target_type': targetType.value,
+                                                      'name'       : ('like', '%' + text + '%')})
+        return map_objects(data)
+
     def get_node(self, id: int) -> Node:
         """
         Get node by id

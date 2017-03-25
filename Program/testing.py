@@ -20,10 +20,7 @@
 #
 # print(Classes.ALCHEMIST)
 
-a = [False, False, False]
 
 
-print (a)
-a = [True, True, True]
-
-print (a)
+a = [1,2,3]
+a.pop(4)

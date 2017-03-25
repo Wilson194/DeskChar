@@ -192,6 +192,7 @@ class TreeWidget(QtWidgets.QFrame):
         elif action.data() == 'add_object':
             node = self.tree_manager.get_node(item_id)
             data, ok = AddAnotherObject.get_data(node)
+            print(data, ok)
 
 
 
