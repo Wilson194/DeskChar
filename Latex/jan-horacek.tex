@@ -206,8 +206,17 @@ Doménový model má za úkol popsat strukturu tříd v aplikaci a jejich vazby 
 	\includegraphics[width=0.8\textwidth]{images/domain_struktura}
 	\caption[Analytický doménový model stromové struktury]{Analytický doménový model stromové struktury}\label{fig:dm_stromova_struktura}
 \end{figure}
-Diagram na obrázku \ref{fig:dm_stromova_struktura} popisuje strukturu objektů, které slouží pro uchování všech objektů (šablon) a jejich rozřazení do stromové struktury. Veškeré šablony využívají tuto stromovou strukturu. Třída Folder (složka) slouží pouze k rozřazování jednotlivých objektů do skupin. Složka má pouze jménu a může obsahovat libovolný počet složek nebo objektů. ObjektNode pak slouží k uchování šablony. Objekt již nemůže mít žádné podřazené složky nebo objekty. Objektem se zde myslí veškeré šablony, které se dají v aplikaci vytvořit. Dolní část objektů (Item, Spell, atd.) jsou objekty, které jsou totožné s aplikací MobChar a slouží k uchování šablon pro základní aplikaci. Pokud vás zajímá podrobnější popis těchto objektů, nahlédněte do bakalářské práce týkající se MobCharu. O proti tomu, objekty na pravé straně diagramu (Map item, Scenarion, atd.) jsou objekty, které slouží k vytvoření dobrodružství. \textbf{TODO} %TODO
-
+Diagram na obrázku \ref{fig:dm_stromova_struktura} popisuje strukturu objektů, které slouží pro uchování všech objektů (šablon) a jejich rozřazení do stromové struktury. Veškeré šablony využívají tuto stromovou strukturu. Třída Folder (složka) slouží pouze k rozřazování jednotlivých objektů do skupin. Složka má pouze jméno a může obsahovat libovolný počet složek nebo objektů. ObjektNode pak slouží k uchování šablony. Dolní část objektů (Item, Spell, atd.) jsou objekty, které jsou totožné s aplikací MobChar a slouží k uchování šablon pro základní aplikaci a využívají se i v aplikaci pro pána jeskyně. Pokud vás zajímá podrobnější popis těchto objektů, nahlédněte do bakalářské práce týkající se MobCharu. O proti tomu, objekty na pravé straně diagramu (Map item, Scenarion, atd.) jsou objekty, které slouží převážně k vytvoření dobrodružství. Jejich podrobnější popis naleznete dále.\\
+\\
+Veškeré objekty můžou mít potomky. Systém složek slouží pouze pro přehledné uspořádání. Každý objekt má definované objekty, které může mít jako potomky. Tento systém slouží pro ukládání závislostí, například dobrodružství může obsahovat mnoho lokací, příšer, map. Některé objekty, jako například kouzla a schopnosti, žádné potomky mít nesmějí. 
+\subsection{Dobrodružství}
+\begin{figure}\centering
+	\includegraphics[width=0.8\textwidth]{images/domain_scenario}
+	\caption[Analytický doménový model dobrodružství]{Analytický doménový model dobrodružství}\label{fig:dm_scenario}
+\end{figure}
+Diagram na obrázku \ref{fig:dm_scenario} popisuje strukturu pro ukládání a práci s dobrodružstvím. Hlavní třída scenario je rozdělená do jednotlivých lokací. Pro celé dobrodružství jsou však společné předměty, kouzla, schopnosti a postavy. Předměty, kouzla a schopnosti jsou pro pána jeskyně, který je nadále poskytuje hráčům, například pokud se hráč má možnost naučit nové kouzlo, nebo získal důležitý předmět pro dobrodružství (elixír, mapa, atd.). Třída Character zde zastupuje postavy hráčů, kteří dané dobrodružství hrají. Jedná se o stejné třídy jako v původní aplikaci MobChar. Pro přesnější popis těchto tříd, nahlédněte do bakalářské práce aplikace MobChar.\\
+\\
+Celé dobrodružství je členěné do lokací, které se navíc můžou do sebe zanořovat (lokace může mít pod sebou další lokace). Lokace obsahují příšery, mapy, předměty a postavy. Příšery mají velice podobnou strukturu jako postavy, můžou se naučit schopnosti a kouzla a vlastnit předměty, mají však odlišné atributy, proto jsou od postav odděleny. Jednotlivé mapy mají složitější strukturu, která je popsána níže. Předměty zde znamenají, předměty důležité pro tuto lokaci (klíče, věci v bednách a další). Poslední částí jsou postavy, které zde znázorňují postavy, za které nehrají hráči, ale samotný PJ. Jsou to důležité postavy pro dobrodružství, které se nacházejí v dané lokaci. Objekt je stejný jako klasické postavy, ale význam je trochu odlišný.
 	\section{Model architektury}
 \begin{figure}\centering
 	\includegraphics[width=0.8\textwidth]{images/architektura}
@@ -219,11 +228,23 @@ Zvolil jsem třívrstvou architekturu z důvodu dobré přehlednosti a jednoduch
 \subsection{Vrstvy}
 \textbf{Prezentační vrstva} zobrazuje informace pro uživatele. Jedná se o grafickou část celé aplikace. Kontroluje zadané vstupy, nijak však získané data nezpracovává.\\
 \textbf{Business vrstva} je základní logická část aplikace. Leží zde jádro aplikace, její logika a funkce pro zpracování dat.\\
-\textbf{Datová vrstva} je vrstva, která se stará o práci s daty. Zajišťuje komunikaci s databází a práci s XML soubory.\\
+\textbf{Datová vrstva} je vrstva, která se stará o práci s daty. Zajišťuje komunikaci s databází a práci s XML soubory. Jejím základním úkolem je získat data z databáze nebo XML a převést je na objekty. \\
 \subsection{Rozhraní}
+Mezi vrstvami jsou definovaná rozhraní, které je nutné dodržet. Rozhraní začínají velkým písmenem I, konkrétní implementace daného rozhraní obvykle má stejný název, pouze bez počátečního písmena I.\\
+\\
+\textbf{IObjectDAO} je skupina několik DAO tříd, které se starají o přístup k datům z databáze a z XML. Na diagramu \ref{fig:architektura} je zobrazen pouze zástupný IObjectDAO, který v implementaci neexistuje a je nahrazen všemi DAO třídami (ISpellDAO, IEffectDAO atd.).\\
+\textbf{ITreeDAO} se stará o~veškeré ukládání stromové struktury do databáze. \\
+\textbf{IMapDAO} se stará o ukládání veškerých dat, které se týkají map. Rozhraní je společné pro všechny druhy map (grafické, jednoduché, obrázkové)\\
+\textbf{ILangDAO} se stará o ukládání jazyků, které jsou v aplikaci použity. Nejedné se o překlady prezentační vrstvy, ale o jazyky vytvořené pro překlady šablon. Rozhraní se nestará o ukládání samotných překladů, pouze o jejich jazyky.\\
+\\
+\textbf{IObjectManager} navazuje na IObjectDAO. Jedná se opět o skupinu tříd pro veškeré základní objekty (ISpellManager, IAbilityManager, atd.). Rozhraní definuje jak přijímá data z prezentační vrstvy. Základní funkcionalita spočívá ve zpracování dat z prezentační vrstvy a vytvoření kompletního objektu, se kterým se dále pracuje nebo pošle na datovou vrstvu pro uložení.\\
+\textbf{ITreeManager} se stará u připravení stromové struktury pro zobrazení. Vytváří z objektů stromovou strukturu a přidává do struktury metadata, které slouží pro zobrazení a práci na prezentační vrstvě.\\
+\textbf{IMapManager} se stará o zpracování dat ohledně mapy. Převádí zobrazenou mapu pro uživatele na formu, ve které se dá snadno uložit do databáze. Propojuje veškeré šablony s mapou.\\
+\textbf{ILangManager} se stará o zpracování dat z prezentační vrstvy ohledně jazyků.\\
+\textbf{ITabManager} se stará o vytváření překladových záložek pro prezentační vrstvu. Toto rozhraní nemá DAO rozhraní, protože veškeré informace které potřebuje, získá přímo z konkrétních IObjectDAO tříd. Jejím hlavním úkolem je zpracování všech překladů jedné šablony a připravení objektů pro uložení.\\
+
 
 \chapter{Návrh}
-	\section{Model databáze}
 	\section{Model databáze}
 	\begin{figure}\centering
 	\includegraphics[width=0.8\textwidth]{images/database_basic}
@@ -231,9 +252,32 @@ Zvolil jsem třívrstvou architekturu z důvodu dobré přehlednosti a jednoduch
 	\end{figure}
 	Pro realizaci aplikace DeskChar jsem vybral databázi sqlite, která je jednoduchá a nepotřebuje žádný složitý externí software pro běh. Na druhou stranu zvládá veškeré potřebné operace, jako jsou cizí klíče a kaskádové mazání záznamů. Pro vytváření a práci se stromovou strukturou, je kaskádové mazání nedocenitelný pomocník. \\
 \\
-Z důvodu vícejazyčnosti šablon, bylo zapotřebí navrhnout strukturu databáze, která dokáže uložit neomezený počet jazykových překladů. Na obrázku \ref{fig:db_basic} můžeme vidět základní strukturu databáze. Tabulka Languages obsahuje záznam o jazycích.Údaj o jazyku není pouze textový v tabulce Translate, abychom docílili konzistence mezi záznamy pro stejný jazyk. Primárním klíče každého jazyka je textový kód, který je unikátní. V tabulce Translate pak nalezneme veškeré textové řetězce, které se nacházejí v objektech. Jeden záznam tabulky translate je přiřazen ke konkrétnímu objektu pomocí dvojice klíčů target\_type, který určuje o jaký objekt (tabulku v databázi) se jedná, a target\_id, který určuje konkrétní záznam v tabulce. Informace o překladu jsou uloženy ve dvojici klíčů name a vulue, které slouží jako slovník, jejich jazyk určuje záznam lang. Takto zvolený návrh databáze umožňuje neomezený počet jazyků a jednoduchou rozšířitelnost.\\
+Diagram na obrázku \ref{fig:db_basic} je zjednodušený pro větší přehlednost. Na diagramu je zachycena základní struktura a princip závislostí v~databázi. Kompletní model databáze se nachází v~příloze.\\
 \\
-Druhá část diagramu se týká stromové struktury, která se používá pro všechny objekty v aplikaci. 
+Z důvodu vícejazyčnosti šablon, bylo zapotřebí navrhnout strukturu databáze, která dokáže uložit neomezený počet jazykových překladů. Na obrázku \ref{fig:db_basic} můžeme vidět základní strukturu databáze. Tabulka Languages obsahuje záznamy o jazycích. Údaj o~jazyku není pouze textový v tabulce Translate, abychom docílili konzistence mezi záznamy pro stejný jazyk. Primárním klíče každého jazyka je textový kód, který je unikátní. V tabulce Translate pak nalezneme veškeré textové řetězce, které se nacházejí v objektech. Jeden záznam tabulky translate je přiřazen ke konkrétnímu objektu pomocí dvojice klíčů target\_type, který určuje o jaký objekt (tabulku v databázi) se jedná, a target\_id, který určuje konkrétní záznam v tabulce (ukazuje na primární klíč ID v tabulce). Informace o překladu jsou uloženy ve dvojici klíčů name a vulue, které slouží jako slovník, jejich jazyk určuje záznam lang. Takto zvolený návrh databáze umožňuje neomezený počet jazyků a jednoduchou rozšířitelnost.\\
+\\
+Druhá část diagramu se týká stromové struktury, která se používá pro všechny objekty v aplikaci. Tabulka Tree\_structure slouží pro zaznamenávání stromové struktury pro veškeré objekty. Do tabulky se ukládají dva druhy uzlů, složky a objekty. Atribut type určuje, o který druh uzlu se jedná. Pomocí cizího klíče parent\_id, vzniká stromová struktura. Zde se využívá kaskádové mazání, pokud se smaže záznam, který má pod sebou navázané další záznamy pomocí cizího klíče, smažou se tyto záznamy také automaticky v databázi. Tento princip udržuje tabulku konzistentní a nevznikají žádné záznamy, které se již nepoužívají. Každý uzel který je typu object, ukazuje pomocí dvojice klíčů target\_type, který určuje tabulku v databázi, a target\_id na záznam v ostatních tabulkách. V diagramu je to naznačené zjednodušeně, kde tabulka Object zastupuje tabulky všech objektů (Spell, Item, atd.). \\
+\\
+Poslední část diagramu znázorňuje, jak jsou vyřešené vztahy mezi objekty. V databázi je zapotřebí zachytit mnoho vazeb mezi objekty. Protože se jedná o systém šablon, kde jedna šablona můžu patřit k více objektům a tato situace bude nastávat velmi často, rozhodl jsem se záznamy nekopírovat pro každý objekt, ale použít systém odkazů. Tyto odkazy realizují tabulky v diagramu znázorněné jako objects\_relations. Jedná se o jednoduché tabulky, které obsahují pouze dva cizí klíče, jeden ukazující na záznam rodiče a druhý ukazující na záznam přiřazené šablony. Tyto tabulky se jmenují podle objektů které spojují, rodičovský objekt je první a názvy jsou oddělené čárkami.
+	\section{Model komunikace}
+	\begin{figure}\centering
+	\includegraphics[width=0.8\textwidth]{images/comunication_main}
+	\caption[Model komunikace pro hlavní obrazovku]{Model komunikace pro hlavní obrazovku}\label{fig:comunication_main}
+	\end{figure}
+Nejčastější operaci prezentační vrstvy, což je práce se stromovou strukturou a vytváření překladů, jsem vytvořil diagram komunikace, který znázorňuje komunikaci mezi jednotlivými třídami. Na diagramu \ref{fig:comunication_main} můžeme vidět základní dvě činnosti. Vybrání konkrétního typu šablon a zobrazení stromové struktury a zobrazení hlavního widgetu pro vytváření šablon po vybrání konkrétní položky ve stromové struktuře.\\
+\\
+Uživatel v menu klikne na požadovaný druh šablon. Tím se zavolá funkce Redraw, která má na starosti vykreslení stromové struktury ve widgetu. Potřebná data získá z TreeManageru po zavolání funkce getTreeRoots, která má na starosti, vytvoření kompletního stromu uzlů, přičemž vrací seznam kořenových uzlů. TreeWidget z tohoto listu pomocí rekurze vykreslí celý strom. TreeManager získává data z konkrétní DAO třída (v diagramu zjednodušena jako ObjectDAO). Objekty navěšené na uzly stromu můžou být různé, takže třída TreeManager volá více DAO tříd.\\
+\\
+Druhá část diagramu se týká vykreslení hlavní části obrazovky, kde se vytváří samotné šablony a jejich překlady. Uživatel v TreeWidgetu dvakrát klikne na nějaký uzel. Pokud se jedná o objekt zavolá se nad třídou TabWidget funkce Redwar, která s parametrem object type. Object type určuje, na který objekt bylo v TreeWidgetu kliknuto, podle kterého se zavolá znovu konkrétní DAO třída pro daný objekt. Třída vrátí seznam objektů, přičemž se jedná o jednu šablonu, ale ve všech jazycích, ve kterých byla vytvořena. TabWidget následně pro každý jazyk vykreslí jednu záložku, kde se dají hodnoty šablony upravovat nebo případně vytvořit nový překlad pro nový jazyk.
+	
+	\section{Model nasazení}
+	\begin{figure}\centering
+	\includegraphics[width=0.8\textwidth]{images/model_nasazeni}
+	\caption[Model nasazení]{Model nasazení}\label{fig:model_nasazeni}
+	\end{figure}
+Diagram nasazení zobrazuje způsob rozdělení systému na samostatné části a komunikační vazby mezi nimi, čímž definuje architekturu systému. Nalezneme zde veškeré komponenty systému a všechny potřebné části pro běh našeho systému.\\
+\\
+Na diagramu \ref{fig:architektura} můžeme vidět, že software je určený pro počítače a funkční pod operačními systémy Windows a Linux (verze operačního systému jsou uvedeny v sekci nefunkční požadavky). Aplikace je napsaná v pythonu a zabalená do spustitelného balíčku, který nevyžaduje žádné speciální požadavky na systém. Veškeré potřebné knihovny a prostředí má uložené v balíčku. Databáze sqlite běží v rámci tohoto balíčku také a nepotřebuje žádné dodatečné prostředí.
 
 \chapter{Realizace}
 
