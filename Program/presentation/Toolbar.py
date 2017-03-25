@@ -30,6 +30,9 @@ class ToolBar(QToolBar):
         modifier_action = QAction(QIcon(ObjectType.MODIFIER.icon()), 'Modifiers', self.__parent)
         toolbar.addAction(modifier_action)
 
+        effect_action = QAction(QIcon(ObjectType.EFFECT.icon()), 'Effect', self.__parent)
+        toolbar.addAction(effect_action)
+
         spell_action.triggered.connect(
             lambda: self.templates_tool_signal.emit(ObjectType.SPELL))
 
@@ -41,3 +44,6 @@ class ToolBar(QToolBar):
 
         modifier_action.triggered.connect(
             lambda: self.templates_tool_signal.emit(ObjectType.MODIFIER))
+
+        effect_action.triggered.connect(
+            lambda: self.templates_tool_signal.emit(ObjectType.EFFECT))

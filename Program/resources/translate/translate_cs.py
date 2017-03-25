@@ -11,6 +11,8 @@ translate = {
     'Menu.ability'                              : 'Šablony schopností',
     'Menu.item'                                 : 'Předměty',
     'Menu.templates'                            : 'Šablony',
+    'Menu.effect'                               : 'Efekty',
+    'Menu.modifier'                             : 'Modifikátory',
 
     'Name'                                      : 'Jméno',
     'Description'                               : 'Popis',
@@ -56,6 +58,7 @@ translate = {
     'ObjectType.ABILITY'                        : 'Schopnosti',
     'ObjectType.ITEM'                           : 'Předměty',
     'ObjectType.MODIFIER'                       : 'Modifikátory',
+    'ObjectType.EFFECT'                         : 'Efekty',
 
     'NodeType.FOLDER'                           : 'Složka',
     'NodeType.OBJECT'                           : 'Objekt',

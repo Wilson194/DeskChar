@@ -125,6 +125,18 @@ class DatabaseTables:
         except OperationalError:
             pass
 
+            # ///////////// Effect \\\\\\\\\\\\\\\\\\
+
+            modifier_columns = [
+                Column('ID', 'INTEGER', True, False, True),
+                Column('targetType', 'INTEGER'),
+            ]
+
+            try:
+                database.create_table('Effect', modifier_columns)
+            except OperationalError:
+                pass
+
         # ///////////// Player tree structure \\\\\\\\\\\\\\\\\\
 
         structure_columns = [

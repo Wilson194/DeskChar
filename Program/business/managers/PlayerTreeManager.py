@@ -105,9 +105,51 @@ class PlayerTreeManager:
                 self.treeDAO.update_node(node)
         else:
             parent_node = self.treeDAO.get_node(parent_id)
-            if node.parent_id != parent_id and isinstance(parent_node, Folder):
+            if node.parent_id != parent_id and self.available_parent(node, parent_node):
                 node.parent_id = parent_id
                 self.treeDAO.update_node(node)
+
+
+    def available_parent(self, node, parent_node) -> bool:
+        """
+        Valida if cat changed parent_id for node
+        Go recursive to root, if find object, just chceck if can be
+        If there is no object, just add it
+        :param node: Node
+        :param parent_node: Parent node
+        :return: True if can be there, False otherwise
+        """
+        while parent_node is not None:
+            if isinstance(parent_node, Folder):
+                if parent_node.parent_id is None:
+                    parent_node = None
+                else:
+                    parent_node = self.treeDAO.get_node(parent_node.parent_id)
+            else:
+                if isinstance(node, Folder):
+                    if NodeType.FOLDER in parent_node.object.treeChildren:
+                        return True
+                    else:
+                        return False
+                else:
+                    if node.object.object_type in parent_node.object.treeChildren:
+                        return True
+                    else:
+                        return False
+        return True
+
+
+    def have_tree_children(self, node) -> bool:
+        while node is not None:
+            if isinstance(node, Folder):
+                if node.parent_id is None:
+                    node = None
+                else:
+                    node = self.treeDAO.get_node(node.parent_id)
+            else:
+                return len(node.object.treeChildren) > 0
+
+        return False
 
 
     def create_empty_object(self, object_type: ObjectType) -> Object:

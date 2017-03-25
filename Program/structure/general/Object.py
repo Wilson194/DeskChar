@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from structure.enums.NodeType import NodeType
+
 
 class Object(ABC):
     TABLE_SCHEMA = [
@@ -16,6 +18,9 @@ class Object(ABC):
         self.__name = name
         self.__description = description
 
+    @property
+    def treeChildren(self):
+        return []
 
     @property
     def id(self):

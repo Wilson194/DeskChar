@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui
 from PyQt5 import QtWidgets
 
+from presentation.dialogs.AddAnotherObject import AddAnotherObject
 from structure.enums.NodeType import NodeType
 from business.managers.PlayerTreeManager import PlayerTreeManager
 from structure.enums.ObjectType import ObjectType
@@ -129,31 +130,34 @@ class TreeWidget(QtWidgets.QFrame):
         if indexes:
             item_type = indexes[0].data(6)
             item_id = indexes[0].data(5)
+
+            menu = QtWidgets.QMenu()
+
+            delete_action = QtWidgets.QAction(TR().tr('Delete'), menu)
+            delete_action.setData(QtCore.QVariant('delete'))
+            menu.addAction(delete_action)
+
+            rename_action = QtWidgets.QAction(TR().tr('Rename'), menu)
+            rename_action.setData(QtCore.QVariant('rename'))
+            menu.addAction(rename_action)
+
             if item_type == NodeType.FOLDER.value:
-                menu = QtWidgets.QMenu()
-                delete_action = QtWidgets.QAction(TR().tr('Delete'), menu)
-                delete_action.setData(QtCore.QVariant('delete'))
-                menu.addAction(delete_action)
                 folder_action = QtWidgets.QAction(TR().tr('New_item'), menu)
                 folder_action.setData(QtCore.QVariant('new'))
                 menu.addAction(folder_action)
                 delete_action = QtWidgets.QAction(TR().tr('Import'), menu)
                 delete_action.setData(QtCore.QVariant('import'))
                 menu.addAction(delete_action)
-                delete_action = QtWidgets.QAction(TR().tr('Rename'), menu)
-                delete_action.setData(QtCore.QVariant('rename'))
-                menu.addAction(delete_action)
-                action = menu.exec_(self.treeWidget.viewport().mapToGlobal(position))
-                if action:
-                    self.contest_menu_actions(action, item_id)
-            else:
-                menu = QtWidgets.QMenu()
-                delete_action = QtWidgets.QAction(TR().tr('Delete'), menu)
-                delete_action.setData(QtCore.QVariant('delete'))
-                menu.addAction(delete_action)
-                action = menu.exec_(self.treeWidget.viewport().mapToGlobal(position))
-                if action:
-                    self.contest_menu_actions(action, item_id)
+
+            node = self.tree_manager.get_node(item_id)
+            if self.tree_manager.have_tree_children(node):
+                add_object_action = QtWidgets.QAction(TR().tr('Add_object'), menu)
+                add_object_action.setData(QtCore.QVariant('add_object'))
+                menu.addAction(add_object_action)
+
+            action = menu.exec_(self.treeWidget.viewport().mapToGlobal(position))
+            if action:
+                self.contest_menu_actions(action, item_id)
 
 
     def contest_menu_actions(self, action, item_id):
@@ -184,6 +188,11 @@ class TreeWidget(QtWidgets.QFrame):
                 self.tree_manager.update_node(obj)
 
             self.draw_data()
+
+        elif action.data() == 'add_object':
+            node = self.tree_manager.get_node(item_id)
+            data, ok = AddAnotherObject.get_data(node)
+
 
 
     def init_buttons(self):

@@ -1,14 +1,16 @@
+from structure.enums.ModifierTargetTypes import ModifierTargetTypes
+from structure.enums.ObjectType import ObjectType
 from structure.general.Object import Object
 
 
 class Effect(Object):
     def __init__(self, id: int = None, lang: str = None, name: str = None,
-                 description: str = None, target_id: int = None,
-                 target_type: str = None):
+                 description: str = None, targetId: int = None,
+                 targetType: ModifierTargetTypes = None):
         super().__init__(id, lang, name, description)
 
-        self.__target_id = target_id
-        self.__target_type = target_type
+        self.__targetId = targetId
+        self.__targetType = targetType
 
         self.__modifiers = []
 
@@ -20,23 +22,59 @@ class Effect(Object):
 
 
     @property
-    def target_id(self):
-        return self.__target_id
+    def treeChildren(self):
+        return [ObjectType.EFFECT]
 
 
-    @target_id.setter
-    def target_id(self, value: int):
-        self.__target_id = value
+    @staticmethod
+    def DAO():
+        from data.DAO.EffectDAO import EffectDAO
+        return EffectDAO
+
+
+    @staticmethod
+    def XmlClass():
+        return None
+
+
+    @staticmethod
+    def layout():
+        return None
 
 
     @property
-    def target_type(self):
-        return self.__target_type
+    def children(self):
+        return []
 
 
-    @target_type.setter
-    def target_type(self, value: str):
-        self.__target_type = value
+    @property
+    def icon(self):
+        return 'resources/icons/gemGreen.png'
+
+
+    @property
+    def object_type(self):
+        return ObjectType.EFFECT
+
+
+    @property
+    def targetId(self):
+        return self.__targetId
+
+
+    @targetId.setter
+    def targetId(self, value: int):
+        self.__targetId = value
+
+
+    @property
+    def targetType(self):
+        return self.__targetType
+
+
+    @targetType.setter
+    def targetType(self, value: str):
+        self.__targetType = value
 
 
     @property
@@ -58,8 +96,8 @@ class Effect(Object):
             return False
 
         if super().__eq__(other) \
-                and self.__target_id == other.target_id \
-                and self.__target_type == other.target_type \
+                and self.__targetId == other.targetId \
+                and self.__targetType == other.targetType \
                 and self.__modifiers == other.modifiers:
             return True
 

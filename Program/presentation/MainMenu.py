@@ -60,6 +60,7 @@ class MainMenu(QMenuBar):
         item_templates = QAction(QIcon(ObjectType.ITEM.icon()), TR().tr('Menu.item'), self)
         modifier_templates = QAction(QIcon(ObjectType.MODIFIER.icon()), TR().tr('Menu.modifier'),
                                      self)
+        effect_templates = QAction(QIcon(ObjectType.EFFECT.icon()), TR().tr('Menu.effect'), self)
 
         ability_templates.triggered.connect(
             lambda: self.templates_menu_signal.emit(ObjectType.ABILITY))
@@ -69,9 +70,12 @@ class MainMenu(QMenuBar):
             lambda: self.templates_menu_signal.emit(ObjectType.ITEM))
         modifier_templates.triggered.connect(
             lambda: self.templates_menu_signal.emit(ObjectType.MODIFIER))
+        effect_templates.triggered.connect(
+            lambda: self.templates_menu_signal.emit(ObjectType.EFFECT))
 
         file_menu = self.addMenu(TR().tr('Menu.templates'))
         file_menu.addAction(spell_templates)
         file_menu.addAction(ability_templates)
         file_menu.addAction(item_templates)
         file_menu.addAction(modifier_templates)
+        file_menu.addAction(effect_templates)

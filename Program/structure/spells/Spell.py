@@ -55,6 +55,11 @@ class Spell(Object):
 
 
     @property
+    def treeChildren(self):
+        return [] + super().treeChildren
+
+
+    @property
     def icon(self):
         return 'resources/icons/book.png'
 
