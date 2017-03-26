@@ -192,8 +192,15 @@ class TreeWidget(QtWidgets.QFrame):
         elif action.data() == 'add_object':
             node = self.tree_manager.get_node(item_id)
             data, ok = AddAnotherObject.get_data(node)
-            print(data, ok)
+            for type, items in data.items():
+                for item in items:
+                    node = self.tree_manager.get_node(item)
+                    newNode = self.tree_manager.create_node_link(node.nodeType, node.name, item_id,
+                                                                 self.__data_type, node.object)
 
+                    print(newNode)
+
+            self.draw_data()
 
 
     def init_buttons(self):

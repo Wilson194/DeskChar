@@ -1,3 +1,4 @@
+from structure.enums.NodeType import NodeType
 from structure.tree.Node import Node
 
 
@@ -6,6 +7,9 @@ class Object(Node):
         super().__init__(id, name, parent_id)
         self.__object = object
 
+    @property
+    def nodeType(self):
+        return NodeType.OBJECT
 
     @property
     def object(self):

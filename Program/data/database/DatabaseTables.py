@@ -144,6 +144,7 @@ class DatabaseTables:
             Column('target_id', 'INTEGER'),
             Column('target_type', 'INTEGER'),
             Column('parent_id', 'INTEGER'),
+            Column('parent_type', 'INTEGER', not_null=True),
             Column('type', 'INTEGER', not_null=True),
             Column('name', 'TEXT')
         ]

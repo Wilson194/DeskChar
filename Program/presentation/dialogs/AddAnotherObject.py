@@ -5,13 +5,14 @@ from PyQt5 import QtCore
 from business.managers.PlayerTreeManager import PlayerTreeManager
 from structure.enums.NodeType import NodeType
 from presentation.Translate import Translate as TR
+from structure.enums.ObjectType import ObjectType
 from structure.tree.Folder import Folder
 from structure.tree.Node import Node
 
 
 class AddAnotherObject(QtWidgets.QDialog):
     """
-    Dialog for creating new item in tree widget
+    Dialog for import object of another type to tree
     """
 
 
@@ -56,7 +57,12 @@ class AddAnotherObject(QtWidgets.QDialog):
         self.setLayout(self.layout)
 
 
-    def create_tree(self, tab, objectType):
+    def create_tree(self, tab, objectType: ObjectType):
+        """
+        Create tree on current tab
+        :param tab: TabWidget tab
+        :param objectType: type of object
+        """
         layout = QtWidgets.QVBoxLayout(tab)
         treeWidget = QtWidgets.QTreeWidget(tab)
         layout.addWidget(treeWidget)
@@ -75,6 +81,7 @@ class AddAnotherObject(QtWidgets.QDialog):
     def set_items(self, items: list, treeWidget: QtWidgets, parent=None):
         """
         Create item tree in widget
+        :param treeWidget: Tree widget, where items will be crated
         :param items: object items
         :param parent: id of parent item (recursion)
         """
@@ -109,6 +116,10 @@ class AddAnotherObject(QtWidgets.QDialog):
 
 
     def item_check_slot(self, item):
+        """
+        Slot for handling check items, because of searching, need store checked items in list
+        :param item: current clicked item
+        """
         if item.checkState(0) == QtCore.Qt.Unchecked:
             node = self.treeManager.get_node(item.data(0, 5))
             if isinstance(node, Folder):
@@ -126,10 +137,15 @@ class AddAnotherObject(QtWidgets.QDialog):
                 if item.data(0, 5) not in self.__selected[self.selected_tab()]:
                     self.__selected[self.selected_tab()].append(item.data(0, 5))
 
-        print(self.__selected)
 
-
-    def search_box_change_slot(self, objectType, searchBox, treeWidget):
+    def search_box_change_slot(self, objectType: ObjectType, searchBox: QtWidgets,
+                               treeWidget: QtWidgets):
+        """
+        Slot, that redraw tree widget base on search box
+        :param objectType: type of object
+        :param searchBox: search box widget
+        :param treeWidget: tree Widget
+        """
         treeWidget.clear()
 
         text = searchBox.text()
@@ -137,7 +153,11 @@ class AddAnotherObject(QtWidgets.QDialog):
         self.set_items(items, treeWidget)
 
 
-    def selected_tab(self):
+    def selected_tab(self) -> ObjectType:
+        """
+        Find currently selected tab and return ObjectType of that tab
+        :return: Object type of tab
+        """
         return self.__node.object.treeChildren[self.tabWidget.currentIndex()]
 
 

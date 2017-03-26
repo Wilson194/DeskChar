@@ -75,6 +75,27 @@ class PlayerTreeManager:
         return node
 
 
+    def create_node_link(self, nodeType: NodeType, name: str, parentId: int,
+                         parentType: ObjectType = None, targetObject: object = None) -> Node:
+        """
+        Create node in tree, that link to some object, that already exist        
+        :param nodeType: Type of node (Folder, Object)
+        :param name: name of node
+        :param parentId: id of parent object
+        :param parentType: 
+        :param targetObject: target object
+        :return: node
+        """
+        if nodeType is NodeType.FOLDER:
+            node = Folder(None, name, parentId)
+        else:
+            node = Object(None, name, parentId, targetObject)
+
+        id = self.treeDAO.insert_node(node, parentType)
+        node.id = id
+        return node
+
+
     def delete_node(self, id):
         """
         Delete node
