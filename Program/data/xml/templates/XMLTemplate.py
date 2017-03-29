@@ -71,5 +71,5 @@ class XMLTemplate(ABC):
             return value_x[0].text if len(value_x) > 0 else ""
 
 
-    def remap_names(self, key):
+    def remap_names(self, key: str) -> str:
         return key

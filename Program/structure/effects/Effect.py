@@ -39,7 +39,8 @@ class Effect(Object):
 
     @staticmethod
     def layout():
-        return None
+        from presentation.layouts.EffectLayout import EffectLayout
+        return EffectLayout
 
 
     @property

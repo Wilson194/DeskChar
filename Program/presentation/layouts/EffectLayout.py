@@ -2,6 +2,7 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from business.managers.ModifierManager import ModifierManager
 from presentation.layouts.Layout import Layout
+from structure.effects.Effect import Effect
 from structure.effects.Modifier import Modifier
 from structure.enums.CharacterAttributes import CharacterAttributes
 from structure.enums.Handling import Handling
@@ -25,6 +26,7 @@ class EffectLayout(Layout):
 
         self.modifier_manager = ModifierManager()
         self.object = None
+        self.__parent = parent
 
 
     def init_ui(self):
@@ -41,41 +43,46 @@ class EffectLayout(Layout):
 
         self.addWidget(self.header)
 
+        self.inputGrid = QtWidgets.QGridLayout()
+        self.inputGrid.setSpacing(20)
+        self.inputGrid.setObjectName("Input grid")
+
+        self.nameInput = self.text_box(self.inputGrid, 'Name', 0, 0)
+        self.descriptionInput = self.text_box(self.inputGrid, 'Description', 0, 1)
+        self.targetInput = self.combo_box(self.inputGrid, 'Modifier_target', ModifierTargetTypes, 0,
+                                          2, True)
+
+
+        table = QtWidgets.QTableWidget(self.__parent)
+        table.setRowCount(4)
+
 
         self.addLayout(self.inputGrid)
 
 
-
-
-    def map_data(self, modifier: Modifier):
+    def map_data(self, effect: Effect):
         """
         Mapa data from object to inputs in layout
-        :param modifier: Spell object
+        :param effect: Spell object
         """
-        # self.object = modifier
-        # self.header.setText(modifier.name)
-        # self.nameInput.setText(modifier.name)
-        #
-        # targetTypeIndex = modifier.targetType.value
-        # targetAttributeIndex = modifier.valueTargetAttribute.value
-        # valueTypeIndex = modifier.valueType.value
-        # value = modifier.value
-        # self.targetTypeInput.setCurrentIndex(targetTypeIndex)
-        # self.targetAttributeInput.setCurrentIndex(targetAttributeIndex)
-        # self.valueTypeInput.setCurrentIndex(valueTypeIndex)
-        # self.valueInput.setValue(value)
+        self.object = effect
+        self.header.setText(effect.name)
+        self.nameInput.setPlainText(effect.name)
+        self.descriptionInput.setPlainText(effect.description)
+
+        targetTypeIndex = effect.targetType.value
+        self.targetInput.setCurrentIndex(targetTypeIndex)
 
 
     def save_data(self):
         """
         Update data in object from inputs and update in manager
         """
-        # valid, data = self.completed()
-        # if valid:
-        #     self.object.name = self.nameInput.text()
-        #     self.object.targetType = data[0]
-        #     self.object.valueTargetAttribute = data[1]
-        #     self.object.valueType = data[2]
-        #     self.object.value = data[3]
-        #
-        #     self.modifier_manager.update(self.object)
+
+        self.object.name = self.nameInput.toPlainText()
+        self.object.description = self.descriptionInput.toPlainText()
+
+        targetIndex = self.targetInput.currentIndex()
+        self.object.targetType = targetIndex if targetIndex > 0 else None
+
+        self.modifier_manager.update(self.object)

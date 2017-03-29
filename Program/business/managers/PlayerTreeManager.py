@@ -121,28 +121,73 @@ class PlayerTreeManager:
         self.treeDAO.update_node(node)
 
 
-    def update_node_parent(self, node_id, parent_id):
+    def update_node_parent(self, nodeId: int, parentId: int, context: ObjectType):
         """
         Update parent of node, check if parent is Folder
-        :param node_id: id of node
-        :param parent_id: parent id
+        :param nodeId: id of node
+        :param parentId: parent id
         :return:
         """
-        node = self.treeDAO.get_node(node_id)
-        if not parent_id:
-            if node.parent_id != parent_id:
-                node.parent_id = parent_id
-                self.treeDAO.update_node(node)
+        node = self.treeDAO.get_node(nodeId)
+        parentNode = self.treeDAO.get_node(parentId)
+        if node.parent_id:
+            oldParentNode = self.treeDAO.get_node(parentId)
         else:
-            parent_node = self.treeDAO.get_node(parent_id)
-            if node.parent_id != parent_id and self.available_parent(node, parent_node):
-                node.parent_id = parent_id
-                self.treeDAO.update_node(node)
+            oldParentNode = None
+
+        if node.parent_id != parentId and self.available_parent(node, parentNode, context):
+            self.update_links(node, parentNode, oldParentNode)
+            node.parent_id = parentId
+            self.treeDAO.update_node(node)
 
 
-    def available_parent(self, node, parent_node) -> bool:
+    def update_links(self, node, newParentNode, oldParentNode):
+        while oldParentNode:
+            if isinstance(oldParentNode, Folder):
+                if oldParentNode.parent_id is None:
+                    oldParentNode = None
+                else:
+                    oldParentNode = self.treeDAO.get_node(oldParentNode.parent_id)
+            else:
+                break
+
+        while newParentNode:
+            if isinstance(newParentNode, Folder):
+                if newParentNode.parent_id is None:
+                    newParentNode = None
+                else:
+                    newParentNode = self.treeDAO.get_node(newParentNode.parent_id)
+            else:
+                break
+
+        children = self.get_all_children(node)
+
+        for child in children:
+            if oldParentNode:
+                oldParentNode.object.DAO()().delete_link(oldParentNode.object, child.object)
+            if newParentNode:
+                newParentNode.object.DAO()().create_link(newParentNode.object, child.object)
+
+
+    def get_all_children(self, node, children=None):
+        if children is None:
+            children = []
+
+        if isinstance(node, Folder):
+            for child in node.children:
+                if isinstance(child, Folder):
+                    children = self.get_all_children(child, children)
+                else:
+                    children.append(child)
+        else:
+            children.append(node)
+
+        return children
+
+
+    def available_parent(self, node, parent_node, context: ObjectType) -> bool:
         """
-        Valida if cat changed parent_id for node
+        Validate if can change parent_id for node
         Go recursive to root, if find object, just chceck if can be
         If there is no object, just add it
         :param node: Node
@@ -166,7 +211,14 @@ class PlayerTreeManager:
                         return True
                     else:
                         return False
-        return True
+
+        if isinstance(node, Folder):  # TODO
+            return True
+        else:
+            if node.object.object_type is context:
+                return True
+            else:
+                return False
 
 
     def have_tree_children(self, node) -> bool:

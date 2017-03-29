@@ -105,7 +105,7 @@ class TreeWidget(QtWidgets.QFrame):
         :param node: Current node in tree
         :param parent_id: parent_id
         """
-        self.tree_manager.update_node_parent(node.data(0, 5), parent_id)
+        self.tree_manager.update_node_parent(node.data(0, 5), parent_id, self.__data_type)
         child_count = node.childCount()
         for n in range(child_count):
             self.update_structure(node.child(n), node.data(0, 5))
@@ -316,11 +316,12 @@ class TreeWidget(QtWidgets.QFrame):
                 self.set_items(item.children, tree_item)
                 tree_item.setData(0, 6, QtCore.QVariant(NodeType.FOLDER.value))
             else:
-                icon = self.__data_type.instance().DAO()().get(item.object.id).icon
+                icon = item.object.icon
                 object_icon = QtGui.QIcon(icon)
                 tree_item.setIcon(0, object_icon)
                 tree_item.setFlags(
                     tree_item.flags() | QtCore.Qt.ItemIsUserCheckable)
+                self.set_items(item.children, tree_item)
                 tree_item.setData(0, 6, QtCore.QVariant(NodeType.OBJECT.value))
 
             if self.checking:

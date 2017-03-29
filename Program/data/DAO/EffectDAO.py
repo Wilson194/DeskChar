@@ -47,3 +47,15 @@ class EffectDAO(DAO, IEffectDAO):
 
     def get_all(self) -> list:
         return []
+
+
+    def delete_link(self, object, target):
+        objects = self.database.select('Effect_modifiers',
+                                       {'effect_id': object.id, 'modifier_id': target.id})
+        if objects:
+            self.database.delete('Effect_modifiers', objects[0]['ID'])
+
+
+    def create_link(self, object, target):
+        self.database.insert('Effect_modifiers',
+                             {'effect_id': object.id, 'modifier_id': target.id})

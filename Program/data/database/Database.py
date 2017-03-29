@@ -234,8 +234,11 @@ class Database(metaclass=Singleton):
                 sql += key + " = " + str(value)
             sql += ' AND '
         sql = sql[:-4]
-        self.cursor.execute(sql)
-        self.connection.commit()
+        try:
+            self.cursor.execute(sql)
+            self.connection.commit()
+        except:
+            pass
 
 
 class Column:

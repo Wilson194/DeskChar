@@ -83,7 +83,7 @@ class Layout(QtWidgets.QVBoxLayout):
 
 
     def text_box(self, grid: object, name: str, xposition: int, yposition: int,
-                 synchronize: bool = False) -> object:
+                 synchronize: bool = False) -> QtWidgets.QPlainTextEdit:
         """
         Widget for text box
         :param grid: parent grid
@@ -107,7 +107,7 @@ class Layout(QtWidgets.QVBoxLayout):
 
 
     def combo_box(self, grid: object, name: str, data: object, xposition: int, yposition: int,
-                  synchronize: bool = False) -> object:
+                  synchronize: bool = False) -> QtWidgets.QComboBox:
         """
         Widget for combobox
         :param grid: parent grid

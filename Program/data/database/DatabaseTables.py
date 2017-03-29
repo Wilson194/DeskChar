@@ -125,17 +125,35 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-            # ///////////// Effect \\\\\\\\\\\\\\\\\\
+        # ///////////// Effect \\\\\\\\\\\\\\\\\\
 
-            modifier_columns = [
-                Column('ID', 'INTEGER', True, False, True),
-                Column('targetType', 'INTEGER'),
-            ]
+        modifier_columns = [
+            Column('ID', 'INTEGER', True, False, True),
+            Column('targetType', 'INTEGER'),
+        ]
 
-            try:
-                database.create_table('Effect', modifier_columns)
-            except OperationalError:
-                pass
+        try:
+            database.create_table('Effect', modifier_columns)
+        except OperationalError:
+            pass
+
+        # ///////////// Effect_modificators \\\\\\\\\\\\\\\\\\
+
+        columns = [
+            Column('ID', 'INTEGER', True, False, True),
+            Column('effect_id', 'INTEGER', not_null=True),
+            Column('modifier_id', 'INTEGER', not_null=True),
+        ]
+
+        foreign = [
+            Foreign('effect_id', 'Effect', 'ID'),
+            Foreign('modifier_id', 'Modifier', 'ID')
+        ]
+
+        try:
+            database.create_table('Effect_modifiers', columns, foreign)
+        except OperationalError:
+            pass
 
         # ///////////// Player tree structure \\\\\\\\\\\\\\\\\\
 
