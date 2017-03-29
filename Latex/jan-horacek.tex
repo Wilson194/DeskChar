@@ -29,24 +29,24 @@
 % ODTUD DAL VSE ZMENTE
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
-\department{Katedra \ldots (Softwarové inženýrství)}
-\title{	MobChar - desktop application for Game master in Dračí doupě}
+\department{Katedra Softwarové inženýrství}
+\title{	MobChar - desktopová aplikace pro Pána jeskyně pro Dračí doupě}
 \authorGN{Jan} %(křestní) jméno (jména) autora
 \authorFN{Horáček} %příjmení autora
 \authorWithDegrees{Jan Horáček} %jméno autora včetně současných akademických titulů
 \supervisor{Ing. Zdeněk Rybola}
 \acknowledgements{Poděkování}
 
-\abstractCS{Cílem této práce je usnadnění hráčům Dračího doupěte a~zejména Pánu jeskyně usnadnit vytváření dobrodružství, postav a~předmětů pomocí jednoduché desktopové aplikace. Hlavní výhody aplikace jsou, možnost exportování dobrodružství pro mobilní aplikaci MobChar pro Pána jeskyně nebo exportování do přehledného pdf vhodné pro tisk a hraní Dračího doupěte bez mobilů a jiných zařízení. V práci jsem vytvořil aplikaci, ve které můžete pomocí grafického rozhraní vytvářet mapy dobrodružství propojené s~příšerami a předměty, které se dají na mapě najít. Veškeré výtvory se ukládají pro případné další použití. Můžete si vytvářet sbírku příšer a předmětů, které můžete i~sdílet s~ostatními Pány jeskyně a tak se nechat inspirovat ostatními.  Hlavní přínos této aplikace bude pro hráče Dračího doupěte, kteří by rádi využili moderní technologie pro tvorbu svého dobrodružství. Někteří hráči jistě ocení možnost sdílení dobrodružství s ostatními nadšenci anebo naopak se rádi nechají inspirovat ostatními hráči. Pomocí databáze již dříve vytvořených příšer a předmětů bude velice snadné vytvářet nové a ještě zábavnější dobrodružství.}
+\abstractCS{Cílem této práce je hráčům Dračího doupěte, a~zejména Pánu jeskyně, usnadnit vytváření dobrodružství, postav a~předmětů pomocí jednoduché desktopové aplikace. Hlavní výhodou aplikace je, možnost exportování dobrodružství pro mobilní aplikaci MobChar pro Pána jeskyně a exportování do přehledného pdf vhodné pro tisk a hraní Dračího doupěte bez mobilů a jiných zařízení. V práci jsem vytvořil aplikaci, ve které je možné pomocí grafického rozhraní vytvářet mapy dobrodružství propojené s~příšerami a předměty, které se dají na mapě najít. Veškeré výtvory se ukládají pro případné další použití. Můžete si vytvářet sbírku příšer a předmětů, které můžete i~sdílet s~ostatními Pány jeskyně, a tak se nechat inspirovat ostatními.  Hlavní přínos této aplikace je pro hráče Dračího doupěte, kteří by rádi využili moderní technologie pro tvorbu svého dobrodružství. Někteří hráči jistě ocení možnost sdílení dobrodružství s ostatními nadšenci, anebo naopak se rádi nechají inspirovat ostatními hráči. Pomocí databáze již dříve vytvořených příšer a předmětů bude velice snadné vytvářet nové a ještě zábavnější dobrodružství.}
 
 \abstractEN{Sem doplňte ekvivalent abstraktu Vaší práce v~angličtině.}
 
 \placeForDeclarationOfAuthenticity{V~Praze}
 \declarationOfAuthenticityOption{4} %volba Prohlášení (číslo 1-6)
 
-\keywordsCS{desktopová aplikace, hra na hrdiny, rozšíření, herní scéna, MobChar, Dračí doupě, tvorba dobrodružství, Python, SQLite, XML}
+\keywordsCS{desktopová aplikace, hra na hrdiny, MobChar, Dračí doupě, rozšíření, herní scéna, tvorba dobrodružství, Python, SQLite, XML}
 
-\keywordsEN{desktop application, heroes games, extension, desktop games, MobChar, Dračí doupě, story creation, Python, SQLite, XML}
+\keywordsEN{desktop application, heroes games, MobChar, Dračí doupě, extension, desktop games, story creation, Python, SQLite, XML}
 
 \begin{document}
 
@@ -56,19 +56,21 @@
 \begin{introduction}
 Dračí doupě je populární hra na hrdiny, která vznikla jako česká verze hry Dungeons~\&~dragons. V~České Republice si získala velkou oblibu zvláště mezi hráči stolních her a počítačových RPG her.\\
 
-Hráči hrají za své hrdiny, které si na začátku dobrodružství vytvořili, putují světem a zažívají 			rozličná dobrodružství, která pro ně pán jeskyně připraví. Každý hráč si může vybrat z~rozličného 			výběru 	ras, které se ve světě vyskytují a zvolit si, jakému povolání se bude věnovat. Ale ať si 			vybere mocného orkského válečníka, rychlého a úskočného hobitího zloděje nebo moudrého a mocného 			elfského válečníka, budou ho čekat složitá rozhodnutí, která určí, jakým směrem se dobrodružství 			bude ubírat dále. \\
+Hráči hrají za své hrdiny, které si na začátku dobrodružství vytvořili, putují světem a zažívají rozličná dobrodružství, která pro ně pán jeskyně připraví. Každý hráč si může vybrat z~rozličného výběru ras, které se ve světě vyskytují, a zvolit si, jakému povolání se bude věnovat. Ale ať si vybere mocného orkského válečníka, rychlého a úskočného hobitího zloděje nebo moudrého a mocného elfského válečníka, budou ho čekat složitá rozhodnutí, která určí, jakým směrem se dobrodružství bude dále ubírat. \\
 
-Dračí doupě se lehce lišší od klasických stolních her, kde plán hry nebo dobrodružství máte jeden a 		toho se musíte držet. Zde celé dobrodružství vymýšlí další hráč, takzvaný pán jeskyně, který při hře 	celé dobrodružství řídí a popisuje hrdinům. Veškeré rozhodnutí, které neučiní samotní hráči rozhodne 	pán jeskyně. Příprava propracovaných a zábavných dobrodružství je velice složitá a zabere mnoho 			hodin času. Je zapotřebí vytvořit přehledné poznámky a mapy, které při hře umožní všem hráčům dobře 		pochopit situaci a oblast, ve které se právě nachází. Cílem této bakalářské práce, je tento proces 			usnadnit a zkrátit dobu přípravy, aby se pán jeskyně mohl věnovat převážně hraní s ostatními 				spoluhráči. \\
+Dračí doupě se lehce liší od klasických stolních her, kde plán hry nebo dobrodružství máte jeden a toho se musíte držet. Zde příběh vymýšlí další hráč, takzvaný pán jeskyně, který při hře celé dobrodružství řídí a popisuje hrdinům. Veškerá rozhodnutí, která neučiní samotní hráči, rozhodne pán jeskyně. Příprava propracovaných a zábavných dobrodružství je velice složitá a zabere mnoho hodin času. Je zapotřebí vytvořit přehledné poznámky a mapy, které při hře umožní všem hráčům dobře pochopit situaci a oblast, ve které se právě nachází. Cílem této bakalářské práce je tento proces usnadnit a zkrátit dobu přípravy, aby se pán jeskyně mohl věnovat převážně hraní s ostatními spoluhráči. \\
 
-Aplikace vzniká souběžně s~mobilní aplikací MobChar pro pány jeskyně, ve které si bude možné veškeré 	informace o~dobrodružství přehledně zobrazit a prezentovat hráčům. V~balíčku aplikací již existuje 			mobilní aplikace MobChar pro hráče, která slouží pro zaznamenávání osobního deníku hráče \\
+Aplikace vznikala souběžně s~mobilní aplikací MobChar pro pány jeskyně, ve které je možné veškeré 	informace o~dobrodružství přehledně zobrazit a prezentovat hráčům. V~balíčku aplikací již existuje mobilní aplikace MobChar pro hráče, která slouží pro zaznamenávání osobního deníku hráče. \\
 
 
 \section*{Struktura práce}
-V první kapitole je popsána analýza problematiky. Popisuji zde pravidla Dračího doupěte a pravidla 			vytváření dobrodružství. Důležitá část je také analýza již existujících aplikací, ať už se jedná o 			aplikace, které by tato aplikace měla nahradit a nebo aplikace MobChar, se kterými bude DeskChar			umět komunikovat.
+V první kapitole je popsán úvod do problematiky. Jsou zde popsána základní pravidla Dračího doupěte a pravidla vytváření dobrodružství. Důležitou částí je také analýza již existujících aplikací, ať už se jedná o aplikace, které by tato aplikace měla nahradit a nebo aplikace MobChar, se kterými bude aplikace spolupracovat.
 
-Na základě analýzy je v druhé kapitole popsán návrh a architektura aplikace. Jednotlivé vrstvy architektury jsou popsány do detailu a popsána komunikace mezi nimi.
+Druhá kapitola je věnována analýze problematiky. Jsou zde popsány veškeré požadavky na aplikaci a zadefinované činnosti, které uživatelé s aplikací budou provozovat.
 
-Ve třetí kapitole se věnuji implementaci a testování celé aplikace a jejich jednotlivých částí.
+Na základě druhé druhé kapitoly je ve třetí kapitole vytvořen návrh a struktura tříd a architektury. Jsou zde detailně popsány vrstvy architektury a komunikace mezi nimi.
+
+Ve čtvrté kapitole je popsaná problematika, týkající se samotné implementace. Jsou zde popsány problémy, které vznikly na základě návrhu architektury a jejich řešení.
 
 
 \end{introduction}
@@ -79,26 +81,24 @@ Ve třetí kapitole se věnuji implementaci a testování celé aplikace a jejic
 
 
 	\section{Cíl práce}
-Cílem této práce je vytvořit desktopovou aplikaci, které rozšíří již existují balíček mobilních aplikací MobChar o nové funkcionality. Hlavním účelem aplikace bude vytváření dobrodružství pro Dračí doupě. Jednou z hlavních funkcionalit je tvorba xml souborů, se kterými umí pracovat mobilní aplikace MobChar.
+Cílem této práce je vytvořit desktopovou aplikaci, které rozšíří již existují balíček mobilních aplikací MobChar o nové funkcionality. Hlavním účelem aplikace je vytváření dobrodružství pro Dračí doupě. Jednou z hlavních funkcionalit je tvorba xml souborů, se kterými umí pracovat mobilní aplikace MobChar.
 	\section{Dračí doupě}
+		TODO: napsat o DrD
+
 
 
 \chapter{Současný stav}
-	\section{Projekt MobChar}
+	\section{Projekt MobChar}	
 Aplikace MobChar vznikla jako samostatná aplikace, která měla sloužit jako osobní deník hráče pro hru Dračí doupě. Postupem času se rozšiřovala a měnila základní struktura. Nynější stav již umožňuje vytváření rozšíření pro další hry na hrdiny jako jsou například Dungeons~\&~Dragons. V této chvíli jsou již plně funkční rozšíření pro Dračí doupě a Dungeons~\&~Dragons a vznikají další.\\
 \\
-V rámci aplikace MobChar vzniká další rozšíření, ne však pro osobní deník hráče, ale pro pána jeskyně. Jednoduchá aplikace, ve které budou k dispozici údaje o všech hráčích a údaje od právě probíhajícím dobrodružství. Protože tvorba dobrodružství je poměrně náročná činnost, která vyžaduje napsání mnoho textu, připravení velkého množství šablon a další, bylo by velice nepraktické toto dobrodružství vytvářet na mobilním zařízení. Proto vzniká desktopová aplikace DeskChar, jejíž hlavním cílem bude vytváření dobrodružství a šablon pro mobilní aplikace.
+V rámci aplikace MobChar vzniká další rozšíření, ne však pro osobní deník hráče, ale pro pána jeskyně. Jednoduchá aplikace, ve které budou k dispozici údaje o všech hráčích a právě probíhajícím dobrodružství. Protože tvorba dobrodružství je poměrně náročná činnost, která vyžaduje napsání mnoha textu, připravení velkého množství šablon a další časové náročné činnosti, bylo by velice nepraktické toto dobrodružství vytvářet na mobilním zařízení. Proto vzniká desktopová aplikace DeskChar, jejíž hlavním cílem je vytváření dobrodružství a šablon pro mobilní aplikace.
 
 	\section{Existující aplikace}
-Díky rozsáhlé komunitě okolo her na hrdiny jako jsou Dračí doupě a Dungeons~\&~Dragons vzniklo již mnoho aplikací, které mají hraní či přípravu dobrodružství usnadnit. Můžeme najít desítky různých editorů map, které jsou více či méně povedené a propracované. Mezi nejzajímavější bych asi zařadil Dungeon Painter Studio, který se převážně zaměřuje na tvorbu rozsáhlých map nebo například Donjon, který se zaměřuje na generování náhodných map a další objektů jako jsou například obchody,truhly, počasí a další. Všechny tyto aplikace vám vygenerují PDF soubor, který si můžete následně vytisknout a vzít sebou na herní sezení. Žádná z těchto aplikací nenabízí mobilní prohlížeč dobrodružství, nebo export do nějakého formátu, který by se dal na mobilních zařízení jednoduše prohlížet. Přeci jenom PDF soubor formátu A4 s mnoho údaji, není příliš přehledný, obzvlášť na malých obrazovkách. \\
+Díky rozsáhlé komunitě okolo her na hrdiny, jako jsou Dračí doupě a Dungeons~\&~Dragons, vzniklo již mnoho aplikací, které mají hraní či přípravu dobrodružství usnadnit. Je možné najít desítky různých editorů map, které jsou více či méně povedené a propracované. Mezi nejzajímavější patří Dungeon Painter Studio, které se převážně zaměřuje na tvorbu rozsáhlých map, nebo například Donjon, který se zaměřuje na generování náhodných map a další objektů, jako jsou například obchody, truhly, počasí a další. Všechny tyto aplikace vygenerují PDF soubor, který je možné následně vytisknout a vzít s sebou na herní sezení. Žádná z těchto aplikací nenabízí mobilní prohlížeč dobrodružství, nebo export do formátu, který by bylo možné na mobilních zařízeních jednoduše prohlížet.Bohužel PDF soubor formátu A4 s mnoho údaji není příliš přehledný, obzvlášť na malých obrazovkách. \\
 \\
-\textbf{Dungeon Painter Studion} je aplikace, která se zaměřuje na tvorbu map a následné generování PDF souborů. Existuje online verze, která je zdarma, která však nenabízí veškeré funkcionality plné verze. Ale i v této zjednodušené verzi dokážete vytvořit velmi propracované mapy. Plná verze je již desktopová aplikace, která je placená (stojí  přibližně 400 korun). Je možné zde vytvořit opravdu krásná a poutavá dobrodružství včetně stínování, světelných efektů a mnoho dalšího. Podle mého názoru, je však až zbytečně složitý a pro větší pánů jeskyně, příliš zdlouhavý. Vytvoření jedné mapy zabere opravdu hodně času a ve většině případů takto propracované mapy nejsou pro hraní důležité. Bohužel v základní verzi není možné s mapou propojit předměty a příšery z dobrodružství, což považuji za jednu z nejdůležitějších funkcionalit. \\
+\textbf{Dungeon Painter Studion} je aplikace, která se zaměřuje na tvorbu map a následné generování PDF souborů. Existuje online verze, dostupná je zdarma, která však nenabízí veškeré funkcionality plné verze. Ale i v této zjednodušené verzi dokážete vytvořit velmi propracované mapy. Plná verze je již desktopová aplikace, která je placená (stojí  přibližně 400 korun). Je možné zde vytvořit opravdu propracovaná a poutavá dobrodružství včetně stínování, světelných efektů a mnoha dalšího. Je však až zbytečně složitý a pro většinu pánů jeskyně tvorba mapy bude příliš zdlouhavá. Vytvoření jedné mapy zabere mnoho času a ve většině případů takto propracované mapy nejsou pro hraní důležité. Bohužel v základní verzi není možné s mapou propojit předměty a příšery z dobrodružství, což považuji za jednu z nejdůležitějších funkcionalit. \\
 \\
-\textbf{Donjon} je online aplikace, která se zaměřuje na generování náhodných lokací. Můžeme si zde navolit základní nastavení jako je velikost mapy, velikost místností a další. Finální verzi mapy již upravit však nemůžeme. K mapě dostaneme popis jednotlivých místností v poměrně nepřehledné tabulce. Tento formát bez dodatečných úprav v obrázkovém editoru nelze rozumě vytisknout. Aplikace nabízí generování další prvků, jako například poklady, obchody a další, bohužel však tyto vygenerované prvky se jíž nedají propojit s vygenerovanou mapou. 
-
-
-
-
+\textbf{Donjon} je online aplikace, která se zaměřuje na generování náhodných lokací. Můžeme si zde navolit základní nastavení, jako je velikost mapy, velikost místností a další. Finální verzi mapy již upravit však nemůžeme. K mapě dostaneme popis jednotlivých místností v poměrně nepřehledné tabulce. Tento formát bez dodatečných úprav v obrázkovém editoru nelze rozumně vytisknout. Aplikace nabízí generování další prvků, jako jsou například poklady, obchody a další, bohužel však tyto prvky se jíž nedají propojit s vygenerovanou mapou. 
 
 
 
@@ -107,9 +107,7 @@ Díky rozsáhlé komunitě okolo her na hrdiny jako jsou Dračí doupě a Dungeo
 \chapter{Analýza}
 	\section{Požadavky}
 
-
-
-Sběr požadavků je jedna z~prvních činností, které se musí provést na začátku analýzy projektu. Je zapotřebí sepsat veškeré funkční a nefunkční požadavky, na základě kterých bude vznikat návrh a výsledný program. Na základě požadavků se dají vytvořit první odhady na rozsah projektu a~na jeho cenu. Tento odhad je velice nepřesný, ale zákazníci vyžadují předběžnou cenu, již na základě jejich požadavků na program. 
+Sběr požadavků je jedna z~prvních činností, které se musí provést na začátku analýzy projektu. Je zapotřebí sepsat veškeré funkční a nefunkční požadavky, na základě kterých bude vznikat návrh a výsledný program. Na základě požadavků je možné vytvořit první odhady rozsahu projektu a jeho ceny. Tento odhad je velice nepřesný, ale zákazníci vyžadují předběžnou cenu, již na základě jejich požadavků na program. 
 	
 \subsection{Funkční požadavky}
 Funkční požadavky jsou rozděleny do dvou částí, funkcionalita pro hráče a funkcionalita pro pána jeskyně. Tyto sekce jsou rozdělené, protože popisují stejný program, ale z pohledu jiného uživatele.
@@ -129,7 +127,7 @@ Funkční požadavky, které program bude poskytovat zejména pro hráče pro pr
 \\
 \textbf{Import šablon z~mobilní aplikace MobChar:} program bude umožňovat import xml šablon, které se dají vytvořit v~mobilní aplikaci MobChar. Šablony se přidají do databáze a následně je bude možné editovat.\\
 \\
-\textbf{Ukládání šablon do souboru:} program bude umožňovat ukládat veškeré vytvoření šablony do společného xml souboru, který bude možné opět do programu načíst a nahrát veškeré šablony. Soubor bude sloužit pro jednoduché ukládání práce a sdílení šablon.
+\textbf{Ukládání šablon do souboru:} program bude umožňovat ukládat veškeré vytvořené šablony do společného xml souboru, který bude možné opět do programu načíst a nahrát veškeré šablony. Soubor bude sloužit pro jednoduché ukládání práce a sdílení šablon.
 
 \subsubsection{Funkcionalita pro pána jeskyně}
 Funkční požadavky, které program bude poskytovat zejména pro pána jeskyně pro vytváření nových dobrodružství.
@@ -141,13 +139,13 @@ Funkční požadavky, které program bude poskytovat zejména pro pána jeskyně
 \item Grafický mód - mapa se bude skládat z~jednotlivých grafických dílků
 \item Obrázkový mód - jako podklad mapy bude sloužit nahraný obrázek, který bude doplněn o jednoduché objekty
 \end{itemize}
-Na mapu půjdou umisťovat odkazy na vytvoření postavy, příšery, předměty a~další mapové prvky. Mapy půjdou sdružovat do stromové struktury pro větší přehlednost\\
+Na mapu bude možné umisťovat odkazy na vytvoření postavy, příšery, předměty a~další mapové prvky. Mapy bude možné sdružovat do stromové struktury pro větší přehlednost\\
 \\
 \textbf{Tvorba a~editace příšer pro dobrodružství:} program bude umožňovat vytváření nových a~editaci již existujících příšer pro dobrodružství. Příšery půjdou seskupovat do stromové struktury pro větší přehlednost.\\
 \\
 \textbf{Tvorba a~editace postav pro dobrodružství:} program bude umožňovat vytváření nových postav a editaci již existujících. Postavy půjdou seskupovat do stromové struktury pro větší přehlednost.\\
 \\
-\textbf{Exportování dobrodružství pro mobilní aplikaci MobChar:} celé dobrodružství půjde exportovat ve formátu xml se strukturou, která podporuje mobilní aplikace MobChar pro pána jeskyně.\\
+\textbf{Exportování dobrodružství pro mobilní aplikaci MobChar:} celé dobrodružství půjde exportovat ve formátu xml se strukturou, kterou podporuje mobilní aplikace MobChar pro pána jeskyně.\\
 \\
 \textbf{Importování a~exportování dobrodružství pro sdílení:} celé dobrodružství včetně všech přiřazených objektů půjde exportovat do jednoho xml souboru, který následně bude možné do aplikace znovu nahrát. Soubor bude sloužit pro ukládání práce a~případné sdílení s~ostatními pány jeskyně.\\
 \\
@@ -156,7 +154,7 @@ Na mapu půjdou umisťovat odkazy na vytvoření postavy, příšery, předměty
 
 \textbf{Podpora operačních systémů Windows a Linux:} program půjde spustit pod operačnímy systémy Windows a Linux. U operačního systému Windows budou podporovány všechny verze, které jsou novější než Windows XP. Program bude spustitelný pomocí exe souboru. U operačního systému Linux budou podporovány standardní linuxové distribuce. Program bude spustitelný pomocí bash souboru.\\
 \\
-\textbf{Jazyková podpora} program bude umožňovat přepínání jazyků a případnou lokalizaci pro další jazyky. V základu bude podporován český jazyk a anglický jazyk.
+\textbf{Jazyková podpora:} program bude umožňovat přepínání jazyků a případnou lokalizaci pro další jazyky. V základu bude podporován český jazyk a anglický jazyk.
 
 
 
@@ -206,9 +204,9 @@ Doménový model má za úkol popsat strukturu tříd v aplikaci a jejich vazby 
 	\includegraphics[width=0.8\textwidth]{images/domain_struktura}
 	\caption[Analytický doménový model stromové struktury]{Analytický doménový model stromové struktury}\label{fig:dm_stromova_struktura}
 \end{figure}
-Diagram na obrázku \ref{fig:dm_stromova_struktura} popisuje strukturu objektů, které slouží pro uchování všech objektů (šablon) a jejich rozřazení do stromové struktury. Veškeré šablony využívají tuto stromovou strukturu. Třída Folder (složka) slouží pouze k rozřazování jednotlivých objektů do skupin. Složka má pouze jméno a může obsahovat libovolný počet složek nebo objektů. ObjektNode pak slouží k uchování šablony. Dolní část objektů (Item, Spell, atd.) jsou objekty, které jsou totožné s aplikací MobChar a slouží k uchování šablon pro základní aplikaci a využívají se i v aplikaci pro pána jeskyně. Pokud vás zajímá podrobnější popis těchto objektů, nahlédněte do bakalářské práce týkající se MobCharu. O proti tomu, objekty na pravé straně diagramu (Map item, Scenarion, atd.) jsou objekty, které slouží převážně k vytvoření dobrodružství. Jejich podrobnější popis naleznete dále.\\
+Diagram na obrázku \ref{fig:dm_stromova_struktura} popisuje strukturu objektů, které slouží pro uchování všech objektů (šablon) a jejich rozřazení do stromové struktury. Veškeré šablony využívají tuto stromovou strukturu. Třída Folder (složka) slouží pouze k rozřazování jednotlivých objektů do skupin. Složka má pouze jméno a může obsahovat libovolný počet složek nebo objektů. ObjektNode pak slouží k uchování šablony samotné. Dolní část objektů na obrázku (Item, Spell, atd.) jsou objekty, které jsou totožné s aplikací MobChar a slouží k uchování šablon pro základní aplikaci a využívají se i v aplikaci pro pána jeskyně. Pokud vás zajímá podrobnější popis těchto objektů, nahlédněte do bakalářské práce týkající se MobCharu. O proti tomu, objekty na pravé straně diagramu (Map item, Scenarion, atd.) jsou objekty, které slouží převážně k vytvoření dobrodružství. Jejich podrobnějšímu popisu se věnuji dále.\\
 \\
-Veškeré objekty můžou mít potomky. Systém složek slouží pouze pro přehledné uspořádání. Každý objekt má definované objekty, které může mít jako potomky. Tento systém slouží pro ukládání závislostí, například dobrodružství může obsahovat mnoho lokací, příšer, map. Některé objekty, jako například kouzla a schopnosti, žádné potomky mít nesmějí. 
+Veškeré objekty můžou mít potomky. Systém složek slouží pouze pro přehledné uspořádání. Každý objekt má definované objekty, které může mít jako potomky. Tento systém slouží pro ukládání závislostí, například dobrodružství může obsahovat mnoho lokací, příšer, map. Některé objekty, jako například kouzla a schopnosti, žádné potomky mít nesmějí. Veškeré vazby mezi objekty jsou zachyceny pouze ve stromové struktuře, aby bylo zabráněno duplikování informací.
 \subsection{Dobrodružství}
 \begin{figure}\centering
 	\includegraphics[width=0.8\textwidth]{images/domain_scenario}
@@ -217,6 +215,29 @@ Veškeré objekty můžou mít potomky. Systém složek slouží pouze pro přeh
 Diagram na obrázku \ref{fig:dm_scenario} popisuje strukturu pro ukládání a práci s dobrodružstvím. Hlavní třída scenario je rozdělená do jednotlivých lokací. Pro celé dobrodružství jsou však společné předměty, kouzla, schopnosti a postavy. Předměty, kouzla a schopnosti jsou pro pána jeskyně, který je nadále poskytuje hráčům, například pokud se hráč má možnost naučit nové kouzlo, nebo získal důležitý předmět pro dobrodružství (elixír, mapa, atd.). Třída Character zde zastupuje postavy hráčů, kteří dané dobrodružství hrají. Jedná se o stejné třídy jako v původní aplikaci MobChar. Pro přesnější popis těchto tříd, nahlédněte do bakalářské práce aplikace MobChar.\\
 \\
 Celé dobrodružství je členěné do lokací, které se navíc můžou do sebe zanořovat (lokace může mít pod sebou další lokace). Lokace obsahují příšery, mapy, předměty a postavy. Příšery mají velice podobnou strukturu jako postavy, můžou se naučit schopnosti a kouzla a vlastnit předměty, mají však odlišné atributy, proto jsou od postav odděleny. Jednotlivé mapy mají složitější strukturu, která je popsána níže. Předměty zde znamenají, předměty důležité pro tuto lokaci (klíče, věci v bednách a další). Poslední částí jsou postavy, které zde znázorňují postavy, za které nehrají hráči, ale samotný PJ. Jsou to důležité postavy pro dobrodružství, které se nacházejí v dané lokaci. Objekt je stejný jako klasické postavy, ale význam je trochu odlišný.
+
+	\section{Model XML souborů}
+S~doménovým modelem úzce souvisí návrh struktury xml souborů. Struktura těchto souborů je velmi důležitá. Na základě této definované struktury bude probíhat komunikace s~mobilní aplikací MobChar. Formát základních šablon předmětů, kouzel, schopností, efektů a~postav, byl převzat z~původní aplikace MobChar pro hráče, aby byla zachována konzistence mezi aplikacemi. Dále se zaměřuji pouze na nové části, což jsou příšery a dobrodružství. Pokud vás zajímá struktura základních šablon, nahlédněte do bakalářky týkající se aplikace MobChar nebo do přiložené kompletní dokumentace.\\
+\\
+Strukturu xml jsem namodeloval diagramem který se normálně využívá pro modelování tříd. Pro tento případ vypovídající hodnota diagramu je dostačující a jasně zadefinovává strukturu xml. Entity v diagramu které jsou znázorněné žlutou barvou znázorňují již konkrétní xml tag, který uvnitř obsahuje pouze hodnotu a žádné další vnořené tagy. Oproti tomu bílé entity znázorňují pouze obalující tag, který uvnitř obsahuje strukturu další tagů. Každá entita v diagramu znázorňuje jeden tag ve výsledném xml dokumentu. Parcialita a kardinalita v diagramu znázorňuje povinnost případně množství tagů, které se na daném místě v diagramu můžou objevit. Kořenový tag je vždy označen textem  \clqq ROOT\crqq .
+
+\subsection{Dobrodružství}
+\begin{figure}\centering
+	\includegraphics[width=0.8\textwidth]{images/scenarioXML}
+	\caption[Model XML souhoru dobrodružství]{Model XML souhoru dobrodružství}\label{fig:xml_scenario}
+\end{figure}
+Struktura xml souboru pro dobrodružství je velice podobná doménovému modelu dobrodružství jak můžeme vidět na obrázku \ref{fig:xml_scenario}. První z odlišností si můžeme všimnout tagu \clqq metaData\crqq . Tyto data využívá pouze mobilní aplikace MobChar a slouží pro ukládání metadat ohledně připojených uživatelů. Tyto údaje v aplikaci nejdou nijak upravovat a pouze se ukládají pro udržení informace při importu a exportu. \\
+Další odlišnost se nachází u \clqq scenarioCharacter\crqq . Z důvodu zachování historie cizích postav napříč lokacemi, se v lokacích nachází pouze link na postavu, která je definovaná pro celé dobrodružství. Jedná se o seznam tagů se jménem link, který mají obsah pouze identifikátor konkrétní cizí postavy. \\
+Poslední významný rozdíl se týká rozdělení předmětů. Předměty jsou rozděleny na 7 kategorii. V aplikaci je dělení stejné, nicméně zde každý předmět má vlastní kořenový tag, čímž je jasně definován. Pokud vás zajímá přesný popis jednotlivých předmětů, můžete nahlédnout do přiložené dokumentace. \\
+
+\subsection{Příšery}
+Druhý nově zadefinovaný formát xml souborů se týká příšer. Příšery jsou samozřejmě součástí dobrodružství, jak jste mohli vidět na obrázku \ref{fig:xml_scenario}. Na obrázku \ref{fig:xml_monster} můžeme vidět detailní strukturu souboru. Struktura je podobná postavám, také obsahuje seznam předmětů, schopností a kouzel. Také obsahuje tag race, který určuje rasu příšery, ale jedná se o odlišné rasy než pro postavy. Pro určení rasy příšer, jsme hledali kompromis, mezi dostatečnou vypovídající hodnotou a konzistencí oproti velkému množství ras, které by se velice rychle stalo nepřehledné. Uživatel si samozřejmě může příšery rozřadit podle libosti na základě stromové struktury nebo případně v popisku příšery. Proto jsme se rozhodli rasy příšer omezit pouze na základních sedm, které můžete vidět na obrázku. Hlavní důvod rozdělení příšer od klasických postav byl v rozdílných atributech. Pro počítání výsledku soubojů se používají jiné atributy než u postav. 
+\begin{figure}\centering
+	\includegraphics[width=0.8\textwidth]{images/monsterXML}
+	\caption[Model XML souhoru příšery]{Model XML souhoru příšery}\label{fig:xml_monster}
+\end{figure}
+
+
 	\section{Model architektury}
 \begin{figure}\centering
 	\includegraphics[width=0.8\textwidth]{images/architektura}
@@ -247,7 +268,7 @@ Mezi vrstvami jsou definovaná rozhraní, které je nutné dodržet. Rozhraní z
 \chapter{Návrh}
 	\section{Model databáze}
 	\begin{figure}\centering
-	\includegraphics[width=0.8\textwidth]{images/database_basic}
+	\includegraphics[width=0.8\textwidth]{images/basic_database}
 	\caption[Základní model databáze]{Základní mode databáze}\label{fig:db_basic}
 	\end{figure}
 	Pro realizaci aplikace DeskChar jsem vybral databázi sqlite, která je jednoduchá a nepotřebuje žádný složitý externí software pro běh. Na druhou stranu zvládá veškeré potřebné operace, jako jsou cizí klíče a kaskádové mazání záznamů. Pro vytváření a práci se stromovou strukturou, je kaskádové mazání nedocenitelný pomocník. \\
@@ -258,7 +279,7 @@ Z důvodu vícejazyčnosti šablon, bylo zapotřebí navrhnout strukturu databá
 \\
 Druhá část diagramu se týká stromové struktury, která se používá pro všechny objekty v aplikaci. Tabulka Tree\_structure slouží pro zaznamenávání stromové struktury pro veškeré objekty. Do tabulky se ukládají dva druhy uzlů, složky a objekty. Atribut type určuje, o který druh uzlu se jedná. Pomocí cizího klíče parent\_id, vzniká stromová struktura. Zde se využívá kaskádové mazání, pokud se smaže záznam, který má pod sebou navázané další záznamy pomocí cizího klíče, smažou se tyto záznamy také automaticky v databázi. Tento princip udržuje tabulku konzistentní a nevznikají žádné záznamy, které se již nepoužívají. Každý uzel který je typu object, ukazuje pomocí dvojice klíčů target\_type, který určuje tabulku v databázi, a target\_id na záznam v ostatních tabulkách. V diagramu je to naznačené zjednodušeně, kde tabulka Object zastupuje tabulky všech objektů (Spell, Item, atd.). \\
 \\
-Poslední část diagramu znázorňuje, jak jsou vyřešené vztahy mezi objekty. V databázi je zapotřebí zachytit mnoho vazeb mezi objekty. Protože se jedná o systém šablon, kde jedna šablona můžu patřit k více objektům a tato situace bude nastávat velmi často, rozhodl jsem se záznamy nekopírovat pro každý objekt, ale použít systém odkazů. Tyto odkazy realizují tabulky v diagramu znázorněné jako objects\_relations. Jedná se o jednoduché tabulky, které obsahují pouze dva cizí klíče, jeden ukazující na záznam rodiče a druhý ukazující na záznam přiřazené šablony. Tyto tabulky se jmenují podle objektů které spojují, rodičovský objekt je první a názvy jsou oddělené čárkami.
+Poslední problém návrhu databáze se skrýval v návrhu ukládání vazeb mezi jednotlivými objekty. V úvahu připadali dvě možnosti. První možnost byla zachytit veškeré vazby mezi objekty pomocí tabulek \clqq relations\cpqq , které by obsahovaly pouze dvojici klíčů z obou tabulek vazby jako cizí klíče. Toto řešení by bylo rychlé a jednoduché na používání, bohužel se u některých vazeb nedalo použít samotné. Například u dobrodružství se podřazené objekty můžou sdružovat dále do složek, čehož by se pouze pomocí těchto vazeb nedalo docílit. Musela se zde navíc využít stromová struktura použitá pro všechny šablony a jejich základní rozřazení, čímž by vznikali duplicitní data. Duplicitní data sebou nesou dva základní problémy. První z nich je samozřejmě větší množství dat, které je potřebné uložit. V tomto případě by se však nejednalo o drastický nárůst, který by dělal problém. Druhý a závažnější problém se týká aktuálnosti dat. Bylo by zapotřebí udržovat oboje údaje aktuální a stejné, což by mělo velké nároky na složitost ukládání a zpomalovalo by to některé operace, které je zapotřebí aby aplikace prováděla okamžitě (například drag and drop rozřazování). Z těchto důvodů jsem se rozhodl zvolit druhou možnost, kde veškeré vazby mezi objekty jsou uloženy pouze ve stromové struktuře popsané výše. Problém bude vznikat při operacích exportu, kde bude vazbu mezi objekty dohledávat ze stromové struktury. Tyto operace se však neprovádí tak často a není zde velký důraz na okamžitou odezvu. 
 	\section{Model komunikace}
 	\begin{figure}\centering
 	\includegraphics[width=0.8\textwidth]{images/comunication_main}
@@ -268,7 +289,7 @@ Nejčastější operaci prezentační vrstvy, což je práce se stromovou strukt
 \\
 Uživatel v menu klikne na požadovaný druh šablon. Tím se zavolá funkce Redraw, která má na starosti vykreslení stromové struktury ve widgetu. Potřebná data získá z TreeManageru po zavolání funkce getTreeRoots, která má na starosti, vytvoření kompletního stromu uzlů, přičemž vrací seznam kořenových uzlů. TreeWidget z tohoto listu pomocí rekurze vykreslí celý strom. TreeManager získává data z konkrétní DAO třída (v diagramu zjednodušena jako ObjectDAO). Objekty navěšené na uzly stromu můžou být různé, takže třída TreeManager volá více DAO tříd.\\
 \\
-Druhá část diagramu se týká vykreslení hlavní části obrazovky, kde se vytváří samotné šablony a jejich překlady. Uživatel v TreeWidgetu dvakrát klikne na nějaký uzel. Pokud se jedná o objekt zavolá se nad třídou TabWidget funkce Redwar, která s parametrem object type. Object type určuje, na který objekt bylo v TreeWidgetu kliknuto, podle kterého se zavolá znovu konkrétní DAO třída pro daný objekt. Třída vrátí seznam objektů, přičemž se jedná o jednu šablonu, ale ve všech jazycích, ve kterých byla vytvořena. TabWidget následně pro každý jazyk vykreslí jednu záložku, kde se dají hodnoty šablony upravovat nebo případně vytvořit nový překlad pro nový jazyk.
+Druhá část diagramu se týká vykreslení hlavní části obrazovky, kde se vytváří samotné šablony a jejich překlady. Uživatel v TreeWidgetu dvakrát klikne na nějaký uzel. Pokud se jedná o složku, funkce zavolá pouze rodičovskou funkci TreeWidgetu, což má za následek rozbalení obsahu složky. Pokud se jedná o objekt zavolá se nad třídou TabWidget funkce setObject s parametrem object. Hned poté se zavolá funkce, které vykreslí všechna data. Data získá na základě nastaveného objektu, který si pamatuje vlastní DAO třídu. Třída vrátí seznam objektů, přičemž se jedná o jednu šablonu, ale ve všech jazycích, ve kterých byla vytvořena. TabWidget následně pro každý jazyk vykreslí jednu záložku, kde se dají hodnoty šablony upravovat nebo případně vytvořit nový překlad pro nový jazyk.
 	
 	\section{Model nasazení}
 	\begin{figure}\centering
