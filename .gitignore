@@ -1,0 +1,10 @@
+*.md
+*.log
+*.out
+*.gz
+*.to
+*.aux
+*.pyc
+*.toc
+*.lof
+*.ldb
