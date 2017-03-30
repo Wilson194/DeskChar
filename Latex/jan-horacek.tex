@@ -12,6 +12,8 @@
 \usepackage[utf8]{inputenc} % LaTeX source encoded as UTF-8
 
 \usepackage{graphicx} %graphics files inclusion
+\usepackage{listings}
+\usepackage{color}
 % \usepackage{amsmath} %advanced maths
 % \usepackage{amssymb} %additional math symbols
 
@@ -166,11 +168,11 @@ Případy užití popisují jednotlivé činnosti, které uživatel provádí, p
 	\caption[Případy užití pro šablony]{Případy užití pro práci se šablonami}\label{fig:uc_sablony}
 \end{figure}
 
-Případ užití týkající se práci se šablonami namodelovaný na obrázku \ref{fig:uc_sablony} se týká veškeré práce se šablonami. Dobrodružství a postavy jsou složené z jednotlivých šablon, které se dají využít i samostatně. Nakonec i dobrodružství a postava mají formát šablony, které v sobě obsahují další šablony.\\
+Případ užití týkající se práci se šablonami namodelovaný na obrázku \ref{fig:uc_sablony}, se týká veškeré práce se šablonami. Dobrodružství a postavy jsou složené z jednotlivých šablon, které se dají využít i samostatně. Samotné dobrodružství a postavy mají stejný formát jako šablony a navíc můžou obsahovat základní šablony (například postavy můžou mít u sebe zbraně).\\
 \\
-\textbf{Vytváření a editace šablon:} uživatel si bude moci vytvořit nové šablony nebo editovat stávající. Veškeré parametry, které je možné do šablony zapsat, lze jednoduše upravovat v přehledném formuláři. Uživatel si může vytvořit libovolný počet šablon, které se na základě návazností sdružují na větších celků (dobrodružství, postava).\\
+\textbf{Vytváření a editace šablon:} uživatel si bude moci vytvořit nové šablony nebo editovat stávající. Veškeré parametry, které je možné do šablony zapsat, lze jednoduše upravovat v přehledném formuláři. Uživatel si může vytvořit libovolný počet šablon, které se na základě návazností sdružují do větších celků (dobrodružství, postava).\\
 \\
-\textbf{Import šablon z XML souboru:} program bude umožňovat import šablon ze strukturovaných xml souborů, které vytváří mobilní aplikace MobChar a také samotný program. Importované šablony se přidají do databáze a lze s nimi následně provádět stejné činnosti jako s nově vytvořenými. Import je možný buď hromadný, který se pokusí ze souboru dostat veškeré dostupné informace a přidat je do aplikace do příslušná místa, nebo lokální import, který ze souboru vytáhne pouze šablony o daném typu.\\
+\textbf{Import šablon z XML souboru:} program bude umožňovat import šablon ze strukturovaných xml souborů, které vytváří mobilní aplikace MobChar a také samotný program. Importované šablony se přidají do databáze a lze s nimi následně provádět stejné činnosti jako s nově vytvořenými. Import je možný buď hromadný, který se pokusí ze souboru dostat veškeré dostupné informace a přidat je do aplikace na příslušná místa, nebo lokální import, který ze souboru vytáhne pouze šablony o daném typu.\\
 \\
 \textbf{Sdružování šablon do skupin:} veškeré šablony půjde rozřazovat do stromové struktury pro větší přehlednost a jednoduší práci s nimi. Pomocí vytváření složek a jednoduchého drag and drop systému bude rozřazování velice jednoduché a intuitivní. Díky rozřazení do složek je následná práce se šablonami velice usnadněná, ať už se jedná o export nebo přiřazování do rodičovských šablon.\\
 \\
@@ -186,7 +188,7 @@ Business proces (někdy též nazývaný podnikový nebo obchodní proces) je to
 	\includegraphics[width=0.8\textwidth]{images/bussiness_sablony}
 	\caption[Business proces vytváření šablon]{Model bussines procesů vytváření šablon}\label{fig:bp_sablony}
 \end{figure}
-Diagram \ref{fig:bp_sablony} popisuje základní proces práce se šablonami. Proces popisuje vytvoření šablon a~následné nahrání do mobilní aplikace. Šablony vytvoříme v~programu nebo případně importujeme z~xml souboru vytvořeném buď aplikací nebo například aplikací MobChar. Samozřejmě import a~vytvoření nových šablon můžeme kombinovat. Při tomto procesu nevzniká pouze jedna šablona, ale celý soubor šablon, obvykle jednoho typu. Provedeme veškeré potřebné úpravy a~vytvoříme překlady (pokud jsou nějaké zapotřebí). Danou šablonu následně exportujeme do strukturovaného souboru XML ve~formátu, který podporuje aplikace MobChar. Uživatel mobilní aplikace si vytvořený soubor nahraje do zařízení a~následně provede import do aplikace. Nyní již může s~novou šablonou pracovat.
+Diagram na obrázku \ref{fig:bp_sablony} popisuje základní proces práce se šablonami. Proces popisuje vytvoření šablon a~následné nahrání do mobilní aplikace. Šablony vytvoříme v~programu nebo případně importujeme z~xml souboru vytvořeném buď aplikací nebo například aplikací MobChar. Samozřejmě import a~vytvoření nových šablon můžeme kombinovat. Při tomto procesu nevzniká pouze jedna šablona, ale celý soubor šablon, obvykle jednoho typu. Provedeme veškeré potřebné úpravy a~vytvoříme překlady (pokud jsou nějaké zapotřebí). Danou šablonu následně exportujeme do strukturovaného souboru XML ve~formátu, který podporuje aplikace MobChar. Uživatel mobilní aplikace si vytvořený soubor nahraje do zařízení a~následně provede import do aplikace. Nyní již může s~novou šablonou pracovat.
 
 \subsection{Vytváření dobrodružství}
 \begin{figure}\centering
@@ -279,13 +281,13 @@ Z důvodu vícejazyčnosti šablon, bylo zapotřebí navrhnout strukturu databá
 \\
 Druhá část diagramu se týká stromové struktury, která se používá pro všechny objekty v aplikaci. Tabulka Tree\_structure slouží pro zaznamenávání stromové struktury pro veškeré objekty. Do tabulky se ukládají dva druhy uzlů, složky a objekty. Atribut type určuje, o který druh uzlu se jedná. Pomocí cizího klíče parent\_id, vzniká stromová struktura. Zde se využívá kaskádové mazání, pokud se smaže záznam, který má pod sebou navázané další záznamy pomocí cizího klíče, smažou se tyto záznamy také automaticky v databázi. Tento princip udržuje tabulku konzistentní a nevznikají žádné záznamy, které se již nepoužívají. Každý uzel který je typu object, ukazuje pomocí dvojice klíčů target\_type, který určuje tabulku v databázi, a target\_id na záznam v ostatních tabulkách. V diagramu je to naznačené zjednodušeně, kde tabulka Object zastupuje tabulky všech objektů (Spell, Item, atd.). \\
 \\
-Poslední problém návrhu databáze se skrýval v návrhu ukládání vazeb mezi jednotlivými objekty. V úvahu připadali dvě možnosti. První možnost byla zachytit veškeré vazby mezi objekty pomocí tabulek \clqq relations\cpqq , které by obsahovaly pouze dvojici klíčů z obou tabulek vazby jako cizí klíče. Toto řešení by bylo rychlé a jednoduché na používání, bohužel se u některých vazeb nedalo použít samotné. Například u dobrodružství se podřazené objekty můžou sdružovat dále do složek, čehož by se pouze pomocí těchto vazeb nedalo docílit. Musela se zde navíc využít stromová struktura použitá pro všechny šablony a jejich základní rozřazení, čímž by vznikali duplicitní data. Duplicitní data sebou nesou dva základní problémy. První z nich je samozřejmě větší množství dat, které je potřebné uložit. V tomto případě by se však nejednalo o drastický nárůst, který by dělal problém. Druhý a závažnější problém se týká aktuálnosti dat. Bylo by zapotřebí udržovat oboje údaje aktuální a stejné, což by mělo velké nároky na složitost ukládání a zpomalovalo by to některé operace, které je zapotřebí aby aplikace prováděla okamžitě (například drag and drop rozřazování). Z těchto důvodů jsem se rozhodl zvolit druhou možnost, kde veškeré vazby mezi objekty jsou uloženy pouze ve stromové struktuře popsané výše. Problém bude vznikat při operacích exportu, kde bude vazbu mezi objekty dohledávat ze stromové struktury. Tyto operace se však neprovádí tak často a není zde velký důraz na okamžitou odezvu. 
+Poslední problém návrhu databáze se skrýval v návrhu ukládání vazeb mezi jednotlivými objekty. V úvahu připadali dvě možnosti. První možnost byla zachytit veškeré vazby mezi objekty pomocí tabulek \clqq relations\crqq , které by obsahovaly pouze dvojici klíčů z obou tabulek vazby jako cizí klíče. Toto řešení by bylo rychlé a jednoduché na používání, bohužel se u některých vazeb nedalo použít samotné. Například u dobrodružství se podřazené objekty můžou sdružovat dále do složek, čehož by se pouze pomocí těchto vazeb nedalo docílit. Musela se zde navíc využít stromová struktura použitá pro všechny šablony a jejich základní rozřazení, čímž by vznikali duplicitní data. Duplicitní data sebou nesou dva základní problémy. První z nich je samozřejmě větší množství dat, které je potřebné uložit. V tomto případě by se však nejednalo o drastický nárůst, který by dělal problém. Druhý a závažnější problém se týká aktuálnosti dat. Bylo by zapotřebí udržovat oboje údaje aktuální a stejné, což by mělo velké nároky na složitost ukládání a zpomalovalo by to některé operace, které je zapotřebí aby aplikace prováděla okamžitě (například drag and drop rozřazování). Z těchto důvodů jsem se rozhodl zvolit druhou možnost, kde veškeré vazby mezi objekty jsou uloženy pouze ve stromové struktuře popsané výše. Problém bude vznikat při operacích exportu, kde bude vazbu mezi objekty dohledávat ze stromové struktury. Tyto operace se však neprovádí tak často a není zde velký důraz na okamžitou odezvu. 
 	\section{Model komunikace}
 	\begin{figure}\centering
 	\includegraphics[width=0.8\textwidth]{images/comunication_main}
 	\caption[Model komunikace pro hlavní obrazovku]{Model komunikace pro hlavní obrazovku}\label{fig:comunication_main}
 	\end{figure}
-Nejčastější operaci prezentační vrstvy, což je práce se stromovou strukturou a vytváření překladů, jsem vytvořil diagram komunikace, který znázorňuje komunikaci mezi jednotlivými třídami. Na diagramu \ref{fig:comunication_main} můžeme vidět základní dvě činnosti. Vybrání konkrétního typu šablon a zobrazení stromové struktury a zobrazení hlavního widgetu pro vytváření šablon po vybrání konkrétní položky ve stromové struktuře.\\
+Nejčastější operaci prezentační vrstvy je práce se stromovou strukturou a vytváření překladů. Pro znázornění komunikace mezi vrstvami jsem vytvořil diagram komunikace, který znázorňuje komunikaci mezi jednotlivými třídami prezentační vrstvy. Na diagramu \ref{fig:comunication_main} můžeme vidět základní dvě činnosti. Vybrání konkrétního typu šablon , které zobrazí stromovou strukturu a zobrazení hlavního widgetu pro vytváření šablon po vybrání konkrétní položky ve stromové struktuře.\\
 \\
 Uživatel v menu klikne na požadovaný druh šablon. Tím se zavolá funkce Redraw, která má na starosti vykreslení stromové struktury ve widgetu. Potřebná data získá z TreeManageru po zavolání funkce getTreeRoots, která má na starosti, vytvoření kompletního stromu uzlů, přičemž vrací seznam kořenových uzlů. TreeWidget z tohoto listu pomocí rekurze vykreslí celý strom. TreeManager získává data z konkrétní DAO třída (v diagramu zjednodušena jako ObjectDAO). Objekty navěšené na uzly stromu můžou být různé, takže třída TreeManager volá více DAO tříd.\\
 \\
@@ -301,6 +303,53 @@ Diagram nasazení zobrazuje způsob rozdělení systému na samostatné části 
 Na diagramu \ref{fig:architektura} můžeme vidět, že software je určený pro počítače a funkční pod operačními systémy Windows a Linux (verze operačního systému jsou uvedeny v sekci nefunkční požadavky). Aplikace je napsaná v pythonu a zabalená do spustitelného balíčku, který nevyžaduje žádné speciální požadavky na systém. Veškeré potřebné knihovny a prostředí má uložené v balíčku. Databáze sqlite běží v rámci tohoto balíčku také a nepotřebuje žádné dodatečné prostředí.
 
 \chapter{Realizace}
+\section{Použitý programovací jazyk}
+
+\section{Využité knihovny}
+\subsection{Knihovna pro práci s XML}
+Velká část programu se týká práce s xml šablonami. Python v základu neumí s xml šablonami pracovat. Proto bylo zapotřebí vybrat vhodnou knihovnu, která by veškerou práci co nejvíce usnadnila. Hledal jsem knihovnu, která by dokázala namapovat třídu a její atributy přímo na xml šablony. Bohužel taková knihovna pro Python neexistuje. Proto jsem využil knihovnu lxml, která umí základní parsování xml souborů a napsal jsem pro ní rozšíření, které umožňuje mapovat objekty přímo na strukturu xml souboru. V ukázce kódu \ref{python_xml} můžeme vidět namapování objektů Effect a Modifier a jejich vzájemné provázání. \\
+Rozšíření obsahuje tři základní třídy, XElement, XAttribElement a XInstance. Každá z těchto tříd reprezentuje jiný typ atributu v objektu. Třída XElement reprezentuje základní atribut, který nemá překlady. Jako parametr, kromě jména tagu, přijímá volitelný atribut enum, kterým se dá nastavit, že hodnota se má mapovat na konkrétním enum.\\
+Třída XAttribElement reprezentuje tagy, které mohou navíc obsahovat atribute. Nejčastěji se to využívá u atributů, které jsou vícejazyčné. Atributem lang se zde nastavuje jazyk překladu.\\
+Poslední třída XInstance reprezentuje vazbu na další mapovací třídu. Jako parametr komě jména, přijímá instanci cílové mapovací třídy.\\
+\\
+Třída XMLTemplate, ze které všechny mapovací třídy dědí, obsahuje dvě základní funkce, import\_xml a create\_xml. Funkce import\_xml načte xml soubor a vrátí seznam objektů, které se dále načítají do databáze. O proti tomu třída create\_xml přijímá seznam objektů, ze kterých vytvoří strukturovaný xml soubor.
+
+
+\begin{lstlisting}[float,language=Python, label=python_xml, caption=Mapování objektů na xml strukturu]
+class XMLModifier(XMLTemplate):
+    ROOT_NAME = 'modifier'
+    OBJECT_TYPE = ObjectType.MODIFIER
+
+
+    def __init__(self):
+        self.id = XElement('id')
+        self.valueType = XElement('valueType', ModifierValueTypes)
+        self.value = XElement('value')
+        self.targetType = XElement('targetType')
+        self.valueTargetAttribute = XElement('valueTargetAttribute')
+
+
+class XMLEffect(XMLTemplate):
+    ROOT_NAME = 'effect'
+    OBJECT_TYPE = ObjectType.EFFECT
+
+
+    def __init__(self):
+        self.id = XElement('id')
+        self.name = XAttribElement('name', 'lang')
+        self.description = XAttribElement('description', 'lang')
+        self.targetType = XElement('targetType')
+        self.modifiers = XInstance('modifiers', XMLModifier)
+
+\end{lstlisting}
+
+\subsection{Grafická knihovna}
+Pro python existuje velké množství grafických knihoven. Některé jsou zaměřené na mobilní aplikace, některé hlavně pro webové rozhraní. Vybrat mezi takovým množstvím knihoven není lehké. Mezi nejznámější patří knihovny Kivy, PyGame, TkInter a PyQt. Knihoven existují desítky další, ale v této bakalářce se věnuji pouze nejzajímavějším z nich.\\
+Knihovna kivy je převážně zaměřené na dotykové displeje. Výsledný vzhled a veškeré widgety jsou pro to přizpůsobené a ovládání pomocí myši a klávesnice není tak intuitivní jako u ostatních knihoven.\\
+Dalším důležitým kritériem pro výběr knihovny byla aktuálnost a vydávání nových aktualizací. Pro knihovna TkInter již dlouho nevychází nové aktualizace. Knihovna je velice jednoduchá a intuitivní, bohužel již několik let není aktuální. \\
+Knihovna PyGame, jak již napovídá její název, se specializuje převážně na tvorbu počítačových her. Má rozsáhlé možnosti animací a herních prvků, které jsou důležité převážně ve hrách. Knihovna neumí vytvářet přehledné grafické rozhraní aplikace, proto jsem ji ze seznamu také vyřadil.\\
+Poslední z čtveřice knihoven je PyQt. Knihovna se zaměřuje na tvorbu přehledných grafických rozhraní pro programy, což je přesně to co je zapotřebí. Navíc má velice moderní a přehledný vzhled, což bylo jedno z hlavních kritérii pří výběru. Aktualizace k této knihovně jsou vydávány pravidelně a nejnovější verze PyQt5 je určena pro Python 3. Proto jsem se rozhodl zvolit tuto knihovnu pro můj program.
+\subsection{Knihovna pro tvorbu PDF almanachů}
 
 \begin{conclusion}
 	%sem napište závěr Vaší práce
