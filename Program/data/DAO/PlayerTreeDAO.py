@@ -34,6 +34,7 @@ class PlayerTreeDAO:
                                                       'name'       : ('like', '%' + text + '%')})
         return map_objects(data)
 
+
     def get_node(self, id: int) -> Node:
         """
         Get node by id
@@ -42,6 +43,37 @@ class PlayerTreeDAO:
         """
         data = self.database.select(self.TABLE_NAME, {'ID': id})
         return map_objects(data)[0] if len(data) > 0 else None
+
+
+    def get_children_objects(self, targetType: ObjectType, object: object, ) -> list:
+        """
+        Recursively find all child object of give type
+        :param targetType:
+        :param nodeId:
+        :param parentType:
+        :param objects:
+        :return:
+        """
+
+        node = self.database.select(self.TABLE_NAME,
+                                    {'target_id'  : object.id, 'target_type': object.object_type.value,
+                                     'parent_type': object.object_type.value})[0]
+
+        return self.__get_children_objects(targetType, node['ID'], object.object_type)
+
+
+    def __get_children_objects(self, targetType, nodeId, parentType, objects: list = None):
+        if objects is None:
+            objects = []
+
+        children = self.get_children_nodes(parentType, nodeId)
+
+        for child in children:
+            objects = self.__get_children_objects(targetType, child.id, parentType, objects)
+            if isinstance(child, Object) and child.object.object_type is targetType:
+                objects.append(child.object)
+
+        return objects
 
 
     def get_children_nodes(self, target_type: ObjectType, parent_id: int) -> list:

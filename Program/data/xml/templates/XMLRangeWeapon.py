@@ -1,9 +1,5 @@
 from data.DAO.ItemDAO import ItemDAO
 from data.xml.templates.XMLTemplate import XMLTemplate
-from structure.enums.Handling import Handling
-from structure.enums.WeaponWeight import WeaponWeight
-from structure.items.Container import Container
-from structure.items.MeleeWeapon import MeleeWeapon
 from structure.items.RangeWeapon import RangeWeapon
 
 

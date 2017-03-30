@@ -90,11 +90,8 @@ class ObjectDatabase(Database):
             elif type(value) is str or type(value) is bytes:
                 str_values[key] = value
             else:
-                print('preskocim:', key, value)
                 continue
 
-        print(int_values)
-        print(str_values)
         self.update(database_name, obj.id, int_values)
 
         translates = self.select('translates',

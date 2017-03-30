@@ -1,4 +1,5 @@
 from data.DAO.DAO import DAO
+from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from data.DAO.interface.IEffectDAO import IEffectDAO
 
 from data.database.Database import Database
@@ -32,6 +33,7 @@ class EffectDAO(DAO, IEffectDAO):
 
 
     def get(self, effect_id: int, lang: str = None) -> Effect:
+
         if lang is None:  # TODO : default lang
             lang = 'cs'
         data = dict(self.database.select(self.DATABASE_TABLE, {'ID': effect_id})[0])
@@ -41,6 +43,9 @@ class EffectDAO(DAO, IEffectDAO):
         targetType = ModifierTargetTypes(index)
         effect = Effect(effect_id, lang, tr_data.get('name', ''), tr_data.get('description', ''),
                         None, targetType)
+
+        modifiers = PlayerTreeDAO().get_children_objects(ObjectType.MODIFIER, effect)
+        effect.modifiers = modifiers
 
         return effect
 

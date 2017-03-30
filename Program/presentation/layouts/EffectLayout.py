@@ -22,11 +22,11 @@ class EffectLayout(Layout):
     def __init__(self, parent):
         super().__init__(parent)
 
-        self.init_ui()
-
         self.modifier_manager = ModifierManager()
         self.object = None
         self.__parent = parent
+
+        self.init_ui()
 
 
     def init_ui(self):
@@ -49,13 +49,12 @@ class EffectLayout(Layout):
 
         self.nameInput = self.text_box(self.inputGrid, 'Name', 0, 0)
         self.descriptionInput = self.text_box(self.inputGrid, 'Description', 0, 1)
-        self.targetInput = self.combo_box(self.inputGrid, 'Modifier_target', ModifierTargetTypes, 0,
+        self.targetInput = self.combo_box(self.inputGrid, 'Effect_target', ModifierTargetTypes, 0,
                                           2, True)
 
+        self.table = QtWidgets.QTableWidget(self.__parent)
 
-        table = QtWidgets.QTableWidget(self.__parent)
-        table.setRowCount(4)
-
+        self.inputGrid.addWidget(self.table, 3, 0, 1, 2)
 
         self.addLayout(self.inputGrid)
 
@@ -69,6 +68,7 @@ class EffectLayout(Layout):
         self.header.setText(effect.name)
         self.nameInput.setPlainText(effect.name)
         self.descriptionInput.setPlainText(effect.description)
+        self.__set_table_data()
 
         targetTypeIndex = effect.targetType.value
         self.targetInput.setCurrentIndex(targetTypeIndex)
@@ -86,3 +86,28 @@ class EffectLayout(Layout):
         self.object.targetType = targetIndex if targetIndex > 0 else None
 
         self.modifier_manager.update(self.object)
+
+
+    def __set_table_data(self):
+        self.table.setColumnCount(5)
+        self.table.setRowCount(len(self.object.modifiers))
+
+        heades = [TR().tr('Name'), TR().tr('Target_type'), TR().tr('Target_attribute_type'),
+                  TR().tr('Value_type'), TR().tr('Value')]
+        self.table.setHorizontalHeaderLabels(heades)
+
+        header = self.table.horizontalHeader()
+        header.setStretchLastSection(True)
+
+        for i, modifier in enumerate(self.object.modifiers):
+            self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(modifier.name))
+            self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(TR().tr((modifier.targetType))))
+            self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(
+                TR().tr((modifier.valueTargetAttribute))))
+
+            if modifier.valueTargetAttribute in (
+            ItemsAttributes.WEAPON_MELEE_HANDLING, ItemsAttributes.WEAPON_WEIGHT):
+                self.table.setItem(i, 4, QtWidgets.QTableWidgetItem(TR().tr((modifier.valueType))))
+            else:
+                self.table.setItem(i, 3, QtWidgets.QTableWidgetItem(TR().tr((modifier.valueType))))
+                self.table.setItem(i, 4, QtWidgets.QTableWidgetItem(str(modifier.value)))

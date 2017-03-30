@@ -128,6 +128,7 @@ translate = {
     'ModifierValueTypes.FROM_BASE'              : '% ze základu',
     'ModifierValueTypes.FROM_TOTAL'             : '% z celku',
 
+    'Effect_target'                             : 'Cíl efektu',
 
     'Delete'                                    : 'Smazat',
     'New_item'                                  : 'Přidat objekt',

@@ -198,8 +198,6 @@ class TreeWidget(QtWidgets.QFrame):
                     newNode = self.tree_manager.create_node_link(node.nodeType, node.name, item_id,
                                                                  self.__data_type, node.object)
 
-                    print(newNode)
-
             self.draw_data()
 
 
@@ -371,6 +369,10 @@ class TreeWidget(QtWidgets.QFrame):
         """
         if item.data(0, 6) is not 1:
             self.item_doubleclick_signal.emit(item)
+            if item.isExpanded():
+                item.setExpanded(False)
+            else:
+                item.setExpanded(True)
 
 
 class ExportMenu(QtWidgets.QHBoxLayout):

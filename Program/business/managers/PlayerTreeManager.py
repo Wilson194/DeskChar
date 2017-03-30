@@ -130,59 +130,9 @@ class PlayerTreeManager:
         """
         node = self.treeDAO.get_node(nodeId)
         parentNode = self.treeDAO.get_node(parentId)
-        if node.parent_id:
-            oldParentNode = self.treeDAO.get_node(parentId)
-        else:
-            oldParentNode = None
-
         if node.parent_id != parentId and self.available_parent(node, parentNode, context):
-            self.update_links(node, parentNode, oldParentNode)
             node.parent_id = parentId
             self.treeDAO.update_node(node)
-
-
-    def update_links(self, node, newParentNode, oldParentNode):
-        while oldParentNode:
-            if isinstance(oldParentNode, Folder):
-                if oldParentNode.parent_id is None:
-                    oldParentNode = None
-                else:
-                    oldParentNode = self.treeDAO.get_node(oldParentNode.parent_id)
-            else:
-                break
-
-        while newParentNode:
-            if isinstance(newParentNode, Folder):
-                if newParentNode.parent_id is None:
-                    newParentNode = None
-                else:
-                    newParentNode = self.treeDAO.get_node(newParentNode.parent_id)
-            else:
-                break
-
-        children = self.get_all_children(node)
-
-        for child in children:
-            if oldParentNode:
-                oldParentNode.object.DAO()().delete_link(oldParentNode.object, child.object)
-            if newParentNode:
-                newParentNode.object.DAO()().create_link(newParentNode.object, child.object)
-
-
-    def get_all_children(self, node, children=None):
-        if children is None:
-            children = []
-
-        if isinstance(node, Folder):
-            for child in node.children:
-                if isinstance(child, Folder):
-                    children = self.get_all_children(child, children)
-                else:
-                    children.append(child)
-        else:
-            children.append(node)
-
-        return children
 
 
     def available_parent(self, node, parent_node, context: ObjectType) -> bool:
@@ -280,7 +230,9 @@ class PlayerTreeManager:
         :param parent: parent node id
         """
         objects = ParserHandler().import_xml(file_path)
+
         ObjectDatabase('test.db').set_many(True)
+
         if not LangManager().lang_exists('cs'):  # TODO : default lang
             LangManager().create_lang('Čeština', 'cs')
 

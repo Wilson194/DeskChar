@@ -30,7 +30,7 @@ class Translate(metaclass=Singleton):
             return 'Missing trans <' + str(value) + '>'
 
 
-    def tr(self, value):
+    def tr(self, value : str):
         """
         Get translate of value
         :param value:

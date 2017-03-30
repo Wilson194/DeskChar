@@ -1,40 +1,19 @@
-from data.DAO.AbilityDAO import AbilityDAO
-from data.xml.templates.XMLTemplate import XMLTemplate
-from structure.abilities.Ability import Ability
+from data.xml.templates.XMLTemplate import XMLTemplate, XElement, XAttribElement, XInstance
 from structure.enums.Classes import Classes
+from structure.enums.ObjectType import ObjectType
 
 from structure.enums.Races import Races
 
 
 class XMLAbility(XMLTemplate):
     ROOT_NAME = 'ability'
+    OBJECT_TYPE = ObjectType.ABILITY
 
 
     def __init__(self):
-        self.DAO = AbilityDAO()
-
-
-    def get_object(self, root) -> object:
-        data = {}
-        langs = self.get_langs(root)
-        expr = "./{}[@lang='{}']"
-        for lang in langs:
-            name = self.get_value(root, 'name', lang)
-            desc = self.get_value(root, 'description', lang)
-            chan = self.get_value(root, 'chance', lang)
-            clas = self.get_value(root, 'class', None, False)
-            race = self.get_value(root, 'race', None, False)
-
-            clas_num = Classes.by_name(Classes, clas)
-            race_num = Races.by_name(Races, race)
-
-            obj = Ability(None, lang, name, desc, chan, race_num, clas_num)
-            data[lang] = obj
-
-        return data
-
-
-
-
-    def remap_names(self, name: str) -> str:
-        return name
+        self.id = XElement('id')
+        self.name = XAttribElement('name', 'lang')
+        self.description = XAttribElement('description', 'lang')
+        self.chance = XAttribElement('chance', 'lang')
+        self.drd_race = XElement('race', Races)
+        self.drd_class = XElement('class', Classes)
