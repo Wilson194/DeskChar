@@ -10,8 +10,6 @@ class Races(AutoNumber):
     KROLL = ()
     KUDUK = ()
 
-    def xml_name(self):
-        return self.name
 
     def by_name(self, name):
         name = name.upper()
@@ -31,3 +29,6 @@ class Races(AutoNumber):
             return self.KUDUK
         return None
 
+
+    def __str__(self):
+        return self.name

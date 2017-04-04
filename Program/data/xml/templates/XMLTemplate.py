@@ -1,5 +1,6 @@
 from lxml import etree
 
+
 class XElement:
     def __init__(self, name: str, enum=None):
         self.__value = None
@@ -32,7 +33,7 @@ class XElement:
     def set_attributes(self, objects: dict, name: str, attr):
         for obj in objects.values():
             if self.__enum:
-                setattr(obj, name, self.__enum.by_name(self.__enum,attr.text))
+                setattr(obj, name, self.__enum.by_name(self.__enum, attr.text))
             else:
                 try:
                     value = int(attr.text)

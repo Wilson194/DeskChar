@@ -5,11 +5,10 @@ from structure.general.Object import Object
 
 class Effect(Object):
     def __init__(self, id: int = None, lang: str = None, name: str = None,
-                 description: str = None, targetId: int = None,
+                 description: str = None,
                  targetType: ModifierTargetTypes = None):
         super().__init__(id, lang, name, description)
 
-        self.__targetId = targetId
         self.__targetType = targetType
 
         self.__modifiers = []
@@ -34,7 +33,8 @@ class Effect(Object):
 
     @staticmethod
     def XmlClass():
-        return None
+        from data.xml.templates.XMLEffectl import XMLEffect
+        return XMLEffect
 
 
     @staticmethod

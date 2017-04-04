@@ -47,7 +47,7 @@ class ModifierLayout(Layout):
 
         self.nameInput = self.text_line(self.inputGrid, 'Name', 0, 0)
 
-        # Target Type Input -> Character / Item
+        # Target Type Input -> Character / Item - Armor, money, weapon, ...
         self.targetTypeInput = self.combo_box(self.inputGrid, 'Target_type',
                                               ModifierTargetTypes, 0, 1, True)
         self.targetTypeInput.currentIndexChanged.connect(self.targetTypeChangedSlot)
@@ -96,7 +96,7 @@ class ModifierLayout(Layout):
             self.targetAttributeInput.setDisabled(False)
             self.targetAttributeInput.currentIndexChanged.connect(self.attributeTargetChangedSlot)
 
-        elif ModifierTargetTypes(index) is ModifierTargetTypes.ITEM:
+        else:
             data = ItemsAttributes
             self.targetAttributeInput.addItem(TR().tr('Select_value'))
             for value in data:
@@ -132,7 +132,7 @@ class ModifierLayout(Layout):
                 self.valueTypeInput.addItem(TR().tr(str(value)), QtCore.QVariant(Qdata))
             self.valueTypeInput.currentIndexChanged.connect(self.valueTypeChangedSlot)
 
-        elif ModifierTargetTypes(self.targetTypeInput.currentIndex()) is ModifierTargetTypes.ITEM:
+        else:
             self.valueTypeInput.clear()
             if ItemsAttributes(index) is ItemsAttributes.WEAPON_MELEE_HANDLING:
                 self.valueTypeInput.addItem(TR().tr('Select_value'))
@@ -183,7 +183,7 @@ class ModifierLayout(Layout):
             targetType = ModifierTargetTypes(self.targetTypeInput.currentIndex())
             if targetType is ModifierTargetTypes.CHARACTER:
                 attributeType = CharacterAttributes(self.targetAttributeInput.currentIndex())
-            elif targetType is ModifierTargetTypes.ITEM:
+            else:
                 attributeType = ItemsAttributes(self.targetAttributeInput.currentIndex())
 
             if attributeType is ItemsAttributes.WEAPON_MELEE_HANDLING:
@@ -210,7 +210,11 @@ class ModifierLayout(Layout):
         self.nameInput.setText(modifier.name)
 
         targetTypeIndex = modifier.targetType.value
-        targetAttributeIndex = modifier.valueTargetAttribute.value
+        if modifier.targetType is ModifierTargetTypes.CHARACTER:
+            targetAttributeIndex = modifier.characterTargetAttribute.value
+        else:
+            targetAttributeIndex = modifier.itemTargetAttribute.value
+
         valueTypeIndex = modifier.valueType.value
         value = modifier.value
         self.targetTypeInput.setCurrentIndex(targetTypeIndex)
@@ -227,7 +231,10 @@ class ModifierLayout(Layout):
         if valid:
             self.object.name = self.nameInput.text()
             self.object.targetType = data[0]
-            self.object.valueTargetAttribute = data[1]
+            if self.object.targetType is ModifierTargetTypes.CHARACTER:
+                self.object.characterTargetAttribute = data[1]
+            else:
+                self.object.itemTargetAttribute = data[1]
             self.object.valueType = data[2]
             self.object.value = data[3]
 

@@ -19,5 +19,5 @@ class WeaponWeight(AutoNumber):
         return None
 
 
-    def xml_name(self):
+    def __str__(self):
         return self.name

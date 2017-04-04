@@ -4,11 +4,13 @@ from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
 from structure.abilities.Ability import Ability
 from structure.enums.ObjectType import ObjectType
+from structure.enums.Races import Races
 
 
 class AbilityDAO(DAO, IAbilityDAO):
     DATABASE_TABLE = 'Ability'
     DATABASE_DRIVER = 'test.db'
+    TYPE = ObjectType.ABILITY
 
 
     def __init__(self):
@@ -53,9 +55,12 @@ class AbilityDAO(DAO, IAbilityDAO):
             lang = 'cs'
         data = dict(self.database.select(self.DATABASE_TABLE, {'ID': ability_id})[0])
         tr_data = self.database.select_translate(ability_id, ObjectType.ABILITY.value, lang)
+
+        drd_class = Races(data.get('drd_class')) if data.get('drd_class') is not None else None
+        drd_race = Races(data.get('drd_race')) if data.get('drd_race') is not None else None
         ability = Ability(ability_id, lang, tr_data.get('name', ''),
                           tr_data.get('description', ''), tr_data.get('chance', ''),
-                          data.get('drd_race', None), data.get('drd_class', None))
+                          drd_race, drd_class)
 
         return ability
 
@@ -75,45 +80,3 @@ class AbilityDAO(DAO, IAbilityDAO):
             item = self.get(line['ID'], lang)
             items.append(item)
         return items
-
-
-    def get_languages(self, id: int) -> list:
-        """
-        Get list of all languages of one ability
-        :param id: id of ability
-        :return: list of language codes
-        """
-        data = self.database.select('translates',
-                                    {'target_id': id, 'type': ObjectType.ABILITY.value})
-        languages = []
-        for line in data:
-            if line['lang'] not in languages:
-                languages.append(line['lang'])
-        return languages
-
-
-    def get_all_data(self, ability_id: int) -> dict:
-        """
-        Get all data dictionary of one spell, all langs
-        :param ability_id: id of ability
-        :return: dictionary of all data
-        """
-        data = {}
-        int_data = dict(self.database.select(self.DATABASE_TABLE, {'ID': ability_id})[0])
-        tr_data = self.database.select('translates',
-                                       {'target_id': ability_id, 'type': ObjectType.ABILITY.value})
-        for key, value in int_data.items():
-            data[key] = value
-
-        for line in tr_data:
-            name = line['name']
-            lang = line['lang']
-            value = line['value']
-
-            if name in data:
-                data[name][lang] = value
-            else:
-                data[name] = {}
-                data[name][lang] = value
-
-        return data

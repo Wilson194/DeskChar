@@ -54,3 +54,5 @@ class Items(AutoNumber):
         if self is self.MONEY:
             return Money
         return None
+
+

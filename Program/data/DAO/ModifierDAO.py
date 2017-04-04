@@ -46,28 +46,34 @@ class ModifierDAO(DAO, IModifierDAO):
         targetType = ModifierTargetTypes(
             int(targetTypeIndex)) if targetTypeIndex is not None else None
 
-        targetAttributeIndex = data.get('valueTargetAttribute', None)
-        if targetType is ModifierTargetTypes.CHARACTER:
-            targetAttribute = CharacterAttributes(targetAttributeIndex)
-        elif targetType is ModifierTargetTypes.ITEM:
-            targetAttribute = ItemsAttributes(targetAttributeIndex)
-        else:
-            return Modifier(modifier_id, lang)
+        characterAttributeIndex = data.get('characterTargetAttribute', None)
+        itemAttributeIndex = data.get('itemTargetAttribute', None)
+
+        characterTargetAttribute = CharacterAttributes(
+            characterAttributeIndex) if characterAttributeIndex is not None else None
+
+        itemTargetAttribute = ItemsAttributes(
+            itemAttributeIndex) if itemAttributeIndex is not None else None
 
         valueTypeIndex = data.get('valueType', None)
-        value = data.get('value',0)
-        if targetAttribute is ItemsAttributes.WEAPON_MELEE_HANDLING:
+        value = data.get('value', 0)
+        if itemTargetAttribute is ItemsAttributes.WEAPON_MELEE_HANDLING:
             valueType = Handling(value)
             value = value
-        elif targetAttribute is ItemsAttributes.WEAPON_WEIGHT:
+        elif itemTargetAttribute is ItemsAttributes.WEAPON_WEIGHT:
+            valueType = WeaponWeight(value)
+            value = value
+
+        elif itemTargetAttribute is ItemsAttributes.ARMOR_SIZE:
             valueType = WeaponWeight(value)
             value = value
         else:
-            valueType = ModifierValueTypes(int(valueTypeIndex))
+            valueType = ModifierValueTypes(valueTypeIndex) if valueTypeIndex else None
             value = data.get('value', 0)
 
         modifier = Modifier(modifier_id, lang, tr_data.get('name', ''),
-                            tr_data.get('description', ''), valueType, value, targetAttribute,
+                            tr_data.get('description', ''), valueType, value,
+                            characterTargetAttribute, itemTargetAttribute,
                             targetType)
 
         return modifier

@@ -1,14 +1,19 @@
 from PyQt5 import QtCore, QtGui
 from PyQt5 import QtWidgets
 
+import threading
+
 from presentation.dialogs.AddAnotherObject import AddAnotherObject
+from presentation.dialogs.TextDialog import TextDialog
 from structure.enums.NodeType import NodeType
 from business.managers.PlayerTreeManager import PlayerTreeManager
 from structure.enums.ObjectType import ObjectType
 from structure.tree.Folder import Folder
 from presentation.dialogs.NewTreeItem import NewTreeItem
 from presentation.Translate import Translate as TR
-from structure.tree.Object import Object
+
+
+# from presentation.dialogs.LoadingBar import LoadingBar
 
 
 class TreeWidget(QtWidgets.QFrame):
@@ -340,11 +345,14 @@ class TreeWidget(QtWidgets.QFrame):
 
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
-        types = "All Files (*);;Xml Files (*.xml)"
-        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self, "QFileDialog.getSaveFileName()",
+        types = "Xml Files (*.xml)"
+        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self, TR().tr("File_select_target"),
                                                             "", types, options=options)
         if fileName:
             self.tree_manager.export_to_xml(checked_items, fileName)
+            TextDialog('Export complete')
+
+
 
 
     def import_data_slot(self, parent=None):
@@ -355,7 +363,7 @@ class TreeWidget(QtWidgets.QFrame):
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         types = "Xml Files (*.xml)"
-        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()",
+        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, TR().tr("File_select_open"),
                                                             "", types, options=options)
         if fileName:
             self.tree_manager.import_from_xml(fileName, self.__data_type, parent, True)

@@ -83,42 +83,4 @@ class SpellDAO(DAO, ISpellDAO):
         return items
 
 
-    def get_languages(self, id: int) -> list:
-        """
-        Get list of all languages codes for this spell
-        :param id: id of spell
-        :return: list of langs codes
-        """
-        data = self.database.select('translates', {'target_id': id, 'type': ObjectType.SPELL.value})
-        languages = []
-        for line in data:
-            if line['lang'] not in languages:
-                languages.append(line['lang'])
-        return languages
 
-
-    def get_all_data(self, spell_id: int) -> dict:
-        """
-        Get all data dictionary of one spell, all langs
-        :param spell_id: id of spell
-        :return: dictionary of all data
-        """
-        data = {}
-        int_data = dict(self.database.select(self.DATABASE_TABLE, {'ID': spell_id})[0])
-        tr_data = self.database.select('translates',
-                                       {'target_id': spell_id, 'type': ObjectType.SPELL.value})
-        for key, value in int_data.items():
-            data[key] = value
-
-        for line in tr_data:
-            name = line['name']
-            lang = line['lang']
-            value = line['value']
-
-            if name in data:
-                data[name][lang] = value
-            else:
-                data[name] = {}
-                data[name][lang] = value
-
-        return data

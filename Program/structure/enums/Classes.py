@@ -9,10 +9,6 @@ class Classes(AutoNumber):
     WARRIOR = ()
 
 
-    def xml_name(self):
-        return self.name
-
-
     def by_name(self, name):
         name = name.upper()
         if name == 'ALCHEMIST':
@@ -26,3 +22,7 @@ class Classes(AutoNumber):
         if name == 'WARRIOR':
             return self.WARRIOR
         return None
+
+
+    def __str__(self):
+        return self.name

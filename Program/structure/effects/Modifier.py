@@ -1,23 +1,30 @@
-from structure.enums.ModifierValueTypes import ModifierValueTypes
+from structure.enums.CharacterAttributes import CharacterAttributes
+from structure.enums.ItemsAttributes import ItemsAttributes
 from structure.enums.ObjectType import ObjectType
 from structure.general.Object import Object
 
 
 class Modifier(Object):
     TABLE_SCHEMA = [
-        'id', 'value', 'valueType', 'targetType', 'valueTargetAttribute', 'name', 'description'
+        'id', 'value', 'valueType', 'targetType', 'characterTargetAttribute', 'itemTargetAttribute',
+        'name', 'description'
     ]
 
 
     def __init__(self, id: int = None, lang: str = None, name: str = None, description: str = None,
-                 valueType: object = None, value: int = None, valueTargetAttribute: object = None,
+                 valueType: object = None, value: int = None,
+                 characterTargetAttribute: CharacterAttributes = None,
+                 itemTargetAttribute: ItemsAttributes = None,
                  targetType: ObjectType = None):
         super().__init__(id, lang, name, description)
 
+        self.__targetType = targetType
+
+        self.__characterTargetAttribute = characterTargetAttribute
+        self.__itemTargetAttribute = itemTargetAttribute
+
         self.__valueType = valueType
         self.__value = value
-        self.__valueTargetAttribute = valueTargetAttribute
-        self.__targetType = targetType
 
 
     def __name__(self):
@@ -34,7 +41,8 @@ class Modifier(Object):
 
     @staticmethod
     def XmlClass():
-        return None
+        from data.xml.templates.XMLModifier import XMLModifier
+        return XMLModifier
 
 
     @staticmethod
@@ -79,13 +87,23 @@ class Modifier(Object):
 
 
     @property
-    def valueTargetAttribute(self):
-        return self.__valueTargetAttribute
+    def characterTargetAttribute(self):
+        return self.__characterTargetAttribute
 
 
-    @valueTargetAttribute.setter
-    def valueTargetAttribute(self, value):
-        self.__valueTargetAttribute = value
+    @characterTargetAttribute.setter
+    def characterTargetAttribute(self, value):
+        self.__characterTargetAttribute = value
+
+
+    @property
+    def itemTargetAttribute(self):
+        return self.__itemTargetAttribute
+
+
+    @itemTargetAttribute.setter
+    def itemTargetAttribute(self, value):
+        self.__itemTargetAttribute = value
 
 
     @property

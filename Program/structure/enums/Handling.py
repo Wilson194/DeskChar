@@ -17,3 +17,6 @@ class Handling(AutoNumber):
 
     def xml_name(self):
         return self.name
+
+    def __str__(self):
+        return self.name

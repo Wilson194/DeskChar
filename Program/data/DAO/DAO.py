@@ -36,10 +36,12 @@ class DAO:
 
     def get_languages(self, id: int) -> list:
         """
-        Get list of all languages codes for this spell
+        Get list of all languages codes for this object
         :param id: id of spell
         :return: list of langs codes
         """
+        if self.TYPE is None:
+            raise ValueError('Constant TYPE is not defined in class {}'.format(self))
         data = Database(self.DATABASE_DRIVER).select('translates',
                                                      {'target_id': id, 'type': self.TYPE.value})
         languages = []
@@ -47,3 +49,16 @@ class DAO:
             if line['lang'] not in languages:
                 languages.append(line['lang'])
         return languages
+
+
+    def get_list(self, id: int):
+        """
+        Return list of object for one ID but all languages
+        :param id: id of object
+        :return: list of objects
+        """
+        languages = self.get_languages(id)
+        objects = []
+        for lang in languages:
+            objects.append(self.get(id, lang))
+        return objects

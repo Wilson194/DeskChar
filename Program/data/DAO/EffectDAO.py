@@ -42,7 +42,7 @@ class EffectDAO(DAO, IEffectDAO):
         index = data.get('targetType', 1) if data.get('targetType', 1) is not None else 1
         targetType = ModifierTargetTypes(index)
         effect = Effect(effect_id, lang, tr_data.get('name', ''), tr_data.get('description', ''),
-                        None, targetType)
+                        targetType)
 
         modifiers = PlayerTreeDAO().get_children_objects(ObjectType.MODIFIER, effect)
         effect.modifiers = modifiers

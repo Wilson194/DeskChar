@@ -2,15 +2,27 @@ from lxml import etree
 
 from structure.enums.Items import Items
 from structure.enums.ObjectType import ObjectType
+import os
 
 
 class ParserHandler:
-    def create_xml(self, data: list, path=None):
+    def create_xml(self, data: list, path: str = None):
         root = etree.Element('templates')
 
         for type, id in data:
-            child = type.instance().XmlClass()().create_xml(id)
+            objs = type.instance().DAO()().get_list(id)
+            child = objs[0].XmlClass()().create_xml(objs)
             root.append(child)
+
+        pathParts = path.split(os.sep)
+        fileName = pathParts[-1]
+
+        fileExtension = fileName.split('.')[-1]
+
+        if fileExtension != 'xml':
+            fileName += '.xml'
+
+        path = ''.join(pathParts[:-2]) + fileName
 
         with open(path, 'w', encoding='UTF-8') as out:
             out.write(etree.tostring(root, pretty_print=True, encoding='UTF-8').decode('UTF-8'))

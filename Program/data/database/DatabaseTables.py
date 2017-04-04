@@ -117,7 +117,9 @@ class DatabaseTables:
             Column('value', 'INTEGER'),
             Column('valueType', 'INTEGER'),
             Column('targetType', 'INTEGER'),
-            Column('valueTargetAttribute', 'INTEGER')
+            Column('characterTargetAttribute', 'INTEGER'),
+            Column('itemTargetAttribute', 'INTEGER')
+
         ]
 
         try:

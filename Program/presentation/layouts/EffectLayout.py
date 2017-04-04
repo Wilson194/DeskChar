@@ -102,10 +102,16 @@ class EffectLayout(Layout):
         for i, modifier in enumerate(self.object.modifiers):
             self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(modifier.name))
             self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(TR().tr((modifier.targetType))))
-            self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(
-                TR().tr((modifier.valueTargetAttribute))))
+            if modifier.itemTargetAttribute is not None:
+                self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(
+                    TR().tr((modifier.itemTargetAttribute))))
+            else:
+                self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(
+                    TR().tr((modifier.characterTargetAttribute))))
 
-            if modifier.valueTargetAttribute in (
+
+
+            if modifier.itemTargetAttribute in (
             ItemsAttributes.WEAPON_MELEE_HANDLING, ItemsAttributes.WEAPON_WEIGHT):
                 self.table.setItem(i, 4, QtWidgets.QTableWidgetItem(TR().tr((modifier.valueType))))
             else:
