@@ -135,7 +135,7 @@ class Layout(QtWidgets.QVBoxLayout):
 
 
     def spin_box(self, grid: object, name: str, xposition: int, yposition: int,
-                 synchronize: bool = False) -> object:
+                 synchronize: bool = False) -> QtWidgets.QSpinBox:
         """
         Widget for numbers, limit (-20,10000)
         :param grid: parent grid

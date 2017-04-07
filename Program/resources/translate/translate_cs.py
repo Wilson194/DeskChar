@@ -46,7 +46,7 @@ translate = {
 
 
     'Folder'                    : 'Složka',
-    'Object'                    : 'Objekt',
+    'NodeObject'                    : 'Objekt',
     'Type'                      : 'Typ',
     'Code'                      : 'Kód',
     'Select_lang'               : 'Vybrat jazyk',
@@ -59,6 +59,7 @@ translate = {
     'ObjectType.ITEM'           : 'Předměty',
     'ObjectType.MODIFIER'       : 'Modifikátory',
     'ObjectType.EFFECT'         : 'Efekty',
+    'ObjectType.CHARACTER'      : 'Postavy',
 
     'NodeType.FOLDER'           : 'Složka',
     'NodeType.OBJECT'           : 'Objekt',

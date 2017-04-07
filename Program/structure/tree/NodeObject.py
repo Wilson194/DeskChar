@@ -2,7 +2,7 @@ from structure.enums.NodeType import NodeType
 from structure.tree.Node import Node
 
 
-class Object(Node):
+class NodeObject(Node):
     def __init__(self, id: int = None, name: str = None, parent_id: int = None, object=None):
         super().__init__(id, name, parent_id)
         self.__object = object

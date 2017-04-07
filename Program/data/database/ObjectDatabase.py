@@ -1,3 +1,4 @@
+from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from data.database.Database import *
 from structure.enums.AutoNumber import AutoNumber
 from structure.enums.Classes import Classes
@@ -7,12 +8,13 @@ from structure.enums.ObjectType import ObjectType
 from structure.enums.Races import Races
 from structure.enums.WeaponWeight import WeaponWeight
 from structure.general.Object import Object
+from structure.tree.NodeObject import NodeObject
 
 
 class ObjectDatabase(Database):
     """
     Class that extend class Database, can handlig mapping object to database
-    Object need function __name__ that return list of table names (hierarchy)
+    NodeObject need function __name__ that return list of table names (hierarchy)
     """
 
 
@@ -32,7 +34,8 @@ class ObjectDatabase(Database):
             else:
                 key = substr(key, obj.__name__())
             if key not in obj.TABLE_SCHEMA:
-                continue
+                if type(value) is list:
+                    self.__create_sub_objects(value, obj)
             elif isinstance(value, AutoNumber):
                 int_values[key] = value.value
             elif type(value) is int:
@@ -118,6 +121,16 @@ class ObjectDatabase(Database):
                         'value': value
                     }
                     self.update('translates', db_line['ID'], data_dict)
+
+
+    def __create_sub_objects(self, objects: list, parent: object):
+        treeDAO = PlayerTreeDAO()
+        for object in objects:
+            object.id = None
+            id = object.DAO()().create(object)
+            object.id = id
+            node = NodeObject(None, object.name, None, object)
+            treeDAO.insert_node(node, object.object_type)
 
 
 def compare(name: str, objects: list) -> bool:

@@ -41,7 +41,7 @@ class AbilityDAO(DAO, IAbilityDAO):
         """
         self.database.delete(self.DATABASE_TABLE, ability_id)
         self.database.delete_where('translates',
-                                   {'target_id': ability_id, 'type': 'Item'})
+                                   {'target_id': ability_id, 'type': ObjectType.ABILITY})
 
 
     def get(self, ability_id: int, lang=None) -> Ability:

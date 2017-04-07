@@ -139,6 +139,32 @@ class DatabaseTables:
         except OperationalError:
             pass
 
+        # ///////////// Character \\\\\\\\\\\\\\\\\\
+
+        character_columns = [
+            Column('ID', 'INTEGER', True, False, True),
+            Column('age', 'INTEGER'),
+            Column('agility', 'INTEGER'),
+            Column('charisma', 'INTEGER'),
+            Column('height', 'INTEGER'),
+            Column('intelligence', 'INTEGER'),
+            Column('level', 'INTEGER'),
+            Column('mobility', 'INTEGER'),
+            Column('strength', 'INTEGER'),
+            Column('toughness', 'INTEGER'),
+            Column('weight', 'INTEGER'),
+            Column('xp', 'INTEGER'),
+            Column('maxHealth', 'INTEGER'),
+            Column('maxMana', 'INTEGER'),
+            Column('drdRace', 'INTEGER'),
+            Column('drdClass', 'INTEGER'),
+        ]
+
+        try:
+            database.create_table('Character', character_columns)
+        except OperationalError:
+            pass
+
         # ///////////// Player tree structure \\\\\\\\\\\\\\\\\\
 
         structure_columns = [

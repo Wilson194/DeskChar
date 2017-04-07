@@ -91,7 +91,9 @@ class TabWidget(QtWidgets.QFrame):
         :param item: tree item in tree widget, has data
         """
 
+
         for layout in self.layouts_changed:
+            print(layout)
             layout.save_data()
         self.layouts_changed.clear()
         Sync().delete_data('Input_synchronize')

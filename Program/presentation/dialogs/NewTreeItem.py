@@ -23,6 +23,8 @@ class NewTreeItem(QtWidgets.QDialog):
         """
         Init basic layout
         """
+        self.setWindowIcon(QtGui.QIcon('resources/icons/char.png'))
+        self.setWindowTitle('Create new item')
         self.layout = QtWidgets.QGridLayout(self)
 
         self.type_label = QtWidgets.QLabel(self)
@@ -35,7 +37,7 @@ class NewTreeItem(QtWidgets.QDialog):
         self.type_input.addItem(TR().tr(NodeType.FOLDER), QtCore.QVariant(data))
 
         for obj in self.__objects:
-            data = {'NodeType': NodeType.OBJECT, 'Object': obj}
+            data = {'NodeType': NodeType.OBJECT, 'NodeObject': obj}
             self.type_input.addItem(str(obj().__name__()[-1]), QtCore.QVariant(data))
 
         self.name_label = QtWidgets.QLabel(self)
@@ -55,6 +57,7 @@ class NewTreeItem(QtWidgets.QDialog):
         QtCore.QMetaObject.connectSlotsByName(self)
 
         self.layout.addWidget(self.buttonBox, 2, 0, 1, 2, QtCore.Qt.AlignHCenter)
+        self.name_input.setFocus()
 
 
     def get_inputs(self) -> dict:
@@ -67,7 +70,7 @@ class NewTreeItem(QtWidgets.QDialog):
         data = {
             'name'    : self.name_input.text(),
             'NodeType': current['NodeType'] if 'NodeType' in current else None,
-            'Object'  : current['Object'] if 'Object' in current else None
+            'NodeObject'  : current['NodeObject'] if 'NodeObject' in current else None
         }
         return data
 

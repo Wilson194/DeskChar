@@ -37,7 +37,7 @@ class ItemDAO(DAO, IItemDAO):
     def delete(self, item_id: int):
         self.database.delete(self.DATABASE_TABLE, item_id)
         self.database.delete_where('translates',
-                                   {'target_id': item_id, 'type': 'Item'})
+                                   {'target_id': item_id, 'type': ObjectType.ITEM})
 
 
     def get_all(self, lang=None) -> list:

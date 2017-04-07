@@ -188,7 +188,10 @@ class XMLTemplate:
             xInstances[instance.name] = (key, instance)
 
         for attr in root:
-            objects = xInstances[attr.tag][1].set_attributes(objects, xInstances[attr.tag][0], attr)
+            if attr.tag in xInstances:
+                if attr.tag == 'id':
+                    continue
+                objects = xInstances[attr.tag][1].set_attributes(objects, xInstances[attr.tag][0], attr)
 
         return objects
 

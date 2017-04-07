@@ -41,7 +41,7 @@ class SpellDAO(DAO, ISpellDAO):
         """
         self.database.delete(self.DATABASE_TABLE, spell_id)
         self.database.delete_where('translates',
-                                   {'target_id': spell_id, 'type': 'Item'})
+                                   {'target_id': spell_id, 'type': ObjectType.SPELL})
 
 
     def get(self, spell_id: int, lang: str = None) -> Spell:

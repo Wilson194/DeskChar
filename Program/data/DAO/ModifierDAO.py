@@ -33,6 +33,8 @@ class ModifierDAO(DAO, IModifierDAO):
 
     def delete(self, modifier_id: int) -> None:
         self.obj_database.delete(self.DATABASE_TABLE, modifier_id)
+        self.database.delete_where('translates',
+                                   {'target_id': modifier_id, 'type': ObjectType.MODIFIER})
 
 
     def get(self, modifier_id: int, lang: str = None) -> Modifier:

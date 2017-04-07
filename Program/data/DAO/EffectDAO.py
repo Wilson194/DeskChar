@@ -30,6 +30,8 @@ class EffectDAO(DAO, IEffectDAO):
 
     def delete(self, effect_id: int) -> None:
         self.obj_database.delete(self.DATABASE_TABLE, effect_id)
+        self.database.delete_where('translates',
+                                   {'target_id': effect_id, 'type': ObjectType.EFFECT})
 
 
     def get(self, effect_id: int, lang: str = None) -> Effect:

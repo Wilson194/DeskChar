@@ -12,8 +12,8 @@ from structure.tree.Folder import Folder
 from presentation.dialogs.NewTreeItem import NewTreeItem
 from presentation.Translate import Translate as TR
 
-
 # from presentation.dialogs.LoadingBar import LoadingBar
+from structure.tree.NodeObject import NodeObject
 
 
 class TreeWidget(QtWidgets.QFrame):
@@ -179,7 +179,7 @@ class TreeWidget(QtWidgets.QFrame):
                 self.__data_type.instance()().children + [self.__data_type.instance()])
             if choice:
                 self.tree_manager.create_node(data['NodeType'], data['name'], item_id,
-                                              self.__data_type, data['Object'])
+                                              self.__data_type, data['NodeObject'])
                 self.draw_data()
         elif action.data() == 'import':
             self.import_data_slot(item_id)
@@ -267,7 +267,7 @@ class TreeWidget(QtWidgets.QFrame):
         if choice:
             self.tree_manager.create_node(data['NodeType'], data['name'], None,
                                           self.__data_type,
-                                          data['Object'] if 'Object' in data else None)
+                                          data['NodeObject'] if 'NodeObject' in data else None)
             self.draw_data()
 
 
@@ -328,7 +328,10 @@ class TreeWidget(QtWidgets.QFrame):
                 tree_item.setData(0, 6, QtCore.QVariant(NodeType.OBJECT.value))
 
             if self.checking:
-                tree_item.setCheckState(0, QtCore.Qt.Unchecked)
+                if isinstance(item, NodeObject) and self.__data_type is item.object.object_type:
+                    tree_item.setCheckState(0, QtCore.Qt.Unchecked)
+                if self.tree_manager.tree_folder(item):
+                    tree_item.setCheckState(0, QtCore.Qt.Unchecked)
 
 
     def export_data_slot(self):
@@ -351,8 +354,6 @@ class TreeWidget(QtWidgets.QFrame):
         if fileName:
             self.tree_manager.export_to_xml(checked_items, fileName)
             TextDialog('Export complete')
-
-
 
 
     def import_data_slot(self, parent=None):
@@ -399,6 +400,9 @@ class ExportMenu(QtWidgets.QHBoxLayout):
         """
         Create pop up menu with buttons
         """
+        if self.__parent.checking:
+            return
+
         self.__parent.checking = True
         self.__parent.draw_data()
         self.export_menu_layout = QtWidgets.QHBoxLayout()

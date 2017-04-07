@@ -2,7 +2,7 @@ from data.database.Database import Database
 from structure.enums.ObjectType import ObjectType
 from structure.enums.NodeType import NodeType
 from structure.tree.Folder import Folder
-from structure.tree.Object import Object
+from structure.tree.NodeObject import NodeObject
 from structure.tree.Node import Node
 
 
@@ -70,7 +70,7 @@ class PlayerTreeDAO:
 
         for child in children:
             objects = self.__get_children_objects(targetType, child.id, parentType, objects)
-            if isinstance(child, Object) and child.object.object_type is targetType:
+            if isinstance(child, NodeObject) and child.object.object_type is targetType:
                 objects.append(child.object)
 
         return objects
@@ -153,7 +153,7 @@ def map_objects(data: dict) -> list:
             obj = Folder(row['ID'], row['name'], row['parent_id'])
         elif row['type'] is NodeType.OBJECT.value:
             target_object = ObjectType(row['target_type']).instance().DAO()().get(row['target_id'])
-            obj = Object(row['ID'], row['name'], row['parent_id'], target_object)
+            obj = NodeObject(row['ID'], row['name'], row['parent_id'], target_object)
         else:
             obj = None
         nodes.append(obj)

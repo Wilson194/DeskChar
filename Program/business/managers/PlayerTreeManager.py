@@ -1,7 +1,7 @@
 from business.managers.LangManager import LangManager
 from data.database.ObjectDatabase import ObjectDatabase
 from data.xml.ParserHandler import ParserHandler
-from structure.tree.Object import Object
+from structure.tree.NodeObject import NodeObject
 from structure.tree.Folder import Folder
 from structure.enums.NodeType import NodeType
 from structure.tree.Node import Node
@@ -69,7 +69,7 @@ class PlayerTreeManager:
         else:
             id = target_object.DAO()().create(target_object())
             obj = target_object(id)
-            node = Object(None, name, parent_id, obj)
+            node = NodeObject(None, name, parent_id, obj)
         id = self.treeDAO.insert_node(node, object_type)  # TODO : remove object_type
         node.id = id
         return node
@@ -79,7 +79,7 @@ class PlayerTreeManager:
                          parentType: ObjectType = None, targetObject: object = None) -> Node:
         """
         Create node in tree, that link to some object, that already exist        
-        :param nodeType: Type of node (Folder, Object)
+        :param nodeType: Type of node (Folder, NodeObject)
         :param name: name of node
         :param parentId: id of parent object
         :param parentType: 
@@ -89,7 +89,7 @@ class PlayerTreeManager:
         if nodeType is NodeType.FOLDER:
             node = Folder(None, name, parentId)
         else:
-            node = Object(None, name, parentId, targetObject)
+            node = NodeObject(None, name, parentId, targetObject)
 
         id = self.treeDAO.insert_node(node, parentType)
         node.id = id
@@ -184,11 +184,11 @@ class PlayerTreeManager:
         return False
 
 
-    def create_empty_object(self, object_type: ObjectType) -> Object:
+    def create_empty_object(self, object_type: ObjectType) -> NodeObject:
         """
         Create empty object
         :param object_type: obkect type
-        :return: Object if created, None otherwise
+        :return: NodeObject if created, None otherwise
         """
         obj = object_type.instance()()
         obj.id = object_type.instance().DAO()().create(obj)
@@ -249,8 +249,19 @@ class PlayerTreeManager:
                 lang.id = default_id
                 ObjectDatabase('test.db').update_object(lang, type.name.title())
 
-            node = Object(None, default.name, parent, default)
+            node = NodeObject(None, default.name, parent, default)
             self.treeDAO.insert_node(node, default.object_type)
 
         ObjectDatabase('test.db').insert_many_execute()
         ObjectDatabase('test.db').set_many(False)
+
+
+    def tree_folder(self, node: Node) -> bool:
+        while node.parent_id:
+            parentNode = self.get_node(node.parent_id)
+            if isinstance(parentNode, Folder):
+                node = parentNode
+            else:
+                return False
+
+        return True

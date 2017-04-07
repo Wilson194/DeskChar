@@ -156,7 +156,7 @@ class AddAnotherObject(QtWidgets.QDialog):
     def selected_tab(self) -> ObjectType:
         """
         Find currently selected tab and return ObjectType of that tab
-        :return: Object type of tab
+        :return: NodeObject type of tab
         """
         return self.__node.object.treeChildren[self.tabWidget.currentIndex()]
 

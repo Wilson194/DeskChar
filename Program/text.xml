@@ -1,0 +1,11 @@
+<templates>
+  <modifier>
+    <id>1</id>
+    <name lang="cs">tst</name>
+    <description lang="cs"></description>
+    <targetType>AFFECTS_MELEE_WEAPON</targetType>
+    <itemTargetAttribute>WEAPON_MELEE_HANDLING</itemTargetAttribute>
+    <valueType>ONE_HANDED</valueType>
+    <value>1</value>
+  </modifier>
+</templates>

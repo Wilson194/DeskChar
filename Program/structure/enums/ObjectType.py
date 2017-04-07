@@ -7,6 +7,7 @@ class ObjectType(AutoNumber):
     ABILITY = ()
     MODIFIER = ()
     EFFECT = ()
+    CHARACTER = ()
 
 
     def icon(self):
@@ -20,6 +21,8 @@ class ObjectType(AutoNumber):
             return 'resources/icons/potionGreen.png'
         if self is ObjectType.EFFECT:
             return 'resources/icons/gemGreen.png'
+        if self is ObjectType.CHARACTER:
+            return 'resources/icons/helmet.png'
 
         return 'resources/icons/book.png'
 
@@ -30,6 +33,7 @@ class ObjectType(AutoNumber):
         from structure.abilities.Ability import Ability
         from structure.effects.Effect import Effect
         from structure.effects.Modifier import Modifier
+        from structure.character.Character import Character
 
         if self == ObjectType.ITEM:
             return Item
@@ -41,6 +45,8 @@ class ObjectType(AutoNumber):
             return Modifier
         if self == ObjectType.EFFECT:
             return Effect
+        if self == ObjectType.CHARACTER:
+            return Character
 
 
     def by_name(self, name: str):
@@ -55,3 +61,5 @@ class ObjectType(AutoNumber):
             return self.MODIFIER
         if name == 'EFFECT':
             return self.EFFECT
+        if name == 'CHARACTER':
+            return self.CHARACTER
