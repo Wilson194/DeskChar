@@ -1298,6 +1298,24 @@ FUNCTION {mastersthesis}
   write.url
 }
 
+FUNCTION {bachelorthesis}
+{ output.bibitem
+  format.authors "author" output.check
+  add.colon
+  format.btitle
+  "title" output.check
+  new.sentence
+  bbl.mthesis format.thesis.type output.nonnull
+  school "school" bibinfo.warn output
+  address "address" bibinfo.check output
+  format.date "year" output.check
+  format.doi output
+  format.note output
+  format.eprint output
+  fin.entry
+  write.url
+}
+
 FUNCTION {misc}
 { output.bibitem
   format.authors output
