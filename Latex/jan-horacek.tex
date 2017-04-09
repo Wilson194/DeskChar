@@ -14,6 +14,12 @@
 \usepackage{graphicx} %graphics files inclusion
 \usepackage{listings}
 \usepackage{color}
+\usepackage{pdfpages}
+
+\usepackage[outputdir=build]{minted}
+	\definecolor {codebg} {rgb} {0.92, 0.92, 0.92}
+	\renewcommand\listingscaption{Algoritmus}
+
 % \usepackage{amsmath} %advanced maths
 % \usepackage{amssymb} %additional math symbols
 
@@ -59,7 +65,8 @@
 \begin{introduction}
 Dračí doupě je populární hra na hrdiny, která vznikla jako česká verze hry Dungeons~\&~dragons. V~České Republice si získala velkou oblibu zvláště mezi hráči stolních her a počítačových RPG her.\\
 
-Hráči hrají za své hrdiny, které si na začátku dobrodružství vytvořili, putují světem a zažívají rozličná dobrodružství, která pro ně pán jeskyně připraví. Každý hráč si může vybrat z~rozličného výběru ras, které se ve světě vyskytují, a zvolit si, jakému povolání se bude věnovat. Ale ať si vybere mocného trpasličího válečníka, rychlého a úskočného hobitího zloděje nebo moudrého a mocného elfského kouzelníka, budou ho čekat složitá rozhodnutí, která určí, jakým směrem se dobrodružství bude dále ubírat. \\
+Hráči hrají za své hrdiny, které si na začátku dobrodružství vytvořili, putují světem a zažívají rozličná dobrodružství, která pro ně pán jeskyně připraví. Celá družina si na začátku dobrodružství vytvoří své postavy podle toho, do které postavy by se rádi vžili. Někteří si vytvoří postavy, které svým chováním či názory jsou podobné samotným hráčům, někteří zase Dračí doupě využijí jako únik do úplně jiného světa, kde nemusí být sami sebou a chovají se úplně jinak a nepředvídatelně. Nicméně během celého dobrodružství se všichni hráči vtělí do svých fiktivních postav a veškerá rozhodnutí rozhodují, jako by právě stáli v magickém světě s kouzelnou hůlkou v ruce a rozhodovali, jestli svého zajatce zabijí či ho nechají jít.
+Každý hráč si může vybrat z~rozličného výběru ras, které se ve světě vyskytují, a zvolit si, jakému povolání se bude věnovat. Ale ať si vybere mocného trpasličího válečníka, rychlého a úskočného hobitího zloděje nebo moudrého a mocného elfského kouzelníka, budou ho čekat složitá rozhodnutí, která určí, jakým směrem se dobrodružství bude dále ubírat. \\
 
 Dračí doupě se lehce liší od klasických stolních her, kde plán hry nebo dobrodružství máte jeden a toho se musíte držet. Zde příběh vymýšlí další hráč, takzvaný Pán jeskyně, který při hře celé dobrodružství řídí a popisuje hráčům. Veškerá rozhodnutí, která neučiní samotní hráči, rozhodne Pán jeskyně. Příprava propracovaných a zábavných dobrodružství je velice složitá a zabere mnoho hodin času. Je zapotřebí vytvořit přehledné poznámky a mapy, které při hře umožní všem hráčům dobře pochopit situaci a oblast, ve které se právě nachází jejich postavy. Cílem této bakalářské práce je tento proces usnadnit a zkrátit dobu přípravy, aby se Pán jeskyně mohl věnovat převážně hraní s ostatními spoluhráči. \\
 
@@ -82,24 +89,25 @@ V páté kapitole je popsaná problematika, týkající se samotné implementace
 
 \chapter{Úvod do problematiky}
 
-
-
-
 	\section{Cíl práce}
-Cílem této práce je vytvořit desktopovou aplikaci, které rozšíří již existují balíček mobilních aplikací MobChar o nové funkcionality. Hlavním účelem aplikace je vytváření dobrodružství pro Dračí doupě. Jednou z hlavních funkcionalit je tvorba XML souborů, se kterými umí pracovat mobilní aplikace MobChar.
+Cílem této práce je vytvořit desktopovou aplikaci, které rozšíří již existují balíček mobilních aplikací MobChar o nové funkcionality. Hlavním účelem aplikace je vytváření dobrodružství pro Dračí doupě. Jednou z hlavních funkcionalit je tvorba XML souborů, se kterými umí pracovat mobilní aplikace MobChar a tvorba PDF almanachů, pro přehledné tisknutí celého dobrodružství.
 	\section{Dračí doupě}
-		TODO: napsat o DrD
+
 
 
 
 \chapter{Současný stav}
 	\section{Projekt MobChar}	
-Aplikace MobChar vznikla jako samostatná aplikace, která měla sloužit jako osobní deník hráče pro hru Dračí doupě. Postupem času se rozšiřovala a měnila základní struktura. Nynější stav již umožňuje vytváření rozšíření pro další hry na hrdiny jako jsou například Dungeons~\&~Dragons. V této chvíli jsou již plně funkční rozšíření pro Dračí doupě a Dungeons~\&~Dragons a vznikají další.\\
-\\
+Aplikace MobChar vznikla jako samostatná aplikace, která měla sloužit jako osobní deník hráče pro hru Dračí doupě. Postupem času se rozšiřovala a měnila základní struktura. Nynější stav již umožňuje vytváření rozšíření pro další hry na hrdiny jako jsou například Dungeons~\&~Dragons. V této chvíli jsou již plně funkční rozšíření pro Dračí doupě a Dungeons~\&~Dragons a vznikají další.
+
+\subsection{Balíček pro Dračí doupě}
+Jedním z již vzniklých balíčků pro MobChar je balíček Dračí doupě. Jedná se o klasický balíček do aplikace pro osobní deník. Mezi základní funkcionality balíčku patří zaznamenávání atributů, kouzel, schopností a efektů postavy, zaznamenávání veškerého vybavení postavy a logování všech událostí, které se v aplikaci provedli. Všechny tyto entity se dají exportovat do XML souborů a také je možné tyto soubory do aplikace naimportovat. Pokud si šablony přípravitě ještě před začátkem dobrodružství, velice vám to usnadní práci s aplikací. Přeci jenom mobilní telefon není nejvhodnější zařízení, pro vypisování všech informací do jednotlivých šablon. Pokud máte však šablony předpřipravené a importované do aplikace, práce je velice jednoduchá a intuitivní. Poté vám zážitek ze hry již žádné složité připravování rušit nebude. 
+
+\subsection{Balíček pro pána jeskyně}
 V rámci aplikace MobChar vzniká další rozšíření, ne však pro osobní deník hráče, ale pro Pána jeskyně. Jednoduchá aplikace, ve které budou k dispozici údaje o všech hráčích a právě probíhajícím dobrodružství. Protože tvorba dobrodružství je poměrně náročná činnost, která vyžaduje napsání mnoha textů, připravení velkého množství šablon a další časově náročné činnosti, bylo by velice nepraktické toto dobrodružství vytvářet na mobilním zařízení. Proto vzniká desktopová aplikace DeskChar, jejíž hlavním cílem je vytváření dobrodružství a šablon pro mobilní aplikaci.
 
 	\section{Existující aplikace}
-Díky rozsáhlé komunitě okolo her na hrdiny, jako jsou Dračí doupě a Dungeons~\&~Dragons, vzniklo již mnoho aplikací, které mají hraní či přípravu dobrodružství usnadnit. Je možné najít desítky různých editorů map, které jsou více či méně povedené a propracované. Mezi nejzajímavější patří  Dungeon Painter Studio \cite{dungeoPainterStudio}, které se převážně zaměřuje na tvorbu rozsáhlých map, nebo například Donjon\cite{donjon}, který se zaměřuje na generování náhodných map a další objektů, jako jsou například obchody, truhly, počasí a další. Všechny tyto aplikace vygenerují PDF soubor, který je možné následně vytisknout a vzít s sebou na herní sezení. Žádná z těchto aplikací nenabízí mobilní prohlížeč dobrodružství, nebo export do formátu, který by bylo možné na mobilních zařízeních jednoduše prohlížet. Bohužel PDF soubor formátu A4 s mnoho údaji není příliš přehledný, obzvlášť na malých obrazovkách. \\
+Díky rozsáhlé komunitě okolo her na hrdiny, jako jsou Dračí doupě a Dungeons~\&~Dragons, vzniklo již mnoho aplikací, které mají hraní či přípravu dobrodružství usnadnit. Je možné najít desítky různých editorů map, které jsou více či méně povedené a propracované. Mezi nejzajímavější patří  Dungeon Painter Studio \cite{dungeoPainterStudio}, které se převážně zaměřuje na tvorbu rozsáhlých map, nebo například Donjon\cite{donjon}, který se zaměřuje na generování náhodných map a další objektů, jako jsou například obchody, truhly, počasí a další. Vybral jsem tyto to dva systémy, protože z řady všech existujících aplikací jsou nejvíce propracované a hlavně stále živé a pravidelně aktualizované. Žádná z těchto aplikací nenabízí mobilní prohlížeč dobrodružství, nebo export do formátu, který by bylo možné na mobilních zařízeních jednoduše prohlížet. Bohužel PDF soubor formátu A4 s mnoho údaji není příliš přehledný, obzvlášť na malých obrazovkách. \\
 \\
 \textbf{Dungeon Painter Studio} je aplikace, která se zaměřuje na tvorbu map a následné generování PDF souborů. Existuje online verze, dostupná je zdarma, která však nenabízí veškeré funkcionality plné verze. Ale i v této zjednodušené verzi dokážete vytvořit velmi propracované mapy. Plná verze je již desktopová aplikace, která je placená (stojí  přibližně 400 korun). Je možné zde vytvořit opravdu propracovaná a poutavá dobrodružství včetně stínování, světelných efektů a mnoha dalšího. Je však až zbytečně složitý a pro většinu Pánů jeskyně tvorba mapy bude příliš zdlouhavá. Vytvoření jedné mapy zabere mnoho času a ve většině případů takto propracované mapy nejsou pro hraní důležité. Bohužel v základní verzi není možné s mapou propojit předměty a příšery z dobrodružství, což považuji za jednu z nejdůležitějších funkcionalit. \\
 \\
@@ -218,7 +226,7 @@ Veškeré objekty můžou mít potomky. Systém složek slouží pouze pro přeh
 	\includegraphics[width=0.8\textwidth]{images/domain_scenario}
 	\caption[Analytický doménový model dobrodružství]{Analytický doménový model dobrodružství}\label{fig:dm_scenario}
 \end{figure}
-Diagram na obrázku \ref{fig:dm_scenario} popisuje strukturu pro ukládání a práci s dobrodružstvím. Hlavní třída \textit{scenario} je rozdělená do jednotlivých lokací. Pro celé dobrodružství jsou však společné předměty, kouzla, schopnosti a postavy. Předměty, kouzla a schopnosti jsou pro P	ána jeskyně, který je nadále poskytuje hráčům, například pokud se hráč má možnost naučit nové kouzlo, nebo získal důležitý předmět pro dobrodružství (elixír, mapa, atd.). Třída \textit{Character} zde zastupuje postavy hráčů, kteří dané dobrodružství hrají. Jedná se o stejné třídy jako v původní aplikaci MobChar. Pro přesnější popis těchto tříd, nahlédněte do bakalářské práce aplikace MobChar.\\
+Diagram na obrázku \ref{fig:dm_scenario} popisuje strukturu pro ukládání a práci s dobrodružstvím. Hlavní třída \textit{scenario} je rozdělená do jednotlivých lokací. Pro celé dobrodružství jsou však společné předměty, kouzla, schopnosti a postavy. Předměty, kouzla a schopnosti jsou pro P	ána jeskyně, který je nadále poskytuje hráčům, například pokud se hráč má možnost naučit nové kouzlo, nebo získal důležitý předmět pro dobrodružství (elixír, mapa, atd.). Třída \textit{Character} zde zastupuje postavy hráčů, kteří dané dobrodružství hrají. Jedná se o stejné třídy jako v původní aplikaci MobChar. Pro přesnější popis těchto tříd, nahlédněte do bakalářské práce aplikace MobChar\cite{Weberova_2017}.\\
 \\
 Celé dobrodružství je členěné do lokací, které se navíc můžou do sebe zanořovat (lokace může mít pod sebou další lokace). Lokace obsahují příšery, mapy, předměty a postavy. Příšery mají velice podobnou strukturu jako postavy, můžou se naučit schopnosti a kouzla a vlastnit předměty, mají však odlišné atributy, proto jsou od postav odděleny. Jednotlivé mapy mají složitější strukturu, která je popsána níže. Předměty zde znamenají předměty důležité pro tuto lokaci (klíče, věci v bednách a další). Poslední částí jsou postavy, které zde znázorňují postavy, za které nehrají hráči, ale samotný PJ. Jsou to důležité postavy pro dobrodružství, které se nacházejí v dané lokaci. Objekt je stejný jako klasické postavy, ale význam je trochu odlišný.
 
@@ -240,15 +248,25 @@ Zvolil jsem třívrstvou architekturu z důvodu dobré přehlednosti a jednoduch
 \subsection{Rozhraní}
 Mezi vrstvami jsou definovaná rozhraní, která je nutné dodržet. Rozhraní začínají velkým písmenem I, konkrétní implementace daného rozhraní obvykle má stejný název, pouze bez počátečního písmena I.\\
 \\
-\textbf{IObjectDAO} je skupina několika DAO tříd, které se starají o přístup k datům z databáze a z XML. Na diagramu \ref{fig:architektura} je zobrazen pouze zástupný IObjectDAO, který v implementaci neexistuje a je nahrazen jednotlivými DAO rozhraními (ISpellDAO, IEffectDAO atd.).\\
-\textbf{ITreeDAO} se stará o~veškeré ukládání stromové struktury do databáze. \\
-\textbf{IMapDAO} se stará o ukládání veškerých dat, která se týkají map. Rozhraní je společné pro všechny druhy map (grafické, jednoduché, obrázkové)\\
-\textbf{ILangDAO} se stará o ukládání jazyků, které jsou v aplikaci použity. Nejedná se o překlady prezentační vrstvy, ale o jazyky vytvořené pro překlady šablon. Rozhraní se nestará o ukládání samotných překladů, pouze o jejich jazyky.\\
+Pro datovou vrstvu se používají takzvané \clqq data access objects\crqq (DAO). Jedná se o třídy, které zajišťují přístup k datům například z databáze a naopak i data ukládají. Pro business vrstvu se využívají takzvané \clqq managery\crqq .
+\subsubsection*{DAO třídy}
+\noindent\textbf{IObjectDAO} je skupina několika DAO tříd, které se starají o přístup k datům z databáze a z XML. Na diagramu \ref{fig:architektura} je zobrazen pouze zástupný IObjectDAO, který v implementaci neexistuje a je nahrazen jednotlivými DAO rozhraními (ISpellDAO, IEffectDAO atd.).\\
 \\
+\textbf{ITreeDAO} se stará o~veškeré ukládání stromové struktury do databáze. \\
+\\
+\textbf{IMapDAO} se stará o ukládání veškerých dat, která se týkají map. Rozhraní je společné pro všechny druhy map (grafické, jednoduché, obrázkové)\\
+\\
+\textbf{ILangDAO} se stará o ukládání jazyků, které jsou v aplikaci použity. Nejedná se o překlady prezentační vrstvy, ale o jazyky vytvořené pro překlady šablon. Rozhraní se nestará o ukládání samotných překladů, pouze o jejich jazyky.
+
+\subsubsection*{Manager třídy}
 \textbf{IObjectManager} navazuje na IObjectDAO. Jedná se opět o skupinu tříd pro veškeré základní objekty (ISpellManager, IAbilityManager, atd.). Rozhraní definuje, jak přijímá data z prezentační vrstvy. Základní funkcionalita spočívá ve zpracování dat z prezentační vrstvy a vytvoření kompletního objektu, se kterým se dále pracuje nebo se pošle na datovou vrstvu pro uložení.\\
-\textbf{ITreeManager} se stará u připravení stromové struktury pro zobrazení. Vytváří z objektů stromovou strukturu a přidává do struktury metadata, které slouží pro zobrazení a práci na prezentační vrstvě.\\
+\\
+\noindent\textbf{ITreeManager} se stará u připravení stromové struktury pro zobrazení. Vytváří z objektů stromovou strukturu a přidává do struktury metadata, které slouží pro zobrazení a práci na prezentační vrstvě.\\
+\\
 \textbf{IMapManager} se stará o zpracování dat ohledně mapy. Převádí zobrazenou mapu pro uživatele na formu, ve které se dá snadno uložit do databáze. Propojuje veškeré šablony s mapou.\\
+\\
 \textbf{ILangManager} se stará o zpracování dat z prezentační vrstvy ohledně jazyků.\\
+\\
 \textbf{ITabManager} se stará o vytváření překladových záložek pro prezentační vrstvu. Toto rozhraní nemá DAO rozhraní, protože veškeré informace které potřebuje, získá přímo z konkrétních IObjectDAO tříd. Jejím hlavním úkolem je zpracování všech překladů jedné šablony a připravení objektů pro uložení.\\
 
 
@@ -272,9 +290,9 @@ Druhá část diagramu se týká stromové struktury, která se používá pro v
 Poslední problém návrhu databáze se skrýval v návrhu ukládání vazeb mezi jednotlivými objekty. V úvahu připadali dvě možnosti. První možnost byla zachytit veškeré vazby mezi objekty pomocí tabulek relations, které by obsahovaly pouze dvojici klíčů z obou tabulek. Toto řešení by bylo rychlé a jednoduché na používání, bohužel se u některých vazeb nedalo použít samotné. Například u dobrodružství se podřazené objekty můžou sdružovat dále do složek, čehož by se pouze pomocí těchto vazeb nedalo docílit. Musela se zde navíc využít stromová struktura použitá pro všechny šablony a jejich základní rozřazení, čímž by vznikaly duplicitní data. Duplicitní data sebou nesou dva základní problémy. První z nich je samozřejmě větší množství dat, které je potřebné uložit. V tomto případě by se však nejednalo o drastický nárůst, který by dělal problém. Druhý a závažnější problém se týká aktuálnosti dat. Bylo by zapotřebí udržovat veškeré údaje aktuální a stejné, což by mělo velké nároky na složitost ukládání a zpomalovalo by to některé operace, které je zapotřebí, aby aplikace prováděla okamžitě (například drag and drop rozřazování). Z těchto důvodů jsem se rozhodl zvolit druhou možnost, kde veškeré vazby mezi objekty jsou uloženy pouze ve stromové struktuře popsané výše. Problém bude vznikat při operacích exportu, kde bude vazbu mezi objekty dohledávat ze stromové struktury. Tyto operace se však neprovádí tak často a není zde velký důraz na okamžitou odezvu. 
 
 	\section{Model XML souborů}
-S~doménovým modelem úzce souvisí návrh struktury xml souborů. Struktura těchto souborů je velmi důležitá. Na základě této definované struktury bude probíhat komunikace s~mobilní aplikací MobChar. Formát základních šablon předmětů, kouzel, schopností, efektů a~postav, byl převzat z~původní aplikace MobChar pro hráče, aby byla zachována konzistence mezi aplikacemi. Dále se zaměřuji pouze na nové části, což jsou příšery a dobrodružství. Pokud vás zajímá struktura základních šablon, nahlédněte do bakalářky týkající se aplikace MobChar nebo do přiložené kompletní dokumentace.\\
+S~doménovým modelem úzce souvisí návrh struktury xml souborů. Struktura těchto souborů je velmi důležitá. Na základě této definované struktury bude probíhat komunikace s~mobilní aplikací MobChar. Formát základních šablon předmětů, kouzel, schopností, efektů a~postav, byl převzat z~původní aplikace MobChar pro hráče, aby byla zachována konzistence mezi aplikacemi. Dále se zaměřuji pouze na nové části, což jsou příšery a dobrodružství. Pokud vás zajímá struktura základních šablon, nahlédněte do bakalářky týkající se aplikace MobChar\cite{Weberova_2017} nebo do přiložené kompletní dokumentace.\\
 \\
-Strukturu xml jsem namodeloval diagramem, který se normálně využívá pro modelování tříd. Pro tento případ vypovídající hodnota diagramu je dostačující a jasně zadefinovává strukturu xml. Entity v diagramu které jsou znázorněné žlutou barvou znázorňují již konkrétní xml tag, který uvnitř obsahuje pouze hodnotu a žádné další vnořené tagy. Oproti tomu bílé entity znázorňují pouze obalující tag, který uvnitř obsahuje strukturu další tagů. Každá entita v diagramu znázorňuje jeden tag ve výsledném xml dokumentu. Parcialita a kardinalita v diagramu znázorňuje povinnost případně množství tagů, které se na daném místě v XML souboru můžou objevit. Kořenový tag je vždy označen textem  \clqq ROOT\crqq .
+Strukturu XML jsem namodeloval diagramem, který se normálně využívá pro modelování tříd. Pro tento případ vypovídající hodnota diagramu je dostačující a jasně zadefinovává strukturu xml. Entity v diagramu které jsou znázorněné žlutou barvou znázorňují již konkrétní XML tag, který uvnitř obsahuje pouze hodnotu a žádné další vnořené tagy. Oproti tomu bílé entity znázorňují pouze obalující tag, který uvnitř obsahuje strukturu další tagů. Každá entita v diagramu znázorňuje jeden tag ve výsledném XML dokumentu. Parcialita a kardinalita v diagramu znázorňuje povinnost případně množství tagů, které se na daném místě v XML souboru můžou objevit. Kořenový tag je vždy označen textem  \clqq ROOT\crqq .
 
 \subsection{Dobrodružství}
 \begin{figure}\centering
@@ -319,7 +337,7 @@ Na diagramu \ref{fig:model_nasazeni} můžeme vidět, že software je určený p
 
 \section{Využité knihovny}
 \subsection{Knihovna pro práci s XML}
-Velká část programu se týká práce s XML šablonami. Bylo zapotřebí vybrat vhodnou knihovnu, která by veškerou práci co nejvíce usnadnila. Hledal jsem knihovnu, která by dokázala namapovat třídu a její atributy přímo na XML šablony. Bohužel taková knihovna pro Python neexistuje. Proto jsem využil knihovnu lxml\cite{lxml}, která umí základní parsování XML souborů a napsal jsem pro ní rozšíření, které umožňuje mapovat objekty přímo na strukturu XML souboru. V ukázce kódu \ref{python_xml} můžeme vidět namapování objektů \textit{Effect} a \textit{Modifier} a jejich vzájemné provázání. \\
+Velká část programu se týká práce s XML šablonami. Bylo zapotřebí vybrat vhodnou knihovnu, která by veškerou práci co nejvíce usnadnila. Hledal jsem knihovnu, která by dokázala namapovat třídu a její atributy přímo na XML šablony. Bohužel taková knihovna pro Python neexistuje. Proto jsem využil knihovnu lxml\cite{lxml}, která umí základní parsování XML souborů a napsal jsem pro ní rozšíření, které umožňuje mapovat objekty přímo na strukturu XML souboru. V ukázce kódu \ref{code:XMLTemplates} můžeme vidět namapování objektů \textit{Effect} a \textit{Modifier} a jejich vzájemné provázání. \\
 Rozšíření obsahuje tři základní třídy, \textit{XElement}, \textit{XAttribElement} a \textit{XInstance}. Každá z těchto tříd reprezentuje jiný typ atributu v objektu. Třída \textit{XElement} reprezentuje základní atribut, který nemá překlady. Jako parametr, kromě jména tagu, přijímá volitelný atribut enum, kterým se dá nastavit, že hodnota se má mapovat na konkrétním enum.\\
 Třída XAttribElement reprezentuje tagy, které mohou navíc obsahovat atribute. Nejčastěji se to využívá u atributů, které jsou vícejazyčné. Atributem lang se zde nastavuje jazyk překladu.\\
 Poslední třída XInstance reprezentuje vazbu na další mapovací třídu. Jako parametr komě jména, přijímá instanci cílové mapovací třídy.\\
@@ -327,10 +345,14 @@ Poslední třída XInstance reprezentuje vazbu na další mapovací třídu. Jak
 Třída \textit{XMLTemplate}, ze které všechny mapovací třídy dědí, obsahuje dvě základní funkce, \textit{import\_xml} a \textit{create\_xml}. Funkce \textit{import\_xml} načte XML soubor a vrátí seznam objektů, které se dále načítají do databáze. O proti tomu třída \textit{create\_xml} přijímá seznam objektů, ze kterých vytvoří strukturovaný XML soubor.
 
 
-\begin{lstlisting}[float,language=Python, label=python_xml, caption=Mapování objektů na xml strukturu]
+%\begin{lstlisting}[float,language=Python, label=python_xml, caption=Mapování objektů na xml strukturu]
+\begin{listing}[htbp]
+\caption{\label{code:XMLTemplates}Mapování objektů na XML strukturu}
+%\inputminted{python}[linenos]{resources/XMLTemplate.py}
+\begin{minted}[]{python}
 class XMLModifier(XMLTemplate):
     ROOT_NAME = 'modifier'
-    OBJECT_TYPE = ObjectType.MODIFIER
+    OBJECT_TYPE = ObjectType.MODIFIER%
 
 
     def __init__(self):
@@ -352,8 +374,8 @@ class XMLEffect(XMLTemplate):
         self.description = XAttribElement('description', 'lang')
         self.targetType = XElement('targetType')
         self.modifiers = XInstance('modifiers', XMLModifier)
-
-\end{lstlisting}
+\end{minted}
+\end{listing}
 
 \subsection{Grafická knihovna}
 Pro Python existuje velké množství grafických knihoven. Některé jsou zaměřené na mobilní aplikace, některé hlavně pro webové rozhraní. Vybrat mezi takovým množstvím knihoven není lehké. Mezi nejznámější patří knihovny Kivy, PyGame, TkInter a PyQt. Knihoven existují desítky další, ale v této bakalářce se věnuji pouze nejzajímavějším z nich.\\
