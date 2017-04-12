@@ -91,14 +91,11 @@ class TabWidget(QtWidgets.QFrame):
         :param item: tree item in tree widget, has data
         """
 
-
         for layout in self.layouts_changed:
-            print(layout)
             layout.save_data()
         self.layouts_changed.clear()
         Sync().delete_data('Input_synchronize')
-        item_tree_id = item.data(0, 5)
-        item = PlayerTreeManager().get_object(item_tree_id)
+        item = item.data(0, 11)
         self.change_object(item.id, ObjectType(item.object_type))
 
 

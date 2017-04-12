@@ -19,3 +19,6 @@ class NodeObject(Node):
     @object.setter
     def object(self, value):
         self.__object = value
+
+    def __repr__(self):
+        return '<structure.tree.NodeObject -> {}'.format(self.object.object_type)

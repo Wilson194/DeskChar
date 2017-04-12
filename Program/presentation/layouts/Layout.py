@@ -149,8 +149,8 @@ class Layout(QtWidgets.QVBoxLayout):
         label.setText(TR().tr(name) + ':')
         grid.addWidget(label, yposition, xposition, 1, 1)
         input = QtWidgets.QSpinBox()
-        input.setMaximum(10000)
-        input.setMinimum(-20)
+        input.setMaximum(100000)
+        input.setMinimum(-10000)
         input.setObjectName(name)
         if synchronize:
             self.synchronize(input)

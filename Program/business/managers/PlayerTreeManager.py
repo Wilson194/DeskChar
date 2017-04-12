@@ -1,4 +1,7 @@
 from business.managers.LangManager import LangManager
+from data.DAO.EffectDAO import EffectDAO
+from data.DAO.ItemDAO import ItemDAO
+from data.DAO.ModifierDAO import ModifierDAO
 from data.database.ObjectDatabase import ObjectDatabase
 from data.xml.ParserHandler import ParserHandler
 from structure.tree.NodeObject import NodeObject
@@ -26,8 +29,10 @@ class PlayerTreeManager:
         """
         roots = self.treeDAO.get_root_nodes(object_type)
 
-        for root in roots:
-            self.__create_tree(root, object_type)
+        for i in range(len(roots)):
+            root = roots[i]
+            new = self.__create_tree(root, object_type)
+            roots[i] = new
 
         return roots
 
@@ -47,10 +52,32 @@ class PlayerTreeManager:
         :param node: Current node
         :param type: parent of node
         """
+
+        if node.id == None:
+            node.id = -1
         children = self.treeDAO.get_children_nodes(type, node.id)
-        for child in children:
-            self.__create_tree(child, type)
+
+        if isinstance(node, NodeObject):
+            if node.object.object_type is ObjectType.EFFECT:
+                modifiers = ModifierDAO().get_link(node.object.id)
+                for modifier in modifiers:
+                    modifierNode = NodeObject(None, modifier.name, node.id, modifier)
+                    children.append(modifierNode)
+
+            if node.object.object_type is ObjectType.ITEM:
+                effects = EffectDAO().get_link(node.object.id, node.object.object_type)
+                for effect in effects:
+                    effectNode = NodeObject(None, effect.name, node.id, effect)
+                    children.append(effectNode)
+
+        for i in range(len(children)):
+            child = children[i]
+            parentType = type if isinstance(child, Folder) else child.object.object_type
+            new = self.__create_tree(child, parentType)
+            children[i] = new
+
         node.children = children
+        return node
 
 
     def create_node(self, node_type: NodeType, name: str, parent_id: int = None,
@@ -66,17 +93,21 @@ class PlayerTreeManager:
         """
         if node_type.value is NodeType.FOLDER.value:
             node = Folder(None, name, parent_id)
+            id = self.treeDAO.insert_node(node, object_type)  # TODO : remove object_type
+            node.id = id
         else:
             id = target_object.DAO()().create(target_object())
+
             obj = target_object(id)
-            node = NodeObject(None, name, parent_id, obj)
-        id = self.treeDAO.insert_node(node, object_type)  # TODO : remove object_type
-        node.id = id
+            node = self.treeDAO.get_node_by_object(obj)
+            node.name = name
+            self.treeDAO.update_node(node)  # TODO : remove object_type
+
         return node
 
 
     def create_node_link(self, nodeType: NodeType, name: str, parentId: int,
-                         parentType: ObjectType = None, targetObject: object = None) -> Node:
+                         parentType: ObjectType = None, targetObject: object = None):
         """
         Create node in tree, that link to some object, that already exist        
         :param nodeType: Type of node (Folder, NodeObject)
@@ -88,20 +119,37 @@ class PlayerTreeManager:
         """
         if nodeType is NodeType.FOLDER:
             node = Folder(None, name, parentId)
+            self.treeDAO.insert_node(node, parentType)
         else:
-            node = NodeObject(None, name, parentId, targetObject)
+            if targetObject.object_type is ObjectType.MODIFIER:
 
-        id = self.treeDAO.insert_node(node, parentType)
-        node.id = id
-        return node
+                parentObjectId = self.treeDAO.get_node(parentId).object.id
+                parentObject = parentType.instance().DAO()().get(parentObjectId)
+
+                EffectDAO().create_link(parentObject, targetObject)
+
+            elif targetObject.object_type is ObjectType.EFFECT and parentType is ObjectType.ITEM:
+                parentObjectId = self.treeDAO.get_node(parentId).object.id
+                parentObject = parentType.instance().DAO()().get(parentObjectId)
+
+                ItemDAO().create_effect_link(parentObject, targetObject)
+            else:
+                node = NodeObject(None, name, parentId, targetObject)
+                self.treeDAO.insert_node(node, parentType)
 
 
-    def delete_node(self, id):
+    def delete_node(self, id, targetObject):
         """
         Delete node
         :param id: id of node
         """
-        self.treeDAO.delete_node(id)
+        if targetObject and targetObject.object_type is ObjectType.MODIFIER:
+            node = self.treeDAO.get_node_by_object(targetObject)
+            print(node.parent_id)
+            parentObject = self.treeDAO.get_node(node.parent_id).object
+            EffectDAO().delete_link(parentObject, targetObject)
+        else:
+            self.treeDAO.delete_node(id)
 
 
     def get_node(self, id: int):
@@ -130,7 +178,9 @@ class PlayerTreeManager:
         """
         node = self.treeDAO.get_node(nodeId)
         parentNode = self.treeDAO.get_node(parentId)
-        if node.parent_id != parentId and self.available_parent(node, parentNode, context):
+        if hasattr(node, 'parent_id') and node.parent_id != parentId and self.available_parent(node,
+                                                                                               parentNode,
+                                                                                               context):
             node.parent_id = parentId
             self.treeDAO.update_node(node)
 
@@ -221,7 +271,7 @@ class PlayerTreeManager:
         ParserHandler().create_xml(exporting, path)
 
 
-    def import_from_xml(self, file_path, type, parent=None, strict: bool = False):
+    def import_from_xml(self, file_path, parentType, parent=None, strict: bool = False):
         """
         Import templates from XML file
         :param file_path: path to XML file
@@ -233,27 +283,42 @@ class PlayerTreeManager:
 
         ObjectDatabase('test.db').set_many(True)
 
-        if not LangManager().lang_exists('cs'):  # TODO : default lang
-            LangManager().create_lang('Čeština', 'cs')
+        for languages in objects:
+            leader = languages.popitem()
 
-        for object in objects:
-            if strict and object[list(object.keys())[0]].object_type != type:
+            leaderCode = leader[0]
+            leaderObejct = leader[1]
+
+            if strict and leaderObejct.object_type != parentType:
                 continue
 
-            default = object.pop('cs')  # TODO: default lang
-            default_id = ObjectDatabase('test.db').insert_object(default, type.name.title())
-            default.id = default_id
-            for lang in object.values():
-                if not LangManager().lang_exists(lang.lang):  # TODO : default lang
-                    LangManager().create_lang(lang.lang, lang.lang)
-                lang.id = default_id
-                ObjectDatabase('test.db').update_object(lang, type.name.title())
+            if not LangManager().lang_exists(leaderCode):
+                LangManager().create_lang(leaderCode, leaderCode)
 
-            node = NodeObject(None, default.name, parent, default)
-            self.treeDAO.insert_node(node, default.object_type)
+            leaderId = ObjectDatabase('test.db').insert_object(leaderObejct,
+                                                               parentType.name.title(), parentType,
+                                                               parent)
+            leaderObejct.id = leaderId
+
+            for lang in languages.values():
+                if not LangManager().lang_exists(lang.lang):
+                    LangManager().create_lang(lang.lang, lang.lang)
+
+                lang.id = leaderId
+                ObjectDatabase('test.db').update_object(lang, parentType.name.title())
 
         ObjectDatabase('test.db').insert_many_execute()
         ObjectDatabase('test.db').set_many(False)
+
+
+    def create_tree_dependences(self, objects: list, parentId: int, parentType: object):
+        for item in objects:
+            node = NodeObject(None, item.name, parentId, item)
+            nodeId = self.treeDAO.insert_node(node, parentType)
+
+            for value in item.__dict__.values():
+                if type(value) is list:
+                    self.create_tree_dependences(value, nodeId, parentType)
 
 
     def tree_folder(self, node: Node) -> bool:

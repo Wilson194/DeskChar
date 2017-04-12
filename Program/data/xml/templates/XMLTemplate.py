@@ -35,10 +35,12 @@ class XElement:
             if self.__enum:
                 setattr(obj, name, self.__enum.by_name(self.__enum, attr.text))
             else:
-                try:
-                    value = int(attr.text)
-                except:
+                lang = attr.get('lang')
+                if lang:
                     value = attr.text
+                else:
+                    value = int(attr.text)
+
                 setattr(obj, name, value)
         return objects
 
@@ -183,6 +185,7 @@ class XMLTemplate:
         if len(objects) == 0:
             objects['cs'] = self.OBJECT_TYPE.instance()(None, 'cs')  # TODO: default lang
 
+        # Remap instances for easy finding
         xInstances = {}
         for key, instance in self.__dict__.items():
             xInstances[instance.name] = (key, instance)
@@ -191,7 +194,8 @@ class XMLTemplate:
             if attr.tag in xInstances:
                 if attr.tag == 'id':
                     continue
-                objects = xInstances[attr.tag][1].set_attributes(objects, xInstances[attr.tag][0], attr)
+                objects = xInstances[attr.tag][1].set_attributes(objects, xInstances[attr.tag][0],
+                                                                 attr)
 
         return objects
 

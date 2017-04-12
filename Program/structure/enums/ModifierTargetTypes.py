@@ -26,9 +26,9 @@ class ModifierTargetTypes(AutoNumber):
             return self.RANGED_WEAPON
         if name == 'AFFECTS_THROWABLE_WEAPON':
             return self.THROWABLE_WEAPON
-        if name == 'AFFECT_ARMOR':
+        if name == 'AFFECTS_ARMOR':
             return self.ARMOR
-        if name == 'AFFECT_CONTAINER':
+        if name == 'AFFECTS_CONTAINER':
             return self.CONTAINER
         if name == 'AFFECTS_MONEY':
             return self.MONEY

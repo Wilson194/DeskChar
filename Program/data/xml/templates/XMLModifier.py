@@ -18,8 +18,8 @@ class XMLModifier(XMLTemplate):
 
         self.targetType = XElement('targetType', ModifierTargetTypes)
 
-        self.characterTargetAttribute = XElement('characterTargetAttribute', CharacterAttributes)
-        self.itemTargetAttribute = XElement('itemTargetAttribute', ItemsAttributes)
+        self.characterTargetAttribute = XElement('characterAttribute', CharacterAttributes)
+        self.itemTargetAttribute = XElement('itemAttribute', ItemsAttributes)
 
         self.valueType = XElement('valueType', ModifierValueTypes)
         self.value = XElement('value')

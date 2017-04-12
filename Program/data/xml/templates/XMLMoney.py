@@ -1,4 +1,5 @@
-from data.xml.templates.XMLTemplate import XMLTemplate, XElement, XAttribElement
+from data.xml.templates.XMLEffectl import XMLEffect
+from data.xml.templates.XMLTemplate import XMLTemplate, XElement, XAttribElement, XInstance
 from structure.enums.Items import Items
 
 
@@ -14,3 +15,5 @@ class XMLMoney(XMLTemplate):
         self.copper = XElement('copper')
         self.silver = XElement('silver')
         self.gold = XElement('gold')
+
+        self.effects = XInstance('effects', XMLEffect)

@@ -185,3 +185,38 @@ class DatabaseTables:
             database.create_table('player_tree_structure', structure_columns, structure_foreigns)
         except OperationalError:
             pass
+
+        # ///////////// Effect modifiers \\\\\\\\\\\\\\\\\\
+
+        effectModifierColumns = [
+            Column('effect_id', 'INTEGER', not_null=True),
+            Column('modifier_id', 'INTEGER', not_null=True),
+        ]
+
+        effectModifierForeigns = [
+            Foreign('effect_id', 'Effect', 'ID', 'CASCADE'),
+            Foreign('modifier_id', 'Modifier', 'ID', 'CASCADE'),
+        ]
+
+        try:
+            database.create_table('Effect_modifier', effectModifierColumns, effectModifierForeigns)
+        except OperationalError:
+            pass
+
+        # ///////////// Items effects \\\\\\\\\\\\\\\\\\
+
+        itemEffectColumns = [
+            Column('effect_id', 'INTEGER', not_null=True),
+            Column('item_id', 'INTEGER', not_null=True),
+            Column('item_type', 'INTEGER', not_null=True),
+
+        ]
+
+        itemEffectForeigns = [
+            Foreign('effect_id', 'Effect', 'ID', 'CASCADE'),
+        ]
+
+        try:
+            database.create_table('Item_effect', itemEffectColumns, itemEffectForeigns)
+        except OperationalError:
+            pass

@@ -1,4 +1,5 @@
 from structure.enums.Items import Items
+from structure.enums.ObjectType import ObjectType
 from structure.items.Item import Item
 
 
@@ -14,11 +15,18 @@ class Container(Item):
         self.__capacity = capacity
         self.__type = Items.CONTAINER
 
+        self.__items = []
+
 
     def __name__(self):
         names = super().__name__()
         names.append('Container')
         return names
+
+
+    @property
+    def treeChildren(self):
+        return [ObjectType.ITEM] + super().treeChildren
 
 
     @staticmethod

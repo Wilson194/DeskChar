@@ -68,4 +68,4 @@ class Object(ABC):
 
     @abstractmethod
     def __name__(self):
-        return ['NodeObject']
+        return ['Object']

@@ -127,3 +127,9 @@ class ItemDAO(DAO, IItemDAO):
             if line['lang'] not in languages:
                 languages.append(line['lang'])
         return languages
+
+
+    def create_effect_link(self, item, effect):
+        self.database.insert('Item_effect',
+                             {'effect_id': effect.id, 'item_id': item.id,
+                              'item_type': item.type.value})

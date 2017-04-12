@@ -1,4 +1,5 @@
 from structure.enums.Items import Items
+from structure.enums.ObjectType import ObjectType
 from structure.items.Item import Item
 
 

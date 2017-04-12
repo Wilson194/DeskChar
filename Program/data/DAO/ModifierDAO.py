@@ -81,5 +81,16 @@ class ModifierDAO(DAO, IModifierDAO):
         return modifier
 
 
+    def get_link(self, effectId):
+        data = self.database.select('Effect_modifier', {'effect_id': effectId})
+
+        modifiers = []
+        for i in data:
+            modifiers.append(self.get(i['modifier_id']))
+
+        return modifiers
+
+
+
     def get_all(self) -> list:
         return []

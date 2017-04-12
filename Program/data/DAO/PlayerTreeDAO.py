@@ -56,7 +56,8 @@ class PlayerTreeDAO:
         """
 
         node = self.database.select(self.TABLE_NAME,
-                                    {'target_id'  : object.id, 'target_type': object.object_type.value,
+                                    {'target_id'  : object.id,
+                                     'target_type': object.object_type.value,
                                      'parent_type': object.object_type.value})[0]
 
         return self.__get_children_objects(targetType, node['ID'], object.object_type)
@@ -139,6 +140,14 @@ class PlayerTreeDAO:
         :param id: id of node
         """
         self.database.delete(self.TABLE_NAME, id)
+
+
+    def get_node_by_object(self, object: object):
+        data = self.database.select(self.TABLE_NAME,
+                                    {'target_id'  : object.id,
+                                     'parent_type': object.object_type.value})
+
+        return self.get_node(data[0]['id'])
 
 
 def map_objects(data: dict) -> list:

@@ -14,6 +14,7 @@ class Item(Object):
         self.__weight = weight
         self.__price = price
         self.__type = Items.GENERIC
+        self.__effects = []
 
 
     def __name__(self):
@@ -62,6 +63,11 @@ class Item(Object):
 
 
     @property
+    def treeChildren(self):
+        return [ObjectType.EFFECT] + super().treeChildren
+
+
+    @property
     def parent_id(self):
         return self.__parent_id
 
@@ -94,6 +100,16 @@ class Item(Object):
     @property
     def type(self):
         return self.__type
+
+
+    @property
+    def effects(self):
+        return self.__effects
+
+
+    @effects.setter
+    def effects(self, value):
+        self.__effects = value
 
 
     def __eq__(self, other):

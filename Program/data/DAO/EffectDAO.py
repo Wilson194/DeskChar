@@ -1,5 +1,5 @@
 from data.DAO.DAO import DAO
-from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.ModifierDAO import ModifierDAO
 from data.DAO.interface.IEffectDAO import IEffectDAO
 
 from data.database.Database import Database
@@ -46,8 +46,7 @@ class EffectDAO(DAO, IEffectDAO):
         effect = Effect(effect_id, lang, tr_data.get('name', ''), tr_data.get('description', ''),
                         targetType)
 
-        modifiers = PlayerTreeDAO().get_children_objects(ObjectType.MODIFIER, effect)
-        effect.modifiers = modifiers
+        effect.modifiers = self.get_modifiers(effect_id)
 
         return effect
 
@@ -64,5 +63,25 @@ class EffectDAO(DAO, IEffectDAO):
 
 
     def create_link(self, object, target):
-        self.database.insert('Effect_modifiers',
+        self.database.insert('Effect_modifier',
                              {'effect_id': object.id, 'modifier_id': target.id})
+
+
+    def get_link(self, item_id, item_type):
+        data = self.database.select('Item_effect',
+                                    {'item_id': item_id, 'item_type': item_type.value})
+
+        effects = []
+        for i in data:
+            effects.append(self.get(i['effect_id']))
+
+        return effects
+
+
+    def get_modifiers(self, object_id):
+        datas = self.database.select('Effect_modifier', {'effect_id': object_id})
+        modifiers = []
+        for one in datas:
+            modifiers.append(ModifierDAO().get(one['modifier_id']))
+
+        return modifiers

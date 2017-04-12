@@ -7,6 +7,17 @@ class Node(ABC):
         self.__name = name
         self.__parent_id = parent_id
 
+        self.__children = []
+
+
+    @property
+    def children(self):
+        return self.__children
+
+
+    @children.setter
+    def children(self, value):
+        self.__children = value
 
     @property
     def id(self):

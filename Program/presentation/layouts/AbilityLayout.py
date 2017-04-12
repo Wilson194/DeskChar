@@ -59,8 +59,8 @@ class AbilityLayout(Layout):
         self.name_input.setPlainText(ability.name)
         self.description_input.setPlainText(ability.description)
         self.chance_input.setPlainText(ability.chance)
-        class_index = ability.drd_class if ability.drd_class is not None else 0
-        race_index = ability.drd_race if ability.drd_race is not None else 0
+        class_index = ability.drd_class.value if ability.drd_class is not None else 0
+        race_index = ability.drd_race.value if ability.drd_race is not None else 0
 
         self.class_input.setCurrentIndex(class_index)
         self.race_input.setCurrentIndex(race_index)

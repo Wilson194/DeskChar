@@ -48,6 +48,8 @@ class DAO:
         for line in data:
             if line['lang'] not in languages:
                 languages.append(line['lang'])
+        # if len(languages) == 0:
+        #     languages.append('cs') #TODO: Default lang
         return languages
 
 

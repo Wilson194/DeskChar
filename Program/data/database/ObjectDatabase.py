@@ -1,12 +1,8 @@
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from data.database.Database import *
 from structure.enums.AutoNumber import AutoNumber
-from structure.enums.Classes import Classes
-from structure.enums.Handling import Handling
-from structure.enums.Items import Items
 from structure.enums.ObjectType import ObjectType
-from structure.enums.Races import Races
-from structure.enums.WeaponWeight import WeaponWeight
+
 from structure.general.Object import Object
 from structure.tree.NodeObject import NodeObject
 
@@ -18,7 +14,9 @@ class ObjectDatabase(Database):
     """
 
 
-    def insert_object(self, obj: Object, database_table: str = None) -> int:
+    def insert_object(self, obj: Object, database_table: str = None, rootParentType: object = None,
+                      parentId: int = None, parentObject: object = None,
+                      recursionLevel: int = 1) -> int:
         """
         Insert object to database, map translates to translate table
         :param obj: given object
@@ -28,6 +26,11 @@ class ObjectDatabase(Database):
         database_name = database_table if database_table else obj.__name__()[-1]
         str_values = {}
         int_values = {}
+        list_values = []
+
+        print(recursionLevel * '---', end='')
+        print(obj.name)
+
         for key, value in obj.__dict__.items():
             if not compare(key, obj.__name__()):
                 continue
@@ -35,7 +38,8 @@ class ObjectDatabase(Database):
                 key = substr(key, obj.__name__())
             if key not in obj.TABLE_SCHEMA:
                 if type(value) is list:
-                    self.__create_sub_objects(value, obj)
+                    for item in value:
+                        list_values.append(item)
             elif isinstance(value, AutoNumber):
                 int_values[key] = value.value
             elif type(value) is int:
@@ -59,6 +63,30 @@ class ObjectDatabase(Database):
                 'value'    : value
             }
             self.insert('translates', data_dict)
+
+        # Insert into tree with same object
+        obj.id = db_id
+
+        nodeParent = parentId if not parentObject else None
+
+        node = NodeObject(None, obj.name, nodeParent, obj)
+        nodeId = PlayerTreeDAO().insert_node(node, obj.object_type)
+
+        # Add to importing tree
+        if parentObject:
+            if obj.object_type is ObjectType.MODIFIER:
+                from data.DAO.EffectDAO import EffectDAO
+                EffectDAO().create_link(parentObject, obj)
+            elif obj.object_type is ObjectType.EFFECT and parentObject.object_type == ObjectType.ITEM:
+                from data.DAO.ItemDAO import ItemDAO
+                ItemDAO().create_effect_link(parentObject,obj)
+            else:
+                node = NodeObject(None, obj.name, parentId, obj)
+                PlayerTreeDAO().insert_node(node, rootParentType)
+
+        for item in list_values:
+            self.insert_object(item, item.object_type.name.title(), rootParentType, nodeId, obj,
+                               recursionLevel + 1)
 
         return db_id
 
@@ -121,16 +149,6 @@ class ObjectDatabase(Database):
                         'value': value
                     }
                     self.update('translates', db_line['ID'], data_dict)
-
-
-    def __create_sub_objects(self, objects: list, parent: object):
-        treeDAO = PlayerTreeDAO()
-        for object in objects:
-            object.id = None
-            id = object.DAO()().create(object)
-            object.id = id
-            node = NodeObject(None, object.name, None, object)
-            treeDAO.insert_node(node, object.object_type)
 
 
 def compare(name: str, objects: list) -> bool:

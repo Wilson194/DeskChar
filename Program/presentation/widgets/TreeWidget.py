@@ -135,6 +135,7 @@ class TreeWidget(QtWidgets.QFrame):
         if indexes:
             item_type = indexes[0].data(6)
             item_id = indexes[0].data(5)
+            targetObject = indexes[0].data(11)
 
             menu = QtWidgets.QMenu()
 
@@ -162,17 +163,17 @@ class TreeWidget(QtWidgets.QFrame):
 
             action = menu.exec_(self.treeWidget.viewport().mapToGlobal(position))
             if action:
-                self.contest_menu_actions(action, item_id)
+                self.contest_menu_actions(action, item_id, targetObject)
 
 
-    def contest_menu_actions(self, action, item_id):
+    def contest_menu_actions(self, action, item_id, targetObject):
         """
             Do action based on contest menu selected
         :param action: selected action
         :param item_id: item id (ID in player tree structure)
         """
         if action.data() == 'delete':
-            self.tree_manager.delete_node(item_id)
+            self.tree_manager.delete_node(item_id, targetObject)
             self.draw_data()
         elif action.data() == 'new':
             data, choice = NewTreeItem.get_data(
@@ -197,11 +198,12 @@ class TreeWidget(QtWidgets.QFrame):
         elif action.data() == 'add_object':
             node = self.tree_manager.get_node(item_id)
             data, ok = AddAnotherObject.get_data(node)
-            for type, items in data.items():
-                for item in items:
-                    node = self.tree_manager.get_node(item)
-                    newNode = self.tree_manager.create_node_link(node.nodeType, node.name, item_id,
-                                                                 self.__data_type, node.object)
+            if ok:
+                for type, items in data.items():
+                    for item in items:
+                        node = self.tree_manager.get_node(item)
+                        self.tree_manager.create_node_link(node.nodeType, node.name, item_id,
+                                                                     self.__data_type, node.object)
 
             self.draw_data()
 
@@ -304,10 +306,12 @@ class TreeWidget(QtWidgets.QFrame):
         """
         if parent is None:
             parent = self.treeWidget
+
         for item in items:
             tree_item = QtWidgets.QTreeWidgetItem(parent)
             tree_item.setText(0, item.name)
             tree_item.setData(0, 5, QtCore.QVariant(item.id))
+            tree_item.setData(0, 12, QtCore.QVariant(item))
 
             if isinstance(item, Folder):
                 folder_icon = QtGui.QIcon()
@@ -326,6 +330,7 @@ class TreeWidget(QtWidgets.QFrame):
                     tree_item.flags() | QtCore.Qt.ItemIsUserCheckable)
                 self.set_items(item.children, tree_item)
                 tree_item.setData(0, 6, QtCore.QVariant(NodeType.OBJECT.value))
+                tree_item.setData(0, 11, QtCore.QVariant(item.object))
 
             if self.checking:
                 if isinstance(item, NodeObject) and self.__data_type is item.object.object_type:

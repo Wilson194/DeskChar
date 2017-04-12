@@ -1,3 +1,4 @@
+from data.xml.templates.XMLEffectl import XMLEffect
 from data.xml.templates.XMLTemplate import XMLTemplate, XAttribElement, XElement, XInstance
 from structure.enums.Handling import Handling
 from structure.enums.Items import Items
@@ -11,6 +12,7 @@ class XMLMeleeWeapon(XMLTemplate):
 
     def __init__(self):
         self.id = XElement('id')
+        self.parent_id = XElement('parentId')
         self.name = XAttribElement('name', 'lang')
         self.description = XAttribElement('description', 'lang')
         self.price = XElement('price')
@@ -21,3 +23,5 @@ class XMLMeleeWeapon(XMLTemplate):
         self.length = XElement('length')
         self.weaponWeight = XElement('weaponWeight', WeaponWeight)
         self.handling = XElement('handling', Handling)
+
+        self.effects = XInstance('effects', XMLEffect)
