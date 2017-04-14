@@ -59,7 +59,7 @@ class ContainerLayout(Layout):
         self.header.setText(item.name)
         self.name_input.setPlainText(item.name)
         self.description_input.setPlainText(item.description)
-        self.weight_input.setValue(item.weight)
+        self.weight_input.setValue(item.weight if item.weight else 0)
         self.price_input.setValue(item.price if item.price else 0)
         self.capacity_input.setValue(item.capacity if item.capacity else 0)
 

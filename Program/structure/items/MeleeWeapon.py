@@ -105,3 +105,8 @@ class MeleeWeapon(Item):
     @handling.setter
     def handling(self, value):
         self.__handling = value
+
+
+    @property
+    def type(self):
+        return self.__type

@@ -28,9 +28,6 @@ class ObjectDatabase(Database):
         int_values = {}
         list_values = []
 
-        print(recursionLevel * '---', end='')
-        print(obj.name)
-
         for key, value in obj.__dict__.items():
             if not compare(key, obj.__name__()):
                 continue
@@ -79,7 +76,7 @@ class ObjectDatabase(Database):
                 EffectDAO().create_link(parentObject, obj)
             elif obj.object_type is ObjectType.EFFECT and parentObject.object_type == ObjectType.ITEM:
                 from data.DAO.ItemDAO import ItemDAO
-                ItemDAO().create_effect_link(parentObject,obj)
+                ItemDAO().create_effect_link(parentObject, obj)
             else:
                 node = NodeObject(None, obj.name, parentId, obj)
                 PlayerTreeDAO().insert_node(node, rootParentType)

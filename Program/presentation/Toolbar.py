@@ -53,3 +53,11 @@ class ToolBar(QToolBar):
 
         character_action.triggered.connect(
             lambda: self.templates_tool_signal.emit(ObjectType.CHARACTER))
+
+        toolbar.addSeparator()
+
+        monster_action = QAction(QIcon(ObjectType.MONSTER.icon()), 'Monster', self.__parent)
+        toolbar.addAction(monster_action)
+
+        monster_action.triggered.connect(
+            lambda: self.templates_tool_signal.emit(ObjectType.MONSTER))

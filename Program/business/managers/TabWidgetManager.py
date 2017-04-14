@@ -21,6 +21,10 @@ class TabWidgetManager:
         """
         data = []
         langs = target_type.instance().DAO()().get_languages(target_id)
+
+        if not langs:
+            langs.append('cs')  # TODO default
+
         for lang in langs:
             object = target_type.instance().DAO()().get(target_id, lang)
             data.append(object)

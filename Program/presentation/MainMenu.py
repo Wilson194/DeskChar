@@ -64,6 +64,9 @@ class MainMenu(QMenuBar):
         character_templates = QAction(QIcon(ObjectType.CHARACTER.icon()), TR().tr('Menu.character'),
                                       self)
 
+        monster_templates = QAction(QIcon(ObjectType.MONSTER.icon()), TR().tr('Menu.monster'),
+                                    self)
+
         ability_templates.triggered.connect(
             lambda: self.templates_menu_signal.emit(ObjectType.ABILITY))
         spell_templates.triggered.connect(
@@ -76,6 +79,8 @@ class MainMenu(QMenuBar):
             lambda: self.templates_menu_signal.emit(ObjectType.EFFECT))
         character_templates.triggered.connect(
             lambda: self.templates_menu_signal.emit(ObjectType.CHARACTER))
+        monster_templates.triggered.connect(
+            lambda: self.templates_menu_signal.emit(ObjectType.MONSTER))
 
         file_menu = self.addMenu(TR().tr('Menu.templates'))
         file_menu.addAction(spell_templates)
@@ -84,3 +89,5 @@ class MainMenu(QMenuBar):
         file_menu.addAction(modifier_templates)
         file_menu.addAction(effect_templates)
         file_menu.addAction(character_templates)
+        file_menu.addSeparator()
+        file_menu.addAction(monster_templates)

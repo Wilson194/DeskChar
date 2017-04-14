@@ -1,4 +1,5 @@
 from data.DAO.DAO import DAO
+from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from data.DAO.interface.IItemDAO import IItemDAO
 from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
@@ -63,9 +64,16 @@ class ItemDAO(DAO, IItemDAO):
                         data.get('parent_id', 0), data.get('weight', 0), data.get('price', 0))
 
         if data['type'] == Items.CONTAINER.value:
-            return Container(item_id, lang, tr_data.get('name', ''), tr_data.get('description', ''),
-                             data.get('parent_id', 0), data.get('weight', 0), data.get('price', 0),
-                             data.get('capacity', 0))
+            container = Container(item_id, lang, tr_data.get('name', ''),
+                                  tr_data.get('description', ''),
+                                  data.get('parent_id', 0), data.get('weight', 0),
+                                  data.get('price', 0),
+                                  data.get('capacity', 0))
+
+            items = PlayerTreeDAO().get_children_objects(ObjectType.ITEM, container)
+
+            container.items = items
+            return container
 
         if data['type'] == Items.MELEE_WEAPON.value:
             weaponWeightIndex = data.get('weaponWeight', None)

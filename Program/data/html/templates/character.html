@@ -1,0 +1,32 @@
+
+{{ object.icon }}
+{{ object.name }}
+{{ object.description }}
+
+{{ tr.agility }}        {{ object.agility }}
+{{ tr.charisma }}        {{ object.charisma }}
+{{ tr.intelligence }}        {{ object.intelligence }}
+{{ tr.mobility }}        {{ object.mobility }}
+{{ tr.strength }}        {{ object.strength }}
+{{ tr.toughness }}        {{ object.toughness }}
+{{ tr.age }}        {{ object.age }}
+{{ tr.height }}        {{ object.height }}
+{{ tr.weight }}        {{ object.weight }}
+{{ tr.level }}        {{ object.level }}
+{{ tr.xp }}        {{ object.xp }}
+{{ tr.maxHealth }}        {{ object.maxHealth }}
+{{ tr.maxMana }}        {{ object.maxMana }}
+{{ tr.drdClass }}        {{ object.drdClass }}
+{{ tr.drdRace }}        {{ object.drdRace }}
+
+{% for item in items %}
+{% for armor in items %}
+{% for container in items %}
+{% for meleeWeapons in items %}
+{% for moneyList in items %}
+{% for rangedWeapons in items %}
+{% for throwableWeapons in items %}
+
+{% for abilities in items %}
+{% for spells in items %}
+{% for effects in items %}

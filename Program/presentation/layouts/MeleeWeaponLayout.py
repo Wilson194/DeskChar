@@ -65,12 +65,12 @@ class MeleeWeaponLayout(Layout):
         self.header.setText(item.name)
         self.name_input.setPlainText(item.name)
         self.description_input.setPlainText(item.description)
-        self.weight_input.setValue(item.weight)
-        self.price_input.setValue(item.price)
-        self.strength_input.setValue(item.strength)
-        self.rampancy_input.setValue(item.rampancy)
-        self.defence_input.setValue(item.defence)
-        self.length_input.setValue(item.length)
+        self.weight_input.setValue(item.weight if item.weight else 0)
+        self.price_input.setValue(item.price if item.price else 0)
+        self.strength_input.setValue(item.strength if item.strength else 0)
+        self.rampancy_input.setValue(item.rampancy if item.rampancy else 0)
+        self.defence_input.setValue(item.defence if item.length else 0)
+        self.length_input.setValue(item.length if item.length else 0)
 
         handling_index = item.handling.value if item.handling is not None else 0
         weapon_weight_index = item.weaponWeight.value if item.weaponWeight is not None else 0

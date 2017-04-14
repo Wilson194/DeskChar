@@ -56,10 +56,11 @@ class EffectDAO(DAO, IEffectDAO):
 
 
     def delete_link(self, object, target):
-        objects = self.database.select('Effect_modifiers',
+        objects = self.database.select('Effect_modifier',
                                        {'effect_id': object.id, 'modifier_id': target.id})
         if objects:
-            self.database.delete('Effect_modifiers', objects[0]['ID'])
+            self.database.delete_where('Effect_modifier',
+                                       {'effect_id': object.id, 'modifier_id': target.id})
 
 
     def create_link(self, object, target):

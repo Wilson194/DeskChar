@@ -75,20 +75,20 @@ class CharacterLayout(Layout):
         self.name_input.setPlainText(self.object.name)
         self.description_input.setPlainText(self.object.description)
 
-        self.agility_input.setValue(self.object.agility)
-        self.charisma_input.setValue(self.object.charisma)
-        self.intelligence_input.setValue(self.object.intelligence)
-        self.mobility_input.setValue(self.object.mobility)
-        self.strength_input.setValue(self.object.strength)
-        self.toughness_input.setValue(self.object.toughness)
+        self.agility_input.setValue(self.object.agility if self.object.agility else 0)
+        self.charisma_input.setValue(self.object.charisma if self.object.charisma else 0)
+        self.intelligence_input.setValue(self.object.intelligence if self.object.intelligence else 0)
+        self.mobility_input.setValue(self.object.mobility if self.object.mobility else 0)
+        self.strength_input.setValue(self.object.strength if self.object.strength else 0)
+        self.toughness_input.setValue(self.object.toughness if self.object.toughness else 0)
 
-        self.age_input.setValue(self.object.age)
-        self.height_input.setValue(self.object.height)
-        self.weight_input.setValue(self.object.weight)
-        self.level_input.setValue(self.object.level)
-        self.xp_input.setValue(self.object.xp)
-        self.maxHealth_input.setValue(self.object.maxHealth)
-        self.maxMana_input.setValue(self.object.maxMana)
+        self.age_input.setValue(self.object.age if self.object.age else 0)
+        self.height_input.setValue(self.object.height if self.object.height else 0)
+        self.weight_input.setValue(self.object.weight if self.object.weight else 0)
+        self.level_input.setValue(self.object.level if self.object.level else 0)
+        self.xp_input.setValue(self.object.xp if self.object.xp else 0)
+        self.maxHealth_input.setValue(self.object.maxHealth if self.object.maxHealth else 0)
+        self.maxMana_input.setValue(self.object.maxMana if self.object.maxMana else 0)
 
 
     def save_data(self):

@@ -3,6 +3,7 @@ from data.DAO.EffectDAO import EffectDAO
 from data.DAO.ItemDAO import ItemDAO
 from data.DAO.ModifierDAO import ModifierDAO
 from data.database.ObjectDatabase import ObjectDatabase
+from data.html.HtmlHandler import HtmlHandler
 from data.xml.ParserHandler import ParserHandler
 from structure.tree.NodeObject import NodeObject
 from structure.tree.Folder import Folder
@@ -138,18 +139,16 @@ class PlayerTreeManager:
                 self.treeDAO.insert_node(node, parentType)
 
 
-    def delete_node(self, id, targetObject):
+    def delete_node(self, node, targetObject):
         """
         Delete node
         :param id: id of node
         """
         if targetObject and targetObject.object_type is ObjectType.MODIFIER:
-            node = self.treeDAO.get_node_by_object(targetObject)
-            print(node.parent_id)
-            parentObject = self.treeDAO.get_node(node.parent_id).object
+            parentObject = node.object
             EffectDAO().delete_link(parentObject, targetObject)
         else:
-            self.treeDAO.delete_node(id)
+            self.treeDAO.delete_node(node.id)
 
 
     def get_node(self, id: int):
@@ -169,20 +168,25 @@ class PlayerTreeManager:
         self.treeDAO.update_node(node)
 
 
-    def update_node_parent(self, nodeId: int, parentId: int, context: ObjectType):
+    def update_node_parent(self, node: int, parentId: int, context: ObjectType):
         """
         Update parent of node, check if parent is Folder
         :param nodeId: id of node
         :param parentId: parent id
         :return:
         """
-        node = self.treeDAO.get_node(nodeId)
         parentNode = self.treeDAO.get_node(parentId)
-        if hasattr(node, 'parent_id') and node.parent_id != parentId and self.available_parent(node,
-                                                                                               parentNode,
-                                                                                               context):
+        oldParentNode = self.treeDAO.get_node(node.parent_id)
+        if node.parent_id != parentId and self.available_parent(node, parentNode, context):
             node.parent_id = parentId
-            self.treeDAO.update_node(node)
+            if isinstance(node, Folder):
+                self.treeDAO.update_node(node)
+            else:
+                if node.object.object_type is ObjectType.MODIFIER:
+                    EffectDAO().delete_link(oldParentNode.object, node.object)
+                    EffectDAO().create_link(parentNode.object, node.object)
+                else:
+                    self.treeDAO.update_node(node)
 
 
     def available_parent(self, node, parent_node, context: ObjectType) -> bool:
@@ -254,6 +258,15 @@ class PlayerTreeManager:
         """
         node = self.treeDAO.get_node(node_id)
         return node.object
+
+
+    def export_to_html(self, selected: list, path: str):
+        exporting = []
+        for id in selected:
+            node = self.treeDAO.get_node(id)
+            exporting.append(node.object)
+
+        HtmlHandler().create_html(exporting, path)
 
 
     def export_to_xml(self, selected: list, path: str):

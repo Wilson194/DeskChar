@@ -1,7 +1,6 @@
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 from business.managers.LangManager import LangManager
-from business.managers.PlayerTreeManager import PlayerTreeManager
 from presentation.dialogs.NewLangTab import NewLangTab
 from business.managers.TabWidgetManager import TabWidgetManager
 from presentation.layouts.Layout import Layout

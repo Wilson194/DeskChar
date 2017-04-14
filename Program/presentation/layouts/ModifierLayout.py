@@ -196,7 +196,7 @@ class ModifierLayout(Layout):
                 valueType = ModifierValueTypes(self.valueTypeInput.currentIndex())
                 value = self.valueInput.value()
             return True, [targetType, attributeType, valueType, value]
-        except :
+        except:
             return False, []
 
 
@@ -209,14 +209,14 @@ class ModifierLayout(Layout):
         self.header.setText(modifier.name)
         self.nameInput.setText(modifier.name)
 
-        targetTypeIndex = modifier.targetType.value
+        targetTypeIndex = modifier.targetType.value if modifier.targetType else 0
         if modifier.targetType is ModifierTargetTypes.CHARACTER:
-            targetAttributeIndex = modifier.characterTargetAttribute.value
+            targetAttributeIndex = modifier.characterTargetAttribute.value if modifier.characterTargetAttribute else 0
         else:
-            targetAttributeIndex = modifier.itemTargetAttribute.value
+            targetAttributeIndex = modifier.itemTargetAttribute.value if modifier.itemTargetAttribute else 0
 
-        valueTypeIndex = modifier.valueType.value
-        value = modifier.value
+        valueTypeIndex = modifier.valueType.value if modifier.valueType else 0
+        value = modifier.value if modifier.value else 0
         self.targetTypeInput.setCurrentIndex(targetTypeIndex)
         self.targetAttributeInput.setCurrentIndex(targetAttributeIndex)
         self.valueTypeInput.setCurrentIndex(valueTypeIndex)

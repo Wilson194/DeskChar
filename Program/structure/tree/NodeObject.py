@@ -7,9 +7,11 @@ class NodeObject(Node):
         super().__init__(id, name, parent_id)
         self.__object = object
 
+
     @property
     def nodeType(self):
         return NodeType.OBJECT
+
 
     @property
     def object(self):
@@ -20,5 +22,8 @@ class NodeObject(Node):
     def object(self, value):
         self.__object = value
 
+
     def __repr__(self):
-        return '<structure.tree.NodeObject -> {}'.format(self.object.object_type)
+        return '<structure.tree.NodeObject -> {}(id: {}, parentId: {})'.format(
+            self.object.object_type,
+            self.object.id, self.parent_id)

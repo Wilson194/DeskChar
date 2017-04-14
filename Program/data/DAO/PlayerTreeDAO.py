@@ -86,6 +86,7 @@ class PlayerTreeDAO:
         """
         data = self.database.select(self.TABLE_NAME,
                                     {'parent_id': parent_id, 'parent_type': target_type.value})
+
         return map_objects(data)
 
 
