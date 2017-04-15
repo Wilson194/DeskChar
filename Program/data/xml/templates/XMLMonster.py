@@ -9,7 +9,8 @@ from data.xml.templates.XMLRangeWeapon import XMLRangeWeapon
 from data.xml.templates.XMLSpell import XMLSpell
 from data.xml.templates.XMLTemplate import XMLTemplate
 from data.xml.templates.XMLThrowableWeapon import XMLThrowableWeapon
-from structure.enums.Classes import Classes
+from structure.enums.Alignment import Alignment
+
 from structure.enums.MonsterRace import MonsterRace
 from structure.enums.MonsterSize import MonsterSize
 from structure.enums.ObjectType import ObjectType
@@ -30,12 +31,12 @@ class XMLMonster(XMLTemplate):
         self.offense = XAttribElement('offense', 'lang')
         self.defense = XElement('defense')
         self.endurance = XElement('endurance')
-        self.rampancy = XElement('rampancy')
+        self.rampancy = XElement('pugnacity')
         self.mobility = XElement('mobility')
         self.perseverance = XElement('perseverance')
         self.intelligence = XElement('intelligence')
         self.charisma = XElement('charisma')
-        self.alignment = XElement('alignment')
+        self.alignment = XElement('alignment', Alignment)
         self.experience = XElement('experience')
         self.hp = XElement('hp')
 
@@ -46,9 +47,9 @@ class XMLMonster(XMLTemplate):
         self.abilities = XInstance('abilities', XMLAbility)
 
         self.items = XInstance('items', XMLItem)
-        self.armors = XInstance('armors', XMLArmor)
-        self.containers = XInstance('containers', XMLContainer)
-        self.meleeWeapons = XInstance('meleeWeapons', XMLMeleeWeapon)
-        self.rangedWeapons = XInstance('rangedWeapons', XMLRangeWeapon)
-        self.moneyList = XInstance('moneyList', XMLMoney)
-        self.throwableWeapons = XInstance('throwableWeapons', XMLThrowableWeapon)
+        self.armors = XInstance('items', XMLArmor)
+        self.containers = XInstance('items', XMLContainer)
+        self.meleeWeapons = XInstance('items', XMLMeleeWeapon)
+        self.rangedWeapons = XInstance('items', XMLRangeWeapon)
+        self.moneyList = XInstance('items', XMLMoney)
+        self.throwableWeapons = XInstance('items', XMLThrowableWeapon)

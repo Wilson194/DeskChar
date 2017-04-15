@@ -157,7 +157,14 @@ class XMLTemplate:
                         instance.value = (lang[key], lang[instance.attributeName])
                         root.append(instance.xmlElement)
             elif isinstance(instance, XInstance):
-                instanceRoot = etree.Element(instance.name)
+                instanceRoot = None
+                for tag in root.iter():
+                    if instance.name == tag.tag:
+                        instanceRoot = tag
+
+                if not instanceRoot:
+                    instanceRoot = etree.Element(instance.name)
+
                 for one in remapObjects[0][key]:
                     child = instance.instance().create_xml(one)
                     instanceRoot.append(child)
@@ -172,8 +179,8 @@ class XMLTemplate:
         if not self.ROOT_NAME:
             raise NotImplementedError('ROOT_NAME not defined')
 
-        if root.tag != self.ROOT_NAME:
-            raise ValueError('Root tag name is not ' + self.ROOT_NAME)
+        # if root.tag != self.ROOT_NAME:
+        #     raise ValueError('Root tag name is not ' + self.ROOT_NAME)
 
         langs = self.__get_langs(root)
 
@@ -188,16 +195,53 @@ class XMLTemplate:
         # Remap instances for easy finding
         xInstances = {}
         for key, instance in self.__dict__.items():
-            xInstances[instance.name] = (key, instance)
+            if instance.name in xInstances:
+                if type(xInstances[instance.name]) is not dict:
+                    old = xInstances[instance.name]
+                    xInstances[instance.name] = {}
+                    xInstances[instance.name][old[0]] = old[1]
+                xInstances[instance.name][key] = instance
+                # if type(xInstances[instance.name]) is not list:
+                #     xInstances[instance.name] = [xInstances[instance.name]]
+                # xInstances[instance.name].append((key, instance))
+            else:
+                xInstances[instance.name] = (key, instance)
 
         for attr in root:
             if attr.tag in xInstances:
-                if attr.tag == 'id':
+                if attr.tag == 'id':  # TODO: remap id
                     continue
-                objects = xInstances[attr.tag][1].set_attributes(objects, xInstances[attr.tag][0],
-                                                                 attr)
+                # if not attr:
+                #     continue
+
+                if type(xInstances[attr.tag]) is dict:
+                    groups = self.__remap_xml_group(attr, xInstances[attr.tag])
+                    for name, root in groups.items():
+                        objects = xInstances[attr.tag][name].set_attributes(objects, name, root)
+                else:
+                    objects = xInstances[attr.tag][1].set_attributes(objects,
+                                                                     xInstances[attr.tag][0],
+                                                                     attr)
 
         return objects
+
+
+    def __remap_xml_group(self, rootTag, instances):
+        groups = {}
+        for name, instance in instances.items():
+            groups[instance.instance.ROOT_NAME] = (name, [])
+
+        for tag in list(rootTag):
+            groups[tag.tag][1].append(tag)
+
+        newTrees = {}
+        for group in groups.values():
+            root = etree.Element(group[0])
+            for child in group[1]:
+                root.append(child)
+            newTrees[group[0]] = root
+
+        return newTrees
 
 
     def __attribute_name_remap(self, obj):

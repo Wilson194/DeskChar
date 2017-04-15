@@ -1,119 +1,97 @@
 <templates>
-  <spell>
-    <id>6</id>
-    <name lang="en">Hypnosis</name>
-    <name lang="cs">Hypnóza</name>
-    <description lang="en">Trap: int + roz ~ 6 ~ 0
-           After you cast this spell, the magician can control one humanoid creature. The instruction must be entered in the simplest form (ie. Clear, simple
-           sentences). Hypnotized character tries to meet a very difficult and dangerous command, but not downright suicidal. Posthypnotic command: Hypnotized
-           character can store one called posthypnotic command. It must be some simple guidelines. Posthypnotic command can also go against the interests of
-           the character, for example: "avoid touching the gold" but you can not save a figure of feeling, such as "hate gold". For saving posthypnotic command
-           is needed for 10 mags. After spells the character remembers everything, unless they received from the magician's post-hypnotic command that forgot everything. </description>
-    <description lang="cs">past: int + roz ~ 6 ~ 0
-            Po seslání tohoto kouzla může kouzelník ovládat jedno humanoidní stvoření. Instrukce ovšem musí být zadávány v co nejjednodušší formě, tj. jednoznačné,
-            jednoduché věty. Zhypnotizovaná postava se pokusí splnit i velmi obtížný a nebezpečný příkaz, ale nikoli vysloveně sebevražedný. Posthypnotický příkaz:
-            Zhypnotizované postavě je možné uložit jeden tzv. posthypnotický příkaz. Musí to být nějaký jednoduchý pokyn. Posthypnotický příkaz může jít i proti zájmům
-            postavy, například: Vyhýbej se dotyku zlata," ale není možné postavě uložit nějaký pocit, například: "Nesnášíš zlato." Na uložení posthypnotického příkazu
-            je zapotřebí dalších 10 magů. Po skončení kouzla si postava všechno pamatuje, ledaže by dostala od kouzelníka posthypnotický příkaz, aby na všechno zapomněla.
-            V případě, že dojde ke konfliktu různých posthypnotických příkazů, hází si kouzelník, který příkaz zadal později, proti pasti Roz - 5 - poslechne nový/starý příkaz.
-            Roz se srovnává úrovní kouzelníka, který zadal pů­vodní příkaz. Pokud kouzelník uspěje, oběť poslechne jeho nový příkaz, pokud neuspěje, oběť se řídí původním
-            příkazem, což ovšem nemusí kouzelník poznat.</description>
-    <manaInitial lang="en">Twice the amount of target hit points</manaInitial>
-    <manaInitial lang="cs">Dvojnásobek životů cíle</manaInitial>
-    <manaContinual lang="en">0</manaContinual>
-    <manaContinual lang="cs">0</manaContinual>
-    <range lang="en">5 fathoms</range>
-    <range lang="cs">5 sáhů</range>
-    <scope lang="en">One humanoid</scope>
-    <scope lang="cs">Jeden humanoid</scope>
-    <castTime>1</castTime>
-    <duration lang="en">1 - 3 shifts</duration>
-    <duration lang="cs">1 - 3 směny</duration>
-    <class>MAGICIAN</class>
-  </spell>
-  <spell>
-    <id>7</id>
-    <name lang="en">Levitation</name>
-    <name lang="cs">Levitace</name>
-    <description lang="en">Recipient spells can freely move vertically and horizontaly. The load figures must not be greater than 2000 coins.
-           A character can't freely "fly", but may for example: climb the wall without fear of falling. Keep in mind that even when a character
-           seemingly no weight, yet retains its weight and inertia, this means that, for example, can not be with her bandy with a blower. If you
-           fall somewhere, compatible slowly to the ground at a rate of 1 fathom per round.</description>
-    <description lang="cs">Příjemce kouzla se může volně horii vertikálně pohybovat. Zátěž postavy nesmí být větší než 2000 mincí. Postava nemůže
-            volně "létat", ale může např. slézat zeď bez obavy z pádu. Měj na paměti, že i když postava zdánlivě nic neváží, přesto si zachovává svou
-            hmotnost a setrvačnost, to znamená, že například není možné si s ní pohazovat jako s balónkem. Pokud odněkud spadne, snáší se pomalu k zemi,
-            a to rychlostí 1 sáh za kolo.</description>
-    <manaInitial lang="en">3</manaInitial>
-    <manaInitial lang="cs">3</manaInitial>
-    <manaContinual lang="en">1</manaContinual>
-    <manaContinual lang="cs">1</manaContinual>
-    <range lang="en">Touch</range>
-    <range lang="cs">Dotyk</range>
-    <scope lang="en">One creature</scope>
-    <scope lang="cs">Jeden tvor</scope>
-    <castTime>3</castTime>
-    <duration lang="en">According to the supplied magenergie</duration>
-    <duration lang="cs">Dle dodané magenergie</duration>
-    <class>MAGICIAN</class>
-  </spell>
-  <spell>
-    <id>8</id>
-    <name lang="en">Magic shield</name>
-    <name lang="cs">Magický štít</name>
-    <description lang="en">Wizard creates an invisible barrier if fromt of him that moves with him and has the following properties:
-           1) The probability of any lightning hit a magician is halved.
-           2) Quality armor against dragon breath attack is increased by 9
-           3) Quality armor against all attacks arms and throwing weapons increases by 7
-           4) Quality armor against all attacks in the face increased by 5
-           It goes without saying that all of these benefits relate only to the attacks from the front. Equally important is the fact that
-           if he wants magician, protected by a shield, attack any of the above ways is penalized in the same way. Duration of magic magician
-           determines when the cast and during subsequent rounds of the already magical shield to not concentrate. If you want to extend the
-           duration of the spell has cast a new spell.</description>
-    <description lang="cs">Kouzlo vytvoří před kouzelníkem neviditelnou bariéru, která se s ním pohybuje a má následující vlastnosti:
-            1. Pravděpodobnost zásahu kouzelníka jakýmkoliv bleskem se snižuje na polovinu.
-            2. Kvalita zbroje proti útoku dračím dechem se zvyšuje o 9.
-            3. Kvalita zbroje proti všem útokům střelnými a vrhacími zbraněmi se zvyšuje o 7.
-            4. Kvalita zbroje proti všem útokům tváří v tvář se zvyšuje o 5.
-            Je samozřejmé, že všechny tyto výhody se vztahují pouze na útoky vedené zepředu. Neméně důležité je také to, že chce-li kouzelník,
-            chráněný tímto štítem, zaútočit některým z výše uvedených způsobů, je penalizován stejným způsobem. Trvání kouzla určuje kouzelník
-            při jeho seslání a během dalších kol se už na magický štít nemusí soustředit. Jestliže chce trvání kouzla prodloužit,
-            musí seslat nové kouzlo.</description>
-    <manaInitial lang="en">2</manaInitial>
-    <manaInitial lang="cs">2</manaInitial>
-    <manaContinual lang="en">1</manaContinual>
-    <manaContinual lang="cs">1</manaContinual>
-    <range lang="en">0</range>
-    <range lang="cs">0</range>
-    <scope lang="en">The area in front of the magician, depending on his or hers size</scope>
-    <scope lang="cs">Oblast před kouzelníkem v jeho velikosti</scope>
-    <castTime>1</castTime>
-    <duration lang="en">1 - 3 shifts</duration>
-    <duration lang="cs">1 - 3 směny</duration>
-    <class>MAGICIAN</class>
-  </spell>
-  <spell>
-    <id>9</id>
-    <name lang="en">Mago-mega-mix</name>
-    <name lang="cs">Mago-mega-mix</name>
-    <description lang="en">trap: scope - 8 -!
-           This spell creates around the selected monsters sort of nebulous haze yellow and then randomly swap the locations of all the molecules
-           of the body. After the spells on the spot where once was a monster usually appears pile of quivering jelly protein. Magic acts on the
-           monster, including objects and creatures the size of A0, which is has.</description>
-    <description lang="cs">past: rozsah - 8 - !
-            Toto kouzlo vytvoří kolem zvolené příšery jakýsi žlutý mlhovinový opar a posléze zcela náhodně prohodí umístění všech molekul těla.
-            Po skončení kouzla se na místě, kde dříve byla pří­šera, zpravidla objeví hromádka tře­soucího se bílkovinného rosolu. Kouzlo působí
-            na nestvůru včetně předmětů a tvorů velikosti A0, které má u sebe.</description>
-    <manaInitial lang="en">Twice the hit points of target + 1</manaInitial>
-    <manaInitial lang="cs">Dvojnásobek životů cíle + 1</manaInitial>
-    <manaContinual lang="en">0</manaContinual>
-    <manaContinual lang="cs">0</manaContinual>
-    <range lang="en">5 fathoms</range>
-    <range lang="cs">5 sáhů</range>
-    <scope lang="en">One creature</scope>
-    <scope lang="cs">Jedna stvůra</scope>
-    <castTime>0</castTime>
-    <duration lang="en">Immidiately</duration>
-    <duration lang="cs">Hned</duration>
-    <class>MAGICIAN</class>
-  </spell>
+  <monster>
+    <id>26</id>
+    <name lang="cs">Gorgona</name>
+    <description lang="cs">Gorgona je člověku podobný tvor s dlouhými netopýřími křídly a ostnatým ohonem. Nemá ráda sluneční světlo, i když jí nijak neškodí, a přemisťuje
+se převážně za nocí létáním. Kromě pařátů často používá dlouhý luk, ze kterého střílí z výšky. Její kůže vypadá podobně jako kámen, a tak je
+často zaměňována za sochu. </description>
+    <viability>4</viability>
+    <offense lang="cs">(+2 + 3/+1) = 5/+1
+(paraty) +
+(+2 + 4/+1) = 6/+1
+(tlama)
++1 + dlouhý luk
+(2× za kolo)
+</offense>
+    <defense>3</defense>
+    <endurance>0</endurance>
+    <pugnacity>2</pugnacity>
+    <mobility>8</mobility>
+    <perseverance>0</perseverance>
+    <intelligence>17</intelligence>
+    <charisma>15</charisma>
+    <alignment>LAWFUL_GOOD</alignment>
+    <experience>105</experience>
+    <hp>0</hp>
+    <monsterRace>MYTHIC</monsterRace>
+    <spells>
+      <spell>
+        <id>16</id>
+        <name lang="cs">Světlo</name>
+        <description lang="cs">Místo se dokonale osvětlí. Světlo se pohybuje zároveň s kouzelníkem.
+            Účinky kouzla se zastaví na překážce, za kterou by neproniklo normální světlo.</description>
+        <manaInitial lang="cs">2 za sáh v poloměru</manaInitial>
+        <manaContinual lang="cs">0</manaContinual>
+        <range lang="cs">0</range>
+        <scope lang="cs">Kruh s poloměrem dle dodané magenergie</scope>
+        <castTime>1</castTime>
+        <duration lang="cs">1 - 5 směn</duration>
+        <class>MAGICIAN</class>
+      </spell>
+    </spells>
+    <abilities>
+      <ability>
+        <id>10</id>
+        <name lang="cs">Stopování</name>
+        <description lang="cs"> Hraničář má schopnost stopovat nestvůry i postavy. Tato schopnost závisí na typu terénu, počtu nestvůr a úrovni zkušenosti hraničáře.
+
+    Typy terénu:
+        Volná příroda:
+            Lehký - sníh, louka, vysoký les
+            Těžký - hustý les, džungle, skály
+            Nepoužitelný - propasti, řeky, jezera
+        Uzavřené prostory:
+            Lehký - místnost, chodba
+            Těžký - schody, dveře
+            Nepoužitelný - průrvy, tůně
+        </description>
+        <chance lang="cs">  Volná příroda:
+        Lehký terén . . . 80%
+        Těžký terén . . . 50%
+        Nepoužitelný. . . 0%
+    Uzavřené prostory:
+        Lehký terén . . . 60%
+        Těžký terén . . . 40%
+        Nepoužitelný terén . . . 0%
+
+    K těmto číslům se (v jiném než nepoužitelném terénu) přidají 2% za každou úroveň hraničáře a odečte 10% za každých 24 hodin, které uplynuly od okamžiku, kdy tu nestvůra stopu zanechala.
+    Pokud stopu zanechalo víc tvorů než jeden, přidají se také 3 % za každého tvora navíc. PJ ti ale samozřejmě nemusí říct kolik nestvůr stopuješ.
+        </chance>
+        <race>ELF</race>
+      </ability>
+    </abilities>
+    <items>
+      <item>
+        <id>101</id>
+        <name lang="cs">Peníze </name>
+        <description lang="cs"></description>
+        <effects/>
+      </item>
+      <item>
+        <id>102</id>
+        <name lang="cs">Luk</name>
+        <description lang="cs"></description>
+        <price>0</price>
+        <weight>15</weight>
+        <effects/>
+      </item>
+      <item>
+        <id>103</id>
+        <name lang="cs">Šupinaté</name>
+        <description lang="cs"></description>
+        <price>120</price>
+        <effects/>
+      </item>
+    </items>
+  </monster>
 </templates>
