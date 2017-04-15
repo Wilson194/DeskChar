@@ -268,7 +268,6 @@ class TreeWidget(QtWidgets.QFrame):
         """
         Clicked action on new button
         """
-
         data, choice = NewTreeItem.get_data(
             self.__data_type.instance()().children + [self.__data_type.instance()])
         if choice:

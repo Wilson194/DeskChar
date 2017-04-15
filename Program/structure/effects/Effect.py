@@ -4,6 +4,11 @@ from structure.general.Object import Object
 
 
 class Effect(Object):
+    TABLE_SCHEMA = [
+        'id', 'name', 'description', 'targetType'
+    ]
+
+
     def __init__(self, id: int = None, lang: str = None, name: str = None,
                  description: str = None,
                  targetType: ModifierTargetTypes = None):

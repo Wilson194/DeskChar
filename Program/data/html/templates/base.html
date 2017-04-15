@@ -10,8 +10,19 @@
 </head>
 
 <body>
-
-    {% include 'items.html' %}
+    {% if export == objectType.ITEM %}
+        {% include 'items.html' %}
+    {% elif export == objectType.ABILITY %}
+        {% include 'abilities.html' %}
+    {% elif export == objectType.SPELL %}
+        {% include 'spells.html' %}
+    {% elif export == objectType.EFFECT %}
+        {% include 'effects.html' %}
+    {% elif export == objectType.CHARACTER %}
+        {% include 'characters.html' %}
+    {% elif export == objectType.MONSTER %}
+        {% include 'monster.html' %}
+    {% endif %}
 
 </body>
 </html>

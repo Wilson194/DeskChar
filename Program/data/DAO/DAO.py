@@ -1,3 +1,4 @@
+from data.DAO.SettingsDAO import SettingsDAO
 from data.database.Database import Database
 
 
@@ -44,12 +45,13 @@ class DAO:
             raise ValueError('Constant TYPE is not defined in class {}'.format(self))
         data = Database(self.DATABASE_DRIVER).select('translates',
                                                      {'target_id': id, 'type': self.TYPE.value})
+
         languages = []
         for line in data:
             if line['lang'] not in languages:
                 languages.append(line['lang'])
-        # if len(languages) == 0:
-        #     languages.append('cs') #TODO: Default lang
+        if len(languages) == 0:
+            languages.append(SettingsDAO().get_value('language', str))
         return languages
 
 

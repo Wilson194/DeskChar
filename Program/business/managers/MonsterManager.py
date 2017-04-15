@@ -1,19 +1,12 @@
-from data.DAO.AbilityDAO import AbilityDAO
+from data.DAO.MonsterDAO import MonsterDAO
 from structure.abilities.Ability import Ability
+from structure.monster.Monster import Monster
 
 
 class MonsterManager:
     def __init__(self):
-        self.DAO = AbilityDAO()
+        self.DAO = MonsterDAO()
 
 
-    def update_ability(self, ability: Ability):
-        self.DAO.update(ability)
-
-
-    def create_empty(self, lang):
-        ability = Ability(None, lang)
-        id = self.DAO.create(ability)
-        ability.id = id
-
-        return ability
+    def update_monster(self, monster: Monster):
+        self.DAO.update(monster)

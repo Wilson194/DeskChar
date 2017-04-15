@@ -165,6 +165,30 @@ class DatabaseTables:
         except OperationalError:
             pass
 
+        # ///////////// Monster \\\\\\\\\\\\\\\\\\
+
+        monster_columns = [
+            Column('ID', 'INTEGER', True, False, True),
+            Column('viability', 'INTEGER'),
+            Column('defense', 'INTEGER'),
+            Column('endurance', 'INTEGER'),
+            Column('rampancy', 'INTEGER'),
+            Column('mobility', 'INTEGER'),
+            Column('perseverance', 'INTEGER'),
+            Column('intelligence', 'INTEGER'),
+            Column('charisma', 'INTEGER'),
+            Column('alignment', 'INTEGER'),
+            Column('experience', 'INTEGER'),
+            Column('hp', 'INTEGER'),
+            Column('monsterRace', 'INTEGER'),
+            Column('size', 'INTEGER'),
+        ]
+
+        try:
+            database.create_table('Monster', monster_columns)
+        except OperationalError:
+            pass
+
         # ///////////// Player tree structure \\\\\\\\\\\\\\\\\\
 
         structure_columns = [
@@ -220,3 +244,24 @@ class DatabaseTables:
             database.create_table('Item_effect', itemEffectColumns, itemEffectForeigns)
         except OperationalError:
             pass
+
+        # ///////////// Settings \\\\\\\\\\\\\\\\\\
+
+        settingsColumns = [
+            Column('ID', 'INTEGER', True, False, True),
+            Column('name', 'INTEGER', not_null=True),
+            Column('int_value', 'INTEGER'),
+            Column('str_value', 'TEXT'),
+
+        ]
+
+        try:
+            database.create_table('Settings', settingsColumns)
+        except OperationalError:
+            pass
+
+        # ///////////// Initialize Languages \\\\\\\\\\\\\\\\\\
+        data = database.select('languages', {'code': 'cs'})
+        if len(data) == 0:
+            database.insert('languages', {'name': 'Čeština', 'code': 'cs'})
+            database.insert('languages', {'name': 'Angličtina', 'code': 'en'})

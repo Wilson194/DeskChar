@@ -129,3 +129,8 @@ class ThrowableWeapon(Item):
     @weaponWeight.setter
     def weaponWeight(self, value):
         self.__weaponWeight = value
+
+
+    @property
+    def type(self):
+        return self.__type

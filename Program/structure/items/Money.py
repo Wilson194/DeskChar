@@ -24,7 +24,8 @@ class Money(Item):
 
     @staticmethod
     def XmlClass():
-        return None
+        from data.xml.templates.XMLMoney import XMLMoney
+        return XMLMoney
 
 
     @staticmethod
@@ -67,3 +68,8 @@ class Money(Item):
     @gold.setter
     def gold(self, value):
         self.__gold = value
+
+
+    @property
+    def type(self):
+        return self.__type

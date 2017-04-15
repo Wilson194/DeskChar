@@ -2,8 +2,22 @@
 
 <h1> Předměty</h1>
 
-{% for item in items %}
-    {% include 'item.html' %}
+{% for object in objects %}
+    {% if object.type == itemType.GENERIC %}
+        {% include 'item.html' %}
+    {% elif object.type == itemType.CONTAINER %}
+        {% include 'container.html' %}
+    {% elif object.type == itemType.MELEE_WEAPON %}
+        {% include 'meleeWeapon.html' %}
+    {% elif object.type == itemType.MONEY %}
+        {% include 'money.html' %}
+    {% elif object.type == itemType.ARMOR %}
+        {% include 'armor.html' %}
+    {% elif object.type == itemType.RANGED_WEAPON %}
+        {% include 'rangedWeapon.html' %}
+    {% elif object.type == itemType.THROWABLE_WEAPON %}
+        {% include 'armor.html' %}
+    {%endif %}
 {% endfor %}
 
 

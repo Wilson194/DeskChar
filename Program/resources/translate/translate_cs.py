@@ -6,6 +6,8 @@ translate = {
     'Menu_open'                 : '&Otevřít',
     'Menu_help'                 : '&Nápověda',
     'Menu_about'                : '&O aplikaci',
+    'Menu_save'                 : 'Uložit',
+    'Menu_settings'             : 'Nastavení',
 
     'Menu.spell'                : 'Šablony kouzel',
     'Menu.ability'              : 'Šablony schopností',
@@ -46,7 +48,7 @@ translate = {
 
 
     'Folder'                    : 'Složka',
-    'NodeObject'                    : 'Objekt',
+    'NodeObject'                : 'Objekt',
     'Type'                      : 'Typ',
     'Code'                      : 'Kód',
     'Select_lang'               : 'Vybrat jazyk',
@@ -60,6 +62,7 @@ translate = {
     'ObjectType.MODIFIER'       : 'Modifikátory',
     'ObjectType.EFFECT'         : 'Efekty',
     'ObjectType.CHARACTER'      : 'Postavy',
+    'ObjectType.MONSTER'        : 'Příšery',
 
     'NodeType.FOLDER'           : 'Složka',
     'NodeType.OBJECT'           : 'Objekt',
@@ -79,6 +82,13 @@ translate = {
     'HUMAN'                     : 'Člověk',
     'KROLL'                     : 'Krol',
     'KUDUK'                     : 'Kuduk',
+
+    # --------- Alignments -------------------------------------------------------
+    'LAWFUL_GOOD'               : 'Zákonné dobro',
+    'CHAOTIC_GOOD'              : 'Zmatené dobro',
+    'NEUTRAL'                   : 'Neutrální',
+    'CHAOTIC_EVIL'              : 'Zmatené zlo',
+    'LAWFUL_EVIL'               : 'Zákonné zlo',
 
     # --------- Handling -----------------------------------------------------
     'ONE_HANDED'                : 'Jednoruční',
@@ -146,6 +156,7 @@ translate = {
     'New_item'                  : 'Přidat objekt',
     'Import'                    : 'Importovat',
     'Rename'                    : 'Přejmenovat',
+    'Add_object'                : 'Přidat jiný objekt',
 
     'New_name'                  : 'Nový název',
 
@@ -159,7 +170,44 @@ translate = {
     'Value'                     : 'Hodnota',
 
     'File_select_target'        : 'Zvolte cílový soubor',
-    'File_select_open'          : 'Vyberte cílový soubor'
+    'File_select_open'          : 'Vyberte cílový soubor',
 
+    'Viability'                 : 'Životaschop',
+    'Offense'                   : 'Útočné číslo',
+    'Defense'                   : 'Obranné číslo',
+    'Endurance'                 : 'Odolnost',
+    'Mobility'                  : 'Pohyblivost',
+    'Perseverance'              : 'Vytrvalost',
+    'Intelligence'              : 'Inteligence',
+    'Charisma'                  : 'Charisma',
+    'Alignment'                 : 'Přesvědčení',
+    'Experience'                : 'Zkušenosti',
+    'Hp'                        : 'Životy',
+    'Monster_race'              : 'Rasa',
+    'Monster_size'              : 'Velikost',
+    'Agility'                   : 'Pohyblivost',
+    'Toughness'                 : 'Odolnost',
+    'Age'                       : 'Věk',
+    'Height'                    : 'Výška',
+    'Level'                     : 'Levl',
+    'Xp'                        : 'Zkušenosti',
+    'MaxHealth'                 : 'Maximální počet životů',
+    'MaxMana'                   : 'Maximální množství many',
+    ''                          : '',
+
+    'DRAGON'                    : 'Drak',
+    'ANIMAL'                    : 'Zvíře',
+    'INSECT'                    : 'Hmyz',
+    'UNDEAD'                    : 'Nemrtvý',
+    'HUMANOID'                  : 'Humanoidní',
+    'MYTHIC'                    : 'Mýtický',
+    'OTHERS'                    : 'Ostatní',
+
+    'A0'                        : 'Velikost A0',
+    'A'                         : 'Velikost A',
+    'B'                         : 'Velikost B',
+    'C'                         : 'Velikost C',
+    'D'                         : 'Velikost D',
+    'E'                         : 'Velikost E',
 
 }

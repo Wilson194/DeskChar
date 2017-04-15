@@ -1,4 +1,5 @@
 from data.DAO.DAO import DAO
+from data.DAO.EffectDAO import EffectDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from data.DAO.interface.IItemDAO import IItemDAO
 from data.database.Database import Database
@@ -59,21 +60,26 @@ class ItemDAO(DAO, IItemDAO):
         data = dict(self.database.select(self.DATABASE_TABLE, {'ID': item_id})[0])
         tr_data = dict(self.database.select_translate(item_id, ObjectType.ITEM.value,
                                                       lang))
+
+        effectData = self.database.select('Item_effect', {'item_id': item_id})
+        effects = []
+        for eff in effectData:
+            effects.append(EffectDAO().get(eff['effect_id']))
+
         if data['type'] == Items.GENERIC.value:
-            return Item(item_id, lang, tr_data.get('name', ''), tr_data.get('description', ''),
+            item = Item(item_id, lang, tr_data.get('name', ''), tr_data.get('description', ''),
                         data.get('parent_id', 0), data.get('weight', 0), data.get('price', 0))
 
         if data['type'] == Items.CONTAINER.value:
-            container = Container(item_id, lang, tr_data.get('name', ''),
-                                  tr_data.get('description', ''),
-                                  data.get('parent_id', 0), data.get('weight', 0),
-                                  data.get('price', 0),
-                                  data.get('capacity', 0))
+            item = Container(item_id, lang, tr_data.get('name', ''),
+                             tr_data.get('description', ''),
+                             data.get('parent_id', 0), data.get('weight', 0),
+                             data.get('price', 0),
+                             data.get('capacity', 0))
 
-            items = PlayerTreeDAO().get_children_objects(ObjectType.ITEM, container)
+            items = PlayerTreeDAO().get_children_objects(ObjectType.ITEM, item)
 
-            container.items = items
-            return container
+            item.items = items
 
         if data['type'] == Items.MELEE_WEAPON.value:
             weaponWeightIndex = data.get('weaponWeight', None)
@@ -82,7 +88,7 @@ class ItemDAO(DAO, IItemDAO):
             handlingIndex = data.get('handling', None)
             handling = Handling(handlingIndex) if handlingIndex else None
 
-            return MeleeWeapon(item_id, lang, tr_data.get('name', ''),
+            item = MeleeWeapon(item_id, lang, tr_data.get('name', ''),
                                tr_data.get('description', ''), data.get('parent_id', 0),
                                data.get('weight', 0), data.get('price', 0), data.get('strength', 0),
                                data.get('rampancy', 0), data.get('defence', 0),
@@ -92,7 +98,7 @@ class ItemDAO(DAO, IItemDAO):
             weaponWeightIndex = data.get('weaponWeight', None)
             weaponWeight = WeaponWeight(weaponWeightIndex) if weaponWeightIndex else None
 
-            return ThrowableWeapon(item_id, lang, tr_data.get('name', ''),
+            item = ThrowableWeapon(item_id, lang, tr_data.get('name', ''),
                                    tr_data.get('description', ''),
                                    data.get('parent_id', 0), data.get('weight', 0),
                                    data.get('price', 0), data.get('initiative', 0),
@@ -102,7 +108,7 @@ class ItemDAO(DAO, IItemDAO):
                                    weaponWeight)
 
         if data['type'] == Items.RANGED_WEAPON.value:
-            return RangeWeapon(item_id, lang, tr_data.get('name', ''),
+            item = RangeWeapon(item_id, lang, tr_data.get('name', ''),
                                tr_data.get('description', ''),
                                data.get('parent_id', 0), data.get('weight', 0),
                                data.get('price', 0), data.get('initiative', 0),
@@ -111,30 +117,18 @@ class ItemDAO(DAO, IItemDAO):
                                data.get('rangeHigh', 0))
 
         if data['type'] == Items.ARMOR.value:
-            return Armor(item_id, lang, tr_data.get('name', ''), tr_data.get('description', ''),
+            item = Armor(item_id, lang, tr_data.get('name', ''), tr_data.get('description', ''),
                          data.get('parent_id', 0), data.get('price', 0), data.get('quality', 0),
                          data.get('weightA', 0), data.get('weightB', 0), data.get('weightC', 0),
                          data.get('size', 0))
 
         if data['type'] == Items.MONEY.value:
-            return Money(item_id, lang, tr_data.get('name', ''), tr_data.get('description', ''),
+            item = Money(item_id, lang, tr_data.get('name', ''), tr_data.get('description', ''),
                          data.get('parent_id', 0), data.get('copper'), data.get('silver'),
                          data.get('gold'))
 
-
-    def get_languages(self, id: int) -> list:
-        """
-        Get list of all languages of one item
-        :param id: id of item
-        :return: list of language codes
-        """
-        data = self.database.select('translates',
-                                    {'target_id': id, 'type': ObjectType.ITEM.value})
-        languages = []
-        for line in data:
-            if line['lang'] not in languages:
-                languages.append(line['lang'])
-        return languages
+        item.effects = effects
+        return item
 
 
     def create_effect_link(self, item, effect):

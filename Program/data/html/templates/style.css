@@ -1,9 +1,85 @@
-
-
-.name_image{
-    width: 30px;
+body {
+    height: 842px;
+    width: 595px;
+    /* to centre page on screen*/
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.name_text{
-    font-size: 25px;
+img.icon {
+    width: 5em;
+    height: 5em;
+    padding-bottom: 0em;
+}
+
+dl {
+    width: 50%;
+    margin-top: 0.5em;
+}
+
+dl.largeDL {
+    width: 100%;
+    columns: 2;
+}
+
+div.iconAndName {
+    display: block;
+}
+
+div.iconAndName:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+div.objectBlock {
+    page-break-inside: avoid;
+}
+
+h3 {
+    padding-bottom: 0em;
+    margin-bottom: 0em;
+    margin-top: 0em;
+}
+
+p {
+    margin-top: 0em;
+    margin-bottom: 0em;
+}
+
+dt, dd {
+    padding: 0.2em 1em;
+    display: block;
+}
+
+dt {
+    font-weight: bold;
+    float: left;
+    min-width: 40%;
+    margin: 0 0 0 0;
+}
+
+dt:after {
+    content: ":";
+}
+
+dt:nth-of-type(odd) {
+    background: #eee;
+}
+
+dd {
+    text-align: right;
+    /*break-before: ;*/
+
+}
+
+dd:nth-of-type(odd) {
+    background: #eee;
+}
+
+div.vertical-line {
+    width: 100%;
+    background-color: silver;
+    height: 1px;
+    float: left;
 }

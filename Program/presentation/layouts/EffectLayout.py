@@ -83,7 +83,7 @@ class EffectLayout(Layout):
         self.object.description = self.descriptionInput.toPlainText()
 
         targetIndex = self.targetInput.currentIndex()
-        self.object.targetType = targetIndex if targetIndex > 0 else None
+        self.object.targetType = ModifierTargetTypes(targetIndex) if targetIndex != 0 else None
 
         self.modifier_manager.update(self.object)
 
@@ -109,10 +109,8 @@ class EffectLayout(Layout):
                 self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(
                     TR().tr((modifier.characterTargetAttribute))))
 
-
-
             if modifier.itemTargetAttribute in (
-            ItemsAttributes.WEAPON_MELEE_HANDLING, ItemsAttributes.WEAPON_WEIGHT):
+                    ItemsAttributes.WEAPON_MELEE_HANDLING, ItemsAttributes.WEAPON_WEIGHT):
                 self.table.setItem(i, 4, QtWidgets.QTableWidgetItem(TR().tr((modifier.valueType))))
             else:
                 self.table.setItem(i, 3, QtWidgets.QTableWidgetItem(TR().tr((modifier.valueType))))

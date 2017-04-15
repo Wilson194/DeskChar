@@ -65,7 +65,7 @@ class SpellLayout(Layout):
         self.mana_cost_continual_input.setPlainText(spell.mana_cost_continual)
         self.range_input.setPlainText(spell.range)
         self.scope_input.setPlainText(spell.scope)
-        self.cast_time_input.setValue(spell.cast_time)
+        self.cast_time_input.setValue(spell.cast_time if spell.cast_time else 0)
         self.duration_input.setPlainText(spell.duration)
 
         class_index = spell.drd_class.value if spell.drd_class is not None else 0

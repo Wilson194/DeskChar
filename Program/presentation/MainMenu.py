@@ -3,6 +3,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5 import QtCore
 
 from presentation.Translate import Translate as TR
+from presentation.dialogs.Settings import Settings
 from structure.enums.ObjectType import ObjectType
 
 
@@ -41,9 +42,16 @@ class MainMenu(QMenuBar):
         save_action.setShortcut('Ctrl+S')
         save_action.setStatusTip('Save file')
 
+        settings_action = QAction(QIcon('resources/icons/settings.png'), TR().tr('Menu_settings'),
+                                  self)
+        settings_action.setShortcut('Ctrl+T')
+        settings_action.setStatusTip('Settings')
+        settings_action.triggered.connect(self.settings_slot)
+
         file_menu = self.addMenu(TR().tr('Menu_file'))
         file_menu.addAction(open_action)
         file_menu.addAction(save_action)
+        file_menu.addAction(settings_action)
         file_menu.addSeparator()
         file_menu.addAction(exit_action)
 
@@ -91,3 +99,7 @@ class MainMenu(QMenuBar):
         file_menu.addAction(character_templates)
         file_menu.addSeparator()
         file_menu.addAction(monster_templates)
+
+
+    def settings_slot(self):
+        Settings.get_data()

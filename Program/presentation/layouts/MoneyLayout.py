@@ -56,9 +56,9 @@ class MoneyLayout(Layout):
         self.header.setText(item.name)
         self.name_input.setPlainText(item.name)
         self.description_input.setPlainText(item.description)
-        self.copper_input.setValue(item.copper)
-        self.silver_input.setValue(item.silver)
-        self.gold_input.setValue(item.gold)
+        self.copper_input.setValue(item.copper if item.copper else 0)
+        self.silver_input.setValue(item.silver if item.silver else 0)
+        self.gold_input.setValue(item.gold if item.gold else 0)
 
 
     def save_data(self):

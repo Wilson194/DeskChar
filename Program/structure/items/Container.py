@@ -54,3 +54,8 @@ class Container(Item):
     @capacity.setter
     def capacity(self, value):
         self.__capacity = value
+
+
+    @property
+    def type(self):
+        return self.__type

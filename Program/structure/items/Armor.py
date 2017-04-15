@@ -46,6 +46,11 @@ class Armor(Item):
 
 
     @property
+    def type(self):
+        return self.__type
+
+
+    @property
     def quality(self):
         return self.__quality
 

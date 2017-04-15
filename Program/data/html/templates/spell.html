@@ -1,20 +1,39 @@
+<div class="iconAndName">
+    <p style="float: left;">
 
+        <img class="icon" src="{{ object.icon }}">
+    </p>
 
-{{ object.icon }} obrazek
-{{ object.name }}
+    <h3>{{ object.name }}</h3>
+    <p> {{ object.description }}</p>
+</div>
 
-{{ tr.description }} {{ object.description }}
+<div class="vertical-line" ></div>
 
-{{ tr.class }} {{ object.class }}
+<dl class="largeDL">
 
-{{ tr.mana_initial }} {{ object.mana_initial }}
+    <dt> {{ tr.trt('class') }}</dt>
+    <dd> {{ object.drd_class }} </dd>
 
-{{ tr.mana_continual }} {{ object.mana_continual }}
+    <dt> {{ tr.trt('mana_cost_initial') }}</dt>
+    <dd> {{ object.mana_cost_initial }} </dd>
 
-{{ tr.range }} {{ object.range }}
+    <dt> {{ tr.trt('mana_cost_continual') }}</dt>
+    <dd> {{ object.mana_cost_continual }} </dd>
 
-{{ tr.scope }} {{ object.scope }}
+    <dt> {{ tr.trt('range') }}</dt>
+    <dd> {{ object.range }} </dd>
 
-{{ tr.cast_time }} {{ object.cast_time }}
+    <dt> {{ tr.trt('scope') }}</dt>
+    <dd> {{ object.scope }} </dd>
 
-{{ tr.duration }} {{ object.duration }}
+    <dt> {{ tr.trt('cast_time') }}</dt>
+    <dd> {{ object.cast_time }} </dd>
+
+    <dt> {{ tr.trt('duration') }}</dt>
+    <dd> {{ object.duration }} </dd>
+
+</dl>
+
+<br>
+<br>

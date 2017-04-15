@@ -1,0 +1,23 @@
+<div class="objectBlock">
+    <div class="iconAndName">
+        <p style="float: left;">
+            <img class="icon" src="{{object.icon}}">
+        </p>
+
+        <h3>{{object.name}}</h3>
+        <p> {{object.description}} </p>
+    </div>
+
+    <dl>
+        <dt>{{tr.trt('copper')}} </dt>
+        <dd> {{ object.copper }}<img src="resources/icons/copper.png" width="15px"></dd>
+
+        <dt>{{ tr.trt('silver') }}</dt>
+        <dd> {{ object.silver }}<img src="resources/icons/silver.png" width="15px"></dd>
+
+        <dt>{{ tr.trt('gold') }}</dt>
+        <dd> {{ object.gold }}<img src="resources/icons/gold.png" width="15px"></dd>
+    </dl>
+</div>
+<br>
+<br>

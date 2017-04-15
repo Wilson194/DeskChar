@@ -58,6 +58,7 @@ class PlayerTreeManager:
             node.id = -1
         children = self.treeDAO.get_children_nodes(type, node.id)
 
+        # Add effect and modifiers links
         if isinstance(node, NodeObject):
             if node.object.object_type is ObjectType.EFFECT:
                 modifiers = ModifierDAO().get_link(node.object.id)
@@ -66,15 +67,16 @@ class PlayerTreeManager:
                     children.append(modifierNode)
 
             if node.object.object_type is ObjectType.ITEM:
-                effects = EffectDAO().get_link(node.object.id, node.object.object_type)
+                effects = EffectDAO().get_link(node.object.id, node.object.type)
                 for effect in effects:
                     effectNode = NodeObject(None, effect.name, node.id, effect)
                     children.append(effectNode)
 
+        # Sub children
         for i in range(len(children)):
             child = children[i]
             parentType = type if isinstance(child, Folder) else child.object.object_type
-            new = self.__create_tree(child, parentType)
+            new = self.__create_tree(child, type)
             children[i] = new
 
         node.children = children

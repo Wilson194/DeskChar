@@ -105,3 +105,8 @@ class RangeWeapon(Item):
     @rangeHigh.setter
     def rangeHigh(self, value):
         self.__rangeHigh = value
+
+
+    @property
+    def type(self):
+        return self.__type

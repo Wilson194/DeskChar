@@ -67,6 +67,7 @@ class ObjectDatabase(Database):
         nodeParent = parentId if not parentObject else None
 
         node = NodeObject(None, obj.name, nodeParent, obj)
+
         nodeId = PlayerTreeDAO().insert_node(node, obj.object_type)
 
         # Add to importing tree
@@ -93,6 +94,7 @@ class ObjectDatabase(Database):
         Update object in database, update all translate columns
         :param obj: given object
         """
+
         database_name = database_table if database_table else obj.__name__()[-1]
         if obj.id is None:
             raise ValueError('Cant update object without ID')

@@ -59,7 +59,7 @@ class Item(Object):
 
     @property
     def icon(self):
-        return 'resources/icons/tools.png'
+        return 'resources/icons/crate.png'
 
 
     @property

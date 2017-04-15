@@ -17,6 +17,7 @@ class ParserHandler:
                 characters.append(character)
             else:
                 objs = type.instance().DAO()().get_list(id)
+                print(objs[0])
                 child = objs[0].XmlClass()().create_xml(objs)
                 root.append(child)
 

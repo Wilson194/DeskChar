@@ -115,6 +115,7 @@ class PlayerTreeDAO:
         :param node: node object
         :return: id of created node
         """
+
         if isinstance(node, Folder):
             values = {
                 'parent_type': object_type.value,

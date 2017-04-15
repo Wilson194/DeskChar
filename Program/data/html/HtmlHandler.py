@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 from jinja2 import Environment, PackageLoader, FileSystemLoader
+from presentation.Translate import Translate
 import os
+
+from structure.enums.Items import Items
+from structure.enums.ObjectType import ObjectType
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -17,9 +21,14 @@ class HtmlHandler:
     def create_html(self, objects, destination):
         # self.to_unicode(objects)
 
+        export = objects[0].object_type
         html = render_template(
             "base.html",
-            items=objects,
+            objects=objects,
+            objectType=ObjectType,
+            itemType=Items,
+            export=export,
+            tr=Translate()
         )
 
         with open(destination, 'w', encoding='utf8') as file:
