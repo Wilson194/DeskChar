@@ -52,6 +52,7 @@ class MeleeWeaponLayout(Layout):
                                                   8, True)
         self.handling_input = self.combo_box(self.input_grid, 'Handling', Handling, 0,
                                              9, True)
+        self.amount_input = self.spin_box(self.input_grid, 'Amount', 0, 10, True)
 
         self.addLayout(self.input_grid)
 
@@ -71,6 +72,7 @@ class MeleeWeaponLayout(Layout):
         self.rampancy_input.setValue(item.rampancy if item.rampancy else 0)
         self.defence_input.setValue(item.defence if item.length else 0)
         self.length_input.setValue(item.length if item.length else 0)
+        self.amount_input.setValue(item.amount)
 
         handling_index = item.handling.value if item.handling is not None else 0
         weapon_weight_index = item.weaponWeight.value if item.weaponWeight is not None else 0
@@ -91,6 +93,7 @@ class MeleeWeaponLayout(Layout):
         self.object.rampancy = self.rampancy_input.value()
         self.object.defence = self.defence_input.value()
         self.object.length = self.length_input.value()
+        self.object.amount = self.amount_input.value()
 
         handling_index = self.handling_input.currentIndex()
         weapon_weight_index = self.weapon_weight_input.currentIndex()

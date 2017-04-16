@@ -42,6 +42,7 @@ class ItemLayout(Layout):
         self.description_input = self.text_box(self.input_grid, 'Description', 0, 1)
         self.weight_input = self.spin_box(self.input_grid, 'Weight', 0, 2, True)
         self.price_input = self.spin_box(self.input_grid, 'Price', 0, 3, True)
+        self.amount_input = self.spin_box(self.input_grid, 'Amount', 0, 4, True)
 
         self.addLayout(self.input_grid)
 
@@ -57,6 +58,7 @@ class ItemLayout(Layout):
         self.description_input.setPlainText(item.description)
         self.weight_input.setValue(item.weight)
         self.price_input.setValue(item.price)
+        self.amount_input.setValue(item.amount)
 
 
     def save_data(self):
@@ -67,5 +69,6 @@ class ItemLayout(Layout):
         self.object.description = self.description_input.toPlainText()
         self.object.weight = self.weight_input.value()
         self.object.price = self.price_input.value()
+        self.object.amount = self.amount_input.value()
 
         self.item_manager.update(self.object)

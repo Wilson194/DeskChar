@@ -47,6 +47,7 @@ class ArmorLayout(Layout):
         self.weightB_input = self.spin_box(self.input_grid, 'WeightB', 0, 5, True)
         self.weightC_input = self.spin_box(self.input_grid, 'WeightC', 0, 6, True)
         self.size_input = self.spin_box(self.input_grid, 'Size', 0, 7, True)
+        self.amount_input = self.spin_box(self.input_grid, 'Amount', 0, 8, True)
 
         self.addLayout(self.input_grid)
 
@@ -66,6 +67,7 @@ class ArmorLayout(Layout):
         self.weightB_input.setValue(item.weightB)
         self.weightC_input.setValue(item.weightC)
         self.size_input.setValue(item.size)
+        self.amount_input.setValue(item.amount)
 
 
     def save_data(self):
@@ -80,5 +82,6 @@ class ArmorLayout(Layout):
         self.object.weightB = self.weightB_input.value()
         self.object.weightC = self.weightC_input.value()
         self.object.size = self.size_input.value()
+        self.object.amount = self.amount_input.value()
 
         self.item_manager.update(self.object)

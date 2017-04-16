@@ -1,3 +1,4 @@
+from structure.enums.Alignment import Alignment
 from structure.enums.Classes import Classes
 from structure.enums.NodeType import NodeType
 from structure.enums.ObjectType import ObjectType
@@ -16,7 +17,7 @@ class Character(Object):
     TABLE_SCHEMA = [
         'id', 'name', 'description', 'agility', 'charisma', 'intelligence', 'mobility',
         'strength', 'toughness', 'age', 'height', 'weight', 'level', 'xp', 'maxHealth', 'maxMana',
-        'drdClass', 'drdRace'
+        'drdClass', 'drdRace', 'alignment', 'currentMana', 'currentHealth'
     ]
 
 
@@ -25,7 +26,8 @@ class Character(Object):
                  mobility: int = None, strength: int = None, toughness: int = None, age: int = None,
                  height: int = None, weight: int = None, level: int = None, xp: int = None,
                  maxHealth: int = None, maxMana: int = None, drdClass: Classes = None,
-                 drdRace: Races = None):
+                 drdRace: Races = None, alignment: Alignment = None, currentHealth: int = None,
+                 currentMana: int = None):
         super().__init__(id, lang, name, description)
 
         self.__agility = agility
@@ -41,8 +43,11 @@ class Character(Object):
         self.__xp = xp
         self.__maxHealth = maxHealth
         self.__maxMana = maxMana
+        self.__currentHealth = currentHealth
+        self.__currentMana = currentMana
         self.__drdClass = drdClass
         self.__drdRace = drdRace
+        self.__alignment = alignment
 
         self.__items = []
         self.__armors = []
@@ -250,6 +255,36 @@ class Character(Object):
     @drdClass.setter
     def drdClass(self, value):
         self.__drdClass = value
+
+
+    @property
+    def alignment(self):
+        return self.__alignment
+
+
+    @alignment.setter
+    def alignment(self, value):
+        self.__alignment = value
+
+
+    @property
+    def currentHealth(self):
+        return self.__currentHealth
+
+
+    @currentHealth.setter
+    def currentHealth(self, value):
+        self.__currentHealth = value
+
+
+    @property
+    def currentMana(self):
+        return self.__currentMana
+
+
+    @currentMana.setter
+    def currentMana(self, value):
+        self.__currentMana = value
 
 
     @property

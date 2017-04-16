@@ -4,15 +4,16 @@ from structure.enums.Items import Items
 
 
 class Item(Object):
-    TABLE_SCHEMA = ['id', 'name', 'description', 'weight', 'price', 'type']
+    TABLE_SCHEMA = ['id', 'name', 'description', 'weight', 'price', 'type', 'amount']
 
 
-    def __init__(self, id=None, lang=None, name=None, description=None,
-                 parent_id=None, weight=None, price=None):
+    def __init__(self, id: int = None, lang: str = None, name: str = None, description: str = None,
+                 parent_id: int = None, weight: int = None, price: int = None, amount: int = 1):
         super().__init__(id, lang, name, description)
         self.__parent_id = parent_id
         self.__weight = weight
         self.__price = price
+        self.__amount = amount
         self.__type = Items.GENERIC
         self.__effects = []
 
@@ -110,6 +111,14 @@ class Item(Object):
     @effects.setter
     def effects(self, value):
         self.__effects = value
+
+    @property
+    def amount(self):
+        return self.__amount
+
+    @amount.setter
+    def amount(self, value):
+        self.__amount = value
 
 
     def __eq__(self, other):

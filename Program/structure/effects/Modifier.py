@@ -58,7 +58,7 @@ class Modifier(Object):
 
     @property
     def icon(self):
-        return 'resources/icons/potionGreen.png'
+        return 'resources/icons/gemGreen.png'
 
 
     @property

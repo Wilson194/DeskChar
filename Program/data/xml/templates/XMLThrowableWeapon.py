@@ -21,6 +21,7 @@ class XMLThrowableWeapon(XMLTemplate):
         self.rampancy = XElement('rampancy')
         self.rangeLow = XElement('rangeLow')
         self.rangeMedium = XElement('rangeMedium')
+        self.amount = XElement('amount')
         self.rangeHigh = XElement('rangeHigh')
         self.defence = XElement('defence')
         self.weaponWeight = XElement('weaponWeight', WeaponWeight)

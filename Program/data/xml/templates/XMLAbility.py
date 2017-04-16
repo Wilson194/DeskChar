@@ -1,3 +1,4 @@
+from data.xml.templates.XMLAbilityContext import XMLAbilityContext
 from data.xml.templates.XMLTemplate import XMLTemplate, XElement, XAttribElement, XInstance
 from structure.enums.Classes import Classes
 from structure.enums.ObjectType import ObjectType
@@ -17,3 +18,5 @@ class XMLAbility(XMLTemplate):
         self.chance = XAttribElement('chance', 'lang')
         self.drd_race = XElement('race', Races)
         self.drd_class = XElement('class', Classes)
+
+        self.contexts = XInstance('contexts', XMLAbilityContext)

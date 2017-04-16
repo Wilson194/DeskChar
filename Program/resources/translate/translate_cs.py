@@ -15,6 +15,12 @@ translate = {
     'Menu.templates'            : 'Šablony',
     'Menu.effect'               : 'Efekty',
     'Menu.modifier'             : 'Modifikátory',
+    'Menu.character'            : 'Postavy',
+    'Menu.monster'              : 'Příšery',
+    'Menu.scenario'             : 'Dobrodružství',
+    'Menu.location'             : 'Lokace',
+    'Menu.abilityContext'       : 'Kontext pro schopnosti',
+
 
     'Name'                      : 'Jméno',
     'Description'               : 'Popis',
@@ -45,6 +51,7 @@ translate = {
     'Size'                      : 'Velikost',
     'Quality'                   : 'Kvalita',
     'Capacity'                  : 'Kapacita',
+    'Amount'                    : 'Množství',
 
 
     'Folder'                    : 'Složka',
@@ -63,6 +70,10 @@ translate = {
     'ObjectType.EFFECT'         : 'Efekty',
     'ObjectType.CHARACTER'      : 'Postavy',
     'ObjectType.MONSTER'        : 'Příšery',
+    'ObjectType.SCENARIO'       : 'Dobrodružství',
+    'ObjectType.LOCATION'       : 'Lokace',
+    'ObjectType.ABILITY_CONTEXT': 'Kontext pro chopnosti',
+
 
     'NodeType.FOLDER'           : 'Složka',
     'NodeType.OBJECT'           : 'Objekt',
@@ -193,6 +204,9 @@ translate = {
     'Xp'                        : 'Zkušenosti',
     'MaxHealth'                 : 'Maximální počet životů',
     'MaxMana'                   : 'Maximální množství many',
+    'CurrentHealth'             : 'Aktuální počet životů',
+    'CurrentMana'               : 'Aktuální monžství many',
+    'Date'                      : 'Datum',
     ''                          : '',
 
     'DRAGON'                    : 'Drak',

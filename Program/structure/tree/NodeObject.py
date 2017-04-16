@@ -24,6 +24,5 @@ class NodeObject(Node):
 
 
     def __repr__(self):
-        return '<structure.tree.NodeObject -> {}(id: {}, parentId: {})'.format(
-            self.object.object_type,
-            self.object.id, self.parent_id)
+        return '<structure.tree.NodeObject -> {}(id: {}, parentId: {}, name: {})'.format(
+            self.object.object_type, self.object.id, self.parent_id, self.name)

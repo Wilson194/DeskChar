@@ -1,3 +1,4 @@
+from data.DAO.AbilityContextDAO import AbilityContextDAO
 from data.DAO.DAO import DAO
 from data.DAO.interface.IAbilityDAO import IAbilityDAO
 from data.database.Database import Database
@@ -62,6 +63,8 @@ class AbilityDAO(DAO, IAbilityDAO):
                           tr_data.get('description', ''), tr_data.get('chance', ''),
                           drd_race, drd_class)
 
+        ability.contexts = self.get_contexts(ability.id)
+
         return ability
 
 
@@ -80,3 +83,19 @@ class AbilityDAO(DAO, IAbilityDAO):
             item = self.get(line['ID'], lang)
             items.append(item)
         return items
+
+
+    def get_contexts(self, object_id: int) -> list:
+        data = self.database.select('Ability_context', {'ability_id': object_id})
+
+        contexts = []
+        for row in data:
+            context = AbilityContextDAO().get(row['context_id'])
+            contexts.append(context)
+
+        return contexts
+
+
+    def create_context_link(self, parentObject, targetObject):
+        self.database.insert('Ability_context',
+                             {'ability_id': parentObject.id, 'context_id': targetObject.id})

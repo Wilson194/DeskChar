@@ -21,5 +21,6 @@ class XMLRangeWeapon(XMLTemplate):
         self.rangeLow = XElement('rangeLow')
         self.rangeMedium = XElement('rangeMedium')
         self.rangeHigh = XElement('rangeHigh')
+        self.amount = XElement('amount')
 
         self.effects = XInstance('effects', XMLEffect)

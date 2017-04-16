@@ -21,6 +21,7 @@ class XMLMeleeWeapon(XMLTemplate):
         self.rampancy = XElement('rampancy')
         self.defence = XElement('defence')
         self.length = XElement('length')
+        self.amount = XElement('amount')
         self.weaponWeight = XElement('weaponWeight', WeaponWeight)
         self.handling = XElement('handling', Handling)
 

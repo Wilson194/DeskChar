@@ -19,5 +19,6 @@ class XMLArmor(XMLTemplate):
         self.weightB = XElement('weightB')
         self.weightC = XElement('weightC')
         self.size = XElement('size')
+        self.amount = XElement('amount')
 
         self.effects = XInstance('effects', XMLEffect)

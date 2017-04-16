@@ -1,4 +1,5 @@
 from business.managers.LangManager import LangManager
+from data.DAO.AbilityDAO import AbilityDAO
 from data.DAO.EffectDAO import EffectDAO
 from data.DAO.ItemDAO import ItemDAO
 from data.DAO.ModifierDAO import ModifierDAO
@@ -72,6 +73,12 @@ class PlayerTreeManager:
                     effectNode = NodeObject(None, effect.name, node.id, effect)
                     children.append(effectNode)
 
+            if node.object.object_type is ObjectType.ABILITY:
+                contexts = AbilityDAO().get_contexts(node.object.id)
+                for context in contexts:
+                    contextNode = NodeObject(None, context.name, node.id, context)
+                    children.append(contextNode)
+
         # Sub children
         for i in range(len(children)):
             child = children[i]
@@ -136,6 +143,11 @@ class PlayerTreeManager:
                 parentObject = parentType.instance().DAO()().get(parentObjectId)
 
                 ItemDAO().create_effect_link(parentObject, targetObject)
+            elif targetObject.object_type is ObjectType.ABILITY_CONTEXT:
+                parentObjectId = self.treeDAO.get_node(parentId).object.id
+                parentObject = parentType.instance().DAO()().get(parentObjectId)
+
+                AbilityDAO().create_context_link(parentObject, targetObject)
             else:
                 node = NodeObject(None, name, parentId, targetObject)
                 self.treeDAO.insert_node(node, parentType)
@@ -295,11 +307,11 @@ class PlayerTreeManager:
         :param parent: parent node id
         """
         objects = ParserHandler().import_xml(file_path)
-
+        print(objects)
         ObjectDatabase('test.db').set_many(True)
 
         for languages in objects:
-            leader = languages.popitem()
+            leader = languages.popitem()  # TODO default language
 
             leaderCode = leader[0]
             leaderObejct = leader[1]
@@ -310,8 +322,9 @@ class PlayerTreeManager:
             if not LangManager().lang_exists(leaderCode):
                 LangManager().create_lang(leaderCode, leaderCode)
 
+            dbName = parentType.name.title().replace('_', '')
             leaderId = ObjectDatabase('test.db').insert_object(leaderObejct,
-                                                               parentType.name.title(), parentType,
+                                                               dbName, parentType,
                                                                parent)
             leaderObejct.id = leaderId
 

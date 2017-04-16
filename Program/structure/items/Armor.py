@@ -5,14 +5,15 @@ from structure.items.Item import Item
 
 class Armor(Item):
     TABLE_SCHEMA = ['id', 'name', 'description', 'price', 'quality', 'weightA', 'weightB',
-                    'weightC', 'size', 'type']
+                    'weightC', 'size', 'type', 'amount']
 
 
     def __init__(self, id: int = None, lang=None, name: str = None,
                  description: str = None, parent_id: int = None,
                  price: int = None, quality: int = None,
-                 weightA: int = None, weightB: int = None, weightC: int = None, size: int = None):
-        super().__init__(id, lang, name, description, parent_id, None, price)
+                 weightA: int = None, weightB: int = None, weightC: int = None, size: int = None,
+                 amount: int = 1):
+        super().__init__(id, lang, name, description, parent_id, None, price, amount)
 
         self.__quality = quality
         self.__weightA = weightA

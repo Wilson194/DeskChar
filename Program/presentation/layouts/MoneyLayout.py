@@ -43,6 +43,7 @@ class MoneyLayout(Layout):
         self.copper_input = self.spin_box(self.input_grid, 'Copper', 0, 2, True)
         self.silver_input = self.spin_box(self.input_grid, 'Silver', 0, 3, True)
         self.gold_input = self.spin_box(self.input_grid, 'Gold', 0, 4, True)
+        self.amount_input = self.spin_box(self.input_grid, 'Amount', 0, 5, True)
 
         self.addLayout(self.input_grid)
 
@@ -59,6 +60,7 @@ class MoneyLayout(Layout):
         self.copper_input.setValue(item.copper if item.copper else 0)
         self.silver_input.setValue(item.silver if item.silver else 0)
         self.gold_input.setValue(item.gold if item.gold else 0)
+        self.amount_input.setValue(item.amount)
 
 
     def save_data(self):
@@ -71,5 +73,6 @@ class MoneyLayout(Layout):
         self.object.copper = self.copper_input.value()
         self.object.silver = self.silver_input.value()
         self.object.gold = self.gold_input.value()
+        self.object.amount = self.amount_input.value()
 
         self.item_manager.update(self.object)

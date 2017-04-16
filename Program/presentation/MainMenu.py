@@ -74,6 +74,13 @@ class MainMenu(QMenuBar):
 
         monster_templates = QAction(QIcon(ObjectType.MONSTER.icon()), TR().tr('Menu.monster'),
                                     self)
+        scenario_templates = QAction(QIcon(ObjectType.SCENARIO.icon()), TR().tr('Menu.scenario'),
+                                     self)
+        location_templates = QAction(QIcon(ObjectType.LOCATION.icon()), TR().tr('Menu.location'),
+                                     self)
+
+        context_templates = QAction(QIcon(ObjectType.ABILITY_CONTEXT.icon()),
+                                    TR().tr('Menu.ability_context'),self)
 
         ability_templates.triggered.connect(
             lambda: self.templates_menu_signal.emit(ObjectType.ABILITY))
@@ -89,6 +96,15 @@ class MainMenu(QMenuBar):
             lambda: self.templates_menu_signal.emit(ObjectType.CHARACTER))
         monster_templates.triggered.connect(
             lambda: self.templates_menu_signal.emit(ObjectType.MONSTER))
+        scenario_templates.triggered.connect(
+            lambda: self.templates_menu_signal.emit(ObjectType.SCENARIO)
+        )
+        location_templates.triggered.connect(
+            lambda: self.templates_menu_signal.emit(ObjectType.LOCATION)
+        )
+        context_templates.triggered.connect(
+            lambda: self.templates_menu_signal.emit(ObjectType.ABILITY_CONTEXT)
+        )
 
         file_menu = self.addMenu(TR().tr('Menu.templates'))
         file_menu.addAction(spell_templates)
@@ -99,6 +115,9 @@ class MainMenu(QMenuBar):
         file_menu.addAction(character_templates)
         file_menu.addSeparator()
         file_menu.addAction(monster_templates)
+        file_menu.addAction(scenario_templates)
+        file_menu.addAction(location_templates)
+        file_menu.addAction(context_templates)
 
 
     def settings_slot(self):

@@ -15,5 +15,6 @@ class XMLMoney(XMLTemplate):
         self.copper = XElement('copper')
         self.silver = XElement('silver')
         self.gold = XElement('gold')
+        self.amount = XElement('amount')
 
         self.effects = XInstance('effects', XMLEffect)

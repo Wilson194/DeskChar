@@ -46,6 +46,7 @@ class ContainerLayout(Layout):
         self.weight_input = self.spin_box(self.input_grid, 'Weight', 0, 2, True)
         self.price_input = self.spin_box(self.input_grid, 'Price', 0, 3, True)
         self.capacity_input = self.spin_box(self.input_grid, 'Capacity', 0, 4, True)
+        self.amount_input = self.spin_box(self.input_grid, 'Amount', 0, 5, True)
 
         self.addLayout(self.input_grid)
 
@@ -62,6 +63,7 @@ class ContainerLayout(Layout):
         self.weight_input.setValue(item.weight if item.weight else 0)
         self.price_input.setValue(item.price if item.price else 0)
         self.capacity_input.setValue(item.capacity if item.capacity else 0)
+        self.amount_input.setValue(item.amount)
 
 
     def save_data(self):
@@ -73,5 +75,6 @@ class ContainerLayout(Layout):
         self.object.weight = self.weight_input.value()
         self.object.price = self.price_input.value()
         self.object.capacity = self.capacity_input.value()
+        self.object.amount = self.amount_input.value()
 
         self.item_manager.update(self.object)

@@ -1,8 +1,10 @@
+from data.DAO.CharacterDAO import CharacterDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from data.DAO.interface.ISpellDAO import ISpellDAO
 from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
 from structure.character.Character import Character
+from structure.character.PartyCharacter import PartyCharacter
 from structure.enums.Alignment import Alignment
 from structure.enums.Classes import Classes
 from structure.enums.Items import Items
@@ -19,8 +21,8 @@ from structure.spells.Spell import Spell
 from data.DAO.DAO import DAO
 
 
-class CharacterDAO(DAO, ISpellDAO):
-    DATABASE_TABLE = 'Character'
+class PartyCharacterDAO(DAO):
+    DATABASE_TABLE = 'PartyCharacter'
     DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.CHARACTER
 
@@ -52,11 +54,9 @@ class CharacterDAO(DAO, ISpellDAO):
         :param character_id: id of spell
         """
         self.database.delete(self.DATABASE_TABLE, character_id)
-        self.database.delete_where('translates',
-                                   {'target_id': character_id, 'type': ObjectType.CHARACTER})
 
 
-    def get(self, character_id: int, lang: str = None) -> Character:
+    def get(self, character_id: int, lang: str = None) -> PartyCharacter:
         """
         Get spell from database
         :param character_id: id of spell
@@ -66,49 +66,19 @@ class CharacterDAO(DAO, ISpellDAO):
         if lang is None:  # TODO : default lang
             lang = 'cs'
 
-        data = dict(self.database.select(self.DATABASE_TABLE, {'ID': character_id})[0])
-        tr_data = self.database.select_translate(character_id, ObjectType.CHARACTER.value,
+        select = self.database.select(self.DATABASE_TABLE, {'ID': character_id})
+
+        if not select:
+            return None
+
+        data = dict(select[0])
+        tr_data = self.database.select_translate(character_id, ObjectType.PARTY_CHARACTER.value,
                                                  lang)
 
-        drdClass = Classes(data.get('drdClass')) if data.get('drdClass') is not None else None
-        drdRace = Races(data.get('drdRace')) if data.get('drdRace') is not None else None
-        alignment = Alignment(data.get('alignment')) if data.get('alignment') is not None else None
+        character = PartyCharacter(data.get('ID'), lang, None, None, tr_data.get('deviceName', ''),
+                                   tr_data.get('MACAddress'))
 
-        character = Character(data.get('ID'), lang, tr_data.get('name', ''),
-                              tr_data.get('description', ''), data.get('agility', 0),
-                              data.get('charisma', 0), data.get('intelligence', 0),
-                              data.get('mobility', 0), data.get('strength', 0),
-                              data.get('toughness', 0), data.get('age', 0), data.get('height', 0),
-                              data.get('weight', 0), data.get('level', 0), data.get('xp', 0),
-                              data.get('maxHealth', 0), data.get('maxMana', 0), drdClass, drdRace,
-                              alignment, data.get('currentHealth', 0), data.get('currentMana', 0))
-
-        spells = PlayerTreeDAO().get_children_objects(ObjectType.SPELL, character)
-        character.spells = spells
-
-        abilities = PlayerTreeDAO().get_children_objects(ObjectType.ABILITY, character)
-        character.abilities = abilities
-
-        effects = PlayerTreeDAO().get_children_objects(ObjectType.EFFECT, character)
-        character.effects = effects
-
-        items = PlayerTreeDAO().get_children_objects(ObjectType.ITEM, character)
-
-        for item in items:
-            if isinstance(item, Armor):
-                character.addArmor(item)
-            elif isinstance(item, Money):
-                character.addMoney(item)
-            elif isinstance(item, Container):
-                character.addContainer(item)
-            elif isinstance(item, MeleeWeapon):
-                character.addMeleeWeapon(item)
-            elif isinstance(item, RangeWeapon):
-                character.addRangedWeapon(item)
-            elif isinstance(item, ThrowableWeapon):
-                character.addThrowableWeapon(item)
-            else:
-                character.addItem(item)
+        character.character = CharacterDAO().get(data.get('character_id'))
 
         return character
 

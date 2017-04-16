@@ -17,6 +17,6 @@ class XMLContainer(XMLTemplate):
         self.quality = XElement('quality')
         self.weight = XElement('weight')
         self.capacity = XElement('capacity')
+        self.amount = XElement('amount')
 
         self.effects = XInstance('effects', XMLEffect)
-

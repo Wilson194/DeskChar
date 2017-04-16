@@ -52,6 +52,7 @@ class ThrowableWeaponLayout(Layout):
         self.defence_input = self.spin_box(self.input_grid, 'Defence', 0, 10, True)
         self.weapon_weight_input = self.combo_box(self.input_grid, 'WeaponWeight', WeaponWeight, 0,
                                                   11, True)
+        self.amount_input = self.spin_box(self.input_grid, 'Amount', 0, 11, True)
 
         self.addLayout(self.input_grid)
 
@@ -74,6 +75,8 @@ class ThrowableWeaponLayout(Layout):
         self.rangeMedium_input.setValue(item.rangeMedium)
         self.rangeHigh_input.setValue(item.rangeHigh)
         self.defence_input.setValue(item.defence)
+        self.amount_input.setValue(item.amount)
+
         weaponWeightIndex = item.weaponWeight.value if item.weaponWeight is not None else 0
 
         self.weapon_weight_input.setCurrentIndex(weaponWeightIndex)
@@ -94,6 +97,7 @@ class ThrowableWeaponLayout(Layout):
         self.object.rangeMedium = self.rangeMedium_input.value()
         self.object.rangeHigh = self.rangeHigh_input.value()
         self.object.defence = self.defence_input.value()
+        self.object.amount = self.amount_input.value()
 
         weponWeightIndex = self.weapon_weight_input.currentIndex()
         self.object.weaponWeight = WeaponWeight(weponWeightIndex) if weponWeightIndex > 0 else None

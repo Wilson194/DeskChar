@@ -48,6 +48,7 @@ class RangeWeaponLayout(Layout):
         self.rangeLow_input = self.spin_box(self.input_grid, 'RangeLow', 0, 7, True)
         self.rangeMedium_input = self.spin_box(self.input_grid, 'RangeMedium', 0, 8, True)
         self.rangeHigh_input = self.spin_box(self.input_grid, 'RangeHigh', 0, 9, True)
+        self.amount_input = self.spin_box(self.input_grid, 'Amount', 0, 10, True)
 
         self.addLayout(self.input_grid)
 
@@ -69,6 +70,7 @@ class RangeWeaponLayout(Layout):
         self.rangeLow_input.setValue(item.rangeLow)
         self.rangeMedium_input.setValue(item.rangeMedium)
         self.rangeHigh_input.setValue(item.rangeHigh)
+        self.amount_input.setValue(item.amount)
 
 
     def save_data(self):
@@ -85,5 +87,6 @@ class RangeWeaponLayout(Layout):
         self.object.rangeLow = self.rangeLow_input.value()
         self.object.rangeMedium = self.rangeMedium_input.value()
         self.object.rangeHigh = self.rangeHigh_input.value()
+        self.object.amount = self.amount_input.value()
 
         self.item_manager.update(self.object)

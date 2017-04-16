@@ -36,6 +36,11 @@ class ToolBar(QToolBar):
         character_action = QAction(QIcon(ObjectType.CHARACTER.icon()), 'Character', self.__parent)
         toolbar.addAction(character_action)
 
+        context_action = QAction(QIcon(ObjectType.ABILITY_CONTEXT.icon()), 'AbilityContext', self.__parent)
+        toolbar.addAction(context_action)
+
+
+
         spell_action.triggered.connect(
             lambda: self.templates_tool_signal.emit(ObjectType.SPELL))
 
@@ -54,10 +59,27 @@ class ToolBar(QToolBar):
         character_action.triggered.connect(
             lambda: self.templates_tool_signal.emit(ObjectType.CHARACTER))
 
+        context_action.triggered.connect(
+            lambda: self.templates_tool_signal.emit(ObjectType.ABILITY_CONTEXT))
+
         toolbar.addSeparator()
 
         monster_action = QAction(QIcon(ObjectType.MONSTER.icon()), 'Monster', self.__parent)
         toolbar.addAction(monster_action)
 
+        scenario_action = QAction(QIcon(ObjectType.SCENARIO.icon()), 'Scenario', self.__parent)
+        toolbar.addAction(scenario_action)
+
+        location_action = QAction(QIcon(ObjectType.LOCATION.icon()), 'Location', self.__parent)
+        toolbar.addAction(location_action)
+
         monster_action.triggered.connect(
             lambda: self.templates_tool_signal.emit(ObjectType.MONSTER))
+
+        scenario_action.triggered.connect(
+            lambda: self.templates_tool_signal.emit(ObjectType.SCENARIO))
+
+        location_action.triggered.connect(
+            lambda: self.templates_tool_signal.emit(ObjectType.LOCATION))
+
+

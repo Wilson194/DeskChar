@@ -76,6 +76,7 @@ class DatabaseTables:
             Column('rangeHigh', 'INTEGER'),
             Column('weaponWeight', 'INTEGER'),
             Column('handling', 'INTEGER'),
+            Column('amount', 'INTEGER'),
         ]
 
         try:
@@ -94,6 +95,20 @@ class DatabaseTables:
 
         try:
             database.create_table('Ability', ability_columns)
+        except OperationalError:
+            pass
+
+        # ///////////// Ability context \\\\\\\\\\\\\\\\\\
+
+        ability_context_columns = [
+            Column('ID', 'INTEGER', True, False, True),
+            Column('value', 'INTEGER'),
+            Column('valueType', 'INTEGER'),
+            Column('targetAttribute', 'INTEGER'),
+        ]
+
+        try:
+            database.create_table('AbilityContext', ability_context_columns)
         except OperationalError:
             pass
 
@@ -158,10 +173,28 @@ class DatabaseTables:
             Column('maxMana', 'INTEGER'),
             Column('drdRace', 'INTEGER'),
             Column('drdClass', 'INTEGER'),
+            Column('alignment', 'INTEGER'),
+            Column('currentMana', 'INTEGER'),
+            Column('currentHealth', 'INTEGER'),
+
         ]
 
         try:
             database.create_table('Character', character_columns)
+        except OperationalError:
+            pass
+
+        # ///////////// Party character \\\\\\\\\\\\\\\\\\
+
+        party_character_columns = [
+            Column('ID', 'INTEGER', True, False, True),
+            Column('deviceName', 'TEXT'),
+            Column('MACAddress', 'TEXT'),
+            Column('character_id', 'INTEGER')
+        ]
+
+        try:
+            database.create_table('PartyCharacter', party_character_columns)
         except OperationalError:
             pass
 
@@ -186,6 +219,30 @@ class DatabaseTables:
 
         try:
             database.create_table('Monster', monster_columns)
+        except OperationalError:
+            pass
+
+        # ///////////// Scenario \\\\\\\\\\\\\\\\\\
+
+        scenario_columns = [
+            Column('ID', 'INTEGER', True, False, True),
+            Column('date', 'INTEGER'),
+        ]
+
+        try:
+            database.create_table('Scenario', scenario_columns)
+        except OperationalError:
+            pass
+
+        # ///////////// Location \\\\\\\\\\\\\\\\\\
+
+        location_columns = [
+            Column('ID', 'INTEGER', True, False, True),
+
+        ]
+
+        try:
+            database.create_table('Location', location_columns)
         except OperationalError:
             pass
 
@@ -224,6 +281,24 @@ class DatabaseTables:
 
         try:
             database.create_table('Effect_modifier', effectModifierColumns, effectModifierForeigns)
+        except OperationalError:
+            pass
+
+        # ///////////// Ability context \\\\\\\\\\\\\\\\\\
+
+        abilityContextColumns = [
+            Column('ability_id', 'INTEGER', not_null=True),
+            Column('context_id', 'INTEGER', not_null=True),
+        ]
+
+        abilityContextForeigns = [
+            Foreign('ability_id', 'Ability', 'ID', 'CASCADE'),
+            Foreign('context_id', 'AbilityContext', 'ID', 'CASCADE'),
+        ]
+
+        try:
+            database.create_table('Ability_context', abilityContextColumns,
+                                  abilityContextForeigns)
         except OperationalError:
             pass
 

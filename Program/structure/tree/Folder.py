@@ -14,3 +14,6 @@ class Folder(Node):
 
     def add_child(self, child):
         self.__children.append(child)
+
+    def __repr__(self):
+        return '<structure.tree.Folder -> name: {}, parentId: {}'.format(self.name, self.parent_id)

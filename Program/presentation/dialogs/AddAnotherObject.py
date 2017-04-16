@@ -19,13 +19,15 @@ class AddAnotherObject(QtWidgets.QDialog):
     def __init__(self, node: Node, parent=None):
         super().__init__(parent)
         self.setWindowTitle(TR().tr('Add_object'))
-        # self.setWindowIcon('resources/icons/char.png')
+        self.setWindowIcon(QtGui.QIcon('resources/icons/char.png'))
         self.treeManager = PlayerTreeManager()
+
         self.__selected = {}
 
         self.__node = node
         self.__parent = parent
         self.init_ui()
+        self.resize(800,600)
 
 
     def init_ui(self):

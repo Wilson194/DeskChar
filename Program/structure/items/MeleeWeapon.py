@@ -5,15 +5,15 @@ from structure.items.Item import *
 
 class MeleeWeapon(Item):
     TABLE_SCHEMA = ['id', 'name', 'description', 'weight', 'price', 'strength', 'rampancy',
-                    'defence', 'length', 'weaponWeight', 'handling', 'type']
+                    'defence', 'length', 'weaponWeight', 'handling', 'type', 'amount']
 
 
     def __init__(self, id: int = None, lang=None, name: str = None,
                  description: str = None, parent_id: int = None, weight: int = None,
                  price: int = None, strength: int = None,
                  rampancy: int = None, defence: int = None, length: int = None,
-                 weaponWeight: WeaponWeight = None, handling: Handling = None):
-        super().__init__(id, lang, name, description, parent_id, weight, price)
+                 weaponWeight: WeaponWeight = None, handling: Handling = None, amount: int = 1):
+        super().__init__(id, lang, name, description, parent_id, weight, price, amount)
 
         self.__strength = strength
         self.__rampancy = rampancy

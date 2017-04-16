@@ -15,5 +15,6 @@ class XMLItem(XMLTemplate):
         self.description = XAttribElement('description', 'lang')
         self.price = XElement('price')
         self.weight = XElement('weight')
+        self.amount = XElement('amount')
 
         self.effects = XInstance('effects', XMLEffect)

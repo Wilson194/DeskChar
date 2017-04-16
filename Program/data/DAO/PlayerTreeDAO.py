@@ -45,7 +45,8 @@ class PlayerTreeDAO:
         return map_objects(data)[0] if len(data) > 0 else None
 
 
-    def get_children_objects(self, targetType: ObjectType, object: object, ) -> list:
+    def get_children_objects(self, targetType: ObjectType, object: object,
+                             direct: bool = False) -> list:
         """
         Recursively find all child object of give type
         :param targetType:
@@ -60,17 +61,21 @@ class PlayerTreeDAO:
                                      'target_type': object.object_type.value,
                                      'parent_type': object.object_type.value})[0]
 
-        return self.__get_children_objects(targetType, node['ID'], object.object_type)
+        return self.__get_children_objects(targetType, node['ID'], object.object_type,
+                                           direct=direct)
 
 
-    def __get_children_objects(self, targetType, nodeId, parentType, objects: list = None):
+    def __get_children_objects(self, targetType, nodeId, parentType, objects: list = None, direct: bool = False):
         if objects is None:
             objects = []
 
         children = self.get_children_nodes(parentType, nodeId)
 
         for child in children:
-            objects = self.__get_children_objects(targetType, child.id, parentType, objects)
+            if direct and isinstance(child, NodeObject) and child.object.object_type is not targetType:
+                continue
+
+            objects = self.__get_children_objects(targetType, child.id, parentType, objects, direct=direct)
             if isinstance(child, NodeObject) and child.object.object_type is targetType:
                 objects.append(child.object)
 

@@ -68,14 +68,15 @@ class ItemDAO(DAO, IItemDAO):
 
         if data['type'] == Items.GENERIC.value:
             item = Item(item_id, lang, tr_data.get('name', ''), tr_data.get('description', ''),
-                        data.get('parent_id', 0), data.get('weight', 0), data.get('price', 0))
+                        data.get('parent_id', 0), data.get('weight', 0), data.get('price', 0),
+                        data.get('amount', 1))
 
         if data['type'] == Items.CONTAINER.value:
             item = Container(item_id, lang, tr_data.get('name', ''),
                              tr_data.get('description', ''),
                              data.get('parent_id', 0), data.get('weight', 0),
                              data.get('price', 0),
-                             data.get('capacity', 0))
+                             data.get('capacity', 0), data.get('amount', 1))
 
             items = PlayerTreeDAO().get_children_objects(ObjectType.ITEM, item)
 
@@ -92,7 +93,7 @@ class ItemDAO(DAO, IItemDAO):
                                tr_data.get('description', ''), data.get('parent_id', 0),
                                data.get('weight', 0), data.get('price', 0), data.get('strength', 0),
                                data.get('rampancy', 0), data.get('defence', 0),
-                               data.get('length', 0), weaponWeight, handling)
+                               data.get('length', 0), weaponWeight, handling, data.get('amount', 1))
 
         if data['type'] == Items.THROWABLE_WEAPON.value:
             weaponWeightIndex = data.get('weaponWeight', None)
@@ -105,7 +106,7 @@ class ItemDAO(DAO, IItemDAO):
                                    data.get('strength', 0), data.get('rampancy', 0),
                                    data.get('rangeLow', 0), data.get('rangeMedium', 0),
                                    data.get('rangeHigh', 0), data.get('defence', 0),
-                                   weaponWeight)
+                                   weaponWeight, data.get('amount', 1))
 
         if data['type'] == Items.RANGED_WEAPON.value:
             item = RangeWeapon(item_id, lang, tr_data.get('name', ''),
@@ -114,18 +115,18 @@ class ItemDAO(DAO, IItemDAO):
                                data.get('price', 0), data.get('initiative', 0),
                                data.get('strength', 0), data.get('rampancy', 0),
                                data.get('rangeLow', 0), data.get('rangeMedium', 0),
-                               data.get('rangeHigh', 0))
+                               data.get('rangeHigh', 0), data.get('amount', 1))
 
         if data['type'] == Items.ARMOR.value:
             item = Armor(item_id, lang, tr_data.get('name', ''), tr_data.get('description', ''),
                          data.get('parent_id', 0), data.get('price', 0), data.get('quality', 0),
                          data.get('weightA', 0), data.get('weightB', 0), data.get('weightC', 0),
-                         data.get('size', 0))
+                         data.get('size', 0), data.get('amount', 1))
 
         if data['type'] == Items.MONEY.value:
             item = Money(item_id, lang, tr_data.get('name', ''), tr_data.get('description', ''),
                          data.get('parent_id', 0), data.get('copper'), data.get('silver'),
-                         data.get('gold'))
+                         data.get('gold'), data.get('amount', 1))
 
         item.effects = effects
         return item

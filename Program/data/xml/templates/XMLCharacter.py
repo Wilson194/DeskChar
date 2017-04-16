@@ -9,9 +9,11 @@ from data.xml.templates.XMLRangeWeapon import XMLRangeWeapon
 from data.xml.templates.XMLSpell import XMLSpell
 from data.xml.templates.XMLTemplate import XMLTemplate
 from data.xml.templates.XMLThrowableWeapon import XMLThrowableWeapon
+from structure.enums.Alignment import Alignment
 from structure.enums.Classes import Classes
 from structure.enums.ObjectType import ObjectType
 from data.xml.templates.XMLTemplate import XInstance, XElement, XAttribElement
+from structure.enums.Races import Races
 
 
 class XMLCharacter(XMLTemplate):
@@ -38,6 +40,12 @@ class XMLCharacter(XMLTemplate):
         self.xp = XElement('xp')
         self.maxHealth = XElement('maxHealth')
         self.maxMana = XElement('maxMana')
+        self.currentHealth = XElement('currentHealth')
+        self.currentMana = XElement('currentMana')
+
+        # self.drdClass = XElement('class', Classes)
+        # self.drdRace = XElement('race', Races)
+        self.alignment = XElement('alignment', Alignment)
 
         self.spells = XInstance('spells', XMLSpell)
         self.abilities = XInstance('abilities', XMLAbility)

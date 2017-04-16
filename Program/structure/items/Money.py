@@ -2,13 +2,13 @@ from structure.items.Item import *
 
 
 class Money(Item):
-    TABLE_SCHEMA = ['id', 'name', 'description', 'copper', 'silver', 'gold', 'type']
+    TABLE_SCHEMA = ['id', 'name', 'description', 'copper', 'silver', 'gold', 'type', 'amount']
 
 
     def __init__(self, id: int = None, lang=None, name: str = None,
                  description: str = None, parent_id: int = None, copper: int = None,
-                 silver: int = None, gold: int = None):
-        super().__init__(id, lang, name, description, parent_id)
+                 silver: int = None, gold: int = None, amount: int = 1):
+        super().__init__(id, lang, name, description, parent_id, None, None, amount)
 
         self.__copper = copper
         self.__silver = silver
@@ -37,7 +37,6 @@ class Money(Item):
     @property
     def icon(self):
         return 'resources/icons/coin.png'
-
 
 
     @property

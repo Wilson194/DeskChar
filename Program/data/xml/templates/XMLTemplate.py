@@ -35,11 +35,15 @@ class XElement:
             if self.__enum:
                 setattr(obj, name, self.__enum.by_name(self.__enum, attr.text))
             else:
-                lang = attr.get('lang')
-                if lang:
-                    value = attr.text
-                else:
+                # lang = attr.get('lang')
+                # if lang:
+                #     value = attr.text
+                # else:
+                #     value = int(attr.text)
+                try:
                     value = int(attr.text)
+                except:
+                    value = attr.text
 
                 setattr(obj, name, value)
         return objects
@@ -97,9 +101,10 @@ class XAttribElement:
 
 
 class XInstance:
-    def __init__(self, name: str, instance: object):
+    def __init__(self, name: str, instance: object, single: bool = False, link: bool = False):
         self.__name = name
         self.__instance = instance
+        self.__single = single
 
 
     @property
@@ -113,17 +118,27 @@ class XInstance:
 
 
     @property
+    def single(self):
+        return self.__single
+
+
+    @property
     def name(self):
         return self.__name
 
 
     def set_attributes(self, objects: dict, name: str, attr):
         attrList = []
-        for a in attr:
-            o = self.__instance().import_xml(a)
-            attrList.append(o['cs'])  # TODO: default lang
-        for obj in objects.values():
-            setattr(obj, name, attrList)
+        if self.single:
+            o = self.__instance().import_xml(attr)
+            for obj in objects.values():
+                setattr(obj, name, o)
+        else:
+            for a in attr:
+                o = self.__instance().import_xml(a)
+                attrList.append(o['cs'])  # TODO: default lang
+            for obj in objects.values():
+                setattr(obj, name, attrList)
         return objects
 
 
@@ -158,17 +173,26 @@ class XMLTemplate:
                         root.append(instance.xmlElement)
             elif isinstance(instance, XInstance):
                 instanceRoot = None
+                # Control duplicity of tags in root, if exist use old root
                 for tag in root.iter():
                     if instance.name == tag.tag:
                         instanceRoot = tag
 
+                # if not exist, create new one
                 if not instanceRoot:
                     instanceRoot = etree.Element(instance.name)
 
-                for one in remapObjects[0][key]:
-                    child = instance.instance().create_xml(one)
-                    instanceRoot.append(child)
-                root.append(instanceRoot)
+                add = False
+                if type(remapObjects[0][key]) is list:
+                    for one in remapObjects[0][key]:
+                        child = instance.instance().create_xml(one)
+                        instanceRoot.append(child)
+                        add = True
+                    if add:
+                        root.append(instanceRoot)
+                else:
+                    child = instance.instance().create_xml(remapObjects[0][key])
+                    root.append(child)
 
         return root
 

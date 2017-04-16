@@ -12,9 +12,12 @@ class Ability(Object):
                  description: str = None, chance: str = None, drd_race: Races = None,
                  drd_class: Classes = None):
         super().__init__(id, lang, name, description)
+
         self.__chance = chance
         self.__drd_race = drd_race
         self.__drd_class = drd_class
+
+        self.__contexts = []
 
 
     def __name__(self):
@@ -57,6 +60,11 @@ class Ability(Object):
 
 
     @property
+    def treeChildren(self):
+        return [ObjectType.ABILITY_CONTEXT] + super().treeChildren
+
+
+    @property
     def chance(self):
         return self.__chance
 
@@ -84,6 +92,16 @@ class Ability(Object):
     @drd_class.setter
     def drd_class(self, value):
         self.__drd_class = value
+
+
+    @property
+    def contexts(self):
+        return self.__contexts
+
+
+    @contexts.setter
+    def contexts(self, value):
+        self.__contexts = value
 
 
     def __eq__(self, other):

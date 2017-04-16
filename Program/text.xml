@@ -1,97 +1,34 @@
 <templates>
-  <monster>
-    <id>26</id>
-    <name lang="cs">Gorgona</name>
-    <description lang="cs">Gorgona je člověku podobný tvor s dlouhými netopýřími křídly a ostnatým ohonem. Nemá ráda sluneční světlo, i když jí nijak neškodí, a přemisťuje
-se převážně za nocí létáním. Kromě pařátů často používá dlouhý luk, ze kterého střílí z výšky. Její kůže vypadá podobně jako kámen, a tak je
-často zaměňována za sochu. </description>
-    <viability>4</viability>
-    <offense lang="cs">(+2 + 3/+1) = 5/+1
-(paraty) +
-(+2 + 4/+1) = 6/+1
-(tlama)
-+1 + dlouhý luk
-(2× za kolo)
-</offense>
-    <defense>3</defense>
-    <endurance>0</endurance>
-    <pugnacity>2</pugnacity>
-    <mobility>8</mobility>
-    <perseverance>0</perseverance>
-    <intelligence>17</intelligence>
-    <charisma>15</charisma>
-    <alignment>LAWFUL_GOOD</alignment>
-    <experience>105</experience>
-    <hp>0</hp>
-    <monsterRace>MYTHIC</monsterRace>
-    <spells>
-      <spell>
-        <id>16</id>
-        <name lang="cs">Světlo</name>
-        <description lang="cs">Místo se dokonale osvětlí. Světlo se pohybuje zároveň s kouzelníkem.
-            Účinky kouzla se zastaví na překážce, za kterou by neproniklo normální světlo.</description>
-        <manaInitial lang="cs">2 za sáh v poloměru</manaInitial>
-        <manaContinual lang="cs">0</manaContinual>
-        <range lang="cs">0</range>
-        <scope lang="cs">Kruh s poloměrem dle dodané magenergie</scope>
-        <castTime>1</castTime>
-        <duration lang="cs">1 - 5 směn</duration>
-        <class>MAGICIAN</class>
-      </spell>
-    </spells>
-    <abilities>
-      <ability>
-        <id>10</id>
-        <name lang="cs">Stopování</name>
-        <description lang="cs"> Hraničář má schopnost stopovat nestvůry i postavy. Tato schopnost závisí na typu terénu, počtu nestvůr a úrovni zkušenosti hraničáře.
-
-    Typy terénu:
-        Volná příroda:
-            Lehký - sníh, louka, vysoký les
-            Těžký - hustý les, džungle, skály
-            Nepoužitelný - propasti, řeky, jezera
-        Uzavřené prostory:
-            Lehký - místnost, chodba
-            Těžký - schody, dveře
-            Nepoužitelný - průrvy, tůně
-        </description>
-        <chance lang="cs">  Volná příroda:
-        Lehký terén . . . 80%
-        Těžký terén . . . 50%
-        Nepoužitelný. . . 0%
-    Uzavřené prostory:
-        Lehký terén . . . 60%
-        Těžký terén . . . 40%
-        Nepoužitelný terén . . . 0%
-
-    K těmto číslům se (v jiném než nepoužitelném terénu) přidají 2% za každou úroveň hraničáře a odečte 10% za každých 24 hodin, které uplynuly od okamžiku, kdy tu nestvůra stopu zanechala.
-    Pokud stopu zanechalo víc tvorů než jeden, přidají se také 3 % za každého tvora navíc. PJ ti ale samozřejmě nemusí říct kolik nestvůr stopuješ.
-        </chance>
-        <race>ELF</race>
-      </ability>
-    </abilities>
-    <items>
-      <item>
-        <id>101</id>
-        <name lang="cs">Peníze </name>
-        <description lang="cs"></description>
-        <effects/>
-      </item>
-      <item>
-        <id>102</id>
-        <name lang="cs">Luk</name>
-        <description lang="cs"></description>
-        <price>0</price>
-        <weight>15</weight>
-        <effects/>
-      </item>
-      <item>
-        <id>103</id>
-        <name lang="cs">Šupinaté</name>
-        <description lang="cs"></description>
-        <price>120</price>
-        <effects/>
-      </item>
-    </items>
-  </monster>
+    <scenario>
+        <id>1</id>
+        <name lang="cs">Black wood</name>
+        <description lang="cs">Dark wood</description>
+        <party>
+            <partyCharacter>
+                <deviceName>Wilson phone</deviceName>
+                <MACAddress>85:F2:CD:25:1A:5D</MACAddress>
+                <character>
+                    <xp>350</xp>
+                    <maxMana>150</maxMana>
+                    <currentHealth>12</currentHealth>
+                    <strength>6</strength>
+                    <mobility>6</mobility>
+                    <weight>87</weight>
+                    <description lang="cs">Hrdiný kouzelník elfksé říše</description>
+                    <height>185</height>
+                    <maxHealth>15</maxHealth>
+                    <charisma>7</charisma>
+                    <age>25</age>
+                    <toughness>7</toughness>
+                    <agility>7</agility>
+                    <name lang="cs">Wilson</name>
+                    <currentMana>130</currentMana>
+                    <alignment>LAWFUL_GOOD</alignment>
+                    <level>5</level>
+                    <id>1</id>
+                    <intelligence>23</intelligence>
+                </character>
+            </partyCharacter>
+        </party>
+    </scenario>
 </templates>
