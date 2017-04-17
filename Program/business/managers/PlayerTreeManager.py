@@ -182,25 +182,39 @@ class PlayerTreeManager:
         self.treeDAO.update_node(node)
 
 
-    def update_node_parent(self, node: int, parentId: int, context: ObjectType):
+    def update_node_parent(self, node: int, parentId: int, context: ObjectType) -> bool:
         """
         Update parent of node, check if parent is Folder
         :param nodeId: id of node
         :param parentId: parent id
         :return:
         """
-        parentNode = self.treeDAO.get_node(parentId)
-        oldParentNode = self.treeDAO.get_node(node.parent_id)
-        if node.parent_id != parentId and self.available_parent(node, parentNode, context):
-            node.parent_id = parentId
-            if isinstance(node, Folder):
-                self.treeDAO.update_node(node)
-            else:
-                if node.object.object_type is ObjectType.MODIFIER:
-                    EffectDAO().delete_link(oldParentNode.object, node.object)
-                    EffectDAO().create_link(parentNode.object, node.object)
-                else:
+        updated = False
+        if node.parent_id != parentId:
+            updated = True
+            parentNode = self.treeDAO.get_node(parentId)
+            oldParentId = node.parent_id
+
+            if self.available_parent(node, parentNode, context):
+                node.parent_id = parentId
+                if isinstance(node, Folder):
                     self.treeDAO.update_node(node)
+                else:
+                    if node.object.object_type is ObjectType.MODIFIER:
+                        oldParentNode = self.treeDAO.get_node(oldParentId)
+                        EffectDAO().delete_link(oldParentNode.object, node.object)
+                        EffectDAO().create_link(parentNode.object, node.object)
+                    elif node.object.object_type is ObjectType.ABILITY_CONTEXT:
+                        oldParentNode = self.treeDAO.get_node(oldParentId)
+                        AbilityDAO().delete_context_link(oldParentNode.object, node.object)
+                        AbilityDAO().create_context_link(parentNode.object, node.object)
+                    elif node.object.object_type is ObjectType.EFFECT and parentNode.object.object_type is ObjectType.ITEM:
+                        oldParentNode = self.treeDAO.get_node(oldParentId)
+                        ItemDAO().delete_effect_link(oldParentNode.object, node.object)
+                        ItemDAO().create_effect_link(parentNode.object, node.object)
+                    else:
+                        self.treeDAO.update_node(node)
+        return updated
 
 
     def available_parent(self, node, parent_node, context: ObjectType) -> bool:

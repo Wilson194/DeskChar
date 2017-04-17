@@ -225,9 +225,7 @@ class XMLTemplate:
                     xInstances[instance.name] = {}
                     xInstances[instance.name][old[0]] = old[1]
                 xInstances[instance.name][key] = instance
-                # if type(xInstances[instance.name]) is not list:
-                #     xInstances[instance.name] = [xInstances[instance.name]]
-                # xInstances[instance.name].append((key, instance))
+
             else:
                 xInstances[instance.name] = (key, instance)
 
@@ -235,8 +233,6 @@ class XMLTemplate:
             if attr.tag in xInstances:
                 if attr.tag == 'id':  # TODO: remap id
                     continue
-                # if not attr:
-                #     continue
 
                 if type(xInstances[attr.tag]) is dict:
                     groups = self.__remap_xml_group(attr, xInstances[attr.tag])

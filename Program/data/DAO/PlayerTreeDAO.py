@@ -35,14 +35,14 @@ class PlayerTreeDAO:
         return map_objects(data)
 
 
-    def get_node(self, id: int) -> Node:
+    def get_node(self, id: int, light: bool = False) -> Node:
         """
         Get node by id
         :param id: id of node
         :return: node object if exist, None otherwise
         """
         data = self.database.select(self.TABLE_NAME, {'ID': id})
-        return map_objects(data)[0] if len(data) > 0 else None
+        return map_objects(data, light)[0] if len(data) > 0 else None
 
 
     def get_children_objects(self, targetType: ObjectType, object: object,
@@ -157,7 +157,7 @@ class PlayerTreeDAO:
         return self.get_node(data[0]['id'])
 
 
-def map_objects(data: dict) -> list:
+def map_objects(data: dict, light: bool = False) -> list:
     """
     Map data from database to Node object
     :param data: data from database
@@ -168,7 +168,10 @@ def map_objects(data: dict) -> list:
         if row['type'] is NodeType.FOLDER.value:
             obj = Folder(row['ID'], row['name'], row['parent_id'])
         elif row['type'] is NodeType.OBJECT.value:
-            target_object = ObjectType(row['target_type']).instance().DAO()().get(row['target_id'])
+            if light:
+                target_object = None
+            else:
+                target_object = ObjectType(row['target_type']).instance().DAO()().get(row['target_id'])
             obj = NodeObject(row['ID'], row['name'], row['parent_id'], target_object)
         else:
             obj = None

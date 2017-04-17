@@ -99,3 +99,10 @@ class AbilityDAO(DAO, IAbilityDAO):
     def create_context_link(self, parentObject, targetObject):
         self.database.insert('Ability_context',
                              {'ability_id': parentObject.id, 'context_id': targetObject.id})
+
+    def delete_context_link(self, parentObject, target):
+        objects = self.database.select('Ability_context',
+                                       {'ability_id': parentObject.id, 'context_id': target.id})
+        if objects:
+            self.database.delete_where('Ability_context',
+                                       {'ability_id': parentObject.id, 'context_id': target.id})

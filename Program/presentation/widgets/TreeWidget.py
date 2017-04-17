@@ -1,3 +1,4 @@
+import time
 from PyQt5 import QtCore, QtGui
 from PyQt5 import QtWidgets
 
@@ -97,11 +98,9 @@ class TreeWidget(QtWidgets.QFrame):
         :param event: drop event
         """
         self.main_drop_event(event)
-
         count_root = self.treeWidget.topLevelItemCount()
         for i in range(count_root):
             self.update_structure(self.treeWidget.topLevelItem(i))
-
         self.draw_data()
 
 
@@ -111,8 +110,8 @@ class TreeWidget(QtWidgets.QFrame):
         :param node: Current node in tree
         :param parent_id: parent_id
         """
-
-        self.tree_manager.update_node_parent(node.data(0, 12), parent_id, self.__data_type)
+        updated = self.tree_manager.update_node_parent(node.data(0, 12), parent_id, self.__data_type)
+        # if not updated:
         child_count = node.childCount()
         for n in range(child_count):
             self.update_structure(node.child(n), node.data(0, 12).id)

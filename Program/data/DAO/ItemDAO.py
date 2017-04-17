@@ -136,3 +136,10 @@ class ItemDAO(DAO, IItemDAO):
         self.database.insert('Item_effect',
                              {'effect_id': effect.id, 'item_id': item.id,
                               'item_type': item.type.value})
+
+    def delete_effect_link(self, parentObject, target):
+        objects = self.database.select('Item_effect',
+                                       {'item_id': parentObject.id, 'effect_id': target.id})
+        if objects:
+            self.database.delete_where('Item_effect',
+                                       {'item_id': parentObject.id, 'effect_id': target.id})
