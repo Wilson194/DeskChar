@@ -32,7 +32,6 @@ class XMLScenario(XMLTemplate):
         self.date = XElement('date')
 
         self.party = XInstance('party', XMLPartyCharacter)
-        self.npc = XInstance('scenarioCharacters', XMLCharacter)
 
         self.locations = XInstance('locations', XMLLocation)
 

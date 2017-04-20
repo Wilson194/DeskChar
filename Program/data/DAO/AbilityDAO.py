@@ -1,11 +1,12 @@
 from data.DAO.AbilityContextDAO import AbilityContextDAO
 from data.DAO.DAO import DAO
+from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from data.DAO.interface.IAbilityDAO import IAbilityDAO
-from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
 from structure.abilities.Ability import Ability
 from structure.enums.ObjectType import ObjectType
 from structure.enums.Races import Races
+from structure.tree.NodeObject import NodeObject
 
 
 class AbilityDAO(DAO, IAbilityDAO):
@@ -14,17 +15,45 @@ class AbilityDAO(DAO, IAbilityDAO):
     TYPE = ObjectType.ABILITY
 
 
-    def __init__(self):
-        self.database = Database(self.DATABASE_DRIVER)
+    def __init__(self, ):
+        self.database = ObjectDatabase(self.DATABASE_DRIVER)
+        self.treeDAO = PlayerTreeDAO()
 
 
-    def create(self, ability: Ability) -> int:
+    def create(self, ability: Ability, nodeParentId: int = None, contextType: ObjectType = None) -> int:
         """
         Create new ability in database
         :param ability: Ability object
         :return: id of autoincrement
         """
-        return ObjectDatabase(self.DATABASE_DRIVER).insert_object(ability)
+
+        if not contextType:
+            contextType = self.TYPE
+
+        intValues = {
+            'drd_race' : ability.drd_race.value if ability.drd_race else None,
+            'drd_class': ability.drd_class.value if ability.drd_class else None
+        }
+
+        strValues = {
+            'name'       : ability.name,
+            'description': ability.description,
+            'chance'     : ability.chance
+        }
+
+        id = self.database.insert(self.DATABASE_TABLE, intValues)
+        ability.id = id
+
+        self.database.insert_translate(strValues, ability.lang, id, self.TYPE)
+
+        # Create node for tree structure
+        node = NodeObject(None, ability.name, nodeParentId, ability)
+        nodeId = self.treeDAO.insert_node(node, contextType)
+
+        for context in ability.contexts:
+            AbilityContextDAO().create(context, nodeId, contextType)
+
+        return id
 
 
     def update(self, ability: Ability):
@@ -32,7 +61,19 @@ class AbilityDAO(DAO, IAbilityDAO):
         Update ability in database
         :param ability: Ability object with new data
         """
-        ObjectDatabase(self.DATABASE_DRIVER).update_object(ability)
+        intValues = {
+            'drd_race' : ability.drd_race.value if ability.drd_race else None,
+            'drd_class': ability.drd_class.value if ability.drd_class else None
+        }
+
+        strValues = {
+            'name'       : ability.name,
+            'description': ability.description,
+            'chance'     : ability.chance
+        }
+
+        self.database.update(self.DATABASE_TABLE, ability.id, intValues)
+        self.database.update_translate(strValues, ability.lang, ability.id, self.TYPE)
 
 
     def delete(self, ability_id: int):
@@ -45,7 +86,7 @@ class AbilityDAO(DAO, IAbilityDAO):
                                    {'target_id': ability_id, 'type': ObjectType.ABILITY})
 
 
-    def get(self, ability_id: int, lang=None) -> Ability:
+    def get(self, ability_id: int, lang=None, nodeId: int = None, contextType: ObjectType = None) -> Ability:
         """
         Get ability from database
         :param ability_id: id of ability
@@ -54,6 +95,7 @@ class AbilityDAO(DAO, IAbilityDAO):
         """
         if lang is None:  # TODO: default lang
             lang = 'cs'
+
         data = dict(self.database.select(self.DATABASE_TABLE, {'ID': ability_id})[0])
         tr_data = self.database.select_translate(ability_id, ObjectType.ABILITY.value, lang)
 
@@ -63,7 +105,14 @@ class AbilityDAO(DAO, IAbilityDAO):
                           tr_data.get('description', ''), tr_data.get('chance', ''),
                           drd_race, drd_class)
 
-        ability.contexts = self.get_contexts(ability.id)
+        if nodeId and contextType:
+            children = self.treeDAO.get_children_objects(nodeId, contextType)
+
+            contexts = []
+            for child in children:
+                if child.object.object_type is ObjectType.ABILITY_CONTEXT:
+                    contexts.append(AbilityContextDAO().get(child.object.id, None, child.id, contextType))
+            ability.contexts = contexts
 
         return ability
 
@@ -83,26 +132,3 @@ class AbilityDAO(DAO, IAbilityDAO):
             item = self.get(line['ID'], lang)
             items.append(item)
         return items
-
-
-    def get_contexts(self, object_id: int) -> list:
-        data = self.database.select('Ability_context', {'ability_id': object_id})
-
-        contexts = []
-        for row in data:
-            context = AbilityContextDAO().get(row['context_id'])
-            contexts.append(context)
-
-        return contexts
-
-
-    def create_context_link(self, parentObject, targetObject):
-        self.database.insert('Ability_context',
-                             {'ability_id': parentObject.id, 'context_id': targetObject.id})
-
-    def delete_context_link(self, parentObject, target):
-        objects = self.database.select('Ability_context',
-                                       {'ability_id': parentObject.id, 'context_id': target.id})
-        if objects:
-            self.database.delete_where('Ability_context',
-                                       {'ability_id': parentObject.id, 'context_id': target.id})

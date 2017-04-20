@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from PyQt5 import QtWidgets, QtGui, QtCore
+
+from business.managers.AbilityContextManager import AbilityContextManager
 from business.managers.ModifierManager import ModifierManager
 from presentation.layouts.Layout import Layout
 from structure.effects.AbilityContext import AbilityContext
@@ -24,7 +26,7 @@ class AbilityContextLayout(Layout):
 
         self.init_ui()
 
-        self.contextManager = ModifierManager()
+        self.contextManager = AbilityContextManager()
         self.object = None
 
 

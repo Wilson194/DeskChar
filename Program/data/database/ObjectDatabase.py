@@ -16,6 +16,56 @@ class ObjectDatabase(Database):
     """
 
 
+    def insert_translate(self, strValues: dict, lang: str, objectId: int, objectType: ObjectType):
+        if not lang:  # TODO: default lang
+            lang = 'cs'
+
+        self.set_many(True)
+        for name, value in strValues.items():
+            data = {
+                'lang'     : lang,
+                'target_id': objectId,
+                'type'     : objectType.value,
+                'name'     : name,
+                'value'    : value
+            }
+
+            self.insert('translates', data)
+        self.insert_many_execute()
+        self.set_many(False)
+
+
+    def update_translate(self, strValues: dict, lang: str, objectId: int, objectType: ObjectType):
+        translates = self.select('translates',
+                                 {'target_id': objectId,
+                                  'type'     : objectType.value,
+                                  'lang'     : lang})
+
+        self.set_many(True)
+        for name, value in strValues.items():
+            db_line = get_line(name, translates)
+
+            if db_line is None:
+                data_dict = {
+                    'name'     : name,
+                    'value'    : value,
+                    'lang'     : lang,
+                    'target_id': objectId,
+                    'type'     : objectType.value
+                }
+
+                self.insert('translates', data_dict)
+            else:
+                if db_line['value'] != value:
+                    data_dict = {
+                        'value': value
+                    }
+                    self.update('translates', db_line['ID'], data_dict)
+
+        self.insert_many_execute()
+        self.set_many(False)
+
+
     def insert_object(self, obj: Object, database_table: str = None, rootParentType: object = None,
                       parentId: int = None, parentObject: object = None,
                       recursionLevel: int = 1) -> int:

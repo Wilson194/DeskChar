@@ -21,23 +21,27 @@ class ToolBar(QToolBar):
         spell_action = QAction(QIcon(ObjectType.SPELL.icon()), 'Spells', self.__parent)
         toolbar.addAction(spell_action)
 
-        ability_action = QAction(QIcon(ObjectType.ABILITY.icon()), 'Abilities', self.__parent)
-        toolbar.addAction(ability_action)
-
         items_action = QAction(QIcon(ObjectType.ITEM.icon()), 'Items', self.__parent)
         toolbar.addAction(items_action)
 
-        modifier_action = QAction(QIcon(ObjectType.MODIFIER.icon()), 'Modifiers', self.__parent)
-        toolbar.addAction(modifier_action)
+        ability_action = QAction(QIcon(ObjectType.ABILITY.icon()), 'Abilities', self.__parent)
+        toolbar.addAction(ability_action)
+
+        context_action = QAction(QIcon(ObjectType.ABILITY_CONTEXT.icon()), 'AbilityContext', self.__parent)
+        toolbar.addAction(context_action)
 
         effect_action = QAction(QIcon(ObjectType.EFFECT.icon()), 'Effect', self.__parent)
         toolbar.addAction(effect_action)
 
+        modifier_action = QAction(QIcon(ObjectType.MODIFIER.icon()), 'Modifiers', self.__parent)
+        toolbar.addAction(modifier_action)
+
+        toolbar.addSeparator()
+
         character_action = QAction(QIcon(ObjectType.CHARACTER.icon()), 'Character', self.__parent)
         toolbar.addAction(character_action)
 
-        context_action = QAction(QIcon(ObjectType.ABILITY_CONTEXT.icon()), 'AbilityContext', self.__parent)
-        toolbar.addAction(context_action)
+
 
 
 
@@ -81,5 +85,13 @@ class ToolBar(QToolBar):
 
         location_action.triggered.connect(
             lambda: self.templates_tool_signal.emit(ObjectType.LOCATION))
+
+        toolbar.addSeparator()
+
+        map_action = QAction(QIcon(ObjectType.MAP.icon()), 'Map', self.__parent)
+        toolbar.addAction(map_action)
+
+        map_action.triggered.connect(
+            lambda: self.templates_tool_signal.emit(ObjectType.MAP))
 
 

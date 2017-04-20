@@ -1,8 +1,12 @@
 from datetime import date
+from datetime import datetime
 
+from data.DAO.AbilityDAO import AbilityDAO
+from data.DAO.EffectDAO import EffectDAO
 from data.DAO.LocationDAO import LocationDAO
 from data.DAO.PartyCharacterDAO import PartyCharacterDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.SpellDAO import SpellDAO
 from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
 from structure.character.PartyCharacter import PartyCharacter
@@ -19,6 +23,7 @@ from structure.monster.Monster import Monster
 
 from data.DAO.DAO import DAO
 from structure.scenario.Scenario import Scenario
+from structure.tree.NodeObject import NodeObject
 
 
 class ScenarioDAO(DAO):
@@ -28,16 +33,51 @@ class ScenarioDAO(DAO):
 
 
     def __init__(self):
-        self.database = Database(self.DATABASE_DRIVER)
+        self.database = ObjectDatabase(self.DATABASE_DRIVER)
+        self.treeDAO = PlayerTreeDAO()
 
 
-    def create(self, scenario: Scenario) -> int:
+    def create(self, scenario: Scenario, nodeParentId: int = None, contextType: ObjectType = None) -> int:
         """
         Create new spell in database
         :param scenario: Spell object
         :return: id of autoincrement
         """
-        return ObjectDatabase(self.DATABASE_DRIVER).insert_object(scenario)
+        if not contextType:
+            contextType = self.TYPE
+
+        curDate = datetime.strptime(scenario.date, '%Y-%m-%d') if scenario.date else None
+        intValues = {
+            'date': curDate.toordinal() if curDate else None
+        }
+
+        strValues = {
+            'name'       : scenario.name,
+            'description': scenario.description
+        }
+
+        id = self.database.insert(self.DATABASE_TABLE, intValues)
+        scenario.id = id
+
+        self.database.insert_translate(strValues, scenario.lang, id, self.TYPE)
+
+        # Create node for tree structure
+        node = NodeObject(None, scenario.name, nodeParentId, scenario)
+        nodeId = self.treeDAO.insert_node(node, contextType)
+
+        for location in scenario.locations:
+            LocationDAO().create(location, nodeId, contextType)
+
+        for spell in scenario.spells:
+            SpellDAO().create(spell, nodeId, contextType)
+
+        for ability in scenario.abilities:
+            AbilityDAO().create(ability, nodeId, contextType)
+
+        for effect in scenario.effects:
+            EffectDAO().create(effect, nodeId, contextType)
+
+        return id
 
 
     def update(self, scenario: Scenario):
@@ -45,7 +85,17 @@ class ScenarioDAO(DAO):
         Update spell in database
         :param scenario: Spell object with new data
         """
-        ObjectDatabase(self.DATABASE_DRIVER).update_object(scenario)
+        intValues = {
+            'date': scenario.date.toordinal() if scenario.date else None
+        }
+
+        strValues = {
+            'name'       : scenario.name,
+            'description': scenario.description
+        }
+
+        self.database.update(self.DATABASE_TABLE, scenario.id, intValues)
+        self.database.update_translate(strValues, scenario.lang, scenario.id, self.TYPE)
 
 
     def delete(self, scenario_id: int):
@@ -58,7 +108,7 @@ class ScenarioDAO(DAO):
                                    {'target_id': scenario_id, 'type': ObjectType.SCENARIO})
 
 
-    def get(self, scenario_id: int, lang: str = None) -> Scenario:
+    def get(self, scenario_id: int, lang: str = None, nodeId: int = None, contextType: ObjectType = None) -> Scenario:
         """
         Get spell from database
         :param scenario_id: id of spell
@@ -75,65 +125,90 @@ class ScenarioDAO(DAO):
         scenario = Scenario(data.get('ID'), lang, tr_data.get('name', ''),
                             tr_data.get('description', ''), scenarioDate)
 
+        if nodeId and contextType:
+            children = self.treeDAO.get_children_objects(nodeId, contextType)
+
+            abilities = []
+            spells = []
+            effects = []
+            locations = []
+
+            for child in children:
+                if child.object.object_type is ObjectType.ABILITY:
+                    ability = AbilityDAO().get(child.object.id, None, child.id, contextType)
+                    abilities.append(ability)
+                elif child.object.object_type is ObjectType.SPELL:
+                    spell = SpellDAO().get(child.object.id, None, child.id, contextType)
+                    spells.append(spell)
+                elif child.object.object_type is ObjectType.EFFECT:
+                    effect = EffectDAO().get(child.object.id, None, child.id, contextType)
+                    effects.append(effect)
+                elif child.object.object_type is ObjectType.LOCATION:
+                    location = LocationDAO().get(child.object.id, None, child.id, contextType)
+                    locations.append(location)
+
+            scenario.spells = spells
+            scenario.abilities = abilities
+            scenario.effects = effects
+            scenario.locations = locations
+
         # Create party
-        party = PlayerTreeDAO().get_children_objects(ObjectType.CHARACTER, scenario, direct=True)
-        partyCharacters = []
-        partyIds = []
-
-        for member in party:
-            partyIds.append(member.id)
-            real = PartyCharacterDAO().get(member.id)
-            if real:
-                partyCharacters.append(real)
-            else:
-                partyCharacter = PartyCharacter()
-                partyCharacter.character = member
-                partyCharacters.append(partyCharacter)
-
-        scenario.party = partyCharacters
-
-
-        # Create npc
-        data = PlayerTreeDAO().get_children_objects(ObjectType.CHARACTER, scenario)
-        npc = []
-        for one in data:
-            if one.id not in partyIds:
-                npc.append(one)
-
-        scenario.npc = npc
-
-
-        # Create locations
-        locations = PlayerTreeDAO().get_children_objects(ObjectType.LOCATION, scenario, direct=True)
-        scenario.locations = locations
-
-        spells = PlayerTreeDAO().get_children_objects(ObjectType.SPELL, scenario, direct=True)
-        scenario.spells = spells
-
-        abilities = PlayerTreeDAO().get_children_objects(ObjectType.ABILITY, scenario, direct=True)
-        scenario.abilities = abilities
-
-        effects = PlayerTreeDAO().get_children_objects(ObjectType.EFFECT, scenario, direct=True)
-        scenario.abilities = effects
-
-        items = PlayerTreeDAO().get_children_objects(ObjectType.ITEM, scenario, direct=True)
-
-        for item in items:
-            if isinstance(item, Armor):
-                scenario.addArmor(item)
-            elif isinstance(item, Money):
-                scenario.addMoney(item)
-            elif isinstance(item, Container):
-                scenario.addContainer(item)
-            elif isinstance(item, MeleeWeapon):
-                scenario.addMeleeWeapon(item)
-            elif isinstance(item, RangeWeapon):
-                scenario.addRangedWeapon(item)
-            elif isinstance(item, ThrowableWeapon):
-                scenario.addThrowableWeapon(item)
-            else:
-                scenario.addItem(item)
-
+        # party = PlayerTreeDAO().get_children_objects(ObjectType.CHARACTER, scenario, direct=True)
+        # partyCharacters = []
+        # partyIds = []
+        #
+        # for member in party:
+        #     partyIds.append(member.id)
+        #     real = PartyCharacterDAO().get(member.id)
+        #     if real:
+        #         partyCharacters.append(real)
+        #     else:
+        #         partyCharacter = PartyCharacter()
+        #         partyCharacter.character = member
+        #         partyCharacters.append(partyCharacter)
+        #
+        # scenario.party = partyCharacters
+        #
+        # # Create npc
+        # data = PlayerTreeDAO().get_children_objects(ObjectType.CHARACTER, scenario)
+        # npc = []
+        # for one in data:
+        #     if one.id not in partyIds:
+        #         npc.append(one)
+        #
+        # scenario.npc = npc
+        #
+        # # Create locations
+        # locations = PlayerTreeDAO().get_children_objects(ObjectType.LOCATION, scenario, direct=True)
+        # scenario.locations = locations
+        #
+        # spells = PlayerTreeDAO().get_children_objects(ObjectType.SPELL, scenario, direct=True)
+        # scenario.spells = spells
+        #
+        # abilities = PlayerTreeDAO().get_children_objects(ObjectType.ABILITY, scenario, direct=True)
+        # scenario.abilities = abilities
+        #
+        # effects = PlayerTreeDAO().get_children_objects(ObjectType.EFFECT, scenario, direct=True)
+        # scenario.abilities = effects
+        #
+        # items = PlayerTreeDAO().get_children_objects(ObjectType.ITEM, scenario, direct=True)
+        #
+        # for item in items:
+        #     if isinstance(item, Armor):
+        #         scenario.addArmor(item)
+        #     elif isinstance(item, Money):
+        #         scenario.addMoney(item)
+        #     elif isinstance(item, Container):
+        #         scenario.addContainer(item)
+        #     elif isinstance(item, MeleeWeapon):
+        #         scenario.addMeleeWeapon(item)
+        #     elif isinstance(item, RangeWeapon):
+        #         scenario.addRangedWeapon(item)
+        #     elif isinstance(item, ThrowableWeapon):
+        #         scenario.addThrowableWeapon(item)
+        #     else:
+        #         scenario.addItem(item)
+        #
         return scenario
 
 

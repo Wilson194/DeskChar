@@ -110,7 +110,8 @@ class TreeWidget(QtWidgets.QFrame):
         :param node: Current node in tree
         :param parent_id: parent_id
         """
-        updated = self.tree_manager.update_node_parent(node.data(0, 12), parent_id, self.__data_type)
+        updated = self.tree_manager.update_node_parent(node.data(0, 12), parent_id,
+                                                       self.__data_type)
         # if not updated:
         child_count = node.childCount()
         for n in range(child_count):
@@ -174,9 +175,11 @@ class TreeWidget(QtWidgets.QFrame):
         :param action: selected action
         :param item_id: item id (ID in player tree structure)
         """
+        # XXXXXXXXXXXXXXXXXX DELETE ACTION XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         if action.data() == 'delete':
             self.tree_manager.delete_node(node, targetObject)
             self.draw_data()
+        # XXXXXXXXXXXXXXXXXX NEW ITEM ACTION XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         elif action.data() == 'new':
             data, choice = NewTreeItem.get_data(
                 self.__data_type.instance()().children + [self.__data_type.instance()])
@@ -184,9 +187,11 @@ class TreeWidget(QtWidgets.QFrame):
                 self.tree_manager.create_node(data['NodeType'], data['name'], node.id,
                                               self.__data_type, data['NodeObject'])
                 self.draw_data()
+        # XXXXXXXXXXXXXXXXXX IMPORT DATA ACTION XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         elif action.data() == 'import':
             self.import_data_slot(node.id)
 
+        # XXXXXXXXXXXXXXXXX RENAME NODE ACTION XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         elif action.data() == 'rename':
             obj = node
             text, ok = QtWidgets.QInputDialog.getText(self, 'Input Dialog',
@@ -197,17 +202,16 @@ class TreeWidget(QtWidgets.QFrame):
 
             self.draw_data()
 
+        # XXXXXXXXXXXXXXXX ADD OBJECT FROM OTHER ACTION XXXXXXXXXXXXXXXXXXXXXXXX
         elif action.data() == 'add_object':
-            # node = self.tree_manager.get_node(node.id)
             data, ok = AddAnotherObject.get_data(node)
             if ok:
                 for type, items in data.items():
                     for item in items:
-                        dataNode = self.tree_manager.get_node(item)
+                        nodeObject = self.tree_manager.get_node(item)
+                        newObject = nodeObject.object.DAO()().get(nodeObject.object.id, None, nodeObject.id, nodeObject.object.object_type)
 
-                        self.tree_manager.create_node_link(dataNode.nodeType, dataNode.name,
-                                                           node.id,
-                                                           self.__data_type, dataNode.object)
+                        newObject.DAO()().create(newObject, node.id, self.__data_type)
 
             self.draw_data()
 
@@ -270,9 +274,14 @@ class TreeWidget(QtWidgets.QFrame):
         data, choice = NewTreeItem.get_data(
             self.__data_type.instance()().children + [self.__data_type.instance()])
         if choice:
-            self.tree_manager.create_node(data['NodeType'], data['name'], None,
-                                          self.__data_type,
-                                          data['NodeObject'] if 'NodeObject' in data else None)
+            if data['NodeType'] is NodeType.FOLDER:
+                self.tree_manager.create_folder(data['name'], self.__data_type)
+            else:
+                newObject = data['NodeObject']()
+                newObject.name = data['name']
+
+                newObject.DAO()().create(newObject, None, self.__data_type)
+
             self.draw_data()
 
 

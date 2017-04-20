@@ -4,6 +4,7 @@ from PyQt5 import QtCore
 
 from structure.enums.NodeType import NodeType
 from presentation.Translate import Translate as TR
+from structure.enums.ObjectType import ObjectType
 
 
 class NewTreeItem(QtWidgets.QDialog):
@@ -38,7 +39,8 @@ class NewTreeItem(QtWidgets.QDialog):
 
         for obj in self.__objects:
             data = {'NodeType': NodeType.OBJECT, 'NodeObject': obj}
-            self.type_input.addItem(str(obj().__name__()[-1]), QtCore.QVariant(data))
+            name = TR().tr(str(obj().object_type) if obj().object_type != ObjectType.ITEM else str(obj().type))
+            self.type_input.addItem(name, QtCore.QVariant(data))
 
         self.name_label = QtWidgets.QLabel(self)
         self.name_label.setText(TR().tr('Name') + ' :')

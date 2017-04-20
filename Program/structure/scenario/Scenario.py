@@ -25,7 +25,6 @@ class Scenario(Object):
         self.__date = date
 
         self.__party = []
-        self.__npc = []
 
         self.__locations = []
 
@@ -109,16 +108,6 @@ class Scenario(Object):
     @locations.setter
     def locations(self, value):
         self.__locations = value
-
-
-    @property
-    def npc(self):
-        return self.__npc
-
-
-    @npc.setter
-    def npc(self, value):
-        self.__npc = value
 
 
     @property

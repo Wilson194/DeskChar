@@ -2,7 +2,7 @@ from data.DAO.AbilityContextDAO import AbilityContextDAO
 from structure.effects.AbilityContext import AbilityContext
 
 
-class ModifierManager:
+class AbilityContextManager:
     def __init__(self):
         self.DAO = AbilityContextDAO()
 

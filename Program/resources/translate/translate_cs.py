@@ -73,6 +73,15 @@ translate = {
     'ObjectType.SCENARIO'       : 'Dobrodružství',
     'ObjectType.LOCATION'       : 'Lokace',
     'ObjectType.ABILITY_CONTEXT': 'Kontext pro chopnosti',
+    'ObjectType.MAP'            : 'Mapy',
+
+    'Items.GENERIC'             : ' Předmět',
+    'Items.CONTAINER'           : 'Kontejner',
+    'Items.MELEE_WEAPON'        : 'Zbraň na blízko',
+    'Items.RANGED_WEAPON'       : 'Zbraň na dálku',
+    'Items.THROWABLE_WEAPON'    : 'Vrhací zbraň',
+    'Items.ARMOR'               : 'Brnění',
+    'Items.MONEY'               : 'Peníze',
 
 
     'NodeType.FOLDER'           : 'Složka',

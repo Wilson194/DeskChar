@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QGridLayout
 
 from presentation.MainMenu import MainMenu
 from presentation.StatusBar import StatusBar
+from presentation.widgets.MapWidget import MapWidget
 from structure.enums.ObjectType import ObjectType
 from presentation.widgets.TreeWidget import TreeWidget
 from presentation.widgets.TabWidget import TabWidget
@@ -45,17 +46,26 @@ class MainWindow(QMainWindow):
 
     def redraw_central_widget(self, object_type: ObjectType):
         for i in range(self.centralWidget.layout().count()):
-            self.tabWidget.destroy()
+            if self.tabWidget:
+                self.tabWidget.destroy()
             self.centralWidget.layout().takeAt(i).widget().setHidden(True)
+
+            bars = self.findChildren(QtWidgets.QToolBar, 'MapToolbar')
+            for bar in bars:
+                self.removeToolBar(bar)
 
         self.splitter = QtWidgets.QSplitter(self.centralWidget)
         self.splitter.setHandleWidth(15)
 
         tree = TreeWidget(self.splitter, object_type)
-        self.tabWidget = TabWidget(self.splitter, None, object_type)
-        tree.item_doubleclick_signal.connect(self.tabWidget.tree_item_clicked)
 
-        self.tabWidget.setObjectName("tabWidget")
+        if object_type is ObjectType.MAP:
+            self.mapWidget = MapWidget(self.splitter, self)
+            self.mapWidget.setObjectName('mapWidget')
+        else:
+            self.tabWidget = TabWidget(self.splitter, None, object_type)
+            self.tabWidget.setObjectName("tabWidget")
+            tree.item_doubleclick_signal.connect(self.tabWidget.tree_item_clicked)
 
         self.grid_layout.addWidget(self.splitter, 0, 0, 1, 1)
         self.splitter.setSizes([200, 600])

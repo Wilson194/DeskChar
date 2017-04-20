@@ -1,10 +1,11 @@
+from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from data.DAO.interface.ISpellDAO import ISpellDAO
-from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
 from structure.enums.Classes import Classes
 from structure.enums.ObjectType import ObjectType
 from structure.spells.Spell import Spell
 from data.DAO.DAO import DAO
+from structure.tree.NodeObject import NodeObject
 
 
 class SpellDAO(DAO, ISpellDAO):
@@ -14,16 +15,51 @@ class SpellDAO(DAO, ISpellDAO):
 
 
     def __init__(self):
-        self.database = Database(self.DATABASE_DRIVER)
+        self.database = ObjectDatabase(self.DATABASE_DRIVER)
+        self.treeDAO = PlayerTreeDAO()
 
 
-    def create(self, spell: Spell) -> int:
+    def create(self, spell: Spell, nodeParentId: int = None, contextType: ObjectType = None) -> int:
         """
         Create new spell in database
         :param spell: Spell object
+        :param nodeParentId: id of parent node
+         :param contextType:  Type of tab, where will be created
+
         :return: id of autoincrement
         """
-        return ObjectDatabase(self.DATABASE_DRIVER).insert_object(spell)
+
+        if not contextType:
+            contextType = self.TYPE
+
+        intValues = {
+            'cast_time': spell.cast_time,
+            'drd_class': spell.drd_class.value if spell.drd_class else None
+        }
+
+        strValues = {
+            'name'               : spell.name,
+            'description'        : spell.description,
+            'mana_cost_initial'  : spell.mana_cost_initial,
+            'mana_cost_continual': spell.mana_cost_continual,
+            'range'              : spell.range,
+            'scope'              : spell.scope,
+            'duration'           : spell.duration
+        }
+
+        # Insert NON transable values
+        id = self.database.insert(self.DATABASE_TABLE, intValues)
+
+        # Insert transable values
+        self.database.insert_translate(strValues, spell.lang, id, self.TYPE)
+
+        spell.id = id
+
+        # Create node for tree structure
+        node = NodeObject(None, spell.name, nodeParentId, spell)
+        self.treeDAO.insert_node(node, contextType)
+
+        return id
 
 
     def update(self, spell: Spell):
@@ -31,7 +67,31 @@ class SpellDAO(DAO, ISpellDAO):
         Update spell in database
         :param spell: Spell object with new data
         """
-        ObjectDatabase(self.DATABASE_DRIVER).update_object(spell)
+        if spell.id is None:
+            raise ValueError('Cant update object without ID')
+        data = self.database.select(self.DATABASE_TABLE, {'ID': spell.id})
+
+        if not data:
+            raise ValueError('Cant update none existing object')
+
+        intValues = {
+            'cast_time': spell.cast_time,
+            'drd_class': spell.drd_class.value if spell.drd_class else None
+        }
+
+        self.database.update(self.DATABASE_TABLE, spell.id, intValues)
+
+        strValues = {
+            'name'               : spell.name,
+            'description'        : spell.description,
+            'mana_cost_initial'  : spell.mana_cost_initial,
+            'mana_cost_continual': spell.mana_cost_continual,
+            'range'              : spell.range,
+            'scope'              : spell.scope,
+            'duration'           : spell.duration
+        }
+
+        self.database.update_translate(strValues, spell.lang, spell.id, self.TYPE)
 
 
     def delete(self, spell_id: int):
@@ -44,7 +104,7 @@ class SpellDAO(DAO, ISpellDAO):
                                    {'target_id': spell_id, 'type': ObjectType.SPELL})
 
 
-    def get(self, spell_id: int, lang: str = None) -> Spell:
+    def get(self, spell_id: int, lang: str = None, nodeId: int = None, contextType: ObjectType = None) -> Spell:
         """
         Get spell from database
         :param spell_id: id of spell
@@ -53,6 +113,7 @@ class SpellDAO(DAO, ISpellDAO):
         """
         if lang is None:  # TODO : default lang
             lang = 'cs'
+
         data = dict(self.database.select(self.DATABASE_TABLE, {'ID': spell_id})[0])
         tr_data = self.database.select_translate(spell_id, ObjectType.SPELL.value,
                                                  lang)
@@ -81,6 +142,3 @@ class SpellDAO(DAO, ISpellDAO):
             item = self.get(line['ID'], lang)
             items.append(item)
         return items
-
-
-

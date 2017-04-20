@@ -1,34 +1,86 @@
 <templates>
-    <scenario>
-        <id>1</id>
-        <name lang="cs">Black wood</name>
-        <description lang="cs">Dark wood</description>
-        <party>
-            <partyCharacter>
-                <deviceName>Wilson phone</deviceName>
-                <MACAddress>85:F2:CD:25:1A:5D</MACAddress>
-                <character>
-                    <xp>350</xp>
-                    <maxMana>150</maxMana>
-                    <currentHealth>12</currentHealth>
-                    <strength>6</strength>
-                    <mobility>6</mobility>
-                    <weight>87</weight>
-                    <description lang="cs">Hrdiný kouzelník elfksé říše</description>
-                    <height>185</height>
-                    <maxHealth>15</maxHealth>
-                    <charisma>7</charisma>
-                    <age>25</age>
-                    <toughness>7</toughness>
-                    <agility>7</agility>
-                    <name lang="cs">Wilson</name>
-                    <currentMana>130</currentMana>
-                    <alignment>LAWFUL_GOOD</alignment>
-                    <level>5</level>
-                    <id>1</id>
-                    <intelligence>23</intelligence>
-                </character>
-            </partyCharacter>
-        </party>
-    </scenario>
+  <scenario>
+    <id>6</id>
+    <name lang="cs">Lekce</name>
+    <description lang="cs"></description>
+    <date>1950-01-01</date>
+    <locations>
+      <location>
+        <id>10</id>
+        <name lang="cs">Černý les</name>
+        <description lang="cs">Černý les
+</description>
+        <monsters>
+          <monster>
+            <id>8</id>
+            <name lang="cs">Gorgona</name>
+            <description lang="cs">Gorgona</description>
+            <viability>1</viability>
+            <offense lang="cs">2</offense>
+            <defense>3</defense>
+            <endurance>4</endurance>
+            <pugnacity>5</pugnacity>
+            <mobility>6</mobility>
+            <perseverance>7</perseverance>
+            <intelligence>8</intelligence>
+            <charisma>9</charisma>
+            <alignment>CHAOTIC_GOOD</alignment>
+            <experience>10</experience>
+            <hp>11</hp>
+            <monsterRace>ANIMAL</monsterRace>
+            <items>
+              <container>
+                <id>36</id>
+                <name lang="cs">Batoh</name>
+                <amount>1</amount>
+              </container>
+              <container>
+                <id>37</id>
+                <name lang="cs">Batoha</name>
+                <price>0</price>
+                <weight>0</weight>
+                <capacity>0</capacity>
+                <amount>1</amount>
+                <items>
+                  <container>
+                    <id>38</id>
+                    <name lang="cs">Batoh</name>
+                    <amount>1</amount>
+                    <items>
+                      <armor>
+                        <id>39</id>
+                        <name lang="cs">a</name>
+                        <amount>1</amount>
+                        <effects>
+                          <effect>
+                            <id>23</id>
+                            <name lang="cs">e</name>
+                            <targetType>AFFECTS_CHARACTER</targetType>
+                            <modifiers>
+                              <modifier>
+                                <id>26</id>
+                                <name lang="cs">m</name>
+                                <description lang="cs"></description>
+                              </modifier>
+                            </modifiers>
+                          </effect>
+                        </effects>
+                      </armor>
+                    </items>
+                  </container>
+                </items>
+              </container>
+            </items>
+          </monster>
+        </monsters>
+        <locations>
+          <location>
+            <id>11</id>
+            <name lang="cs">Modrý les</name>
+            <description lang="cs">Modrý les</description>
+          </location>
+        </locations>
+      </location>
+    </locations>
+  </scenario>
 </templates>

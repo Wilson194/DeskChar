@@ -75,7 +75,7 @@ class AbilityLayout(Layout):
         self.object.chance = self.chance_input.toPlainText()
         class_index = self.class_input.currentIndex()
         race_index = self.race_input.currentIndex()
-        self.object.drd_class = class_index if class_index > 0 else None
-        self.object.drd_race = race_index if race_index > 0 else None
+        self.object.drd_class = Classes(class_index) if class_index > 0 else None
+        self.object.drd_race = Races(race_index) if race_index > 0 else None
 
         self.ability_manager.update_ability(self.object)

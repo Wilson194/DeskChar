@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from PyQt5 import QtWidgets, QtGui, QtCore
+
+from business.managers.EffectManager import EffectManager
 from business.managers.ModifierManager import ModifierManager
 from presentation.layouts.Layout import Layout
 from structure.effects.Effect import Effect
@@ -22,7 +24,7 @@ class EffectLayout(Layout):
     def __init__(self, parent):
         super().__init__(parent)
 
-        self.modifier_manager = ModifierManager()
+        self.effect_manager = EffectManager()
         self.object = None
         self.__parent = parent
 
@@ -85,7 +87,7 @@ class EffectLayout(Layout):
         targetIndex = self.targetInput.currentIndex()
         self.object.targetType = ModifierTargetTypes(targetIndex) if targetIndex != 0 else None
 
-        self.modifier_manager.update(self.object)
+        self.effect_manager.update_effect(self.object)
 
 
     def __set_table_data(self):

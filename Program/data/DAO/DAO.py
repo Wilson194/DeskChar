@@ -1,5 +1,6 @@
 from data.DAO.SettingsDAO import SettingsDAO
 from data.database.Database import Database
+from structure.enums.ObjectType import ObjectType
 
 
 class DAO:
@@ -55,7 +56,7 @@ class DAO:
         return languages
 
 
-    def get_list(self, id: int):
+    def get_list(self, id: int, nodeId: int = None, contextType: ObjectType = None):
         """
         Return list of object for one ID but all languages
         :param id: id of object
@@ -64,5 +65,5 @@ class DAO:
         languages = self.get_languages(id)
         objects = []
         for lang in languages:
-            objects.append(self.get(id, lang))
+            objects.append(self.get(id, lang, nodeId, contextType))
         return objects

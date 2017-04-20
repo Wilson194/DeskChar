@@ -18,7 +18,7 @@ class Database(metaclass=Singleton):
         self.__sql_many_state = False
 
 
-    def set_many(self, value):
+    def set_many(self, value: bool):
         self.__sql_many_state = value
 
 
@@ -245,7 +245,7 @@ class Column:
     """
     Class for handling column in database
     """
-    data_types = ['INTEGER', 'TEXT', 'REAL', 'NUMERIC', 'DATE', 'DATETIME']
+    data_types = ['INTEGER', 'TEXT', 'REAL', 'NUMERIC', 'DATE', 'DATETIME', 'REAL']
 
 
     def __init__(self, name, value_type, primary=False, unique=False,
@@ -254,7 +254,7 @@ class Column:
 
         if value_type not in self.data_types:
             raise ValueError(
-                'Bad type of column, use one of these: ' + array_to_string(
+                'Bad type of column {}, use one of these: '.format(value_type) + array_to_string(
                     self.data_types, ', '))
 
         self.value_type = value_type

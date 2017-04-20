@@ -58,16 +58,17 @@ class ArmorLayout(Layout):
         :param item: Item object
         """
         self.object = item
+
         self.header.setText(item.name)
         self.name_input.setPlainText(item.name)
         self.description_input.setPlainText(item.description)
-        self.price_input.setValue(item.price)
-        self.quality_input.setValue(item.quality)
-        self.weightA_input.setValue(item.weightA)
-        self.weightB_input.setValue(item.weightB)
-        self.weightC_input.setValue(item.weightC)
-        self.size_input.setValue(item.size)
-        self.amount_input.setValue(item.amount)
+        self.price_input.setValue(item.price if item.price else 0)
+        self.quality_input.setValue(item.quality if item.quality else 0)
+        self.weightA_input.setValue(item.weightA if item.weightA else 0)
+        self.weightB_input.setValue(item.weightB if item.weightB else 0)
+        self.weightC_input.setValue(item.weightC if item.weightC else 0)
+        self.size_input.setValue(item.size if item.size else 0)
+        self.amount_input.setValue(item.amount if item.amount else 1)
 
 
     def save_data(self):

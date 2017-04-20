@@ -35,18 +35,17 @@ class PlayerTreeDAO:
         return map_objects(data)
 
 
-    def get_node(self, id: int, light: bool = False) -> Node:
+    def get_node(self, id: int) -> Node:
         """
         Get node by id
         :param id: id of node
         :return: node object if exist, None otherwise
         """
         data = self.database.select(self.TABLE_NAME, {'ID': id})
-        return map_objects(data, light)[0] if len(data) > 0 else None
+        return map_objects(data)[0] if len(data) > 0 else None
 
 
-    def get_children_objects(self, targetType: ObjectType, object: object,
-                             direct: bool = False) -> list:
+    def get_children_objects(self, parentNodeId: int, contextType: ObjectType) -> list:
         """
         Recursively find all child object of give type
         :param targetType:
@@ -56,14 +55,16 @@ class PlayerTreeDAO:
         :return:
         """
 
-        node = self.database.select(self.TABLE_NAME,
-                                    {'target_id'  : object.id,
-                                     'target_type': object.object_type.value,
-                                     'parent_type': object.object_type.value})[0]
+        nodes = self.get_children_nodes(contextType, parentNodeId)
 
-        return self.__get_children_objects(targetType, node['ID'], object.object_type,
-                                           direct=direct)
+        objects = []
+        for node in nodes:
+            if isinstance(node, Folder):
+                objects += self.get_children_nodes(contextType, node.id)
+            else:
+                objects.append(node)
 
+        return objects
 
     def __get_children_objects(self, targetType, nodeId, parentType, objects: list = None, direct: bool = False):
         if objects is None:
@@ -82,7 +83,7 @@ class PlayerTreeDAO:
         return objects
 
 
-    def get_children_nodes(self, target_type: ObjectType, parent_id: int) -> list:
+    def get_children_nodes(self, contextType: ObjectType, parent_id: int) -> list:
         """
         Get all child of parent id
         :param target_type: target type
@@ -90,7 +91,8 @@ class PlayerTreeDAO:
         :return: list of nodes with parent id, or empty list
         """
         data = self.database.select(self.TABLE_NAME,
-                                    {'parent_id': parent_id, 'parent_type': target_type.value})
+                                    {'parent_id': parent_id, 'parent_type': contextType.value})
+
 
         return map_objects(data)
 
@@ -157,7 +159,7 @@ class PlayerTreeDAO:
         return self.get_node(data[0]['id'])
 
 
-def map_objects(data: dict, light: bool = False) -> list:
+def map_objects(data: dict) -> list:
     """
     Map data from database to Node object
     :param data: data from database
@@ -168,10 +170,7 @@ def map_objects(data: dict, light: bool = False) -> list:
         if row['type'] is NodeType.FOLDER.value:
             obj = Folder(row['ID'], row['name'], row['parent_id'])
         elif row['type'] is NodeType.OBJECT.value:
-            if light:
-                target_object = None
-            else:
-                target_object = ObjectType(row['target_type']).instance().DAO()().get(row['target_id'])
+            target_object = ObjectType(row['target_type']).instance().DAO()().get(row['target_id'])
             obj = NodeObject(row['ID'], row['name'], row['parent_id'], target_object)
         else:
             obj = None

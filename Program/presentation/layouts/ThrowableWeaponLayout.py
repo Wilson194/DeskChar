@@ -52,7 +52,7 @@ class ThrowableWeaponLayout(Layout):
         self.defence_input = self.spin_box(self.input_grid, 'Defence', 0, 10, True)
         self.weapon_weight_input = self.combo_box(self.input_grid, 'WeaponWeight', WeaponWeight, 0,
                                                   11, True)
-        self.amount_input = self.spin_box(self.input_grid, 'Amount', 0, 11, True)
+        self.amount_input = self.spin_box(self.input_grid, 'Amount', 0, 12, True)
 
         self.addLayout(self.input_grid)
 
@@ -66,16 +66,16 @@ class ThrowableWeaponLayout(Layout):
         self.header.setText(item.name)
         self.name_input.setPlainText(item.name)
         self.description_input.setPlainText(item.description)
-        self.weight_input.setValue(item.weight)
-        self.price_input.setValue(item.price)
-        self.initiative_input.setValue(item.initiative)
-        self.strength_input.setValue(item.strength)
-        self.rampancy_input.setValue(item.rampancy)
-        self.rangeLow_input.setValue(item.rangeLow)
-        self.rangeMedium_input.setValue(item.rangeMedium)
-        self.rangeHigh_input.setValue(item.rangeHigh)
-        self.defence_input.setValue(item.defence)
-        self.amount_input.setValue(item.amount)
+        self.weight_input.setValue(item.weight if item.weight else 0)
+        self.price_input.setValue(item.price if item.price else 0)
+        self.initiative_input.setValue(item.initiative if item.initiative else 0)
+        self.strength_input.setValue(item.strength if item.strength else 0)
+        self.rampancy_input.setValue(item.rampancy if item.rampancy else 0)
+        self.rangeLow_input.setValue(item.rangeLow if item.rangeLow else 0)
+        self.rangeMedium_input.setValue(item.rangeMedium if item.rangeMedium else 0)
+        self.rangeHigh_input.setValue(item.rangeHigh if item.rangeHigh else 0)
+        self.defence_input.setValue(item.defence if item.defence else 0)
+        self.amount_input.setValue(item.amount if item.amount else 0)
 
         weaponWeightIndex = item.weaponWeight.value if item.weaponWeight is not None else 0
 

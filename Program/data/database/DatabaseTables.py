@@ -320,11 +320,49 @@ class DatabaseTables:
         except OperationalError:
             pass
 
+        # ///////////// MapItem \\\\\\\\\\\\\\\\\\\
+
+        mapColumns = [
+            Column('ID', 'INTEGER', True, False, True),
+            Column('name', 'TEXT'),
+            Column('description', 'TEXT'),
+            Column('map_file', 'TEXT'),
+        ]
+
+        try:
+            database.create_table('Map', mapColumns)
+        except OperationalError:
+            pass
+
+        # ///////////// MapItem \\\\\\\\\\\\\\\\\\\
+
+        mapItemColumns = [
+            Column('ID', 'INTEGER', True, False, True),
+            Column('name', 'TEXT'),
+            Column('description', 'TEXT'),
+            Column('positionX', 'REAL'),
+            Column('positionY', 'REAL'),
+            Column('scale', 'INTEGER'),
+            Column('object_type', 'INTEGER'),
+            Column('object_id', 'INTEGER'),
+            Column('name', 'INTEGER'),
+            Column('map_id', 'INTEGER')
+        ]
+
+        mapItemForeigns = [
+            Foreign('map_id', 'Map', 'ID', 'CASCADE')
+        ]
+
+        try:
+            database.create_table('Map_item', mapItemColumns, mapItemForeigns)
+        except OperationalError:
+            pass
+
         # ///////////// Settings \\\\\\\\\\\\\\\\\\
 
         settingsColumns = [
             Column('ID', 'INTEGER', True, False, True),
-            Column('name', 'INTEGER', not_null=True),
+            Column('name', 'TEXT', not_null=True),
             Column('int_value', 'INTEGER'),
             Column('str_value', 'TEXT'),
 

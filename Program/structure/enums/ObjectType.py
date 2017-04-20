@@ -13,6 +13,8 @@ class ObjectType(AutoNumber):
     LOCATION = ()  # 9
     ABILITY_CONTEXT = ()  # 10
     PARTY_CHARACTER = ()  # 11
+    MAP = ()  # 12
+    MAP_ITEM = ()  # 13
 
 
     def icon(self):
@@ -36,6 +38,8 @@ class ObjectType(AutoNumber):
             return 'resources/icons/scroll.png'
         if self is ObjectType.ABILITY_CONTEXT:
             return 'resources/icons/gemRed.png'
+        if self is ObjectType.MAP:
+            return 'resources/icons/map.png'
 
         return 'resources/icons/book.png'
 
@@ -52,6 +56,7 @@ class ObjectType(AutoNumber):
         from structure.scenario.Location import Location
         from structure.effects.AbilityContext import AbilityContext
         from structure.character.PartyCharacter import PartyCharacter
+        from structure.map.Map import Map
 
         if self == ObjectType.ITEM:
             return Item
@@ -75,6 +80,8 @@ class ObjectType(AutoNumber):
             return AbilityContext
         if self == ObjectType.PARTY_CHARACTER:
             return PartyCharacter
+        if self == ObjectType.MAP:
+            return Map
 
 
     def by_name(self, name: str):

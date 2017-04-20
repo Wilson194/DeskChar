@@ -1,6 +1,11 @@
 from structure.enums.Items import Items
 from structure.enums.ObjectType import ObjectType
+from structure.items.Armor import Armor
 from structure.items.Item import Item
+from structure.items.MeleeWeapon import MeleeWeapon
+from structure.items.Money import Money
+from structure.items.RangeWeapon import RangeWeapon
+from structure.items.ThrowableWeapon import ThrowableWeapon
 
 
 class Container(Item):
@@ -16,6 +21,12 @@ class Container(Item):
         self.__type = Items.CONTAINER
 
         self.__items = []
+        self.__armors = []
+        self.__containers = []
+        self.__meleeWeapons = []
+        self.__moneyList = []
+        self.__rangedWeapons = []
+        self.__throwableWeapons = []
 
 
     def __name__(self):
@@ -59,3 +70,101 @@ class Container(Item):
     @property
     def type(self):
         return self.__type
+
+
+    @property
+    def items(self):
+        return self.__items
+
+
+    @items.setter
+    def items(self, value):
+        self.__items = value
+
+
+    @property
+    def containers(self):
+        return self.__containers
+
+
+    @containers.setter
+    def containers(self, value):
+        self.__containers = value
+
+
+    @property
+    def armors(self):
+        return self.__armors
+
+
+    @armors.setter
+    def armors(self, value):
+        self.__armors = value
+
+
+    @property
+    def meleeWeapons(self):
+        return self.__meleeWeapons
+
+
+    @meleeWeapons.setter
+    def meleeWeapons(self, value):
+        self.__meleeWeapons = value
+
+
+    @property
+    def rangedWeapons(self):
+        return self.__rangedWeapons
+
+
+    @rangedWeapons.setter
+    def rangedWeapons(self, value):
+        self.__rangedWeapons = value
+
+
+    @property
+    def moneyList(self):
+        return self.__moneyList
+
+
+    @moneyList.setter
+    def moneyList(self, value):
+        self.__moneyList = value
+
+
+    @property
+    def throwableWeapons(self):
+        return self.__throwableWeapons
+
+
+    @throwableWeapons.setter
+    def throwableWeapons(self, value):
+        self.__throwableWeapons = value
+
+
+    def addItem(self, item: Item):
+        self.__items.append(item)
+
+
+    def addArmor(self, armor: Armor):
+        self.__armors.append(armor)
+
+
+    def addContainer(self, container):
+        self.__containers.append(container)
+
+
+    def addMoney(self, money: Money):
+        self.__moneyList.append(money)
+
+
+    def addMeleeWeapon(self, meleeWeapon: MeleeWeapon):
+        self.__meleeWeapons.append(meleeWeapon)
+
+
+    def addRangedWeapon(self, rangedWeapon: RangeWeapon):
+        self.__rangedWeapons.append(rangedWeapon)
+
+
+    def addThrowableWeapon(self, throwableWeapon: ThrowableWeapon):
+        self.__throwableWeapons.append(throwableWeapon)

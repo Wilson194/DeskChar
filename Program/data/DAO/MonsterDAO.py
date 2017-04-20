@@ -1,4 +1,7 @@
+from data.DAO.AbilityDAO import AbilityDAO
+from data.DAO.ItemDAO import ItemDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.SpellDAO import SpellDAO
 from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
 from structure.enums.Alignment import Alignment
@@ -13,6 +16,7 @@ from structure.items.ThrowableWeapon import ThrowableWeapon
 from structure.monster.Monster import Monster
 
 from data.DAO.DAO import DAO
+from structure.tree.NodeObject import NodeObject
 
 
 class MonsterDAO(DAO):
@@ -22,16 +26,61 @@ class MonsterDAO(DAO):
 
 
     def __init__(self):
-        self.database = Database(self.DATABASE_DRIVER)
+        self.database = ObjectDatabase(self.DATABASE_DRIVER)
+        self.treeDAO = PlayerTreeDAO()
 
 
-    def create(self, monster: Monster) -> int:
+    def create(self, monster: Monster, nodeParentId: int = None, contextType: ObjectType = None) -> int:
         """
         Create new spell in database
         :param monster: Spell object
         :return: id of autoincrement
         """
-        return ObjectDatabase(self.DATABASE_DRIVER).insert_object(monster)
+
+        if not contextType:
+            contextType = self.TYPE
+
+        intValues = {
+            'viability'   : monster.viability,
+            'defense'     : monster.defense,
+            'endurance'   : monster.endurance,
+            'rampancy'    : monster.rampancy,
+            'mobility'    : monster.mobility,
+            'perseverance': monster.perseverance,
+            'intelligence': monster.intelligence,
+            'charisma'    : monster.charisma,
+            'experience'  : monster.experience,
+            'hp'          : monster.hp,
+            'alignment'   : monster.alignment.value if monster.alignment else None,
+            'monsterRace' : monster.monsterRace.value if monster.monsterRace else None,
+            'size'        : monster.size.value if monster.size else None,
+        }
+
+        strValues = {
+            'name'       : monster.name,
+            'description': monster.description,
+            'offense'    : monster.offense,
+        }
+
+        id = self.database.insert(self.DATABASE_TABLE, intValues)
+        monster.id = id
+
+        self.database.insert_translate(strValues, monster.lang, id, self.TYPE)
+
+        # Create node for tree structure
+        node = NodeObject(None, monster.name, nodeParentId, monster)
+        nodeId = self.treeDAO.insert_node(node, contextType)
+
+        for one in monster.containers + monster.armors + monster.moneyList + monster.meleeWeapons + monster.rangedWeapons + monster.throwableWeapons + monster.items:
+            ItemDAO().create(one, nodeId, contextType)
+
+        for spell in monster.spells:
+            SpellDAO().create(spell, nodeId, contextType)
+
+        for ability in monster.abilities:
+            AbilityDAO().create(ability, nodeId, contextType)
+
+        return id
 
 
     def update(self, monster: Monster):
@@ -39,7 +88,31 @@ class MonsterDAO(DAO):
         Update spell in database
         :param spell: Spell object with new data
         """
-        ObjectDatabase(self.DATABASE_DRIVER).update_object(monster)
+        intValues = {
+            'viability'   : monster.viability,
+            'defense'     : monster.defense,
+            'endurance'   : monster.endurance,
+            'rampancy'    : monster.rampancy,
+            'mobility'    : monster.mobility,
+            'perseverance': monster.perseverance,
+            'intelligence': monster.intelligence,
+            'charisma'    : monster.charisma,
+            'experience'  : monster.experience,
+            'hp'          : monster.hp,
+            'alignment'   : monster.alignment.value if monster.alignment else None,
+            'monsterRace' : monster.monsterRace.value if monster.monsterRace else None,
+            'size'        : monster.size.value if monster.size else None,
+        }
+
+        strValues = {
+            'name'       : monster.name,
+            'description': monster.description,
+            'offense'    : monster.offense,
+        }
+
+        self.database.update(self.DATABASE_TABLE, monster.id, intValues)
+
+        self.database.update_translate(strValues, monster.lang, monster.id, self.TYPE)
 
 
     def delete(self, monster_id: int):
@@ -52,7 +125,7 @@ class MonsterDAO(DAO):
                                    {'target_id': monster_id, 'type': ObjectType.SPELL})
 
 
-    def get(self, monster_id: int, lang: str = None) -> Monster:
+    def get(self, monster_id: int, lang: str = None, nodeId: int = None, contextType: ObjectType = None) -> Monster:
         """
         Get spell from database
         :param monster_id: id of spell
@@ -77,29 +150,51 @@ class MonsterDAO(DAO):
                           alignment, data.get('experience', 0), data.get('hp', 0),
                           monsterRace, monsterSize)
 
-        spells = PlayerTreeDAO().get_children_objects(ObjectType.SPELL, monster)
-        monster.spells = spells
+        if nodeId and contextType:
+            children = self.treeDAO.get_children_objects(nodeId, contextType)
+            abilities = []
+            spells = []
+            items = []
+            armors = []
+            moneys = []
+            containers = []
+            meleeWeapons = []
+            rangedWeapons = []
+            throwableWeapons = []
 
-        abilities = PlayerTreeDAO().get_children_objects(ObjectType.ABILITY, monster)
-        monster.abilities = abilities
+            for child in children:
+                if child.object.object_type is ObjectType.SPELL:
+                    spell = SpellDAO().get(child.object.id, None, child.id, contextType)
+                    spells.append(spell)
+                elif child.object.object_type is ObjectType.ABILITY:
+                    ability = AbilityDAO().get(child.object.id, None, child.id, contextType)
+                    abilities.append(ability)
+                elif child.object.object_type is ObjectType.ITEM:
+                    childItem = ItemDAO().get(child.object.id, None, child.id, contextType)
+                    if isinstance(childItem, Armor):
+                        armors.append(childItem)
+                    elif isinstance(childItem, Container):
+                        containers.append(childItem)
+                    elif isinstance(childItem, Money):
+                        moneys.append(childItem)
+                    elif isinstance(childItem, MeleeWeapon):
+                        meleeWeapons.append(childItem)
+                    elif isinstance(childItem, RangeWeapon):
+                        rangedWeapons.append(childItem)
+                    elif isinstance(childItem, ThrowableWeapon):
+                        throwableWeapons.append(childItem)
+                    else:
+                        items.append(childItem)
 
-        items = PlayerTreeDAO().get_children_objects(ObjectType.ITEM, monster)
-
-        for item in items:
-            if isinstance(item, Armor):
-                monster.addArmor(item)
-            elif isinstance(item, Money):
-                monster.addMoney(item)
-            elif isinstance(item, Container):
-                monster.addContainer(item)
-            elif isinstance(item, MeleeWeapon):
-                monster.addMeleeWeapon(item)
-            elif isinstance(item, RangeWeapon):
-                monster.addRangedWeapon(item)
-            elif isinstance(item, ThrowableWeapon):
-                monster.addThrowableWeapon(item)
-            else:
-                monster.addItem(item)
+            monster.abilities = abilities
+            monster.spells = spells
+            monster.items = items
+            monster.armors = armors
+            monster.moneyList = moneys
+            monster.containers = containers
+            monster.meleeWeapons = meleeWeapons
+            monster.rangedWeapons = rangedWeapons
+            monster.throwableWeapons = throwableWeapons
 
         return monster
 

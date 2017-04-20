@@ -1,4 +1,5 @@
 from data.DAO.DAO import DAO
+from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from data.DAO.interface.IModifierDAO import IModifierDAO
 from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
@@ -10,6 +11,7 @@ from structure.enums.ModifierTargetTypes import ModifierTargetTypes
 from structure.enums.ModifierValueTypes import ModifierValueTypes
 from structure.enums.ObjectType import ObjectType
 from structure.enums.WeaponWeight import WeaponWeight
+from structure.tree.NodeObject import NodeObject
 
 
 class ModifierDAO(DAO, IModifierDAO):
@@ -21,14 +23,51 @@ class ModifierDAO(DAO, IModifierDAO):
     def __init__(self):
         self.database = Database(self.DATABASE_DRIVER)
         self.obj_database = ObjectDatabase(self.DATABASE_DRIVER)
+        self.treeDAO = PlayerTreeDAO()
 
 
-    def create(self, modifier: Modifier) -> int:
-        return self.obj_database.insert_object(modifier)
+    def create(self, modifier: Modifier, nodeParentId: int = None, contextType: ObjectType = None) -> int:
+        intValues = {
+            'value'                   : modifier.value,
+            'valueType'               : modifier.valueType.value if modifier.valueType else None,
+            'targetType'              : modifier.targetType.value if modifier.targetType else None,
+            'characterTargetAttribute': modifier.characterTargetAttribute.value if modifier.characterTargetAttribute else None,
+            'itemTargetAttribute'     : modifier.itemTargetAttribute.value if modifier.itemTargetAttribute else None
+        }
+
+        strValues = {
+            'name'        : modifier.name,
+            'desccription': modifier.description
+        }
+
+        id = self.database.insert(self.DATABASE_TABLE, intValues)
+        modifier.id = id
+
+        self.obj_database.insert_translate(strValues, modifier.lang, id, self.TYPE)
+
+        # Create node for tree structure
+        node = NodeObject(None, modifier.name, nodeParentId, modifier)
+        self.treeDAO.insert_node(node, contextType)
+
+        return id
 
 
     def update(self, modifier: Modifier) -> None:
-        self.obj_database.update_object(modifier)
+        intValues = {
+            'value'                   : modifier.value,
+            'valueType'               : modifier.valueType.value if modifier.valueType else None,
+            'targetType'              : modifier.targetType.value if modifier.targetType.value else None,
+            'characterTargetAttribute': modifier.characterTargetAttribute.value if modifier.characterTargetAttribute else None,
+            'itemTargetAttribute'     : modifier.itemTargetAttribute.value if modifier.itemTargetAttribute else None
+        }
+
+        strValues = {
+            'name'        : modifier.name,
+            'desccription': modifier.description
+        }
+
+        self.database.update(self.DATABASE_TABLE, modifier.id, intValues)
+        self.obj_database.update_translate(strValues, modifier.lang, modifier.id, self.TYPE)
 
 
     def delete(self, modifier_id: int) -> None:
@@ -37,7 +76,7 @@ class ModifierDAO(DAO, IModifierDAO):
                                    {'target_id': modifier_id, 'type': ObjectType.MODIFIER})
 
 
-    def get(self, modifier_id: int, lang: str = None) -> Modifier:
+    def get(self, modifier_id: int, lang: str = None, nodeId: int = None, contextType: ObjectType = None) -> Modifier:
         if lang is None:
             lang = 'cs'  # TODO: default lang
 
@@ -81,16 +120,15 @@ class ModifierDAO(DAO, IModifierDAO):
         return modifier
 
 
-    def get_link(self, effectId):
-        data = self.database.select('Effect_modifier', {'effect_id': effectId})
-
-        modifiers = []
-        for i in data:
-            modifiers.append(self.get(i['modifier_id']))
-
-        return modifiers
-
-
-
     def get_all(self) -> list:
         return []
+
+
+        # def get_link(self, effectId):
+        #     data = self.database.select('Effect_modifier', {'effect_id': effectId})
+        #
+        #     modifiers = []
+        #     for i in data:
+        #         modifiers.append(self.get(i['modifier_id']))
+        #
+        #     return modifiers

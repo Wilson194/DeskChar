@@ -10,14 +10,14 @@ class ParserHandler:
         root = etree.Element('templates')
 
         characters = []
-        for type, id in data:
-            if type == ObjectType.CHARACTER:
-                objs = type.instance().DAO()().get_list(id)
-                character = objs[0].XmlClass()().create_xml(objs)
-                characters.append(character)
+        for node in data:
+            if node.object.object_type == ObjectType.CHARACTER:
+                # objs = type.instance().DAO()().get_list(id)
+                # character = objs[0].XmlClass()().create_xml(objs)
+                # characters.append(character)
+                pass
             else:
-                objs = type.instance().DAO()().get_list(id)
-                print(objs[0])
+                objs = node.object.DAO()().get_list(node.object.id, node.id, node.object.object_type )
                 child = objs[0].XmlClass()().create_xml(objs)
                 root.append(child)
 
