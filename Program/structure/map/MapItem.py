@@ -6,15 +6,17 @@ from structure.general.Object import Object
 class MapItem(Object):
     def __init__(self, id: int = None, name: str = None, description: str = None,
                  coord: QPointF = None, scale: int = None, number: int = None,
-                 object: object = None):
+                 object: object = None, mapId: int = None):
         super().__init__(id, None, name, description)
 
-        self.__coord = None
-        self.__scale = None
-        self.__object = None
+        self.__icon = 'resources/icons/imp.png'
+        self.__coord = coord
+        self.__scale = scale
+        self.__object = object
         self.__name = None
         self.__description = None
-        self.__number = None
+        self.__number = number
+        self.__mapId = mapId
 
 
     @property
@@ -75,3 +77,19 @@ class MapItem(Object):
     @number.setter
     def number(self, value):
         self.__number = value
+
+    @property
+    def icon(self):
+        return self.__icon
+
+    @icon.setter
+    def icon(self, value):
+        self.__icon = value
+
+    @property
+    def mapId(self):
+        return self.__mapId
+
+    @mapId.setter
+    def mapId(self, value):
+        self.__mapId = value

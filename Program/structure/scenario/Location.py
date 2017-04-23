@@ -219,3 +219,14 @@ class Location(Object):
 
     def addThrowableWeapon(self, throwableWeapon: ThrowableWeapon):
         self.__throwableWeapons.append(throwableWeapon)
+
+
+    def printer(self, depth):
+        print('{} Location - {}'.format('  ' * depth, self.name))
+        print('{}   Locations:'.format('  ' * depth))
+        for location in self.locations:
+            location.printer(depth + 2)
+
+        print('{}   Items:'.format('  ' * depth))
+        for item in self.items + self.containers + self.armors + self.meleeWeapons + self.rangedWeapons + self.moneyList + self.throwableWeapons:
+            item.printer(depth+2)

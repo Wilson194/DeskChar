@@ -20,7 +20,7 @@ class Monster(Object):
 
 
     def __init__(self, id: int = None, lang: str = None, name: str = None, description: str = None,
-                 viability: int = None, offense: str = None, defense: int = None,
+                 viability: str = None, offense: str = None, defense: int = None,
                  endurance: int = None, rampancy: int = None, mobility: int = None,
                  perseverance: int = None, intelligence: int = None, charisma: int = None,
                  alignment: int = None, experience: int = None, hp: int = None,

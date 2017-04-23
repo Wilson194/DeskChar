@@ -88,3 +88,7 @@ class AbilityContext(Object):
     @targetAttribute.setter
     def targetAttribute(self, value):
         self.__targetAttribute = value
+
+
+    def printer(self, depth):
+        print('{} Context - {}'.format('  ' * depth, self.name))

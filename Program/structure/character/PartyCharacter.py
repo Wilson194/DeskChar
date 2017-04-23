@@ -1,16 +1,5 @@
-from structure.enums.Alignment import Alignment
-from structure.enums.Classes import Classes
-from structure.enums.NodeType import NodeType
 from structure.enums.ObjectType import ObjectType
-from structure.enums.Races import Races
 from structure.general.Object import Object
-from structure.items.Armor import Armor
-from structure.items.Container import Container
-from structure.items.Item import Item
-from structure.items.MeleeWeapon import MeleeWeapon
-from structure.items.Money import Money
-from structure.items.RangeWeapon import RangeWeapon
-from structure.items.ThrowableWeapon import ThrowableWeapon
 
 
 class PartyCharacter(Object):

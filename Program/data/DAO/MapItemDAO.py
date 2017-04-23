@@ -25,6 +25,7 @@ class MapItemDAO():
             'scale'      : mapItem.scale,
             'positionX'  : X,
             'positionY'  : Y,
+            'map_id'     : mapItem.mapId,
         }
         id = self.database.insert(self.DATABASE_TABLE, values)
 
@@ -34,6 +35,8 @@ class MapItemDAO():
     def update(self, mapItem: MapItem):
         X = mapItem.coord.x()
         Y = mapItem.coord.y()
+
+        print(X, Y)
 
         values = {
             'name'       : mapItem.name,
@@ -68,7 +71,7 @@ class MapItemDAO():
         coord = QPointF(data.get('positionX', 0), data.get('positionY', 0))
 
         mapitem = MapItem(mapitem_id, data.get('name', ''), data.get('description', ''), coord,
-                          data.get('scale', 0), data.get('number', 0))
+                          data.get('scale', 0), data.get('number', 0), None, data.get('map_id'))
 
         return mapitem
 

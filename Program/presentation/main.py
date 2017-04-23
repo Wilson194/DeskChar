@@ -62,6 +62,7 @@ class MainWindow(QMainWindow):
         if object_type is ObjectType.MAP:
             self.mapWidget = MapWidget(self.splitter, self)
             self.mapWidget.setObjectName('mapWidget')
+            tree.item_doubleclick_signal.connect(self.mapWidget.tree_item_doubleclick_action)
         else:
             self.tabWidget = TabWidget(self.splitter, None, object_type)
             self.tabWidget.setObjectName("tabWidget")

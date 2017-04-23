@@ -6,6 +6,7 @@ from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
 from structure.enums.Alignment import Alignment
 from structure.enums.MonsterRace import MonsterRace
+from structure.enums.MonsterSize import MonsterSize
 from structure.enums.ObjectType import ObjectType
 from structure.items.Armor import Armor
 from structure.items.Container import Container
@@ -41,7 +42,6 @@ class MonsterDAO(DAO):
             contextType = self.TYPE
 
         intValues = {
-            'viability'   : monster.viability,
             'defense'     : monster.defense,
             'endurance'   : monster.endurance,
             'rampancy'    : monster.rampancy,
@@ -60,6 +60,7 @@ class MonsterDAO(DAO):
             'name'       : monster.name,
             'description': monster.description,
             'offense'    : monster.offense,
+            'viability': monster.viability,
         }
 
         id = self.database.insert(self.DATABASE_TABLE, intValues)
@@ -139,10 +140,10 @@ class MonsterDAO(DAO):
                                                  lang)
 
         monsterRace = MonsterRace(data['monsterRace']) if data['monsterRace'] else None
-        monsterSize = MonsterRace(data['size']) if data['size'] else None
+        monsterSize = MonsterSize(data['size']) if data['size'] else None
         alignment = Alignment(data['alignment']) if data['alignment'] else None
         monster = Monster(data['ID'], lang, tr_data.get('name', ''), tr_data.get('description', ''),
-                          data.get('viability', 0), tr_data.get('offense', ''),
+                          tr_data.get('viability', 0), tr_data.get('offense', ''),
                           data.get('defense', 0),
                           data.get('endurance', 0), data.get('rampancy', 0),
                           data.get('mobility', 0), data.get('perseverance', 0),

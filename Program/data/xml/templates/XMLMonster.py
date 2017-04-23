@@ -38,9 +38,9 @@ class XMLMonster(XMLTemplate):
         self.charisma = XElement('charisma')
         self.alignment = XElement('alignment', Alignment)
         self.experience = XElement('experience')
-        self.hp = XElement('hp')
+        self.hp = XElement('HP')
 
-        self.monsterRace = XElement('monsterRace', MonsterRace)
+        self.monsterRace = XElement('race', MonsterRace)
         self.size = XElement('size', MonsterSize)
 
         self.spells = XInstance('spells', XMLSpell)

@@ -27,8 +27,14 @@ class EffectDAO(DAO, IEffectDAO):
         if not contextType:
             contextType = self.TYPE
 
+        if type(effect.active) is str:
+            active = True if effect.active == 'true' else False
+        else:
+            active = effect.active
+
         intValues = {
-            'targetType': effect.targetType.value if effect.targetType else None
+            'targetType': effect.targetType.value if effect.targetType else None,
+            'active'    : int(active)
         }
 
         strValues = {
@@ -51,8 +57,14 @@ class EffectDAO(DAO, IEffectDAO):
 
 
     def update(self, effect: Effect) -> None:
+        if type(effect.active) is str:
+            active = True if effect.active == 'true' else False
+        else:
+            active = effect.active
+
         intValues = {
-            'targetType': effect.targetType.value if effect.targetType else None
+            'targetType': effect.targetType.value if effect.targetType else None,
+            'active'    : int(active)
         }
 
         strValues = {
@@ -80,7 +92,7 @@ class EffectDAO(DAO, IEffectDAO):
         index = data.get('targetType', 1) if data.get('targetType', 1) is not None else 1
         targetType = ModifierTargetTypes(index)
         effect = Effect(effect_id, lang, tr_data.get('name', ''), tr_data.get('description', ''),
-                        targetType)
+                        targetType, bool(data.get('active', 0)))
 
         if nodeId and contextType:
             children = self.treeDAO.get_children_objects(nodeId, contextType)

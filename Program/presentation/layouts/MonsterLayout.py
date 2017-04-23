@@ -50,7 +50,7 @@ class MonsterLayout(Layout):
         self.nameInput = self.text_box(self.input_grid, 'Name', 0, 0)
         self.descriptionInput = self.text_box(self.input_grid, 'Description', 0, 1)
 
-        self.viabilityInput = self.spin_box(self.input_grid, 'Viability', 0, 2, True)
+        self.viabilityInput = self.text_box(self.input_grid, 'Viability', 0, 2)
         self.offenseInput = self.text_box(self.input_grid, 'Offense', 0, 3)
         self.defseInput = self.spin_box(self.input_grid, 'Defense', 0, 4, True)
         self.enduranceInput = self.spin_box(self.input_grid, 'Endurance', 0, 5, True)
@@ -78,7 +78,7 @@ class MonsterLayout(Layout):
         self.nameInput.setPlainText(self.object.name)
         self.descriptionInput.setPlainText(self.object.description)
 
-        self.viabilityInput.setValue(self.object.viability if self.object.viability else 0)
+        self.viabilityInput.setPlainText(self.object.viability)
         self.offenseInput.setPlainText(self.object.offense)
         self.defseInput.setValue(self.object.defense if self.object.defense else 0)
         self.enduranceInput.setValue(self.object.endurance if self.object.endurance else 0)
@@ -107,7 +107,7 @@ class MonsterLayout(Layout):
         self.object.name = self.nameInput.toPlainText()
         self.object.description = self.descriptionInput.toPlainText()
 
-        self.object.viability = self.viabilityInput.value()
+        self.object.viability = self.viabilityInput.toPlainText()
         self.object.offense = self.offenseInput.toPlainText()
         self.object.defense = self.defseInput.value()
         self.object.endurance = self.enduranceInput.value()

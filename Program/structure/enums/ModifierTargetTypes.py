@@ -10,8 +10,7 @@ class ModifierTargetTypes(AutoNumber):
     MONEY = ()
     ARMOR = ()
     THROWABLE_WEAPON = ()
-
-
+    ALL_ITEMS = ()
 
 
     def by_name(self, name):
@@ -32,8 +31,11 @@ class ModifierTargetTypes(AutoNumber):
             return self.CONTAINER
         if name == 'AFFECTS_MONEY':
             return self.MONEY
+        if name == 'AFFECTS_ALL_ITEMS':
+            return self.ALL_ITEMS
 
         return None
+
 
     def __str__(self):
         return 'AFFECTS_' + self.name

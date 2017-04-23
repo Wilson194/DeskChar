@@ -2,6 +2,7 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from business.managers.ItemManager import ItemManager
 from presentation.layouts.Layout import Layout
+from structure.enums.WeaponWeight import WeaponWeight
 from structure.items.RangeWeapon import RangeWeapon
 
 
@@ -41,14 +42,15 @@ class RangeWeaponLayout(Layout):
         self.name_input = self.text_box(self.input_grid, 'Name', 0, 0)
         self.description_input = self.text_box(self.input_grid, 'Description', 0, 1)
         self.weight_input = self.spin_box(self.input_grid, 'Weight', 0, 2, True)
-        self.price_input = self.spin_box(self.input_grid, 'Price', 0, 3, True)
-        self.initiative_input = self.spin_box(self.input_grid, 'Initiative', 0, 4, True)
-        self.strength_input = self.spin_box(self.input_grid, 'Strength', 0, 5, True)
-        self.rampancy_input = self.spin_box(self.input_grid, 'Rampancy', 0, 6, True)
-        self.rangeLow_input = self.spin_box(self.input_grid, 'RangeLow', 0, 7, True)
-        self.rangeMedium_input = self.spin_box(self.input_grid, 'RangeMedium', 0, 8, True)
-        self.rangeHigh_input = self.spin_box(self.input_grid, 'RangeHigh', 0, 9, True)
-        self.amount_input = self.spin_box(self.input_grid, 'Amount', 0, 10, True)
+        self.weapon_weight_input = self.combo_box(self.input_grid, 'WeaponWeight', WeaponWeight, 0,3, True)
+        self.price_input = self.spin_box(self.input_grid, 'Price', 0, 4, True)
+        self.initiative_input = self.spin_box(self.input_grid, 'Initiative', 0, 5, True)
+        self.strength_input = self.spin_box(self.input_grid, 'Strength', 0, 6, True)
+        self.rampancy_input = self.spin_box(self.input_grid, 'Rampancy', 0, 7, True)
+        self.rangeLow_input = self.spin_box(self.input_grid, 'RangeLow', 0, 8, True)
+        self.rangeMedium_input = self.spin_box(self.input_grid, 'RangeMedium', 0, 9, True)
+        self.rangeHigh_input = self.spin_box(self.input_grid, 'RangeHigh', 0, 10, True)
+        self.amount_input = self.spin_box(self.input_grid, 'Amount', 0, 11, True)
 
         self.addLayout(self.input_grid)
 
@@ -72,6 +74,9 @@ class RangeWeaponLayout(Layout):
         self.rangeHigh_input.setValue(item.rangeHigh if item.rangeHigh else 0)
         self.amount_input.setValue(item.amount if item.amount else 1)
 
+        weapon_weight_index = item.weaponWeight.value if item.weaponWeight is not None else 0
+        self.weapon_weight_input.setCurrentIndex(weapon_weight_index)
+
 
     def save_data(self):
         """
@@ -88,5 +93,8 @@ class RangeWeaponLayout(Layout):
         self.object.rangeMedium = self.rangeMedium_input.value()
         self.object.rangeHigh = self.rangeHigh_input.value()
         self.object.amount = self.amount_input.value()
+
+        weapon_weight_index = self.weapon_weight_input.currentIndex()
+        self.object.weaponWeight = WeaponWeight(weapon_weight_index) if weapon_weight_index > 0 else None
 
         self.item_manager.update(self.object)

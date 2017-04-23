@@ -1,5 +1,6 @@
 from data.xml.templates.XMLAbility import XMLAbility
 from data.xml.templates.XMLArmor import XMLArmor
+from data.xml.templates.XMLCharacter import XMLCharacter
 from data.xml.templates.XMLContainer import XMLContainer
 from data.xml.templates.XMLEffectl import XMLEffect
 from data.xml.templates.XMLItem import XMLItem
@@ -30,6 +31,8 @@ class XMLLocation(XMLTemplate):
 
         self.monsters = XInstance('monsters', XMLMonster)
         self.locations = XInstance('locations', XMLLocation)
+
+        self.characters = XInstance('scenarioCharacters', XMLCharacter)
 
         self.items = XInstance('items', XMLItem)
         self.armors = XInstance('items', XMLArmor)

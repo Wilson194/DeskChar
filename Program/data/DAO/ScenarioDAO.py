@@ -2,6 +2,7 @@ from datetime import date
 from datetime import datetime
 
 from data.DAO.AbilityDAO import AbilityDAO
+from data.DAO.CharacterDAO import CharacterDAO
 from data.DAO.EffectDAO import EffectDAO
 from data.DAO.LocationDAO import LocationDAO
 from data.DAO.PartyCharacterDAO import PartyCharacterDAO
@@ -46,7 +47,7 @@ class ScenarioDAO(DAO):
         if not contextType:
             contextType = self.TYPE
 
-        curDate = datetime.strptime(scenario.date, '%Y-%m-%d') if scenario.date else None
+        curDate = datetime.strptime(scenario.date, '%d/%m/%Y') if scenario.date else None
         intValues = {
             'date': curDate.toordinal() if curDate else None
         }
@@ -76,6 +77,9 @@ class ScenarioDAO(DAO):
 
         for effect in scenario.effects:
             EffectDAO().create(effect, nodeId, contextType)
+
+        for character in scenario.party:
+            PartyCharacterDAO().create(character, nodeId, contextType)
 
         return id
 
@@ -132,6 +136,7 @@ class ScenarioDAO(DAO):
             spells = []
             effects = []
             locations = []
+            partyCharacters = []
 
             for child in children:
                 if child.object.object_type is ObjectType.ABILITY:
@@ -147,68 +152,28 @@ class ScenarioDAO(DAO):
                     location = LocationDAO().get(child.object.id, None, child.id, contextType)
                     locations.append(location)
 
+                elif child.object.object_type is ObjectType.CHARACTER:
+                    character = CharacterDAO().get(child.object.id, None, child.id, contextType)
+                    partyCharacter = PartyCharacterDAO().get(character.id)
+
+                    if not partyCharacter:
+                        partyCharacter = PartyCharacter()
+
+                    partyCharacter.character = character
+                    partyCharacters.append(partyCharacter)
+
+            # Search non connected party character
+            chars = self.database.select('PartyCharacter', {'scenario_id': scenario_id})
+            for char in chars:
+                if char['character_id'] is None:
+                    partyCharacters.append(PartyCharacterDAO().get_by_id(char['ID']))
+
             scenario.spells = spells
             scenario.abilities = abilities
             scenario.effects = effects
             scenario.locations = locations
+            scenario.party = partyCharacters
 
-        # Create party
-        # party = PlayerTreeDAO().get_children_objects(ObjectType.CHARACTER, scenario, direct=True)
-        # partyCharacters = []
-        # partyIds = []
-        #
-        # for member in party:
-        #     partyIds.append(member.id)
-        #     real = PartyCharacterDAO().get(member.id)
-        #     if real:
-        #         partyCharacters.append(real)
-        #     else:
-        #         partyCharacter = PartyCharacter()
-        #         partyCharacter.character = member
-        #         partyCharacters.append(partyCharacter)
-        #
-        # scenario.party = partyCharacters
-        #
-        # # Create npc
-        # data = PlayerTreeDAO().get_children_objects(ObjectType.CHARACTER, scenario)
-        # npc = []
-        # for one in data:
-        #     if one.id not in partyIds:
-        #         npc.append(one)
-        #
-        # scenario.npc = npc
-        #
-        # # Create locations
-        # locations = PlayerTreeDAO().get_children_objects(ObjectType.LOCATION, scenario, direct=True)
-        # scenario.locations = locations
-        #
-        # spells = PlayerTreeDAO().get_children_objects(ObjectType.SPELL, scenario, direct=True)
-        # scenario.spells = spells
-        #
-        # abilities = PlayerTreeDAO().get_children_objects(ObjectType.ABILITY, scenario, direct=True)
-        # scenario.abilities = abilities
-        #
-        # effects = PlayerTreeDAO().get_children_objects(ObjectType.EFFECT, scenario, direct=True)
-        # scenario.abilities = effects
-        #
-        # items = PlayerTreeDAO().get_children_objects(ObjectType.ITEM, scenario, direct=True)
-        #
-        # for item in items:
-        #     if isinstance(item, Armor):
-        #         scenario.addArmor(item)
-        #     elif isinstance(item, Money):
-        #         scenario.addMoney(item)
-        #     elif isinstance(item, Container):
-        #         scenario.addContainer(item)
-        #     elif isinstance(item, MeleeWeapon):
-        #         scenario.addMeleeWeapon(item)
-        #     elif isinstance(item, RangeWeapon):
-        #         scenario.addRangedWeapon(item)
-        #     elif isinstance(item, ThrowableWeapon):
-        #         scenario.addThrowableWeapon(item)
-        #     else:
-        #         scenario.addItem(item)
-        #
         return scenario
 
 

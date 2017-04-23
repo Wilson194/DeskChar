@@ -13,8 +13,8 @@ class XMLAbilityContext(XMLTemplate):
 
     def __init__(self):
         self.id = XElement('id')
-        self.name = XAttribElement('name', 'lang')
-        self.description = XAttribElement('description', 'lang')
+        # self.name = XAttribElement('name', 'lang')
+        # self.description = XAttribElement('description', 'lang')
 
         self.targetAttribute = XElement('attribute', CharacterAttributes)
 

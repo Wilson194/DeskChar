@@ -49,13 +49,8 @@ class Character(Object):
         self.__drdRace = drdRace
         self.__alignment = alignment
 
-        self.__items = []
-        self.__armors = []
-        self.__containers = []
-        self.__meleeWeapons = []
-        self.__moneyList = []
-        self.__rangedWeapons = []
-        self.__throwableWeapons = []
+        self.__inventory = None
+        self.__ground = None
 
         self.__spells = []
         self.__abilities = []
@@ -94,7 +89,7 @@ class Character(Object):
     @property
     def treeChildren(self):
         return [ObjectType.ABILITY, ObjectType.SPELL, ObjectType.EFFECT,
-                ObjectType.ITEM, NodeType.FOLDER] + super().treeChildren
+                NodeType.FOLDER] + super().treeChildren
 
 
     @property
@@ -318,101 +313,23 @@ class Character(Object):
 
 
     @property
-    def items(self):
-        return self.__items
+    def inventory(self):
+        return self.__inventory
 
 
-    @items.setter
-    def items(self, value):
-        self.__items = value
-
-
-    @property
-    def containers(self):
-        return self.__containers
-
-
-    @containers.setter
-    def containers(self, value):
-        self.__containers = value
+    @inventory.setter
+    def inventory(self, value):
+        self.__inventory = value
 
 
     @property
-    def armors(self):
-        return self.__armors
+    def ground(self):
+        return self.__ground
 
 
-    @armors.setter
-    def armors(self, value):
-        self.__armors = value
-
-
-    @property
-    def meleeWeapons(self):
-        return self.__meleeWeapons
-
-
-    @meleeWeapons.setter
-    def meleeWeapons(self, value):
-        self.__meleeWeapons = value
-
-
-    @property
-    def rangedWeapons(self):
-        return self.__rangedWeapons
-
-
-    @rangedWeapons.setter
-    def rangedWeapons(self, value):
-        self.__rangedWeapons = value
-
-
-    @property
-    def moneyList(self):
-        return self.__moneyList
-
-
-    @moneyList.setter
-    def moneyList(self, value):
-        self.__moneyList = value
-
-
-    @property
-    def throwableWeapons(self):
-        return self.__throwableWeapons
-
-
-    @throwableWeapons.setter
-    def throwableWeapons(self, value):
-        self.__throwableWeapons = value
-
-
-    def addItem(self, item: Item):
-        self.__items.append(item)
-
-
-    def addArmor(self, armor: Armor):
-        self.__armors.append(armor)
-
-
-    def addContainer(self, container: Container):
-        self.__containers.append(container)
-
-
-    def addMoney(self, money: Money):
-        self.__moneyList.append(money)
-
-
-    def addMeleeWeapon(self, meleeWeapon: MeleeWeapon):
-        self.__meleeWeapons.append(meleeWeapon)
-
-
-    def addRangedWeapon(self, rangedWeapon: RangeWeapon):
-        self.__rangedWeapons.append(rangedWeapon)
-
-
-    def addThrowableWeapon(self, throwableWeapon: ThrowableWeapon):
-        self.__throwableWeapons.append(throwableWeapon)
+    @ground.setter
+    def ground(self, value):
+        self.__ground = value
 
 
     def __eq__(self, other):

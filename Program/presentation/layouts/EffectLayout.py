@@ -51,12 +51,12 @@ class EffectLayout(Layout):
 
         self.nameInput = self.text_box(self.inputGrid, 'Name', 0, 0)
         self.descriptionInput = self.text_box(self.inputGrid, 'Description', 0, 1)
-        self.targetInput = self.combo_box(self.inputGrid, 'Effect_target', ModifierTargetTypes, 0,
-                                          2, True)
+        self.targetInput = self.combo_box(self.inputGrid, 'Effect_target', ModifierTargetTypes, 0, 2, True)
+        self.activeInput = self.check_box(self.inputGrid, 'Active', 0, 3, True)
 
         self.table = QtWidgets.QTableWidget(self.__parent)
 
-        self.inputGrid.addWidget(self.table, 3, 0, 1, 2)
+        self.inputGrid.addWidget(self.table, 4, 0, 1, 2)
 
         self.addLayout(self.inputGrid)
 
@@ -70,6 +70,7 @@ class EffectLayout(Layout):
         self.header.setText(effect.name)
         self.nameInput.setPlainText(effect.name)
         self.descriptionInput.setPlainText(effect.description)
+        self.activeInput.setChecked(effect.active)
         self.__set_table_data()
 
         targetTypeIndex = effect.targetType.value
@@ -86,6 +87,8 @@ class EffectLayout(Layout):
 
         targetIndex = self.targetInput.currentIndex()
         self.object.targetType = ModifierTargetTypes(targetIndex) if targetIndex != 0 else None
+
+        self.object.active = self.activeInput.checkState()
 
         self.effect_manager.update_effect(self.object)
 

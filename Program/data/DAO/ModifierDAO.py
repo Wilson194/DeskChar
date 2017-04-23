@@ -4,6 +4,7 @@ from data.DAO.interface.IModifierDAO import IModifierDAO
 from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
 from structure.effects.Modifier import Modifier
+from structure.enums.ArmorSize import ArmorSize
 from structure.enums.CharacterAttributes import CharacterAttributes
 from structure.enums.Handling import Handling
 from structure.enums.ItemsAttributes import ItemsAttributes
@@ -27,6 +28,7 @@ class ModifierDAO(DAO, IModifierDAO):
 
 
     def create(self, modifier: Modifier, nodeParentId: int = None, contextType: ObjectType = None) -> int:
+        print(modifier.itemTargetAttribute)
         intValues = {
             'value'                   : modifier.value,
             'valueType'               : modifier.valueType.value if modifier.valueType else None,
@@ -84,29 +86,26 @@ class ModifierDAO(DAO, IModifierDAO):
         tr_data = dict(self.database.select_translate(modifier_id, ObjectType.MODIFIER.value, lang))
 
         targetTypeIndex = data.get('targetType', None)
-        targetType = ModifierTargetTypes(
-            int(targetTypeIndex)) if targetTypeIndex is not None else None
+        targetType = ModifierTargetTypes(int(targetTypeIndex)) if targetTypeIndex is not None else None
 
         characterAttributeIndex = data.get('characterTargetAttribute', None)
         itemAttributeIndex = data.get('itemTargetAttribute', None)
 
-        characterTargetAttribute = CharacterAttributes(
-            characterAttributeIndex) if characterAttributeIndex is not None else None
+        characterTargetAttribute = CharacterAttributes(characterAttributeIndex) if characterAttributeIndex is not None else None
 
-        itemTargetAttribute = ItemsAttributes(
-            itemAttributeIndex) if itemAttributeIndex is not None else None
+        itemTargetAttribute = ItemsAttributes(itemAttributeIndex) if itemAttributeIndex is not None else None
 
         valueTypeIndex = data.get('valueType', None)
         value = data.get('value', 0)
         if itemTargetAttribute is ItemsAttributes.WEAPON_MELEE_HANDLING:
-            valueType = Handling(value)
+            valueType = Handling(valueTypeIndex)
             value = value
         elif itemTargetAttribute is ItemsAttributes.WEAPON_WEIGHT:
-            valueType = WeaponWeight(value)
+            valueType = WeaponWeight(valueTypeIndex)
             value = value
 
         elif itemTargetAttribute is ItemsAttributes.ARMOR_SIZE:
-            valueType = WeaponWeight(value)
+            valueType = ArmorSize(valueTypeIndex)
             value = value
         else:
             valueType = ModifierValueTypes(valueTypeIndex) if valueTypeIndex else None

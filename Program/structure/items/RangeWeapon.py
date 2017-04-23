@@ -1,4 +1,5 @@
 from structure.enums.Items import Items
+from structure.enums.WeaponWeight import WeaponWeight
 from structure.items.Item import Item
 
 
@@ -12,7 +13,7 @@ class RangeWeapon(Item):
                  price: int = None,
                  initiative: int = None, strength: int = None, rampancy: int = None,
                  rangeLow: int = None, rangeMedium: int = None, rangeHigh: int = None,
-                 amount: int = 1):
+                 amount: int = 1, weaponWeight: WeaponWeight = None):
         super().__init__(id, lang, name, description, parent_id, weight, price, amount)
 
         self.__initiative = initiative
@@ -21,6 +22,8 @@ class RangeWeapon(Item):
         self.__rangeLow = rangeLow
         self.__rangeMedium = rangeMedium
         self.__rangeHigh = rangeHigh
+
+        self.__weaponWeight = weaponWeight
 
         self.__type = Items.RANGED_WEAPON
 
@@ -106,6 +109,16 @@ class RangeWeapon(Item):
     @rangeHigh.setter
     def rangeHigh(self, value):
         self.__rangeHigh = value
+
+
+    @property
+    def weaponWeight(self):
+        return self.__weaponWeight
+
+
+    @weaponWeight.setter
+    def weaponWeight(self, value):
+        self.__weaponWeight = value
 
 
     @property

@@ -52,6 +52,7 @@ translate = {
     'Quality'                   : 'Kvalita',
     'Capacity'                  : 'Kapacita',
     'Amount'                    : 'Množství',
+    'Active'                    : 'Aktivní',
 
 
     'Folder'                    : 'Složka',

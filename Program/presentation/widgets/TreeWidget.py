@@ -9,6 +9,7 @@ from presentation.dialogs.TextDialog import TextDialog
 from structure.enums.NodeType import NodeType
 from business.managers.PlayerTreeManager import PlayerTreeManager
 from structure.enums.ObjectType import ObjectType
+from structure.items.Container import Container
 from structure.tree.Folder import Folder
 from presentation.dialogs.NewTreeItem import NewTreeItem
 from presentation.Translate import Translate as TR
@@ -142,9 +143,12 @@ class TreeWidget(QtWidgets.QFrame):
 
             menu = QtWidgets.QMenu()
 
-            delete_action = QtWidgets.QAction(TR().tr('Delete'), menu)
-            delete_action.setData(QtCore.QVariant('delete'))
-            menu.addAction(delete_action)
+            if isinstance(item, NodeObject) and item.object.object_type is ObjectType.ITEM and item.object.parent_id == -1:
+                pass
+            else:
+                delete_action = QtWidgets.QAction(TR().tr('Delete'), menu)
+                delete_action.setData(QtCore.QVariant('delete'))
+                menu.addAction(delete_action)
 
             rename_action = QtWidgets.QAction(TR().tr('Rename'), menu)
             rename_action.setData(QtCore.QVariant('rename'))
@@ -209,7 +213,8 @@ class TreeWidget(QtWidgets.QFrame):
                 for type, items in data.items():
                     for item in items:
                         nodeObject = self.tree_manager.get_node(item)
-                        newObject = nodeObject.object.DAO()().get(nodeObject.object.id, None, nodeObject.id, nodeObject.object.object_type)
+                        newObject = nodeObject.object.DAO()().get(nodeObject.object.id, None, nodeObject.id,
+                                                                  nodeObject.object.object_type)
 
                         newObject.DAO()().create(newObject, node.id, self.__data_type)
 

@@ -147,6 +147,7 @@ class DatabaseTables:
         modifier_columns = [
             Column('ID', 'INTEGER', True, False, True),
             Column('targetType', 'INTEGER'),
+            Column('active', 'INTEGER'),
         ]
 
         try:
@@ -176,6 +177,9 @@ class DatabaseTables:
             Column('alignment', 'INTEGER'),
             Column('currentMana', 'INTEGER'),
             Column('currentHealth', 'INTEGER'),
+            Column('inventoryId', 'INTEGER'),
+            Column('groundId', 'INTEGER'),
+
 
         ]
 
@@ -190,7 +194,9 @@ class DatabaseTables:
             Column('ID', 'INTEGER', True, False, True),
             Column('deviceName', 'TEXT'),
             Column('MACAddress', 'TEXT'),
-            Column('character_id', 'INTEGER')
+            Column('character_id', 'INTEGER'),
+            Column('scenario_id', 'INTEGER'),
+            Column('name', 'TEXT'),
         ]
 
         try:
@@ -198,11 +204,25 @@ class DatabaseTables:
         except OperationalError:
             pass
 
+        # ///////////// Messages \\\\\\\\\\\\\\\\\\
+
+        message_columns = [
+            Column('ID', 'INTEGER', True, False, True),
+            Column('text', 'TEXT'),
+            Column('date', 'INTEGER'),
+            Column('isMine', 'INTEGER'),
+            Column('partyCharacter_id', 'INTEGER'),
+        ]
+
+        try:
+            database.create_table('Message', message_columns)
+        except OperationalError:
+            pass
+
         # ///////////// Monster \\\\\\\\\\\\\\\\\\
 
         monster_columns = [
             Column('ID', 'INTEGER', True, False, True),
-            Column('viability', 'INTEGER'),
             Column('defense', 'INTEGER'),
             Column('endurance', 'INTEGER'),
             Column('rampancy', 'INTEGER'),
@@ -267,60 +287,7 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// Effect modifiers \\\\\\\\\\\\\\\\\\
-
-        effectModifierColumns = [
-            Column('effect_id', 'INTEGER', not_null=True),
-            Column('modifier_id', 'INTEGER', not_null=True),
-        ]
-
-        effectModifierForeigns = [
-            Foreign('effect_id', 'Effect', 'ID', 'CASCADE'),
-            Foreign('modifier_id', 'Modifier', 'ID', 'CASCADE'),
-        ]
-
-        try:
-            database.create_table('Effect_modifier', effectModifierColumns, effectModifierForeigns)
-        except OperationalError:
-            pass
-
-        # ///////////// Ability context \\\\\\\\\\\\\\\\\\
-
-        abilityContextColumns = [
-            Column('ability_id', 'INTEGER', not_null=True),
-            Column('context_id', 'INTEGER', not_null=True),
-        ]
-
-        abilityContextForeigns = [
-            Foreign('ability_id', 'Ability', 'ID', 'CASCADE'),
-            Foreign('context_id', 'AbilityContext', 'ID', 'CASCADE'),
-        ]
-
-        try:
-            database.create_table('Ability_context', abilityContextColumns,
-                                  abilityContextForeigns)
-        except OperationalError:
-            pass
-
-        # ///////////// Items effects \\\\\\\\\\\\\\\\\\
-
-        itemEffectColumns = [
-            Column('effect_id', 'INTEGER', not_null=True),
-            Column('item_id', 'INTEGER', not_null=True),
-            Column('item_type', 'INTEGER', not_null=True),
-
-        ]
-
-        itemEffectForeigns = [
-            Foreign('effect_id', 'Effect', 'ID', 'CASCADE'),
-        ]
-
-        try:
-            database.create_table('Item_effect', itemEffectColumns, itemEffectForeigns)
-        except OperationalError:
-            pass
-
-        # ///////////// MapItem \\\\\\\\\\\\\\\\\\\
+        # ///////////// Map \\\\\\\\\\\\\\\\\\\
 
         mapColumns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -345,7 +312,7 @@ class DatabaseTables:
             Column('scale', 'INTEGER'),
             Column('object_type', 'INTEGER'),
             Column('object_id', 'INTEGER'),
-            Column('name', 'INTEGER'),
+            Column('number', 'INTEGER'),
             Column('map_id', 'INTEGER')
         ]
 

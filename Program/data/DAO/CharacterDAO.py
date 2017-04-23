@@ -1,4 +1,8 @@
+from data.DAO.AbilityDAO import AbilityDAO
+from data.DAO.EffectDAO import EffectDAO
+from data.DAO.ItemDAO import ItemDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.SpellDAO import SpellDAO
 from data.DAO.interface.ISpellDAO import ISpellDAO
 from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
@@ -17,6 +21,7 @@ from structure.items.RangeWeapon import RangeWeapon
 from structure.items.ThrowableWeapon import ThrowableWeapon
 from structure.spells.Spell import Spell
 from data.DAO.DAO import DAO
+from structure.tree.NodeObject import NodeObject
 
 
 class CharacterDAO(DAO, ISpellDAO):
@@ -26,16 +31,80 @@ class CharacterDAO(DAO, ISpellDAO):
 
 
     def __init__(self):
-        self.database = Database(self.DATABASE_DRIVER)
+        self.database = ObjectDatabase(self.DATABASE_DRIVER)
+        self.treeDAO = PlayerTreeDAO()
 
 
-    def create(self, character: Character) -> int:
+    def create(self, character: Character, nodeParentId: int = None, contextType: ObjectType = None) -> int:
         """
         Create new spell in database
         :param character: Character object
         :return: id of autoincrement
         """
-        return ObjectDatabase(self.DATABASE_DRIVER).insert_object(character)
+        if contextType is None:
+            contextType = self.TYPE
+
+        intValues = {
+            'agility'      : character.agility,
+            'charisma'     : character.charisma,
+            'intelligence' : character.intelligence,
+            'mobility'     : character.mobility,
+            'strength'     : character.strength,
+            'toughness'    : character.toughness,
+            'age'          : character.age,
+            'height'       : character.height,
+            'weight'       : character.weight,
+            'level'        : character.level,
+            'xp'           : character.xp,
+            'maxHealth'    : character.maxHealth,
+            'maxMana'      : character.maxMana,
+            'currentHealth': character.currentHealth,
+            'currentMana'  : character.currentMana,
+            'drdClass'     : character.drdClass.value if character.drdClass else None,
+            'drdRace'      : character.drdRace.value if character.drdRace else None,
+            'alignment'    : character.alignment.value if character.alignment else None,
+        }
+
+        strValues = {
+            'name'       : character.name,
+            'description': character.description
+        }
+
+        id = self.database.insert(self.DATABASE_TABLE, intValues)
+        character.id = id
+
+        self.database.insert_translate(strValues, character.lang, id, self.TYPE)
+
+        # Create node for tree structure
+        node = NodeObject(None, character.name, nodeParentId, character)
+        nodeId = self.treeDAO.insert_node(node, contextType)
+
+        for spell in character.spells:
+            SpellDAO().create(spell, nodeId, contextType)
+
+        for ability in character.abilities:
+            AbilityDAO().create(ability, nodeId, contextType)
+
+        for effect in character.effects:
+            EffectDAO().create(effect, nodeId, contextType)
+
+        if character.inventory is None:
+            c = Container(None, None, 'Inventory', None, -1)
+            inventoryId = ItemDAO().create(c, nodeId, contextType)
+        else:
+            character.inventory.parent_id = -1
+            inventoryId = ItemDAO().create(character.inventory, nodeId, contextType)
+
+        if character.ground is None:
+            c = Container(None, None, 'Ground', None, -2)
+            groundId = ItemDAO().create(c, nodeId, contextType)
+        else:
+            character.ground.parent_id = -2
+            groundId = ItemDAO().create(character.ground, nodeId, contextType)
+
+        self.database.update(self.DATABASE_TABLE, id, {'inventoryId': inventoryId, 'groundId': groundId})
+
+        return id
 
 
     def update(self, character: Character):
@@ -43,7 +112,34 @@ class CharacterDAO(DAO, ISpellDAO):
         Update spell in database
         :param character: Character object with new data
         """
-        ObjectDatabase(self.DATABASE_DRIVER).update_object(character)
+        intValues = {
+            'agility'      : character.agility,
+            'charisma'     : character.charisma,
+            'intelligence' : character.intelligence,
+            'mobility'     : character.mobility,
+            'strength'     : character.strength,
+            'toughness'    : character.toughness,
+            'age'          : character.age,
+            'height'       : character.height,
+            'weight'       : character.weight,
+            'level'        : character.level,
+            'xp'           : character.xp,
+            'maxHealth'    : character.maxHealth,
+            'maxMana'      : character.maxMana,
+            'currentHealth': character.currentHealth,
+            'currentMana'  : character.currentMana,
+            'drdClass'     : character.drdClass.value if character.drdClass else None,
+            'drdRace'      : character.drdRace.value if character.drdRace else None,
+            'alignment'    : character.alignment.value if character.alignment else None,
+        }
+
+        strValues = {
+            'name'       : character.name,
+            'description': character.description
+        }
+
+        self.database.update(self.DATABASE_TABLE, character.id, intValues)
+        self.database.update_translate(strValues, character.lang, character.id, self.TYPE)
 
 
     def delete(self, character_id: int):
@@ -56,7 +152,7 @@ class CharacterDAO(DAO, ISpellDAO):
                                    {'target_id': character_id, 'type': ObjectType.CHARACTER})
 
 
-    def get(self, character_id: int, lang: str = None) -> Character:
+    def get(self, character_id: int, lang: str = None, nodeId: int = None, contextType: ObjectType = None) -> Character:
         """
         Get spell from database
         :param character_id: id of spell
@@ -83,32 +179,32 @@ class CharacterDAO(DAO, ISpellDAO):
                               data.get('maxHealth', 0), data.get('maxMana', 0), drdClass, drdRace,
                               alignment, data.get('currentHealth', 0), data.get('currentMana', 0))
 
-        spells = PlayerTreeDAO().get_children_objects(ObjectType.SPELL, character)
-        character.spells = spells
+        if nodeId and contextType:
+            children = self.treeDAO.get_children_objects(nodeId, contextType)
+            abilities = []
+            spells = []
+            effects = []
 
-        abilities = PlayerTreeDAO().get_children_objects(ObjectType.ABILITY, character)
-        character.abilities = abilities
+            for child in children:
+                if child.object.object_type is ObjectType.SPELL:
+                    spell = SpellDAO().get(child.object.id, None, child.id, contextType)
+                    spells.append(spell)
+                elif child.object.object_type is ObjectType.ABILITY:
+                    ability = AbilityDAO().get(child.object.id, None, child.id, contextType)
+                    abilities.append(ability)
+                elif child.object.object_type is ObjectType.EFFECT:
+                    effect = EffectDAO().get(child.object.id, None, child.id, contextType)
+                    effects.append(effect)
+                elif child.object.object_type is ObjectType.ITEM and child.object.type is Items.CONTAINER and child.object.parent_id == -1:
+                    inventory = ItemDAO().get(child.object.id, None, child.id, contextType)
+                    character.inventory = inventory
+                elif child.object.object_type is ObjectType.ITEM and child.object.type is Items.CONTAINER and child.object.parent_id == -2:
+                    ground = ItemDAO().get(child.object.id, None, child.id, contextType)
+                    character.ground = ground
 
-        effects = PlayerTreeDAO().get_children_objects(ObjectType.EFFECT, character)
-        character.effects = effects
-
-        items = PlayerTreeDAO().get_children_objects(ObjectType.ITEM, character)
-
-        for item in items:
-            if isinstance(item, Armor):
-                character.addArmor(item)
-            elif isinstance(item, Money):
-                character.addMoney(item)
-            elif isinstance(item, Container):
-                character.addContainer(item)
-            elif isinstance(item, MeleeWeapon):
-                character.addMeleeWeapon(item)
-            elif isinstance(item, RangeWeapon):
-                character.addRangedWeapon(item)
-            elif isinstance(item, ThrowableWeapon):
-                character.addThrowableWeapon(item)
-            else:
-                character.addItem(item)
+            character.spells = spells
+            character.abilities = abilities
+            character.effects = effects
 
         return character
 

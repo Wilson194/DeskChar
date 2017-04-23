@@ -1,3 +1,4 @@
+from data.DAO.CharacterDAO import CharacterDAO
 from data.DAO.ItemDAO import ItemDAO
 from data.DAO.MonsterDAO import MonsterDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
@@ -64,6 +65,9 @@ class LocationDAO(DAO):
         for one in location.locations:
             self.create(one, nodeId, contextType)
 
+        for character in location.characters:
+            CharacterDAO().create(character, nodeId, contextType)
+
         return id
 
 
@@ -110,6 +114,7 @@ class LocationDAO(DAO):
             children = self.treeDAO.get_children_objects(nodeId, contextType)
             locations = []
             monsters = []
+            characters = []
             items = []
             armors = []
             moneys = []
@@ -125,6 +130,9 @@ class LocationDAO(DAO):
                 elif child.object.object_type is ObjectType.MONSTER:
                     monster = MonsterDAO().get(child.object.id, None, child.id, contextType)
                     monsters.append(monster)
+                elif child.object.object_type is ObjectType.CHARACTER:
+                    character = CharacterDAO().get(child.object.id, None, child.id, contextType)
+                    characters.append(character)
                 elif child.object.object_type is ObjectType.ITEM:
                     childItem = ItemDAO().get(child.object.id, None, child.id, contextType)
                     if isinstance(childItem, Armor):
@@ -151,6 +159,7 @@ class LocationDAO(DAO):
             location.throwableWeapons = throwableWeapons
             location.locations = locations
             location.monsters = monsters
+            location.characters = characters
 
         return location
 

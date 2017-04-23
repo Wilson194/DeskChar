@@ -1,3 +1,5 @@
+from datetime import datetime, date
+
 from lxml import etree
 
 
@@ -51,7 +53,10 @@ class XElement:
 
     def __create_xml_element(self):
         self.__xmlElement = etree.Element(self.__name)
-        self.__xmlElement.text = str(self.__value)
+        if isinstance(self.__value, date):
+            self.__xmlElement.text = str(self.__value.strftime('%d/%m/%Y'))
+        else:
+            self.__xmlElement.text = str(self.__value)
 
 
 class XAttribElement:
@@ -101,10 +106,11 @@ class XAttribElement:
 
 
 class XInstance:
-    def __init__(self, name: str, instance: object, single: bool = False, link: bool = False):
+    def __init__(self, name: str, instance: object, single: bool = False, rename: str = None):
         self.__name = name
         self.__instance = instance
         self.__single = single
+        self.__rename = rename
 
 
     @property
@@ -123,6 +129,11 @@ class XInstance:
 
 
     @property
+    def rename(self):
+        return self.__rename
+
+
+    @property
     def name(self):
         return self.__name
 
@@ -132,7 +143,7 @@ class XInstance:
         if self.single:
             o = self.__instance().import_xml(attr)
             for obj in objects.values():
-                setattr(obj, name, o)
+                setattr(obj, name, o.popitem()[1])
         else:
             for a in attr:
                 o = self.__instance().import_xml(a)
@@ -147,7 +158,7 @@ class XMLTemplate:
     OBJECT_TYPE = None
 
 
-    def create_xml(self, objects):
+    def create_xml(self, objects, rename=None):
 
         if not self.ROOT_NAME:
             raise NotImplementedError('ROOT_NAME not defined')
@@ -155,12 +166,14 @@ class XMLTemplate:
         if type(objects) not in (list, tuple):
             objects = [objects]
 
-        root = etree.Element(self.ROOT_NAME)
+        if rename:
+            root = etree.Element(rename)
+        else:
+            root = etree.Element(self.ROOT_NAME)
 
         remapObjects = []
         for obj in objects:
             remapObjects.append(self.__attribute_name_remap(obj))
-
         for key, instance in self.__dict__.items():
             if isinstance(instance, XElement):
                 if key in remapObjects[0].keys() and remapObjects[0][key] is not None:
@@ -168,30 +181,32 @@ class XMLTemplate:
                     root.append(instance.xmlElement)
             elif isinstance(instance, XAttribElement):
                 for lang in remapObjects:
-                    if key in lang and lang[key] is not None:
+                    if key in lang: #  and lang[key] is not None
                         instance.value = (lang[key], lang[instance.attributeName])
                         root.append(instance.xmlElement)
             elif isinstance(instance, XInstance):
+                if remapObjects[0][key] is None:
+                    continue
                 instanceRoot = None
                 # Control duplicity of tags in root, if exist use old root
-                for tag in root.iter():
+                for tag in root.getchildren():
                     if instance.name == tag.tag:
                         instanceRoot = tag
 
                 # if not exist, create new one
-                if not instanceRoot:
+                if instanceRoot is None:
                     instanceRoot = etree.Element(instance.name)
 
                 add = False
                 if type(remapObjects[0][key]) is list:
                     for one in remapObjects[0][key]:
-                        child = instance.instance().create_xml(one)
+                        child = instance.instance().create_xml(one, instance.rename)
                         instanceRoot.append(child)
                         add = True
                     if add:
                         root.append(instanceRoot)
                 else:
-                    child = instance.instance().create_xml(remapObjects[0][key])
+                    child = instance.instance().create_xml(remapObjects[0][key], instance.rename)
                     root.append(child)
 
         return root

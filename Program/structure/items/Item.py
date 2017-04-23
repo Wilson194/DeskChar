@@ -112,9 +112,11 @@ class Item(Object):
     def effects(self, value):
         self.__effects = value
 
+
     @property
     def amount(self):
         return self.__amount
+
 
     @amount.setter
     def amount(self, value):
@@ -127,3 +129,11 @@ class Item(Object):
             return True
 
         return False
+
+
+    def printer(self, depth):
+        print('{} {} - {}'.format('  ' * depth, self.type, self.name))
+        if self.type is Items.CONTAINER:
+            print('{}   Items:'.format('  ' * depth))
+            for item in self.items + self.containers + self.armors + self.meleeWeapons + self.rangedWeapons + self.moneyList + self.throwableWeapons:
+                item.printer(depth + 2)

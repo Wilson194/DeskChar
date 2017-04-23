@@ -99,7 +99,6 @@ class MeleeWeaponLayout(Layout):
         weapon_weight_index = self.weapon_weight_input.currentIndex()
 
         self.object.handling = Handling(handling_index) if handling_index > 0 else None
-        self.object.weaponWeight = WeaponWeight(
-            weapon_weight_index) if weapon_weight_index > 0 else None
+        self.object.weaponWeight = WeaponWeight(weapon_weight_index) if weapon_weight_index > 0 else None
 
         self.item_manager.update(self.object)

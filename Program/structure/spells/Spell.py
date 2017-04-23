@@ -153,3 +153,6 @@ class Spell(Object):
             return True
 
         return False
+
+    def printer(self, depth):
+        print('{}Spell - {}'.format("  " * depth, self.name))

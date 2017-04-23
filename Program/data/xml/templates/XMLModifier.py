@@ -13,8 +13,8 @@ class XMLModifier(XMLTemplate):
 
     def __init__(self):
         self.id = XElement('id')
-        self.name = XAttribElement('name', 'lang')
-        self.description = XAttribElement('description', 'lang')
+        # self.name = XAttribElement('name', 'lang')
+        # self.description = XAttribElement('description', 'lang')
 
         self.targetType = XElement('targetType', ModifierTargetTypes)
 

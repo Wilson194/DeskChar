@@ -10,12 +10,14 @@ class Map(Object):
 
 
     def __init__(self, id: int = None, lang: str = None, name: str = None, description: str = None,
-                 map: str = None):
+                 mapFile: str = None):
         super().__init__(id, lang, name, description)
 
-        self.__map = map
+        self.__mapFile = mapFile
+        self.__mapPixMap = None
 
         self.__mapItems = []
+        self.__mapItemDraws = []
 
 
     def __name__(self):
@@ -47,7 +49,7 @@ class Map(Object):
 
     @property
     def treeChildren(self):
-        return None
+        return []
 
 
     @property
@@ -75,10 +77,34 @@ class Map(Object):
 
 
     @property
-    def map(self):
-        return self.__map
+    def mapFile(self):
+        return self.__mapFile
 
 
-    @map.setter
-    def map(self, value):
-        self.__map = value
+    @mapFile.setter
+    def mapFile(self, value):
+        self.__mapFile = value
+
+
+    @property
+    def mapPixMap(self):
+        return self.__mapPixMap
+
+
+    @mapPixMap.setter
+    def mapPixMap(self, value):
+        self.__mapPixMap = value
+
+
+    @property
+    def mapItemDraws(self):
+        return self.__mapItemDraws
+
+
+    @mapItemDraws.setter
+    def mapItemDraws(self, value):
+        self.__mapItemDraws = value
+
+
+    def addMapItemDraws(self, value):
+        self.__mapItemDraws.append(value)

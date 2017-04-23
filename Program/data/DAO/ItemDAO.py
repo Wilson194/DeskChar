@@ -54,7 +54,8 @@ class ItemDAO(DAO, IItemDAO):
 
         elif isinstance(item, Container):
             intValues.update({
-                'capacity': item.capacity,
+                'capacity' : item.capacity,
+                'parent_id': item.parent_id
             })
 
         elif isinstance(item, MeleeWeapon):
@@ -75,12 +76,13 @@ class ItemDAO(DAO, IItemDAO):
 
         elif isinstance(item, RangeWeapon):
             intValues.update({
-                'initiative' : item.initiative,
-                'strength'   : item.strength,
-                'rampancy'   : item.rampancy,
-                'rangeLow'   : item.rangeLow,
-                'rangeMedium': item.rangeMedium,
-                'rangeHigh'  : item.rangeHigh,
+                'initiative'  : item.initiative,
+                'strength'    : item.strength,
+                'rampancy'    : item.rampancy,
+                'rangeLow'    : item.rangeLow,
+                'rangeMedium' : item.rangeMedium,
+                'rangeHigh'   : item.rangeHigh,
+                'weaponWeight': item.weaponWeight.value if item.weaponWeight else None
             })
         elif isinstance(item, ThrowableWeapon):
             intValues.update({
@@ -157,12 +159,13 @@ class ItemDAO(DAO, IItemDAO):
 
         elif isinstance(item, RangeWeapon):
             intValues.update({
-                'initiative' : item.initiative,
-                'strength'   : item.strength,
-                'rampancy'   : item.rampancy,
-                'rangeLow'   : item.rangeLow,
-                'rangeMedium': item.rangeMedium,
-                'rangeHigh'  : item.rangeHigh,
+                'initiative'  : item.initiative,
+                'strength'    : item.strength,
+                'rampancy'    : item.rampancy,
+                'rangeLow'    : item.rangeLow,
+                'rangeMedium' : item.rangeMedium,
+                'rangeHigh'   : item.rangeHigh,
+                'weaponWeight': item.weaponWeight.value if item.weaponWeight else None
             })
         elif isinstance(item, ThrowableWeapon):
             intValues.update({
@@ -212,7 +215,6 @@ class ItemDAO(DAO, IItemDAO):
                              data.get('price', 0),
                              data.get('capacity', 0), data.get('amount', 1))
 
-
         elif data['type'] == Items.MELEE_WEAPON.value:
             weaponWeightIndex = data.get('weaponWeight', None)
             weaponWeight = WeaponWeight(weaponWeightIndex) if weaponWeightIndex else None
@@ -240,13 +242,16 @@ class ItemDAO(DAO, IItemDAO):
                                    weaponWeight, data.get('amount', 1))
 
         elif data['type'] == Items.RANGED_WEAPON.value:
+            weaponWeightIndex = data.get('weaponWeight', None)
+            weaponWeight = WeaponWeight(weaponWeightIndex) if weaponWeightIndex else None
+
             item = RangeWeapon(item_id, lang, tr_data.get('name', ''),
                                tr_data.get('description', ''),
                                data.get('parent_id', 0), data.get('weight', 0),
                                data.get('price', 0), data.get('initiative', 0),
                                data.get('strength', 0), data.get('rampancy', 0),
                                data.get('rangeLow', 0), data.get('rangeMedium', 0),
-                               data.get('rangeHigh', 0), data.get('amount', 1))
+                               data.get('rangeHigh', 0), data.get('amount', 1), weaponWeight)
 
         elif data['type'] == Items.ARMOR.value:
             item = Armor(item_id, lang, tr_data.get('name', ''), tr_data.get('description', ''),
@@ -266,16 +271,16 @@ class ItemDAO(DAO, IItemDAO):
 
         if nodeId and contextType:
             objects = PlayerTreeDAO().get_children_objects(nodeId, contextType)
+            effects = []
+
             armors = []
             containers = []
             items = []
             moneys = []
-            effects = []
             meleeWeapons = []
             rangedWeapons = []
             throwableWeapons = []
             for one in objects:
-
                 if one.object.object_type is ObjectType.ITEM and data['type'] == Items.CONTAINER.value:
                     childItem = self.get(one.object.id, None, one.id, contextType)
                     if isinstance(childItem, Armor):

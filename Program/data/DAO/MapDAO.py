@@ -17,20 +17,21 @@ class MapDAO:
 
     def __init__(self):
         self.database = Database(self.DATABASE_DRIVER)
+        self.treeDAO = PlayerTreeDAO()
 
 
-    def create(self, map: Map) -> int:
+    def create(self, map: Map, nodeParentId: int = None, contextType: ObjectType = None) -> int:
         values = {
             'name'       : map.id,
             'description': map.description,
-            'map_file'   : map.map,
+            'map_file'   : map.mapFile,
         }
 
         id = self.database.insert(self.DATABASE_TABLE, values)
-
         map.id = id
-        node = NodeObject(None, map.name, None, map)
-        PlayerTreeDAO().insert_node(node, self.TYPE)
+
+        node = NodeObject(None, map.name, nodeParentId, map)
+        nodeId = self.treeDAO.insert_node(node, contextType)
 
         return id
 
@@ -39,8 +40,11 @@ class MapDAO:
         values = {
             'name'       : map.id,
             'description': map.description,
-            'map_file'   : map.map,
+            'map_file'   : map.mapFile,
         }
+
+        for mapItem in map.mapItems:
+            MapItemDAO().update(mapItem)
 
         self.database.update(self.DATABASE_TABLE, map.id, values)
 
@@ -66,7 +70,7 @@ class MapDAO:
         map = Map(map_id, None, data.get('name', ''), data.get('description', ''),
                   data.get('map_file', None))
 
-        sql = self.database.select('Map_item', {'map_id': id})
+        sql = self.database.select('Map_item', {'map_id': map.id})
 
         mapItems = []
         for line in sql:

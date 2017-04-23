@@ -112,3 +112,10 @@ class Ability(Object):
             return True
 
         return False
+
+
+    def printer(self, depth):
+        print('{} Ability - {}'.format('  ' * depth, self.name))
+        print('{} Contexts:'.format('  ' * depth))
+        for context in self.contexts:
+            context.printer(depth + 2)

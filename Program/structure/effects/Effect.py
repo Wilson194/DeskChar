@@ -10,11 +10,11 @@ class Effect(Object):
 
 
     def __init__(self, id: int = None, lang: str = None, name: str = None,
-                 description: str = None,
-                 targetType: ModifierTargetTypes = None):
+                 description: str = None, targetType: ModifierTargetTypes = None, active: bool = None):
         super().__init__(id, lang, name, description)
 
         self.__targetType = targetType
+        self.__active = active
 
         self.__modifiers = []
 
@@ -97,6 +97,16 @@ class Effect(Object):
         self.__modifiers.append(modifier)
 
 
+    @property
+    def active(self):
+        return self.__active
+
+
+    @active.setter
+    def active(self, value):
+        self.__active = value
+
+
     def __eq__(self, other):
         if not isinstance(other, Effect):
             return False
@@ -108,3 +118,10 @@ class Effect(Object):
             return True
 
         return False
+
+
+    def printer(self, depth):
+        print('{} Effect - {}'.format('  ' * depth, self.name))
+        print('{} Modificators: '.format('  ' * depth))
+        for modifier in self.modifiers:
+            modifier.printer(depth + 2)

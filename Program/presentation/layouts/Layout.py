@@ -43,6 +43,8 @@ class Layout(QtWidgets.QVBoxLayout):
             input.currentIndexChanged.connect(lambda: self.save_synchronize_data_slot(input))
         elif isinstance(input, QtWidgets.QSpinBox):
             input.valueChanged.connect(lambda: self.save_synchronize_data_slot(input))
+        elif isinstance(input, QtWidgets.QCheckBox):
+            input.stateChanged.connect(lambda: self.save_synchronize_data_slot(input))
 
 
     def save_synchronize_data_slot(self, obj):
@@ -56,6 +58,8 @@ class Layout(QtWidgets.QVBoxLayout):
                 one.setCurrentIndex(obj.currentIndex())
             elif isinstance(one, QtWidgets.QSpinBox):
                 one.setValue(obj.value())
+            elif isinstance(one, QtWidgets.QCheckBox):
+                one.setChecked(obj.checkState())
 
 
     def text_line(self, grid: object, name: str, xposition: int, yposition: int,
@@ -179,6 +183,23 @@ class Layout(QtWidgets.QVBoxLayout):
             self.synchronize(input)
         grid.addWidget(input, yposition, xposition + 1, yspan, xspan)
         input.dateChanged.connect(self.data_changed)
+
+        return input
+
+
+    def check_box(self, grid: object, name: str, xposition: int, yposition: int,
+                  synchronize: bool = False, xspan: int = 1,
+                  yspan: int = 1) -> QtWidgets.QCheckBox:
+        label = QtWidgets.QLabel()
+        label.setText(TR().tr(name) + ':')
+        grid.addWidget(label, yposition, xposition, 1, 1)
+
+        input = QtWidgets.QCheckBox()
+        input.setObjectName(name)
+        if synchronize:
+            self.synchronize(input)
+        grid.addWidget(input, yposition, xposition + 1, yspan, xspan)
+        input.stateChanged.connect(self.data_changed)
 
         return input
 

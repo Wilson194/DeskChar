@@ -15,6 +15,7 @@ class ObjectType(AutoNumber):
     PARTY_CHARACTER = ()  # 11
     MAP = ()  # 12
     MAP_ITEM = ()  # 13
+    MESSAGE = ()  # 14
 
 
     def icon(self):
@@ -40,6 +41,8 @@ class ObjectType(AutoNumber):
             return 'resources/icons/gemRed.png'
         if self is ObjectType.MAP:
             return 'resources/icons/map.png'
+        if self is ObjectType.MESSAGE:
+            return 'resources/icons/envelop.png'
 
         return 'resources/icons/book.png'
 
@@ -57,6 +60,7 @@ class ObjectType(AutoNumber):
         from structure.effects.AbilityContext import AbilityContext
         from structure.character.PartyCharacter import PartyCharacter
         from structure.map.Map import Map
+        from structure.character.Message import Message
 
         if self == ObjectType.ITEM:
             return Item
@@ -82,6 +86,8 @@ class ObjectType(AutoNumber):
             return PartyCharacter
         if self == ObjectType.MAP:
             return Map
+        if self == ObjectType.MESSAGE:
+            return Message
 
 
     def by_name(self, name: str):
@@ -108,3 +114,5 @@ class ObjectType(AutoNumber):
             return self.ABILITY_CONTEXT
         if name == 'PARTY_CHARACTER' or name == 'PARTYCHARACTER':
             return self.PARTY_CHARACTER
+        if name == 'MESSAGE':
+            return self.MESSAGE

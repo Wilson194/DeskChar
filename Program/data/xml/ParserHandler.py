@@ -12,12 +12,14 @@ class ParserHandler:
         characters = []
         for node in data:
             if node.object.object_type == ObjectType.CHARACTER:
-                # objs = type.instance().DAO()().get_list(id)
-                # character = objs[0].XmlClass()().create_xml(objs)
-                # characters.append(character)
-                pass
+                scenario = node.object.DAO()().get(node.object.id, None, node.id, node.object.object_type)
+                root = scenario.XmlClass()().create_xml(scenario)
+
+            elif node.object.object_type == ObjectType.SCENARIO:
+                scenario = node.object.DAO()().get(node.object.id, None, node.id, node.object.object_type)
+                root = scenario.XmlClass()().create_xml(scenario)
             else:
-                objs = node.object.DAO()().get_list(node.object.id, node.id, node.object.object_type )
+                objs = node.object.DAO()().get_list(node.object.id, node.id, node.object.object_type)
                 child = objs[0].XmlClass()().create_xml(objs)
                 root.append(child)
 
@@ -48,6 +50,9 @@ class ParserHandler:
 
         if root.tag == 'character':
             obj = ObjectType.CHARACTER.instance().XmlClass()().import_xml(root)
+            objects.append(obj)
+        elif root.tag == 'scenario':
+            obj = ObjectType.SCENARIO.instance().XmlClass()().import_xml(root)
             objects.append(obj)
         else:
             for child in root:

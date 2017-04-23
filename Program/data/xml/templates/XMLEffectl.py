@@ -15,5 +15,6 @@ class XMLEffect(XMLTemplate):
         self.description = XAttribElement('description', 'lang')
 
         self.targetType = XElement('targetType', ModifierTargetTypes)
+        self.active = XElement('active')
 
         self.modifiers = XInstance('modifiers', XMLModifier)

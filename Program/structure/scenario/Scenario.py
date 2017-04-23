@@ -246,3 +246,19 @@ class Scenario(Object):
 
     def addThrowableWeapon(self, throwableWeapon: ThrowableWeapon):
         self.__throwableWeapons.append(throwableWeapon)
+
+
+    def printer(self, depth: int = 0):
+        print('Scenario: {}'.format(self.name))
+        print('  Spells: ')
+        for spell in self.spells:
+            spell.printer(depth + 2)
+        print('  Effects:')
+        for effect in self.effects:
+            effect.printer(depth + 2)
+        print('  Abilities: ')
+        for ability in self.abilities:
+            ability.printer(depth + 2)
+        print('  Locations: ')
+        for location in self.locations:
+            location.printer(depth + 2)

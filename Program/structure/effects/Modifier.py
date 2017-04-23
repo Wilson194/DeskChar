@@ -114,3 +114,7 @@ class Modifier(Object):
     @targetType.setter
     def targetType(self, value):
         self.__targetType = value
+
+
+    def printer(self, depth):
+        print('{} Modifier - {}'.format('  ' * depth, self.name))
