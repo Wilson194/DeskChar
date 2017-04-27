@@ -1,5 +1,6 @@
 from data.DAO.CharacterDAO import CharacterDAO
 from data.DAO.ItemDAO import ItemDAO
+from data.DAO.MapDAO import MapDAO
 from data.DAO.MonsterDAO import MonsterDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from data.database.Database import Database
@@ -122,6 +123,7 @@ class LocationDAO(DAO):
             meleeWeapons = []
             rangedWeapons = []
             throwableWeapons = []
+            maps = []
 
             for child in children:
                 if child.object.object_type is ObjectType.LOCATION:
@@ -133,6 +135,9 @@ class LocationDAO(DAO):
                 elif child.object.object_type is ObjectType.CHARACTER:
                     character = CharacterDAO().get(child.object.id, None, child.id, contextType)
                     characters.append(character)
+                elif child.object.object_type is ObjectType.MAP:
+                    map = MapDAO().get(child.object.id)
+                    maps.append(map)
                 elif child.object.object_type is ObjectType.ITEM:
                     childItem = ItemDAO().get(child.object.id, None, child.id, contextType)
                     if isinstance(childItem, Armor):
@@ -160,6 +165,7 @@ class LocationDAO(DAO):
             location.locations = locations
             location.monsters = monsters
             location.characters = characters
+            location.maps = maps
 
         return location
 

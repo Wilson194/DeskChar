@@ -22,21 +22,21 @@ class ObjectType(AutoNumber):
         if self is ObjectType.SPELL:
             return 'resources/icons/book.png'
         if self is ObjectType.ABILITY:
-            return 'resources/icons/map.png'
+            return 'resources/icons/ability.png'
         if self is ObjectType.ITEM:
             return 'resources/icons/crate.png'
         if self is ObjectType.MODIFIER:
             return 'resources/icons/gemGreen.png'
         if self is ObjectType.EFFECT:
-            return 'resources/icons/potionGreen.png'
+            return 'resources/icons/effect.png'
         if self is ObjectType.CHARACTER:
             return 'resources/icons/helmet.png'
         if self is ObjectType.MONSTER:
             return 'resources/icons/imp.png'
         if self is ObjectType.SCENARIO:
-            return 'resources/icons/envelope.png'
+            return 'resources/icons/drd.png'
         if self is ObjectType.LOCATION:
-            return 'resources/icons/scroll.png'
+            return 'resources/icons/location.png'
         if self is ObjectType.ABILITY_CONTEXT:
             return 'resources/icons/gemRed.png'
         if self is ObjectType.MAP:
@@ -61,6 +61,7 @@ class ObjectType(AutoNumber):
         from structure.character.PartyCharacter import PartyCharacter
         from structure.map.Map import Map
         from structure.character.Message import Message
+        from structure.map.MapItem import MapItem
 
         if self == ObjectType.ITEM:
             return Item
@@ -86,6 +87,8 @@ class ObjectType(AutoNumber):
             return PartyCharacter
         if self == ObjectType.MAP:
             return Map
+        if self == ObjectType.MAP_ITEM:
+            return MapItem
         if self == ObjectType.MESSAGE:
             return Message
 
@@ -116,3 +119,7 @@ class ObjectType(AutoNumber):
             return self.PARTY_CHARACTER
         if name == 'MESSAGE':
             return self.MESSAGE
+        if name == 'MAP_ITEM' or name == 'MAPITEM':
+            return self.MAP_ITEM
+        if name == 'MAP':
+            return self.MAP

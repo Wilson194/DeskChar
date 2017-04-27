@@ -4,7 +4,6 @@ from data.DAO.ItemDAO import ItemDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from data.DAO.SpellDAO import SpellDAO
 from data.DAO.interface.ISpellDAO import ISpellDAO
-from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
 from structure.character.Character import Character
 from structure.enums.Alignment import Alignment
@@ -12,14 +11,7 @@ from structure.enums.Classes import Classes
 from structure.enums.Items import Items
 from structure.enums.ObjectType import ObjectType
 from structure.enums.Races import Races
-from structure.items.Armor import Armor
 from structure.items.Container import Container
-from structure.items.Item import Item
-from structure.items.MeleeWeapon import MeleeWeapon
-from structure.items.Money import Money
-from structure.items.RangeWeapon import RangeWeapon
-from structure.items.ThrowableWeapon import ThrowableWeapon
-from structure.spells.Spell import Spell
 from data.DAO.DAO import DAO
 from structure.tree.NodeObject import NodeObject
 

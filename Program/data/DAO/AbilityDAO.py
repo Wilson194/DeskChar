@@ -33,7 +33,8 @@ class AbilityDAO(DAO, IAbilityDAO):
 
         intValues = {
             'drd_race' : ability.drd_race.value if ability.drd_race else None,
-            'drd_class': ability.drd_class.value if ability.drd_class else None
+            'drd_class': ability.drd_class.value if ability.drd_class else None,
+            'level'    : ability.level
         }
 
         strValues = {
@@ -64,7 +65,8 @@ class AbilityDAO(DAO, IAbilityDAO):
         """
         intValues = {
             'drd_race' : ability.drd_race.value if ability.drd_race else None,
-            'drd_class': ability.drd_class.value if ability.drd_class else None
+            'drd_class': ability.drd_class.value if ability.drd_class else None,
+            'level'    : ability.level
         }
 
         strValues = {
@@ -104,7 +106,7 @@ class AbilityDAO(DAO, IAbilityDAO):
         drd_race = Races(data.get('drd_race')) if data.get('drd_race') is not None else None
         ability = Ability(ability_id, lang, tr_data.get('name', ''),
                           tr_data.get('description', ''), tr_data.get('chance', ''),
-                          drd_race, drd_class)
+                          drd_race, drd_class, data.get('level', 1))
 
         if nodeId and contextType:
             children = self.treeDAO.get_children_objects(nodeId, contextType)

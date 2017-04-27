@@ -10,12 +10,13 @@ class Ability(Object):
 
     def __init__(self, id: int = None, lang: str = None, name: str = None,
                  description: str = None, chance: str = None, drd_race: Races = None,
-                 drd_class: Classes = None):
+                 drd_class: Classes = None, level: int = None):
         super().__init__(id, lang, name, description)
 
         self.__chance = chance
         self.__drd_race = drd_race
         self.__drd_class = drd_class
+        self.__level = level
 
         self.__contexts = []
 
@@ -56,7 +57,7 @@ class Ability(Object):
 
     @property
     def icon(self):
-        return 'resources/icons/map.png'
+        return 'resources/icons/ability.png'
 
 
     @property
@@ -102,6 +103,16 @@ class Ability(Object):
     @contexts.setter
     def contexts(self, value):
         self.__contexts = value
+
+
+    @property
+    def level(self):
+        return self.__level
+
+
+    @level.setter
+    def level(self, value):
+        self.__level = value
 
 
     def __eq__(self, other):

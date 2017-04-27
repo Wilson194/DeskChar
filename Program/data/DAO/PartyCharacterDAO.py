@@ -1,4 +1,5 @@
 from data.DAO.CharacterDAO import CharacterDAO
+from data.DAO.MessageDAO import MessageDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from data.database.Database import Database
 from structure.character.PartyCharacter import PartyCharacter
@@ -23,8 +24,12 @@ class PartyCharacterDAO(DAO):
         :return: id of autoincrement
         """
         if character.character:
-            character_id = CharacterDAO().create(character.character.popitem()[1], nodeParentId,
+            if type(character.character) is dict:
+                character_id = CharacterDAO().create(character.character.popitem()[1], nodeParentId,
                                                  contextType)  # TODO: default lang
+            else:
+                character_id = CharacterDAO().create(character.character, nodeParentId,
+                                                     contextType)  # TODO: default lang
         else:
             character_id = None
 
@@ -36,11 +41,15 @@ class PartyCharacterDAO(DAO):
             'MACAddress'  : character.MACAddress,
             'character_id': character_id,
             'scenario_id' : scenario.id,
-            'name'        : character.name
+            'name'        : character.name,
         }
 
         id = self.database.insert(self.DATABASE_TABLE, intValues)
         character.id = id
+
+        for message in character.messages:
+            message.partyCharacterId = id
+            MessageDAO().create(message)
 
         return id
 
@@ -86,6 +95,10 @@ class PartyCharacterDAO(DAO):
 
         character = PartyCharacter(data.get('ID'), lang, data['name'], None, data.get('deviceName', ''),
                                    data.get('MACAddress'))
+
+        messages = MessageDAO().get_by_party_character(character.id)
+
+        character.messages = messages
 
         # character.character = CharacterDAO().get(data.get('character_id'))
 

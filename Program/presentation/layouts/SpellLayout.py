@@ -86,6 +86,6 @@ class SpellLayout(Layout):
         self.object.duration = self.duration_input.toPlainText()
 
         class_index = self.class_input.currentIndex()
-        self.object.drd_class = class_index if class_index > 0 else None
+        self.object.drd_class = Classes(class_index) if class_index > 0 else None
 
         self.spell_manager.update_spell(self.object)

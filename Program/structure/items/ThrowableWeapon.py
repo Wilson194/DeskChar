@@ -1,4 +1,5 @@
 from structure.enums.Items import Items
+from structure.enums.Races import Races
 from structure.enums.WeaponWeight import WeaponWeight
 from structure.items.Item import Item
 
@@ -14,7 +15,7 @@ class ThrowableWeapon(Item):
                  price: int = None, initiative: int = None, strength: int = None,
                  rampancy: int = None, rangeLow: int = None, rangeMedium: int = None,
                  rangeHigh: int = None, defence: int = None, weaponWeight: WeaponWeight = None,
-                 amount: int = 1):
+                 amount: int = 1, racial: Races = None):
         super().__init__(id, lang, name, description, parent_id, weight, price, amount)
 
         self.__initiative = initiative
@@ -25,6 +26,7 @@ class ThrowableWeapon(Item):
         self.__rangeHigh = rangeHigh
         self.__defence = defence
         self.__weaponWeight = weaponWeight
+        self.__racial = racial
 
         self.__type = Items.THROWABLE_WEAPON
 
@@ -135,3 +137,33 @@ class ThrowableWeapon(Item):
     @property
     def type(self):
         return self.__type
+
+
+    @property
+    def racial(self):
+        return self.__racial
+
+
+    @racial.setter
+    def racial(self, value):
+        self.__racial = value
+
+
+    @property
+    def initiative(self):
+        return self.__initiative
+
+
+    @initiative.setter
+    def initiative(self, value):
+        self.__initiative = value
+
+
+    @property
+    def racial(self):
+        return self.__racial
+
+
+    @racial.setter
+    def racial(self, value):
+        self.__racial = value

@@ -55,7 +55,7 @@ class Effect(Object):
 
     @property
     def icon(self):
-        return 'resources/icons/potionGreen.png'
+        return 'resources/icons/effect.png'
 
 
     @property

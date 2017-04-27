@@ -53,8 +53,9 @@ class AbilityContextLayout(Layout):
         self.targetAttributeInput = self.combo_box(self.inputGrid, 'Target_attribute_type',
                                                    CharacterAttributes, 0, 2, True)
 
-        self.valueTypeInput = self.combo_box(self.inputGrid, 'Value_type', ModifierValueTypes, 0, 3,
-                                             True)
+        self.valueTypeInput = self.combo_box(self.inputGrid, 'Value_type',
+                                             [ModifierValueTypes.TO_TOTAL, ModifierValueTypes.FROM_BASE,
+                                              ModifierValueTypes.FROM_TOTAL], 0, 3, True)
 
         self.valueInput = self.spin_box(self.inputGrid, 'Value', 0, 4, True)
 

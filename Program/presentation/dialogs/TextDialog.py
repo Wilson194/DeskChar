@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets, QtGui
+from presentation.Translate import Translate as TR
 
 
 class TextDialog:
@@ -9,7 +10,7 @@ class TextDialog:
         else:
             msg.setIcon(QtWidgets.QMessageBox.Information)
 
-        msg.setWindowTitle("MessageBox")
+        msg.setWindowTitle(TR().tr('About'))
 
         msg.setWindowIcon(QtGui.QIcon('resources/icons/char.png'))
 

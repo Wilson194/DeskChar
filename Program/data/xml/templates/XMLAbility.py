@@ -18,5 +18,6 @@ class XMLAbility(XMLTemplate):
         self.chance = XAttribElement('chance', 'lang')
         self.drd_race = XElement('race', Races)
         self.drd_class = XElement('class', Classes)
+        self.level = XElement('level')
 
         self.contexts = XInstance('contexts', XMLAbilityContext)

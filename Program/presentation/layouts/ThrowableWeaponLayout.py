@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from PyQt5 import QtWidgets, QtGui, QtCore
 from business.managers.ItemManager import ItemManager
+from structure.enums.Races import Races
 from structure.enums.WeaponWeight import WeaponWeight
 from presentation.layouts.Layout import Layout
 from structure.items.ThrowableWeapon import ThrowableWeapon
@@ -50,9 +51,9 @@ class ThrowableWeaponLayout(Layout):
         self.rangeMedium_input = self.spin_box(self.input_grid, 'RangeMedium', 0, 8, True)
         self.rangeHigh_input = self.spin_box(self.input_grid, 'RangeHigh', 0, 9, True)
         self.defence_input = self.spin_box(self.input_grid, 'Defence', 0, 10, True)
-        self.weapon_weight_input = self.combo_box(self.input_grid, 'WeaponWeight', WeaponWeight, 0,
-                                                  11, True)
-        self.amount_input = self.spin_box(self.input_grid, 'Amount', 0, 12, True)
+        self.weapon_weight_input = self.combo_box(self.input_grid, 'WeaponWeight', WeaponWeight, 0,11, True, haveNone=False)
+        self.racial_input = self.combo_box(self.input_grid, 'Racial', Races, 0,12, True)
+        self.amount_input = self.spin_box(self.input_grid, 'Amount', 0, 13, True)
 
         self.addLayout(self.input_grid)
 
@@ -77,9 +78,11 @@ class ThrowableWeaponLayout(Layout):
         self.defence_input.setValue(item.defence if item.defence else 0)
         self.amount_input.setValue(item.amount if item.amount else 0)
 
-        weaponWeightIndex = item.weaponWeight.value if item.weaponWeight is not None else 0
+        weaponWeightIndex = item.weaponWeight.value if item.weaponWeight is not None else 1
+        racialIndex = item.racial.value if item.racial is not None else 0
 
-        self.weapon_weight_input.setCurrentIndex(weaponWeightIndex)
+        self.weapon_weight_input.setCurrentIndex(weaponWeightIndex-1)
+        self.racial_input.setCurrentIndex(racialIndex)
 
 
     def save_data(self):
@@ -100,6 +103,9 @@ class ThrowableWeaponLayout(Layout):
         self.object.amount = self.amount_input.value()
 
         weponWeightIndex = self.weapon_weight_input.currentIndex()
-        self.object.weaponWeight = WeaponWeight(weponWeightIndex) if weponWeightIndex > 0 else None
+        self.object.weaponWeight = WeaponWeight(weponWeightIndex+1)
+
+        racialIndex = self.racial_input.currentIndex()
+        self.object.racial = Races(racialIndex) if racialIndex > 0 else None
 
         self.item_manager.update(self.object)

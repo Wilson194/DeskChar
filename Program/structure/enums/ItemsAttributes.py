@@ -23,7 +23,7 @@ class ItemsAttributes(AutoNumber):
     def by_name(self, name):
         name = name.upper()
         if name == 'WEIGHT':
-            return self.CONTAINER_CAPACITY
+            return self.WEIGHT
         if name == 'CONTAINER_CAPACITY':
             return self.CONTAINER_WEIGHT
         if name == 'CONTAINER_WEIGHT':

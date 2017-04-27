@@ -39,6 +39,8 @@ class AddAnotherObject(QtWidgets.QDialog):
         self.tabWidget = QtWidgets.QTabWidget(self.__parent)
         self.layout.addWidget(self.tabWidget, 0, 0)
         for child in self.__node.object.treeChildren:
+            if child is NodeType.FOLDER:
+                continue
             tab = QtWidgets.QWidget()
             self.__selected[child] = []
             self.tabWidget.addTab(tab, TR().tr(child))

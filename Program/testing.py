@@ -1,182 +1,106 @@
-# import sqlite3 as lite
-#
-# con = lite.connect('test.db')
-#
-# cur = con.cursor()
-#
-# data = '\n'.join(con.iterdump())
-#
-# with open('text.txt', 'w') as f:
-#     f.write(data)
+import sqlite3
 
 
-from PyQt5 import QtCore, QtGui, QtWidgets, QtPrintSupport
+def create_backup():
+    con = sqlite3.connect('test.db')
+
+    con.row_factory = sqlite3.Row
+    con.execute('PRAGMA foreign_keys = ON;')
+    con.execute('PRAGMA ENCODING = `UTF-8`')
+
+    cur = con.cursor()
+    cur.execute("SELECT * FROM sqlite_master WHERE name != 'Settings'")
+
+    tablesCreate = []
+    tablesNames = []
+    for row in cur:
+        if row['sql']:
+            if row['name'] != 'sqlite_sequence':
+                tablesCreate.append(row['sql'] + ';')
+            tablesNames.append(row['name'])
+
+    tableInsert = []
+    for name in tablesNames:
+        data = cur.execute('SELECT * FROM {}'.format(name))
+
+        for one in data:
+            one = dict(one)
+            # print([str(i) for i in list(one.values())])
+
+            sql = 'INSERT INTO "{}" VALUES ({});'.format(name, ','.join([str(i) for i in list(one.values())]))
+            tableInsert.append(sql)
+
+    tableDelete = []
+    for name in tablesNames:
+        if name == 'sqlite_sequence':
+            tableDelete.append('DELETE FROM {};'.format(name))
+        else:
+            tableDelete.append('DROP TABLE {};'.format(name))
+
+    with open('text.txt', 'w') as f:
+        for delete in tableDelete:
+            f.write(delete)
+            f.write('\n')
+
+        for create in tablesCreate:
+            f.write(create)
+            f.write('\n')
+
+        for insert in tableInsert:
+            f.write(insert)
+            f.write('\n')
 
 
-class ImageViewer(QtWidgets.QMainWindow):
-    def __init__(self):
-        super(ImageViewer, self).__init__()
+def load_backup():
+    con = sqlite3.connect('test.db')
 
-        self.printer = QtPrintSupport.QPrinter()
-        self.scaleFactor = 0.0
+    con.row_factory = sqlite3.Row
+    # con.execute('PRAGMA foreign_keys = ON;')
+    con.execute('PRAGMA ENCODING = `UTF-8`')
+    con.isolation_level = None
 
-        self.imageLabel = QtWidgets.QLabel()
-        self.imageLabel.setBackgroundRole(QtGui.QPalette.Base)
-        self.imageLabel.setSizePolicy(QtWidgets.QSizePolicy.Ignored,
-                                      QtWidgets.QSizePolicy.Ignored)
-        self.imageLabel.setScaledContents(True)
+    cur = con.cursor()
 
-        self.scrollArea = QtWidgets.QScrollArea()
-        self.scrollArea.setBackgroundRole(QtGui.QPalette.Dark)
-        self.scrollArea.setWidget(self.imageLabel)
-        self.setCentralWidget(self.scrollArea)
+    with open('text.txt', 'r', encoding='UTF-8') as f:
+        sql = f.read()
 
-        self.createActions()
-        self.createMenus()
-
-        self.setWindowTitle("Image Viewer")
-        self.resize(500, 400)
-
-    def open(self):
-        fileName = QtWidgets.QFileDialog.getOpenFileName(self, "Open File",
-                QtCore.QDir.currentPath())
-        if fileName:
-            image = QtGui.QImage(fileName[0])
-            if image.isNull():
-                QtWidgets.QMessageBox.information(self, "Image Viewer",
-                        "Cannot load {}.".format(fileName))
-                return
-
-            self.imageLabel.setPixmap(QtGui.QPixmap.fromImage(image))
-            self.scaleFactor = 1.0
-
-            self.printAct.setEnabled(True)
-            self.fitToWindowAct.setEnabled(True)
-            self.updateActions()
-
-            if not self.fitToWindowAct.isChecked():
-                self.imageLabel.adjustSize()
-
-    def print_(self):
-        dialog = QtPrintSupport.QPrintDialog(self.printer, self)
-        if dialog.exec_():
-            painter = QtGui.QPainter(self.printer)
-            rect = painter.viewport()
-            size = self.imageLabel.pixmap().size()
-            size.scale(rect.size(), QtCore.Qt.KeepAspectRatio)
-            painter.setViewport(rect.x(), rect.y(), size.width(), size.height())
-            painter.setWindow(self.imageLabel.pixmap().rect())
-            painter.drawPixmap(0, 0, self.imageLabel.pixmap())
-
-    def zoomIn(self):
-        self.scaleImage(1.25)
-
-    def zoomOut(self):
-        self.scaleImage(0.8)
-
-    def normalSize(self):
-        self.imageLabel.adjustSize()
-        self.scaleFactor = 1.0
-
-    def fitToWindow(self):
-        fitToWindow = self.fitToWindowAct.isChecked()
-        self.scrollArea.setWidgetResizable(fitToWindow)
-        if not fitToWindow:
-            self.normalSize()
-
-        self.updateActions()
-
-    def about(self):
-        QtWidgets.QMessageBox.about(self, "About Image Viewer",
-                "<p>The <b>Image Viewer</b> example shows how to combine "
-                "QLabel and QScrollArea to display an image. QLabel is "
-                "typically used for displaying text, but it can also display "
-                "an image. QScrollArea provides a scrolling view around "
-                "another widget. If the child widget exceeds the size of the "
-                "frame, QScrollArea automatically provides scroll bars.</p>"
-                "<p>The example demonstrates how QLabel's ability to scale "
-                "its contents (QLabel.scaledContents), and QScrollArea's "
-                "ability to automatically resize its contents "
-                "(QScrollArea.widgetResizable), can be used to implement "
-                "zooming and scaling features.</p>"
-                "<p>In addition the example shows how to use QPainter to "
-                "print an image.</p>")
-
-    def createActions(self):
-        self.openAct = QtWidgets.QAction("&Open...", self, shortcut="Ctrl+O",
-                triggered=self.open)
-
-        self.printAct = QtWidgets.QAction("&Print...", self, shortcut="Ctrl+P",
-                enabled=False, triggered=self.print_)
-
-        self.exitAct = QtWidgets.QAction("E&xit", self, shortcut="Ctrl+Q",
-                triggered=self.close)
-
-        self.zoomInAct = QtWidgets.QAction("Zoom &In (25%)", self,
-                shortcut="Ctrl++", enabled=False, triggered=self.zoomIn)
-
-        self.zoomOutAct = QtWidgets.QAction("Zoom &Out (25%)", self,
-                shortcut="Ctrl+-", enabled=False, triggered=self.zoomOut)
-
-        self.normalSizeAct = QtWidgets.QAction("&Normal Size", self,
-                shortcut="Ctrl+S", enabled=False, triggered=self.normalSize)
-
-        self.fitToWindowAct = QtWidgets.QAction("&Fit to Window", self,
-                enabled=False, checkable=True, shortcut="Ctrl+F",
-                triggered=self.fitToWindow)
-
-        self.aboutAct = QtWidgets.QAction("&About", self, triggered=self.about)
-
-        self.aboutQtAct = QtWidgets.QAction("About &Qt", self,
-                triggered=QtWidgets.qApp.aboutQt)
-
-    def createMenus(self):
-        self.fileMenu = QtWidgets.QMenu("&File", self)
-        self.fileMenu.addAction(self.openAct)
-        self.fileMenu.addAction(self.printAct)
-        self.fileMenu.addSeparator()
-        self.fileMenu.addAction(self.exitAct)
-
-        self.viewMenu = QtWidgets.QMenu("&View", self)
-        self.viewMenu.addAction(self.zoomInAct)
-        self.viewMenu.addAction(self.zoomOutAct)
-        self.viewMenu.addAction(self.normalSizeAct)
-        self.viewMenu.addSeparator()
-        self.viewMenu.addAction(self.fitToWindowAct)
-
-        self.helpMenu = QtWidgets.QMenu("&Help", self)
-        self.helpMenu.addAction(self.aboutAct)
-        self.helpMenu.addAction(self.aboutQtAct)
-
-        self.menuBar().addMenu(self.fileMenu)
-        self.menuBar().addMenu(self.viewMenu)
-        self.menuBar().addMenu(self.helpMenu)
-
-    def updateActions(self):
-        self.zoomInAct.setEnabled(not self.fitToWindowAct.isChecked())
-        self.zoomOutAct.setEnabled(not self.fitToWindowAct.isChecked())
-        self.normalSizeAct.setEnabled(not self.fitToWindowAct.isChecked())
-
-    def scaleImage(self, factor):
-        self.scaleFactor *= factor
-        self.imageLabel.resize(self.scaleFactor * self.imageLabel.pixmap().size())
-
-        self.adjustScrollBar(self.scrollArea.horizontalScrollBar(), factor)
-        self.adjustScrollBar(self.scrollArea.verticalScrollBar(), factor)
-
-        self.zoomInAct.setEnabled(self.scaleFactor < 3.0)
-        self.zoomOutAct.setEnabled(self.scaleFactor > 0.333)
-
-    def adjustScrollBar(self, scrollBar, factor):
-        scrollBar.setValue(int(factor * scrollBar.value()
-                                + ((factor - 1) * scrollBar.pageStep()/2)))
+    # cur.execute('BEGIN TRANSACTION')
+    for one in sql.split(';'):
+        if not 'Settings' in one:
+            cur.execute(one)
 
 
-if __name__ == '__main__':
+def dump():
+    con = sqlite3.connect('test.db')
+    con.row_factory = sqlite3.Row
+    con.execute('PRAGMA ENCODING = `UTF-8`')
+    data = '\n'.join(con.iterdump())
 
-    import sys
+    cur = con.cursor()
+    names = cur.execute("SELECT * FROM sqlite_master WHERE name != 'Settings'")
 
-    app = QtWidgets.QApplication(sys.argv)
-    imageViewer = ImageViewer()
-    imageViewer.show()
-    sys.exit(app.exec_())
+    delete = []
+    for one in names:
+        if one['name'] == 'sqlite_sequence':
+            delete.append('DELETE FROM `{}`;'.format(one['name']))
+        else:
+            delete.append('DROP TABLE IF EXISTS `{}`;'.format(one['name']))
+
+    with open('text.txt', 'w', encoding='UTF-8') as f:
+        f.write('BEGIN TRANSACTION;\n')
+        f.write('\n'.join(delete))
+        f.write(data[18:])
+
+
+# dump()
+# create_backup()
+# load_backup()
+
+
+
+from data.drdFile.drdFile import DrdFile
+
+
+a = DrdFile()
+a.create('C:/Users/horac/Desktop/test.drd')
+# a.open('C:/Users/horac/Desktop/test.drd')

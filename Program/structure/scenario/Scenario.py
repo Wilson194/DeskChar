@@ -79,7 +79,7 @@ class Scenario(Object):
 
     @property
     def icon(self):
-        return 'resources/icons/envelope.png'
+        return 'resources/icons/drd.png'
 
 
     @property

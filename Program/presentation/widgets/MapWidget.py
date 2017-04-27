@@ -12,6 +12,11 @@ from PyQt5.QtWidgets import QToolBar
 from business.managers.MapManager import MapManager
 from data.DAO.MapDAO import MapDAO
 from data.DAO.MapItemDAO import MapItemDAO
+from presentation.dialogs.EditMapItem import EditMapItem
+from presentation.dialogs.NewMapItem import NewMapItem
+from structure.enums.MapItem import MapItemType
+from structure.enums.ObjectType import ObjectType
+from structure.map.Map import Map
 from structure.map.MapItem import MapItem
 from presentation.Translate import Translate as TR
 
@@ -20,6 +25,8 @@ class MapWidget(QtWidgets.QFrame):
     """
     Custom tab widget with function for editing templates
     """
+
+    mapItem_delete_signal = QtCore.pyqtSignal(object)
 
 
     def __init__(self, parent, mainWindow):
@@ -33,6 +40,8 @@ class MapWidget(QtWidgets.QFrame):
         self.init_bar()
         self.init_ui()
 
+        self.mapItem_delete_signal.connect(self.item_delete_slot)
+
 
     def init_ui(self):
         """
@@ -45,6 +54,7 @@ class MapWidget(QtWidgets.QFrame):
         self.frameLayout.setObjectName("Frame layout")
 
         self.grview = QGraphicsView()
+        self.grview.setRenderHints(self.grview.renderHints() | QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
         self.scene = QGraphicsScene()
 
         # scene.setSceneRect(0, 0, 1500, 459)
@@ -67,51 +77,106 @@ class MapWidget(QtWidgets.QFrame):
         toolbar.setObjectName('MapToolbar')
         self.mainWindow.addToolBar(Qt.RightToolBarArea, toolbar)
 
-        self.openMap_action = QAction(QIcon('resources/icons/open.png'), TR().tr('Open_map'), self.mainWindow,
+        # ------------------------------- Open map ----------------------------------
+        self.openMap_action = QAction(QIcon('resources/icons/openMap.png'), TR().tr('Open_map'), self.mainWindow,
                                       triggered=self.open_map_action, enabled=False)
         toolbar.addAction(self.openMap_action)
 
+        # ------------------------------- Zoom in ----------------------------------
         self.zoomIn_action = QAction(QIcon('resources/icons/zoomIn.png'), TR().tr('Zoom_in'), self.mainWindow,
                                      triggered=self.zoom_in_action, shortcut='Ctrl++', enabled=False)
         toolbar.addAction(self.zoomIn_action)
 
+        # ------------------------------- Zoom out ----------------------------------
         self.zoomOut_action = QAction(QIcon('resources/icons/zoomOut.png'), TR().tr('Zoom_out'), self.mainWindow,
                                       triggered=self.zoom_out_action, shortcut='Ctrl++', enabled=False)
         toolbar.addAction(self.zoomOut_action)
 
-        self.add_action = QAction(QIcon('resources/icons/imp.png'), TR().tr('Add_monster'), self.mainWindow,
-                                  triggered=self.add_item_action, shortcut='Ctrl+M', enabled=False)
-        toolbar.addAction(self.add_action)
+        # ------------------------------- Edit info  ----------------------------------
+        self.info_action = QAction(QIcon('resources/icons/heart.png'), TR().tr('Edit_info'), self.mainWindow,
+                                   triggered=self.edit_info_action, shortcut='Ctrl+P', enabled=False)
+        toolbar.addAction(self.info_action)
 
-        self.save_action = QAction(QIcon('resources/icons/save.png'), TR().tr('Save'), self.mainWindow,
-                                   triggered=self.save_action, shortcut='Ctrl+P', enabled=False)
-        toolbar.addAction(self.save_action)
+        toolbar.addSeparator()
+
+        # ------------------------------- Add monster ----------------------------------
+        self.addMonster_action = QAction(QIcon('resources/icons/addMonster.png'), TR().tr('Add_monster'), self.mainWindow,
+                                         triggered=self.add_monster_action, shortcut='Ctrl+M', enabled=False)
+        toolbar.addAction(self.addMonster_action)
+
+        # ------------------------------- Add item ----------------------------------
+        self.addItem_action = QAction(QIcon('resources/icons/addItem.png'), TR().tr('Add_item'), self.mainWindow,
+                                      triggered=self.add_item_action, enabled=False)
+        toolbar.addAction(self.addItem_action)
+
+        # ------------------------------- Add room ----------------------------------
+        self.addRoom_action = QAction(QIcon('resources/icons/addRoom.png'), TR().tr('Add_room'), self.mainWindow,
+                                      triggered=self.add_room_action, enabled=False)
+        toolbar.addAction(self.addRoom_action)
+
+        # ------------------------------- Add object ----------------------------------
+        self.addObject_action = QAction(QIcon('resources/icons/addObject.png'), TR().tr('Add_object_map'), self.mainWindow,
+                                        triggered=self.add_object_action, enabled=False)
+        toolbar.addAction(self.addObject_action)
 
 
     def enable_tool_bar(self):
+        """
+        Enable tool bar actions
+        """
         self.openMap_action.setEnabled(True)
         self.zoomIn_action.setEnabled(True)
         self.zoomOut_action.setEnabled(True)
-        self.add_action.setEnabled(True)
-        self.save_action.setEnabled(True)
+        self.info_action.setEnabled(True)
+
+        self.addItem_action.setEnabled(True)
+        self.addRoom_action.setEnabled(True)
+        self.addMonster_action.setEnabled(True)
+        self.addObject_action.setEnabled(True)
 
 
     def tree_item_doubleclick_action(self, item):
-        self.enable_tool_bar()
-        map = MapDAO().get(item.data(0, 11).id)
+        """
+        Slot for double click on map at tree widget
+        :param item: item in tree widget
+        """
+
         if self.map:
             self.save_map()
-        if self.map and self.map.id == map.id:
+
+        if item.data(0, 11).object_type is not ObjectType.MAP:
+            self.mainWindow.redraw_context_widget(item.data(0, 11).object_type, item)
+        else:
+
+            self.enable_tool_bar()
             map = MapDAO().get(item.data(0, 11).id)
-        self.map = map
-        self.redraw()
+
+            if self.map and self.map.id == map.id:
+                map = MapDAO().get(item.data(0, 11).id)
+            self.map = map
+            self.redraw()
+
+
+    def item_delete_slot(self, mapItem):
+        # mapItem.number
+        self.map.mapItemDraws.remove(self.map.mapItemDraws[mapItem.number - 1])
+        MapItemDAO().delete(mapItem.mapItem.id)
+        # self.redraw()
 
 
     def save_map(self):
+        """
+        Save image of map
+        :return:
+        """
         self.mapManager.update(self.map)
+        self.save_map_action()
 
 
     def redraw(self):
+        """
+        Redraw scene in widget
+        """
         self.scene.clear()
         if self.map.mapFile:
             pixMap = QPixmap(self.map.mapFile)
@@ -119,13 +184,17 @@ class MapWidget(QtWidgets.QFrame):
             self.map.mapPixMap = sceneMap
             self.grview.fitInView(self.scene.itemsBoundingRect(), Qt.KeepAspectRatio)
 
-        for mapItem in self.map.mapItems:
-            item = MapItemDraw(mapItem)
+        for num, mapItem in enumerate(self.map.mapItems):
+            mapItem.number = num + 1
+            item = MapItemDraw(mapItem, self.mapItem_delete_signal)
             self.scene.addItem(item)
             self.map.addMapItemDraws(item)
 
 
     def open_map_action(self):
+        """
+        Open image with map slot
+        """
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self.mainWindow, "Open File",
                                                             QtCore.QDir.currentPath())
 
@@ -133,28 +202,108 @@ class MapWidget(QtWidgets.QFrame):
             if self.map.mapPixMap:
                 self.scene.removeItem(self.map.mapPixMap)
 
+            fileName = self.mapManager.copy_map(fileName, self.map)
             self.map.mapFile = fileName
             self.map.mapPixMap = self.scene.addPixmap(QPixmap(fileName))
             self.grview.fitInView(self.scene.itemsBoundingRect(), Qt.KeepAspectRatio)
 
 
     def zoom_in_action(self):
+        """
+        Zoom in whole map widget
+        """
         self.grview.scale(1.2, 1.2)
 
 
     def zoom_out_action(self):
+        """
+        Zoom out whole map widget
+        """
         self.grview.scale(0.8, 0.8)
 
 
     def add_item_action(self):
-        mapItem = MapItem(None, None, None, QPointF(), 0, 15, None, self.map.id)
-        id = MapItemDAO().create(mapItem)
-        mapItem.id = id
-        item = MapItemDraw(mapItem)
-        self.scene.addItem(item)
+        """
+        Add item to map
+        :return:
+        """
+        data, choice = NewMapItem.get_data()
+
+        if choice:
+            number = len(self.map.mapItemDraws) + 1
+            mapItem = MapItem(None, data.get('name', ''), data.get('description', ''), QPointF(), 0, number, None, self.map.id,
+                              MapItemType.ITEM)
+            id = MapItemDAO().create(mapItem)
+            mapItem.id = id
+            item = MapItemDraw(mapItem, self.mapItem_delete_signal)
+            self.scene.addItem(item)
+
+            self.map.addMapItemDraws(item)
 
 
-    def save_action(self):
+    def add_monster_action(self):
+        """
+        Add monster to map
+        :return:
+        """
+        data, choice = NewMapItem.get_data()
+
+        if choice:
+            number = len(self.map.mapItemDraws) + 1
+            mapItem = MapItem(None, data.get('name', ''), data.get('description', ''), QPointF(), 0, number, None, self.map.id,
+                              MapItemType.MONSTER)
+            id = MapItemDAO().create(mapItem)
+            mapItem.id = id
+            item = MapItemDraw(mapItem, self.mapItem_delete_signal)
+            self.scene.addItem(item)
+
+            self.map.addMapItemDraws(item)
+
+
+    def add_room_action(self):
+        """
+        Add room to map
+        :return:
+        """
+        data, choice = NewMapItem.get_data()
+
+        if choice:
+            number = len(self.map.mapItemDraws) + 1
+            mapItem = MapItem(None, data.get('name', ''), data.get('description', ''), QPointF(), 0, number, None, self.map.id,
+                              MapItemType.ROOM)
+            id = MapItemDAO().create(mapItem)
+            mapItem.id = id
+            item = MapItemDraw(mapItem, self.mapItem_delete_signal)
+            self.scene.addItem(item)
+
+            self.map.addMapItemDraws(item)
+
+
+    def add_object_action(self):
+        """
+        Add object to map
+        :return:
+        """
+        data, choice = NewMapItem.get_data()
+
+        if choice:
+            number = len(self.map.mapItemDraws) + 1
+            mapItem = MapItem(None, data.get('name', ''), data.get('description', ''), QPointF(), 0, number, None, self.map.id,
+                              MapItemType.OBJECT)
+            id = MapItemDAO().create(mapItem)
+            mapItem.id = id
+            item = MapItemDraw(mapItem, self.mapItem_delete_signal)
+            self.scene.addItem(item)
+
+            self.map.addMapItemDraws(item)
+
+    def edit_info_action(self):
+        data, choice = EditMapItem.get_data(None, self.map)
+        if choice:
+            self.map.name = data['name']
+            self.map.description = data['description']
+
+    def save_map_action(self):
         self.scene.clearSelection()
         self.scene.setSceneRect(self.scene.itemsBoundingRect())
 
@@ -164,7 +313,8 @@ class MapWidget(QtWidgets.QFrame):
         painter = QPainter(img)
         self.scene.render(painter)
 
-        img.save('test.png')
+        name = 'resources/maps/exportedMap-{}.png'.format(self.map.id)
+        img.save(name)
 
         del painter
 
@@ -180,13 +330,14 @@ class MapItemDraw(QGraphicsPixmapItem):
     HANDLE_SIZE = 8
 
 
-    def __init__(self, mapItem: MapItem):
+    def __init__(self, mapItem: MapItem, signal):
         # Create backup of pixmap
-        pix = QPixmap(mapItem.icon)
+        pix = QPixmap(mapItem.itemType.icon())
         self.oldPic = pix
         super().__init__(pix)
 
         self.mapItem = mapItem
+        self.signal = signal
 
         # Set ignore transparent background for mouse
         self.setShapeMode(QGraphicsPixmapItem.BoundingRectShape)
@@ -224,6 +375,11 @@ class MapItemDraw(QGraphicsPixmapItem):
         self.setFlag(QGraphicsItem.ItemSendsGeometryChanges, True)
         self.setFlag(QGraphicsItem.ItemIsFocusable, True)
 
+        self.mapItem.name = self.mapItem.name if self.mapItem.name else ''
+        self.mapItem.description = self.mapItem.description if self.mapItem.description else ''
+        toolTip = self.mapItem.name + '\n\n  ' + self.mapItem.description
+        self.setToolTip(toolTip)
+
 
     def get_object(self) -> MapItem:
         """
@@ -232,6 +388,7 @@ class MapItemDraw(QGraphicsPixmapItem):
         """
         self.mapItem.coord = self.pos()
         self.mapItem.scale = self.resize
+
         return self.mapItem
 
 
@@ -357,3 +514,21 @@ class MapItemDraw(QGraphicsPixmapItem):
         npix = self.oldPic.scaled(scaleX, scaleY, Qt.KeepAspectRatio, Qt.SmoothTransformation)
 
         self.setPixmap(npix)
+
+
+    def mouseDoubleClickEvent(self, mouseEvent):
+        data, choice = EditMapItem.get_data(None, self.mapItem)
+        if choice:
+            self.mapItem.name = data.get('name')
+            self.mapItem.description = data.get('description')
+
+
+    def keyReleaseEvent(self, keyEvent):
+        if keyEvent.key() == QtCore.Qt.Key_Delete:
+            quit_msg = "Are you sure you want to delete this?"
+            reply = QtWidgets.QMessageBox.question(None, 'Message',
+                                                   quit_msg, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+
+            if reply == QtWidgets.QMessageBox.Yes:
+                self.hide()
+                self.signal.emit(self)

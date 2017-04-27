@@ -1,9 +1,10 @@
 from PyQt5.QtWidgets import QMenuBar, QAction, qApp
 from PyQt5.QtGui import QIcon
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtWidgets
 
 from presentation.Translate import Translate as TR
 from presentation.dialogs.Settings import Settings
+from presentation.dialogs.TextDialog import TextDialog
 from structure.enums.ObjectType import ObjectType
 
 
@@ -60,6 +61,7 @@ class MainMenu(QMenuBar):
         about_action = QAction(TR().tr('Menu_about'), self)
         help_menu = self.addMenu(TR().tr('Menu_help'))
         help_menu.addAction(about_action)
+        about_action.triggered.connect(self.about_action)
 
 
     def init_player_ui(self):
@@ -78,9 +80,11 @@ class MainMenu(QMenuBar):
                                      self)
         location_templates = QAction(QIcon(ObjectType.LOCATION.icon()), TR().tr('Menu.location'),
                                      self)
+        map_templates = QAction(QIcon(ObjectType.MAP.icon()), TR().tr('Menu.map'),
+                                self)
 
         context_templates = QAction(QIcon(ObjectType.ABILITY_CONTEXT.icon()),
-                                    TR().tr('Menu.ability_context'),self)
+                                    TR().tr('Menu.ability_context'), self)
 
         ability_templates.triggered.connect(
             lambda: self.templates_menu_signal.emit(ObjectType.ABILITY))
@@ -105,20 +109,46 @@ class MainMenu(QMenuBar):
         context_templates.triggered.connect(
             lambda: self.templates_menu_signal.emit(ObjectType.ABILITY_CONTEXT)
         )
+        map_templates.triggered.connect(
+            lambda: self.templates_menu_signal.emit(ObjectType.MAP)
+        )
 
         file_menu = self.addMenu(TR().tr('Menu.templates'))
         file_menu.addAction(spell_templates)
-        file_menu.addAction(ability_templates)
         file_menu.addAction(item_templates)
-        file_menu.addAction(modifier_templates)
+
+        file_menu.addAction(ability_templates)
+        file_menu.addAction(context_templates)
+
         file_menu.addAction(effect_templates)
+        file_menu.addAction(modifier_templates)
+
+        file_menu.addSeparator()
         file_menu.addAction(character_templates)
         file_menu.addSeparator()
         file_menu.addAction(monster_templates)
         file_menu.addAction(scenario_templates)
         file_menu.addAction(location_templates)
-        file_menu.addAction(context_templates)
+        file_menu.addAction(map_templates)
 
 
     def settings_slot(self):
         Settings.get_data()
+
+
+    def about_action(self):
+        # TextDialog(TR().tr('About_text'))
+        QtWidgets.QMessageBox.about(self, "About Image Viewer",
+                                    "<p>The <b>Image Viewer</b> example shows how to combine "
+                                    "QLabel and QScrollArea to display an image. QLabel is "
+                                    "typically used for displaying text, but it can also display "
+                                    "an image. QScrollArea provides a scrolling view around "
+                                    "another widget. If the child widget exceeds the size of the "
+                                    "frame, QScrollArea automatically provides scroll bars.</p>"
+                                    "<p>The example demonstrates how QLabel's ability to scale "
+                                    "its contents (QLabel.scaledContents), and QScrollArea's "
+                                    "ability to automatically resize its contents "
+                                    "(QScrollArea.widgetResizable), can be used to implement "
+                                    "zooming and scaling features.</p>"
+                                    "<p>In addition the example shows how to use QPainter to "
+                                    "print an image.</p>")

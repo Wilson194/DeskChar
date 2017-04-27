@@ -6,6 +6,7 @@ from business.managers.TabWidgetManager import TabWidgetManager
 from presentation.layouts.Layout import Layout
 from structure.enums.ObjectType import ObjectType
 from presentation.Synchronizer import Synchronizer as Sync
+from structure.map.Map import Map
 
 
 class TabWidget(QtWidgets.QFrame):
@@ -14,7 +15,7 @@ class TabWidget(QtWidgets.QFrame):
     """
 
 
-    def __init__(self, parent, target_id: int, target_type: ObjectType):
+    def __init__(self, parent, target_id: int, target_type: ObjectType, mainWindow):
         super().__init__(parent)
 
         self.layouts_changed = []
@@ -24,6 +25,8 @@ class TabWidget(QtWidgets.QFrame):
 
         self.target_id = target_id
         self.target_type = target_type
+
+        self.mainWindow = mainWindow
 
         self.init_ui()
 
@@ -84,7 +87,7 @@ class TabWidget(QtWidgets.QFrame):
         self.init_data()
 
 
-    def tree_item_clicked(self, item):
+    def tree_item_clicked(self, treeItem):
         """
         Function for mapping tree item click
         :param item: tree item in tree widget, has data
@@ -94,8 +97,12 @@ class TabWidget(QtWidgets.QFrame):
             layout.save_data()
         self.layouts_changed.clear()
         Sync().delete_data('Input_synchronize')
-        item = item.data(0, 11)
-        self.change_object(item.id, ObjectType(item.object_type))
+        item = treeItem.data(0, 11)
+
+        if isinstance(item, Map):
+            self.mainWindow.redraw_context_widget(ObjectType.MAP, treeItem)
+        else:
+            self.change_object(item.id, ObjectType(item.object_type))
 
 
     def data_changed_slot(self, layout: Layout):

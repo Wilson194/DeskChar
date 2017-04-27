@@ -28,9 +28,17 @@ class ModifierDAO(DAO, IModifierDAO):
 
 
     def create(self, modifier: Modifier, nodeParentId: int = None, contextType: ObjectType = None) -> int:
-        print(modifier.itemTargetAttribute)
+        if modifier.valueType is ModifierValueTypes.TYPE_ARMOR_SIZE:
+            value = ArmorSize.by_name(ArmorSize, modifier.value).value
+        elif modifier.valueType is ModifierValueTypes.TYPE_WEAPON_HANDLING:
+            value = Handling.by_name(Handling, modifier.value).value
+        elif modifier.valueType is ModifierValueTypes.TYPE_WEAPON_WEIGHT:
+            value = WeaponWeight.by_name(WeaponWeight, modifier.value).value
+        else:
+            value = modifier.value
+
         intValues = {
-            'value'                   : modifier.value,
+            'value'                   : value,
             'valueType'               : modifier.valueType.value if modifier.valueType else None,
             'targetType'              : modifier.targetType.value if modifier.targetType else None,
             'characterTargetAttribute': modifier.characterTargetAttribute.value if modifier.characterTargetAttribute else None,
@@ -55,8 +63,17 @@ class ModifierDAO(DAO, IModifierDAO):
 
 
     def update(self, modifier: Modifier) -> None:
+        # if modifier.valueType is ModifierValueTypes.TYPE_ARMOR_SIZE:
+        #     value = ArmorSize.by_name(ArmorSize, modifier.value).value
+        # elif modifier.valueType is ModifierValueTypes.TYPE_WEAPON_HANDLING:
+        #     value = Handling.by_name(Handling, modifier.value).value
+        # elif modifier.valueType is ModifierValueTypes.TYPE_WEAPON_WEIGHT:
+        #     value = WeaponWeight.by_name(WeaponWeight, modifier.value).value
+        # else:
+        #     value = modifier.value
+
         intValues = {
-            'value'                   : modifier.value,
+            'value'                   : modifier.value if type(modifier.value) is int else modifier.value.value,
             'valueType'               : modifier.valueType.value if modifier.valueType else None,
             'targetType'              : modifier.targetType.value if modifier.targetType.value else None,
             'characterTargetAttribute': modifier.characterTargetAttribute.value if modifier.characterTargetAttribute else None,
@@ -92,24 +109,20 @@ class ModifierDAO(DAO, IModifierDAO):
         itemAttributeIndex = data.get('itemTargetAttribute', None)
 
         characterTargetAttribute = CharacterAttributes(characterAttributeIndex) if characterAttributeIndex is not None else None
-
         itemTargetAttribute = ItemsAttributes(itemAttributeIndex) if itemAttributeIndex is not None else None
 
         valueTypeIndex = data.get('valueType', None)
-        value = data.get('value', 0)
-        if itemTargetAttribute is ItemsAttributes.WEAPON_MELEE_HANDLING:
-            valueType = Handling(valueTypeIndex)
-            value = value
-        elif itemTargetAttribute is ItemsAttributes.WEAPON_WEIGHT:
-            valueType = WeaponWeight(valueTypeIndex)
-            value = value
+        valueType = ModifierValueTypes(valueTypeIndex) if valueTypeIndex else None
 
-        elif itemTargetAttribute is ItemsAttributes.ARMOR_SIZE:
-            valueType = ArmorSize(valueTypeIndex)
-            value = value
+        value = data.get('value', 0)
+        if valueType is ItemsAttributes.WEAPON_MELEE_HANDLING:
+            value = Handling(value)
+        elif valueType is ItemsAttributes.WEAPON_WEIGHT:
+            value = WeaponWeight(value)
+        elif valueType is ItemsAttributes.ARMOR_SIZE:
+            valueType = ArmorSize(value)
         else:
-            valueType = ModifierValueTypes(valueTypeIndex) if valueTypeIndex else None
-            value = data.get('value', 0)
+            value = value
 
         modifier = Modifier(modifier_id, lang, tr_data.get('name', ''),
                             tr_data.get('description', ''), valueType, value,

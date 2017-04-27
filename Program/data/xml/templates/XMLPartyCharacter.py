@@ -1,4 +1,5 @@
 from data.xml.templates.XMLCharacter import XMLCharacter
+from data.xml.templates.XMLMessage import XMLMessage
 from data.xml.templates.XMLTemplate import XMLTemplate
 from structure.enums.ObjectType import ObjectType
 from data.xml.templates.XMLTemplate import XInstance, XElement, XAttribElement
@@ -16,3 +17,5 @@ class XMLPartyCharacter(XMLTemplate):
         self.name = XElement('name')
 
         self.character = XInstance('character', XMLCharacter, True)
+
+        self.messages = XInstance('messages', XMLMessage)

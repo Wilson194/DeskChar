@@ -4,6 +4,9 @@ from structure.enums.Items import Items
 from structure.enums.ObjectType import ObjectType
 import os
 
+from operator import attrgetter
+from copy import deepcopy
+
 
 class ParserHandler:
     def create_xml(self, data: list, path: str = None):
@@ -13,15 +16,17 @@ class ParserHandler:
         for node in data:
             if node.object.object_type == ObjectType.CHARACTER:
                 scenario = node.object.DAO()().get(node.object.id, None, node.id, node.object.object_type)
-                root = scenario.XmlClass()().create_xml(scenario)
+                root = scenario.XmlClass()().create_xml(scenario, path=path)
 
             elif node.object.object_type == ObjectType.SCENARIO:
                 scenario = node.object.DAO()().get(node.object.id, None, node.id, node.object.object_type)
-                root = scenario.XmlClass()().create_xml(scenario)
+                root = scenario.XmlClass()().create_xml(scenario, path=path)
             else:
                 objs = node.object.DAO()().get_list(node.object.id, node.id, node.object.object_type)
-                child = objs[0].XmlClass()().create_xml(objs)
+                child = objs[0].XmlClass()().create_xml(objs, path=path)
                 root.append(child)
+
+        root = self.sort_tree(root)
 
         pathParts = path.split(os.sep)
         fileName = pathParts[-1]
@@ -67,3 +72,19 @@ class ParserHandler:
                 objects.append(obj)
 
         return objects
+
+
+    def sort_tree(self, root):
+        children = list(root)
+        newRoot = etree.Element(root.tag)
+        newRoot.text = root.text
+
+        for one in root.attrib:
+            newRoot.set(one, root.get(one))
+        sorted_list = sorted(children, key=attrgetter('tag'))
+
+        for item in sorted_list:
+            child = self.sort_tree(item)
+            newRoot.append(child)
+
+        return newRoot

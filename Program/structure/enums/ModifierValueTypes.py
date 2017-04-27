@@ -5,6 +5,9 @@ class ModifierValueTypes(AutoNumber):
     TO_TOTAL = ()
     FROM_BASE = ()
     FROM_TOTAL = ()
+    TYPE_ARMOR_SIZE = ()
+    TYPE_WEAPON_HANDLING = ()
+    TYPE_WEAPON_WEIGHT = ()
 
 
     def by_name(self, name):
@@ -15,6 +18,12 @@ class ModifierValueTypes(AutoNumber):
             return self.FROM_BASE
         if name == 'FROM_TOTAL':
             return self.FROM_TOTAL
+        if name == 'TYPE_ARMOR_SIZE':
+            return self.TYPE_ARMOR_SIZE
+        if name == 'TYPE_WEAPON_HANDLING':
+            return self.TYPE_WEAPON_HANDLING
+        if name == 'TYPE_WEAPON_WEIGHT':
+            return self.TYPE_WEAPON_WEIGHT
         return None
 
 

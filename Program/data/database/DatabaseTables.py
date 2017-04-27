@@ -77,6 +77,8 @@ class DatabaseTables:
             Column('weaponWeight', 'INTEGER'),
             Column('handling', 'INTEGER'),
             Column('amount', 'INTEGER'),
+            Column('racial', 'INTEGER'),
+
         ]
 
         try:
@@ -90,6 +92,7 @@ class DatabaseTables:
             Column('ID', 'INTEGER', True, False, True),
             Column('drd_race', 'INTEGER'),
             Column('drd_class', 'INTEGER'),
+            Column('level', 'INTEGER'),
 
         ]
 
@@ -211,7 +214,8 @@ class DatabaseTables:
             Column('text', 'TEXT'),
             Column('date', 'INTEGER'),
             Column('isMine', 'INTEGER'),
-            Column('partyCharacter_id', 'INTEGER'),
+            Column('partyCharacterId', 'INTEGER'),
+            Column('characterId', 'INTEGER'),
         ]
 
         try:
@@ -227,6 +231,7 @@ class DatabaseTables:
             Column('endurance', 'INTEGER'),
             Column('rampancy', 'INTEGER'),
             Column('mobility', 'INTEGER'),
+            Column('viability', 'INTEGER'),
             Column('perseverance', 'INTEGER'),
             Column('intelligence', 'INTEGER'),
             Column('charisma', 'INTEGER'),
@@ -313,7 +318,9 @@ class DatabaseTables:
             Column('object_type', 'INTEGER'),
             Column('object_id', 'INTEGER'),
             Column('number', 'INTEGER'),
-            Column('map_id', 'INTEGER')
+            Column('map_id', 'INTEGER'),
+            Column('itemType', 'INTEGER')
+
         ]
 
         mapItemForeigns = [

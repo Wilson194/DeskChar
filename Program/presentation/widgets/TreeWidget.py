@@ -70,13 +70,13 @@ class TreeWidget(QtWidgets.QFrame):
         self.treeWidget = QtWidgets.QTreeWidget(self)
         self.treeWidget.setObjectName("treeWidget")
         font = QtGui.QFont()
-        font.setPointSize(15)
+        font.setPointSize(18)
         self.treeWidget.setFont(font)
         self.treeWidget.setHeaderLabel(TR().tr(self.__data_type))
         self.treeWidget.header().setDefaultAlignment(QtCore.Qt.AlignCenter)
         self.treeWidget.header().setFrameStyle(QtWidgets.QFrame.StyledPanel)
         self.treeWidget.header().setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.treeWidget.header().setLineWidth(5)
+        self.treeWidget.header().setLineWidth(2)
 
         # self.treeWidget.header().setFrameShadow(QtWidgets.QFrame.Plain)
 
@@ -143,7 +143,8 @@ class TreeWidget(QtWidgets.QFrame):
 
             menu = QtWidgets.QMenu()
 
-            if isinstance(item, NodeObject) and item.object.object_type is ObjectType.ITEM and item.object.parent_id == -1:
+            if isinstance(item, NodeObject) and item.object.object_type is ObjectType.ITEM and (
+                    item.object.parent_id == -1 or item.object.parent_id == -2):
                 pass
             else:
                 delete_action = QtWidgets.QAction(TR().tr('Delete'), menu)
@@ -342,6 +343,7 @@ class TreeWidget(QtWidgets.QFrame):
             else:
                 icon = item.object.icon
                 object_icon = QtGui.QIcon(icon)
+
                 tree_item.setIcon(0, object_icon)
                 tree_item.setFlags(
                     tree_item.flags() | QtCore.Qt.ItemIsUserCheckable)

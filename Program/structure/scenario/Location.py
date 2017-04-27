@@ -65,12 +65,12 @@ class Location(Object):
     @property
     def treeChildren(self):
         return [ObjectType.LOCATION, ObjectType.ITEM, ObjectType.MONSTER,
-                ObjectType.CHARACTER] + super().treeChildren
+                ObjectType.CHARACTER, ObjectType.MAP] + super().treeChildren
 
 
     @property
     def icon(self):
-        return 'resources/icons/scroll.png'
+        return 'resources/icons/location.png'
 
 
     @property

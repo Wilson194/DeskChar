@@ -114,7 +114,7 @@ class Layout(QtWidgets.QVBoxLayout):
 
     def combo_box(self, grid: object, name: str, data: object, xposition: int, yposition: int,
                   synchronize: bool = False, xspan: int = 1,
-                  yspan: int = 1) -> QtWidgets.QComboBox:
+                  yspan: int = 1, haveNone: bool = True) -> QtWidgets.QComboBox:
         """
         Widget for combobox
         :param grid: parent grid
@@ -133,7 +133,8 @@ class Layout(QtWidgets.QVBoxLayout):
         if synchronize:
             self.synchronize(input)
         grid.addWidget(input, yposition, xposition + 1, yspan, xspan)
-        input.addItem(TR().tr('Select_value'))
+        if haveNone:
+            input.addItem(TR().tr('Select_value'))
         for value in data:
             Qdata = {'value': value}
             input.addItem(TR().tr(str(value)), QtCore.QVariant(Qdata))

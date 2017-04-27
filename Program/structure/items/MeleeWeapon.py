@@ -1,4 +1,5 @@
 from structure.enums.Handling import Handling
+from structure.enums.Races import Races
 from structure.enums.WeaponWeight import WeaponWeight
 from structure.items.Item import *
 
@@ -12,7 +13,8 @@ class MeleeWeapon(Item):
                  description: str = None, parent_id: int = None, weight: int = None,
                  price: int = None, strength: int = None,
                  rampancy: int = None, defence: int = None, length: int = None,
-                 weaponWeight: WeaponWeight = None, handling: Handling = None, amount: int = 1):
+                 weaponWeight: WeaponWeight = None, handling: Handling = None, amount: int = 1, initiative: int = None,
+                 racial: Races = None):
         super().__init__(id, lang, name, description, parent_id, weight, price, amount)
 
         self.__strength = strength
@@ -22,6 +24,8 @@ class MeleeWeapon(Item):
         self.__weaponWeight = weaponWeight
         self.__handling = handling
         self.__type = Items.MELEE_WEAPON
+        self.__initiative = initiative
+        self.__racial = racial
 
 
     def __name__(self):
@@ -110,3 +114,19 @@ class MeleeWeapon(Item):
     @property
     def type(self):
         return self.__type
+
+    @property
+    def racial(self):
+        return self.__racial
+
+    @racial.setter
+    def racial(self, value):
+        self.__racial = value
+
+    @property
+    def initiative(self):
+        return self.__initiative
+
+    @initiative.setter
+    def initiative(self, value):
+        self.__initiative = value

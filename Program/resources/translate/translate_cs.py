@@ -19,7 +19,8 @@ translate = {
     'Menu.monster'              : 'Příšery',
     'Menu.scenario'             : 'Dobrodružství',
     'Menu.location'             : 'Lokace',
-    'Menu.abilityContext'       : 'Kontext pro schopnosti',
+    'Menu.ability_context'      : 'Kontext pro schopnosti',
+    'Menu.map'                  : 'Editor map',
 
 
     'Name'                      : 'Jméno',
@@ -41,9 +42,9 @@ translate = {
     'Initiative'                : 'Iniciativa',
     'Strength'                  : 'Síla',
     'Rampancy'                  : 'Útočnost',
-    'RangeLow'                  : 'Range low',
-    'RangeMedium'               : 'Range medium',
-    'RangeHigh'                 : 'Range high',
+    'RangeLow'                  : 'Dostřel krátký',
+    'RangeMedium'               : 'Dostřel střední',
+    'RangeHigh'                 : 'Dostřel dlouhý',
     'Defence'                   : 'Obrana',
     'WeaponWeight'              : 'Váha zbraně',
     'Handling'                  : 'Držení',
@@ -53,6 +54,10 @@ translate = {
     'Capacity'                  : 'Kapacita',
     'Amount'                    : 'Množství',
     'Active'                    : 'Aktivní',
+    'Racial'                    : 'Rasová zbraň',
+    'WeightA'                   : 'Váha velikosti A',
+    'WeightB'                   : 'Váha velikosti B',
+    'WeightC'                   : 'Váha velikosti C',
 
 
     'Folder'                    : 'Složka',
@@ -129,6 +134,7 @@ translate = {
     'AFFECTS_ARMOR'             : 'Brnění',
     'AFFECTS_CONTAINER'         : 'Kontejner',
     'AFFECTS_MONEY'             : 'Peníze',
+    'AFFECTS_ALL_ITEMS'         : 'Všechny předměty',
 
     'WEIGHT'                    : 'Váha',
     'CONTAINER_CAPACITY'        : 'Kapacita kontejneru',
@@ -234,4 +240,30 @@ translate = {
     'D'                         : 'Velikost D',
     'E'                         : 'Velikost E',
 
+    'name'                      : 'Jméno',
+    'description'               : 'Popis',
+
+    'Add_monster'               : 'Přidat příšeru na mapu',
+    'Add_room'                  : 'Přidat místnost na mapu',
+    'Add_object_map'            : 'Přidat objekt na mapu',
+    'Add_item'                  : 'Přidat předmět na mapu',
+
+
+    'Open_map'                  : 'Přidat podkladouvou mapu',
+    'Zoom_in'                   : 'Přiblížit',
+    'Zoom_out'                  : 'Oddálit',
+    'Edit_information'          : 'Upravit informace',
+    'Edit_info'                 : 'Upravit popis mapy',
+
+    'About'                     : 'O aplikaci',
+
+
+    'About_text'                : '''
+Aplikace deskchar slouží jako podpůrná aplikace pro balíček mobchar pro hru Dračí doupě. 
+Je možné zde vytvářet šablony pro základní balíček pro hráče a také vytvářet rozlehlé dobrodružství pro pány jeskyně.
+Nově je možné vytvářet i jednoduché mapy s popisky.
+        
+Vývojáři:
+    Jan Horáček
+    ''',
 }

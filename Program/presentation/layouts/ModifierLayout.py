@@ -3,6 +3,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from business.managers.ModifierManager import ModifierManager
 from presentation.layouts.Layout import Layout
 from structure.effects.Modifier import Modifier
+from structure.enums.ArmorSize import ArmorSize
 from structure.enums.CharacterAttributes import CharacterAttributes
 from structure.enums.Handling import Handling
 from structure.enums.ItemsAttributes import ItemsAttributes
@@ -65,6 +66,10 @@ class ModifierLayout(Layout):
         self.valueInput = self.spin_box(self.inputGrid, 'Value', 0, 4, True)
         self.valueInput.setDisabled(True)
 
+        self.valueComboInput = self.combo_box(self.inputGrid, 'Value', [], 0, 4, True)
+        self.valueComboInput.hide()
+        self.valueComboInput.setDisabled(True)
+
         self.addLayout(self.inputGrid)
 
 
@@ -86,6 +91,7 @@ class ModifierLayout(Layout):
             self.targetAttributeInput.setDisabled(True)
             self.valueTypeInput.setDisabled(True)
             self.valueInput.setDisabled(True)
+            self.valueComboInput.setDisabled(True)
 
         elif ModifierTargetTypes(index) is ModifierTargetTypes.CHARACTER:
             data = CharacterAttributes
@@ -119,40 +125,74 @@ class ModifierLayout(Layout):
 
         self.valueTypeInput.setDisabled(False)
         self.valueInput.setDisabled(True)
+        self.valueComboInput.setDisabled(True)
 
         if index == 0:
             self.valueTypeInput.setDisabled(True)
 
-        elif ModifierTargetTypes(
-                self.targetTypeInput.currentIndex()) is ModifierTargetTypes.CHARACTER:
+        elif ModifierTargetTypes(self.targetTypeInput.currentIndex()) is ModifierTargetTypes.CHARACTER:
             self.valueTypeInput.clear()
             self.valueTypeInput.addItem(TR().tr('Select_value'))
-            for value in ModifierValueTypes:
+            for value in [ModifierValueTypes.FROM_BASE, ModifierValueTypes.FROM_TOTAL, ModifierValueTypes.TO_TOTAL]:
                 Qdata = {'value': value}
                 self.valueTypeInput.addItem(TR().tr(str(value)), QtCore.QVariant(Qdata))
             self.valueTypeInput.currentIndexChanged.connect(self.valueTypeChangedSlot)
 
         else:
+            self.valueComboInput.clear()
+            self.valueComboInput.addItem(TR().tr('Select_value'))
             self.valueTypeInput.clear()
             if ItemsAttributes(index) is ItemsAttributes.WEAPON_MELEE_HANDLING:
-                self.valueTypeInput.addItem(TR().tr('Select_value'))
-                for value in Handling:
-                    Qdata = {'value': value}
-                    self.valueTypeInput.addItem(TR().tr(str(value)), QtCore.QVariant(Qdata))
-                self.valueTypeInput.currentIndexChanged.connect(self.valueSetTypeSlot)
-
-            elif ItemsAttributes(index) is ItemsAttributes.WEAPON_WEIGHT:
-                self.valueTypeInput.addItem(TR().tr('Select_value'))
-                for value in WeaponWeight:
-                    Qdata = {'value': value}
-                    self.valueTypeInput.addItem(TR().tr(str(value)), QtCore.QVariant(Qdata))
-                self.valueTypeInput.currentIndexChanged.connect(self.valueSetTypeSlot)
-            else:
                 self.valueTypeInput.addItem(TR().tr('Select_value'))
                 for value in ModifierValueTypes:
                     Qdata = {'value': value}
                     self.valueTypeInput.addItem(TR().tr(str(value)), QtCore.QVariant(Qdata))
+                self.valueTypeInput.currentIndexChanged.connect(self.valueSetTypeSlot)
+                self.valueTypeInput.setCurrentIndex(ModifierValueTypes.TYPE_WEAPON_HANDLING.value)
+                self.valueTypeInput.setDisabled(True)
+                self.valueComboInput.show()
+                self.valueInput.hide()
+                self.valueComboInput.setDisabled(False)
+                for one in Handling:
+                    self.valueComboInput.addItem(TR().tr(one))
+
+            elif ItemsAttributes(index) is ItemsAttributes.WEAPON_WEIGHT:
+                self.valueTypeInput.addItem(TR().tr('Select_value'))
+                for value in ModifierValueTypes:
+                    Qdata = {'value': value}
+                    self.valueTypeInput.addItem(TR().tr(str(value)), QtCore.QVariant(Qdata))
+                self.valueTypeInput.currentIndexChanged.connect(self.valueSetTypeSlot)
+                self.valueTypeInput.setCurrentIndex(ModifierValueTypes.TYPE_WEAPON_WEIGHT.value)
+                self.valueTypeInput.setDisabled(True)
+                self.valueComboInput.show()
+                self.valueInput.hide()
+                self.valueComboInput.setDisabled(False)
+                for one in WeaponWeight:
+                    self.valueComboInput.addItem(TR().tr(one))
+
+            elif ItemsAttributes(index) is ItemsAttributes.ARMOR_SIZE:
+                self.valueTypeInput.addItem(TR().tr('Select_value'))
+                for value in ModifierValueTypes:
+                    Qdata = {'value': value}
+                    self.valueTypeInput.addItem(TR().tr(str(value)), QtCore.QVariant(Qdata))
+                self.valueTypeInput.currentIndexChanged.connect(self.valueSetTypeSlot)
+                self.valueTypeInput.setCurrentIndex(ModifierValueTypes.TYPE_ARMOR_SIZE.value)
+                self.valueTypeInput.setDisabled(True)
+                self.valueComboInput.show()
+                self.valueInput.hide()
+                self.valueComboInput.setDisabled(False)
+                for one in ArmorSize:
+                    self.valueComboInput.addItem(TR().tr(one))
+
+            else:
+                self.valueTypeInput.addItem(TR().tr('Select_value'))
+                for value in [ModifierValueTypes.FROM_BASE, ModifierValueTypes.FROM_TOTAL, ModifierValueTypes.TO_TOTAL]:
+                    Qdata = {'value': value}
+                    self.valueTypeInput.addItem(TR().tr(str(value)), QtCore.QVariant(Qdata))
                 self.valueTypeInput.currentIndexChanged.connect(self.valueTypeChangedSlot)
+
+                self.valueComboInput.hide()
+                self.valueInput.show()
 
 
     def valueTypeChangedSlot(self, index):
@@ -161,7 +201,35 @@ class ModifierLayout(Layout):
         :param index:
         :return:
         """
-        self.valueInput.setDisabled(False)
+        valuesType = ModifierValueTypes(self.valueTypeInput.currentIndex()) if self.valueTypeInput.currentIndex() > 0 else None
+
+        self.valueComboInput.clear()
+        self.valueComboInput.addItem(TR().tr('Select_value'))
+
+        if valuesType is ModifierValueTypes.TYPE_ARMOR_SIZE:
+            for value in ArmorSize:
+                Qdata = {'value': value}
+                self.valueComboInput.addItem(TR().tr(str(value)), QtCore.QVariant(Qdata))
+            self.valueComboInput.show()
+            self.valueInput.hide()
+            self.valueComboInput.setDisabled(False)
+        elif valuesType is ModifierValueTypes.TYPE_WEAPON_WEIGHT:
+            for value in WeaponWeight:
+                Qdata = {'value': value}
+                self.valueComboInput.addItem(TR().tr(str(value)), QtCore.QVariant(Qdata))
+            self.valueComboInput.show()
+            self.valueInput.hide()
+            self.valueComboInput.setDisabled(False)
+        elif valuesType is ModifierValueTypes.TYPE_WEAPON_HANDLING:
+            for value in Handling:
+                Qdata = {'value': value}
+                self.valueComboInput.addItem(TR().tr(str(value)), QtCore.QVariant(Qdata))
+            self.valueComboInput.show()
+            self.valueInput.hide()
+            self.valueComboInput.setDisabled(False)
+        else:
+            self.valueInput.show()
+            self.valueInput.setDisabled(False)
 
 
     def valueSetTypeSlot(self, index):
@@ -187,11 +255,14 @@ class ModifierLayout(Layout):
                 attributeType = ItemsAttributes(self.targetAttributeInput.currentIndex())
 
             if attributeType is ItemsAttributes.WEAPON_MELEE_HANDLING:
-                valueType = None
-                value = Handling(self.valueTypeInput.currentIndex())
+                valueType = ModifierValueTypes(self.valueTypeInput.currentIndex())
+                value = Handling(self.valueComboInput.currentIndex())
             elif attributeType is ItemsAttributes.WEAPON_WEIGHT:
-                valueType = None
+                valueType = ModifierValueTypes(self.valueTypeInput.currentIndex())
                 value = WeaponWeight(self.valueTypeInput.currentIndex())
+            elif attributeType is ItemsAttributes.ARMOR_SIZE:
+                valueType = ModifierValueTypes(self.valueTypeInput.currentIndex())
+                value = ArmorSize(self.valueComboInput.currentIndex())
             else:
                 valueType = ModifierValueTypes(self.valueTypeInput.currentIndex())
                 value = self.valueInput.value()
@@ -221,6 +292,7 @@ class ModifierLayout(Layout):
         self.targetAttributeInput.setCurrentIndex(targetAttributeIndex)
         self.valueTypeInput.setCurrentIndex(valueTypeIndex)
         self.valueInput.setValue(value)
+        self.valueComboInput.setCurrentIndex(value)
 
 
     def save_data(self):

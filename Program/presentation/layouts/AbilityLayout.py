@@ -43,8 +43,9 @@ class AbilityLayout(Layout):
         self.name_input = self.text_box(self.input_grid, 'Name', 0, 0)
         self.class_input = self.combo_box(self.input_grid, 'Class', Classes, 0, 1, True)
         self.race_input = self.combo_box(self.input_grid, 'Race', Races, 0, 2, True)
-        self.description_input = self.text_box(self.input_grid, 'Description', 0, 3)
-        self.chance_input = self.text_box(self.input_grid, 'Chance', 0, 4)
+        self.level_input = self.spin_box(self.input_grid, 'Level', 0, 3, True)
+        self.description_input = self.text_box(self.input_grid, 'Description', 0, 4)
+        self.chance_input = self.text_box(self.input_grid, 'Chance', 0, 5)
 
         self.addLayout(self.input_grid)
 
@@ -59,6 +60,7 @@ class AbilityLayout(Layout):
         self.name_input.setPlainText(ability.name)
         self.description_input.setPlainText(ability.description)
         self.chance_input.setPlainText(ability.chance)
+        self.level_input.setValue(ability.level if ability.level else 1)
         class_index = ability.drd_class.value if ability.drd_class is not None else 0
         race_index = ability.drd_race.value if ability.drd_race is not None else 0
 
@@ -73,6 +75,7 @@ class AbilityLayout(Layout):
         self.object.name = self.name_input.toPlainText()
         self.object.description = self.description_input.toPlainText()
         self.object.chance = self.chance_input.toPlainText()
+        self.object.level = self.level_input.value()
         class_index = self.class_input.currentIndex()
         race_index = self.race_input.currentIndex()
         self.object.drd_class = Classes(class_index) if class_index > 0 else None

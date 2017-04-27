@@ -2,11 +2,12 @@ from data.DAO.DAO import DAO
 from data.DAO.EffectDAO import EffectDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from data.DAO.interface.IItemDAO import IItemDAO
-from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
+from structure.enums.ArmorSize import ArmorSize
 from structure.enums.Handling import Handling
 from structure.enums.Items import Items
 from structure.enums.ObjectType import ObjectType
+from structure.enums.Races import Races
 from structure.enums.WeaponWeight import WeaponWeight
 from structure.items.Armor import Armor
 from structure.items.Container import Container
@@ -49,7 +50,7 @@ class ItemDAO(DAO, IItemDAO):
                 'weightA': item.weightA,
                 'weightB': item.weightB,
                 'weightC': item.weightC,
-                'size'   : item.size,
+                'size'   : item.size.value if item.size else None,
             })
 
         elif isinstance(item, Container):
@@ -64,8 +65,11 @@ class ItemDAO(DAO, IItemDAO):
                 'rampancy'    : item.rampancy,
                 'defence'     : item.defence,
                 'length'      : item.length,
+                'initiative'  : item.initiative,
                 'handling'    : item.handling.value if item.handling else None,
-                'weaponWeight': item.weaponWeight.value if item.weaponWeight else None
+                'weaponWeight': item.weaponWeight.value if item.weaponWeight else None,
+                'racial'      : item.racial.value if item.racial else None
+
             })
         elif isinstance(item, Money):
             intValues.update({
@@ -82,7 +86,8 @@ class ItemDAO(DAO, IItemDAO):
                 'rangeLow'    : item.rangeLow,
                 'rangeMedium' : item.rangeMedium,
                 'rangeHigh'   : item.rangeHigh,
-                'weaponWeight': item.weaponWeight.value if item.weaponWeight else None
+                'weaponWeight': item.weaponWeight.value if item.weaponWeight else None,
+                'racial'      : item.racial.value if item.racial else None
             })
         elif isinstance(item, ThrowableWeapon):
             intValues.update({
@@ -93,7 +98,8 @@ class ItemDAO(DAO, IItemDAO):
                 'rangeMedium' : item.rangeMedium,
                 'rangeHigh'   : item.rangeHigh,
                 'defence'     : item.defence,
-                'weaponWeight': item.weaponWeight.value if item.weaponWeight else None
+                'weaponWeight': item.weaponWeight.value if item.weaponWeight else None,
+                'racial'      : item.racial.value if item.racial else None
             })
 
         id = self.database.insert(self.DATABASE_TABLE, intValues)
@@ -132,7 +138,7 @@ class ItemDAO(DAO, IItemDAO):
                 'weightA': item.weightA,
                 'weightB': item.weightB,
                 'weightC': item.weightC,
-                'size'   : item.size,
+                'size'   : item.size.value,
 
             })
 
@@ -147,8 +153,10 @@ class ItemDAO(DAO, IItemDAO):
                 'rampancy'    : item.rampancy,
                 'defence'     : item.defence,
                 'length'      : item.length,
+                'initiative'  : item.initiative,
                 'handling'    : item.handling.value if item.handling else None,
-                'weaponWeight': item.weaponWeight.value if item.weaponWeight else None
+                'weaponWeight': item.weaponWeight.value if item.weaponWeight else None,
+                'racial'      : item.racial.value if item.racial else None
             })
         elif isinstance(item, Money):
             intValues.update({
@@ -165,7 +173,8 @@ class ItemDAO(DAO, IItemDAO):
                 'rangeLow'    : item.rangeLow,
                 'rangeMedium' : item.rangeMedium,
                 'rangeHigh'   : item.rangeHigh,
-                'weaponWeight': item.weaponWeight.value if item.weaponWeight else None
+                'weaponWeight': item.weaponWeight.value if item.weaponWeight else None,
+                'racial'      : item.racial.value if item.racial else None
             })
         elif isinstance(item, ThrowableWeapon):
             intValues.update({
@@ -176,7 +185,8 @@ class ItemDAO(DAO, IItemDAO):
                 'rangeMedium' : item.rangeMedium,
                 'rangeHigh'   : item.rangeHigh,
                 'defence'     : item.defence,
-                'weaponWeight': item.weaponWeight.value if item.weaponWeight else None
+                'weaponWeight': item.weaponWeight.value if item.weaponWeight else None,
+                'racial'      : item.racial.value if item.racial else None
             })
 
         self.database.update(self.DATABASE_TABLE, item.id, intValues)
@@ -222,15 +232,22 @@ class ItemDAO(DAO, IItemDAO):
             handlingIndex = data.get('handling', None)
             handling = Handling(handlingIndex) if handlingIndex else None
 
+            racialIndex = data.get('racial', None)
+            racial = Races(racialIndex) if racialIndex else None
+
             item = MeleeWeapon(item_id, lang, tr_data.get('name', ''),
                                tr_data.get('description', ''), data.get('parent_id', 0),
                                data.get('weight', 0), data.get('price', 0), data.get('strength', 0),
                                data.get('rampancy', 0), data.get('defence', 0),
-                               data.get('length', 0), weaponWeight, handling, data.get('amount', 1))
+                               data.get('length', 0), weaponWeight, handling, data.get('amount', 1), data.get('initiative', 0),
+                               racial)
 
         elif data['type'] == Items.THROWABLE_WEAPON.value:
             weaponWeightIndex = data.get('weaponWeight', None)
             weaponWeight = WeaponWeight(weaponWeightIndex) if weaponWeightIndex else None
+
+            racialIndex = data.get('racial', None)
+            racial = Races(racialIndex) if racialIndex else None
 
             item = ThrowableWeapon(item_id, lang, tr_data.get('name', ''),
                                    tr_data.get('description', ''),
@@ -239,11 +256,14 @@ class ItemDAO(DAO, IItemDAO):
                                    data.get('strength', 0), data.get('rampancy', 0),
                                    data.get('rangeLow', 0), data.get('rangeMedium', 0),
                                    data.get('rangeHigh', 0), data.get('defence', 0),
-                                   weaponWeight, data.get('amount', 1))
+                                   weaponWeight, data.get('amount', 1), racial)
 
         elif data['type'] == Items.RANGED_WEAPON.value:
             weaponWeightIndex = data.get('weaponWeight', None)
             weaponWeight = WeaponWeight(weaponWeightIndex) if weaponWeightIndex else None
+
+            racialIndex = data.get('racial', None)
+            racial = Races(racialIndex) if racialIndex else None
 
             item = RangeWeapon(item_id, lang, tr_data.get('name', ''),
                                tr_data.get('description', ''),
@@ -251,13 +271,15 @@ class ItemDAO(DAO, IItemDAO):
                                data.get('price', 0), data.get('initiative', 0),
                                data.get('strength', 0), data.get('rampancy', 0),
                                data.get('rangeLow', 0), data.get('rangeMedium', 0),
-                               data.get('rangeHigh', 0), data.get('amount', 1), weaponWeight)
+                               data.get('rangeHigh', 0), data.get('amount', 1), weaponWeight, racial)
 
         elif data['type'] == Items.ARMOR.value:
+            sizeIndex = data.get('size', None)
+            size = ArmorSize(sizeIndex) if sizeIndex else None
             item = Armor(item_id, lang, tr_data.get('name', ''), tr_data.get('description', ''),
                          data.get('parent_id', 0), data.get('price', 0), data.get('quality', 0),
                          data.get('weightA', 0), data.get('weightB', 0), data.get('weightC', 0),
-                         data.get('size', 0), data.get('amount', 1))
+                         size, data.get('amount', 1))
 
         elif data['type'] == Items.MONEY.value:
             item = Money(item_id, lang, tr_data.get('name', ''), tr_data.get('description', ''),

@@ -4,6 +4,7 @@ from data.xml.templates.XMLCharacter import XMLCharacter
 from data.xml.templates.XMLContainer import XMLContainer
 from data.xml.templates.XMLEffectl import XMLEffect
 from data.xml.templates.XMLItem import XMLItem
+from data.xml.templates.XMLMap import XMLMap
 from data.xml.templates.XMLMeleeWeapon import XMLMeleeWeapon
 from data.xml.templates.XMLMoney import XMLMoney
 from data.xml.templates.XMLMonster import XMLMonster
@@ -31,6 +32,7 @@ class XMLLocation(XMLTemplate):
 
         self.monsters = XInstance('monsters', XMLMonster)
         self.locations = XInstance('locations', XMLLocation)
+        self.maps = XInstance('maps', XMLMap)
 
         self.characters = XInstance('scenarioCharacters', XMLCharacter)
 

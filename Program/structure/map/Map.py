@@ -15,6 +15,8 @@ class Map(Object):
 
         self.__mapFile = mapFile
         self.__mapPixMap = None
+        self.__XMLMap = None
+        self.__finalMapPath = None
 
         self.__mapItems = []
         self.__mapItemDraws = []
@@ -34,7 +36,8 @@ class Map(Object):
 
     @staticmethod
     def XmlClass():
-        return None
+        from data.xml.templates.XMLMap import XMLMap
+        return XMLMap
 
 
     @staticmethod
@@ -108,3 +111,23 @@ class Map(Object):
 
     def addMapItemDraws(self, value):
         self.__mapItemDraws.append(value)
+
+
+    @property
+    def XMLMap(self):
+        return self.__XMLMap
+
+
+    @XMLMap.setter
+    def XMLMap(self, value):
+        self.__XMLMap = value
+
+
+    @property
+    def finalMapPath(self):
+        return self.__finalMapPath
+
+
+    @finalMapPath.setter
+    def finalMapPath(self, value):
+        self.__finalMapPath = value

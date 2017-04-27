@@ -1,5 +1,6 @@
 from data.xml.templates.XMLEffectl import XMLEffect
 from data.xml.templates.XMLTemplate import XMLTemplate, XElement, XAttribElement, XInstance
+from structure.enums.ArmorSize import ArmorSize
 from structure.enums.Items import Items
 
 
@@ -18,7 +19,7 @@ class XMLArmor(XMLTemplate):
         self.weightA = XElement('weightA')
         self.weightB = XElement('weightB')
         self.weightC = XElement('weightC')
-        self.size = XElement('size')
+        self.size = XElement('size', ArmorSize)
         self.amount = XElement('amount')
 
         self.effects = XInstance('effects', XMLEffect)

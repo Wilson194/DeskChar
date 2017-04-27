@@ -1,14 +1,18 @@
 from datetime import datetime, date
-
+import os
+import shutil
 from lxml import etree
+
+from structure.map.Map import Map
 
 
 class XElement:
-    def __init__(self, name: str, enum=None):
+    def __init__(self, name: str, enum=None, valueType=None):
         self.__value = None
         self.__name = name
         self.__xmlElement = None
         self.__enum = enum
+        self.__valueType = valueType
 
 
     @property
@@ -53,8 +57,12 @@ class XElement:
 
     def __create_xml_element(self):
         self.__xmlElement = etree.Element(self.__name)
-        if isinstance(self.__value, date):
+        if self.__valueType == 'DATETIME':
+            self.__xmlElement.text = str(self.__value.strftime('%d/%m/%Y %H:%M:%S'))
+        elif isinstance(self.__value, date):
             self.__xmlElement.text = str(self.__value.strftime('%d/%m/%Y'))
+        elif type(self.__value) == bool:
+            self.__xmlElement.text = str(self.__value).lower()
         else:
             self.__xmlElement.text = str(self.__value)
 
@@ -158,7 +166,7 @@ class XMLTemplate:
     OBJECT_TYPE = None
 
 
-    def create_xml(self, objects, rename=None):
+    def create_xml(self, objects, rename=None, path: str = None):
 
         if not self.ROOT_NAME:
             raise NotImplementedError('ROOT_NAME not defined')
@@ -171,6 +179,9 @@ class XMLTemplate:
         else:
             root = etree.Element(self.ROOT_NAME)
 
+        if self.ROOT_NAME is 'map':
+            self.create_image(objects[0], path)
+
         remapObjects = []
         for obj in objects:
             remapObjects.append(self.__attribute_name_remap(obj))
@@ -181,8 +192,12 @@ class XMLTemplate:
                     root.append(instance.xmlElement)
             elif isinstance(instance, XAttribElement):
                 for lang in remapObjects:
-                    if key in lang: #  and lang[key] is not None
-                        instance.value = (lang[key], lang[instance.attributeName])
+                    if key in lang:  # and lang[key] is not None
+                        if lang[key] is None:
+                            text = ''
+                        else:
+                            text = lang[key]
+                        instance.value = (text, lang[instance.attributeName])
                         root.append(instance.xmlElement)
             elif isinstance(instance, XInstance):
                 if remapObjects[0][key] is None:
@@ -200,13 +215,13 @@ class XMLTemplate:
                 add = False
                 if type(remapObjects[0][key]) is list:
                     for one in remapObjects[0][key]:
-                        child = instance.instance().create_xml(one, instance.rename)
+                        child = instance.instance().create_xml(one, instance.rename, path)
                         instanceRoot.append(child)
                         add = True
                     if add:
                         root.append(instanceRoot)
                 else:
-                    child = instance.instance().create_xml(remapObjects[0][key], instance.rename)
+                    child = instance.instance().create_xml(remapObjects[0][key], instance.rename, path)
                     root.append(child)
 
         return root
@@ -259,6 +274,20 @@ class XMLTemplate:
                                                                      attr)
 
         return objects
+
+
+    def create_image(self, map: Map, path: str):
+        directory = os.path.dirname(path)
+
+        resourcesDir = os.path.join(directory, 'resources')
+        if not os.path.exists(resourcesDir):
+            os.mkdir(resourcesDir)
+
+        source = os.path.join('resources', 'maps', 'exportedMap-{}.png'.format(map.id))
+        destination = os.path.join(resourcesDir, map.XMLMap)
+        # print(source)
+        # print(destination)
+        shutil.copy2(source, destination)
 
 
     def __remap_xml_group(self, rootTag, instances):

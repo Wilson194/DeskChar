@@ -1,6 +1,7 @@
 from data.xml.templates.XMLEffectl import XMLEffect
 from data.xml.templates.XMLTemplate import XMLTemplate, XElement, XAttribElement, XInstance
 from structure.enums.Items import Items
+from structure.enums.Races import Races
 from structure.enums.WeaponWeight import WeaponWeight
 
 
@@ -25,5 +26,6 @@ class XMLRangeWeapon(XMLTemplate):
         self.amount = XElement('amount')
 
         self.weaponWeight = XElement('weaponWeight', WeaponWeight)
+        self.racial = XElement('racial', Races)
 
         self.effects = XInstance('effects', XMLEffect)

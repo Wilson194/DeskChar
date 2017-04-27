@@ -60,7 +60,7 @@ class MonsterDAO(DAO):
             'name'       : monster.name,
             'description': monster.description,
             'offense'    : monster.offense,
-            'viability': monster.viability,
+            'viability'  : monster.viability,
         }
 
         id = self.database.insert(self.DATABASE_TABLE, intValues)
@@ -90,7 +90,6 @@ class MonsterDAO(DAO):
         :param spell: Spell object with new data
         """
         intValues = {
-            'viability'   : monster.viability,
             'defense'     : monster.defense,
             'endurance'   : monster.endurance,
             'rampancy'    : monster.rampancy,
@@ -109,10 +108,10 @@ class MonsterDAO(DAO):
             'name'       : monster.name,
             'description': monster.description,
             'offense'    : monster.offense,
+            'viability'  : monster.viability,
         }
 
         self.database.update(self.DATABASE_TABLE, monster.id, intValues)
-
         self.database.update_translate(strValues, monster.lang, monster.id, self.TYPE)
 
 

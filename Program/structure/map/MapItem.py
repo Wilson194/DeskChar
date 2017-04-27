@@ -1,23 +1,46 @@
 from PyQt5.QtCore import QPointF
 
+from structure.enums.MapItem import MapItemType
+from structure.enums.ObjectType import ObjectType
 from structure.general.Object import Object
 
 
 class MapItem(Object):
     def __init__(self, id: int = None, name: str = None, description: str = None,
                  coord: QPointF = None, scale: int = None, number: int = None,
-                 object: object = None, mapId: int = None):
+                 object: object = None, mapId: int = None, itemType: MapItemType = None):
         super().__init__(id, None, name, description)
 
-        self.__icon = 'resources/icons/imp.png'
+        self.__itemType = itemType
         self.__coord = coord
         self.__scale = scale
         self.__object = object
-        self.__name = None
-        self.__description = None
+        self.__name = name
+        self.__description = description
         self.__number = number
         self.__mapId = mapId
 
+
+    @staticmethod
+    def DAO():
+        from data.DAO.MapItemDAO import MapItemDAO
+        return MapItemDAO
+
+
+    @staticmethod
+    def XmlClass():
+        from data.xml.templates.XMLMapItem import XMLMapItem
+        return XMLMapItem
+
+
+    @property
+    def object_type(self):
+        return ObjectType.MAP_ITEM
+
+    def __name__(self):
+        names = super().__name__()
+        names.append('MapItem')
+        return names
 
     @property
     def coord(self):
@@ -78,18 +101,32 @@ class MapItem(Object):
     def number(self, value):
         self.__number = value
 
+
     @property
     def icon(self):
         return self.__icon
+
 
     @icon.setter
     def icon(self, value):
         self.__icon = value
 
+
     @property
     def mapId(self):
         return self.__mapId
 
+
     @mapId.setter
     def mapId(self, value):
         self.__mapId = value
+
+
+    @property
+    def itemType(self):
+        return self.__itemType
+
+
+    @itemType.setter
+    def itemType(self, value):
+        self.__itemType = value

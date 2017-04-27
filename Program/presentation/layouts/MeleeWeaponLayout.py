@@ -2,6 +2,7 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from business.managers.ItemManager import ItemManager
 from structure.enums.Handling import Handling
+from structure.enums.Races import Races
 from structure.enums.WeaponWeight import WeaponWeight
 from presentation.layouts.Layout import Layout
 from structure.items.MeleeWeapon import MeleeWeapon
@@ -48,11 +49,11 @@ class MeleeWeaponLayout(Layout):
         self.rampancy_input = self.spin_box(self.input_grid, 'Rampancy', 0, 5, True)
         self.defence_input = self.spin_box(self.input_grid, 'Defence', 0, 6, True)
         self.length_input = self.spin_box(self.input_grid, 'Length', 0, 7, True)
-        self.weapon_weight_input = self.combo_box(self.input_grid, 'WeaponWeight', WeaponWeight, 0,
-                                                  8, True)
-        self.handling_input = self.combo_box(self.input_grid, 'Handling', Handling, 0,
-                                             9, True)
-        self.amount_input = self.spin_box(self.input_grid, 'Amount', 0, 10, True)
+        self.initiative_input = self.spin_box(self.input_grid, 'Initiative', 0, 8, True)
+        self.weapon_weight_input = self.combo_box(self.input_grid, 'WeaponWeight', WeaponWeight, 0, 9, True, haveNone=False)
+        self.handling_input = self.combo_box(self.input_grid, 'Handling', Handling, 0, 10, True, haveNone=False)
+        self.racial_input = self.combo_box(self.input_grid, 'Racial', Races, 0, 11, True)
+        self.amount_input = self.spin_box(self.input_grid, 'Amount', 0, 12, True)
 
         self.addLayout(self.input_grid)
 
@@ -73,12 +74,15 @@ class MeleeWeaponLayout(Layout):
         self.defence_input.setValue(item.defence if item.length else 0)
         self.length_input.setValue(item.length if item.length else 0)
         self.amount_input.setValue(item.amount)
+        self.initiative_input.setValue(item.initiative if item.initiative else 0)
 
-        handling_index = item.handling.value if item.handling is not None else 0
-        weapon_weight_index = item.weaponWeight.value if item.weaponWeight is not None else 0
+        handling_index = item.handling.value if item.handling is not None else 1
+        weapon_weight_index = item.weaponWeight.value if item.weaponWeight is not None else 1
+        racial_index = item.racial.value if item.racial is not None else 0
 
-        self.handling_input.setCurrentIndex(handling_index)
-        self.weapon_weight_input.setCurrentIndex(weapon_weight_index)
+        self.handling_input.setCurrentIndex(handling_index-1)
+        self.weapon_weight_input.setCurrentIndex(weapon_weight_index-1)
+        self.racial_input.setCurrentIndex(racial_index)
 
 
     def save_data(self):
@@ -94,11 +98,14 @@ class MeleeWeaponLayout(Layout):
         self.object.defence = self.defence_input.value()
         self.object.length = self.length_input.value()
         self.object.amount = self.amount_input.value()
+        self.object.initiative = self.initiative_input.value()
 
         handling_index = self.handling_input.currentIndex()
         weapon_weight_index = self.weapon_weight_input.currentIndex()
+        racial_index = self.racial_input.currentIndex()
 
-        self.object.handling = Handling(handling_index) if handling_index > 0 else None
-        self.object.weaponWeight = WeaponWeight(weapon_weight_index) if weapon_weight_index > 0 else None
+        self.object.handling = Handling(handling_index+1)
+        self.object.weaponWeight = WeaponWeight(weapon_weight_index+1)
+        self.object.racial = Races(racial_index) if racial_index > 0 else None
 
         self.item_manager.update(self.object)

@@ -22,7 +22,7 @@ class MessageDAO(DAO):
         :param character: Character object
         :return: id of autoincrement
         """
-        curDate = datetime.strptime(message.date, '%d/%m/%Y') if message.date else None
+        curDate = datetime.strptime(message.date, '%d/%m/%Y %H:%M:%S') if message.date else None
 
         if type(message.isMine) is str:
             isMine = True if message.isMine == 'true' else False
@@ -30,9 +30,11 @@ class MessageDAO(DAO):
             isMine = message.isMine
 
         intValues = {
-            'text'  : message.text,
-            'date'  : curDate.toordinal() if curDate else None,
-            'isMine': int(isMine)
+            'text'            : message.text,
+            'date'            : curDate.toordinal() if curDate else None,
+            'isMine'          : int(isMine),
+            'characterId'     : message.characterId,
+            'partyCharacterId': message.partyCharacterId
         }
 
         id = self.database.insert(self.DATABASE_TABLE, intValues)
@@ -80,11 +82,27 @@ class MessageDAO(DAO):
 
         data = dict(self.database.select(self.DATABASE_TABLE, {'ID': message_id})[0])
 
-        curDate = date.fromordinal(data.get('date')) if data.get('date') else None
+        curDate = datetime.fromordinal(data.get('date')) if data.get('date') else None
 
-        message = Message(message_id, data['text'], curDate, bool(data['isMine']))
+        message = Message(message_id, data['text'], curDate, bool(data['isMine']), data.get('partyCharacterId'),
+                          data.get('characterId'))
 
         return message
+
+
+    def get_by_party_character(self, partyCharacterId: int) -> list:
+        select = self.database.select(self.DATABASE_TABLE, {'partyCharacterId': partyCharacterId})
+
+        messages = []
+        for one in select:
+            data = dict(one)
+            curDate = date.fromordinal(data.get('date')) if data.get('date') else None
+            message = Message(data.get('id'), data.get('text', ''), curDate, bool(data['isMine']), data.get('partyCharacterId'),
+                              None)
+
+            messages.append(message)
+
+        return messages
 
 
     def get_all(self, lang=None) -> list:

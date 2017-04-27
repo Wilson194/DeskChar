@@ -1,5 +1,6 @@
 from PyQt5.QtCore import QPointF
 from data.database.Database import Database
+from structure.enums.MapItem import MapItemType
 from structure.enums.ObjectType import ObjectType
 from structure.map.MapItem import MapItem
 
@@ -26,6 +27,7 @@ class MapItemDAO():
             'positionX'  : X,
             'positionY'  : Y,
             'map_id'     : mapItem.mapId,
+            'itemType'   : mapItem.itemType.value
         }
         id = self.database.insert(self.DATABASE_TABLE, values)
 
@@ -36,7 +38,6 @@ class MapItemDAO():
         X = mapItem.coord.x()
         Y = mapItem.coord.y()
 
-        print(X, Y)
 
         values = {
             'name'       : mapItem.name,
@@ -70,8 +71,10 @@ class MapItemDAO():
 
         coord = QPointF(data.get('positionX', 0), data.get('positionY', 0))
 
+        itemType = MapItemType(data.get('itemType'))
+
         mapitem = MapItem(mapitem_id, data.get('name', ''), data.get('description', ''), coord,
-                          data.get('scale', 0), data.get('number', 0), None, data.get('map_id'))
+                          data.get('scale', 0), data.get('number', 0), None, data.get('map_id'), itemType)
 
         return mapitem
 
