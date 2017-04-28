@@ -2,6 +2,7 @@ import sqlite3
 import zipfile
 import os
 import shutil
+import glob
 
 
 class DrdFile:
@@ -31,7 +32,7 @@ class DrdFile:
         :param path: 
         :return: 
         """
-        os.mkdir('temp')
+        os.mkdir('temp', 777)
 
         shutil.rmtree('resources/maps')
         os.mkdir('resources/maps')
@@ -41,7 +42,8 @@ class DrdFile:
 
         self._load_db('temp/database')
 
-        shutil.copy2('temp/maps', 'resources/maps')
+        for filename in glob.glob(os.path.join('temp/maps/*.*')):
+            shutil.copy2(filename, 'resources/maps/')
 
         shutil.rmtree('temp')
 

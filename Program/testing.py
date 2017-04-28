@@ -102,5 +102,5 @@ from data.drdFile.drdFile import DrdFile
 
 
 a = DrdFile()
-a.create('C:/Users/horac/Desktop/test.drd')
-# a.open('C:/Users/horac/Desktop/test.drd')
+# a.create('C:/Users/horac/Desktop/test.drd')
+a.open('C:/Users/horac/Desktop/Patalie.drd')

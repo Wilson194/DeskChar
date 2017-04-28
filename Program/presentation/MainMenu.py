@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QMenuBar, QAction, qApp
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtCore, QtWidgets
 
+from data.drdFile.drdFile import DrdFile
 from presentation.Translate import Translate as TR
 from presentation.dialogs.Settings import Settings
 from presentation.dialogs.TextDialog import TextDialog
@@ -37,11 +38,13 @@ class MainMenu(QMenuBar):
                               self)
         open_action.setShortcut('Ctrl+O')
         open_action.setStatusTip('Open file')
+        open_action.triggered.connect(self.open_slot)
 
         save_action = QAction(QIcon('resources/icons/save.png'), TR().tr('Menu_save'),
                               self)
         save_action.setShortcut('Ctrl+S')
         save_action.setStatusTip('Save file')
+        save_action.triggered.connect(self.save_slot)
 
         settings_action = QAction(QIcon('resources/icons/settings.png'), TR().tr('Menu_settings'),
                                   self)
@@ -152,3 +155,27 @@ class MainMenu(QMenuBar):
                                     "zooming and scaling features.</p>"
                                     "<p>In addition the example shows how to use QPainter to "
                                     "print an image.</p>")
+
+
+    def open_slot(self):
+        options = QtWidgets.QFileDialog.Options()
+        options |= QtWidgets.QFileDialog.DontUseNativeDialog
+        types = "DrD Files (*.drd)"
+        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(None, TR().tr("File_select_open"),
+                                                            "", types, options=options)
+
+        if fileName:
+            DrdFile().open(fileName)
+            self.templates_menu_signal.emit(ObjectType.SCENARIO)
+
+
+    def save_slot(self):
+        options = QtWidgets.QFileDialog.Options()
+        options |= QtWidgets.QFileDialog.DontUseNativeDialog
+        types = "DrD Files (*.drd)"
+        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(None, TR().tr("File_select_target"),
+                                                            "", types, options=options)
+
+        if fileName:
+            DrdFile().create(fileName)
+            TextDialog('File saved')
