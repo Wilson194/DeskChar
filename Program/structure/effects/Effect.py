@@ -108,14 +108,9 @@ class Effect(Object):
 
 
     def __eq__(self, other):
-        if not isinstance(other, Effect):
-            return False
-
-        if super().__eq__(other) \
-                and self.__targetId == other.targetId \
-                and self.__targetType == other.targetType \
-                and self.__modifiers == other.modifiers:
-            return True
+        if isinstance(other, Effect):
+            if super().__eq__(other) and self.__targetType == other.targetType and self.__active == other.active:
+                return True
 
         return False
 

@@ -7,6 +7,11 @@ from structure.map.Map import Map
 
 
 class XElement:
+    """
+    Element for store and import single attribute in XML
+    """
+
+
     def __init__(self, name: str, enum=None, valueType=None):
         self.__value = None
         self.__name = name
@@ -36,16 +41,19 @@ class XElement:
         return self.__name
 
 
+    @property
+    def enum(self):
+        return self.__enum
+
+
     def set_attributes(self, objects: dict, name: str, attr):
+        """
+        Set attribute in object
+        """
         for obj in objects.values():
             if self.__enum:
                 setattr(obj, name, self.__enum.by_name(self.__enum, attr.text))
             else:
-                # lang = attr.get('lang')
-                # if lang:
-                #     value = attr.text
-                # else:
-                #     value = int(attr.text)
                 try:
                     value = int(attr.text)
                 except:
@@ -56,6 +64,9 @@ class XElement:
 
 
     def __create_xml_element(self):
+        """
+        Create xml element        
+        """
         self.__xmlElement = etree.Element(self.__name)
         if self.__valueType == 'DATETIME':
             self.__xmlElement.text = str(self.__value.strftime('%d/%m/%Y %H:%M:%S'))
@@ -64,10 +75,17 @@ class XElement:
         elif type(self.__value) == bool:
             self.__xmlElement.text = str(self.__value).lower()
         else:
+            if self.__value is None:
+                self.__value = 0
             self.__xmlElement.text = str(self.__value)
 
 
 class XAttribElement:
+    """
+    Element for store value with attribute, usually lang
+    """
+
+
     def __init__(self, name: str, attribute: str):
         self.__name = name
         self.__attributeName = attribute
@@ -98,6 +116,7 @@ class XAttribElement:
 
     def __create_xml_element(self):
         attributes = {self.__attributeName: self.__value[1]}
+
         self.__xmlElement = etree.Element(self.__name, **attributes)
         self.__xmlElement.text = str(self.__value[0])
 
@@ -114,6 +133,11 @@ class XAttribElement:
 
 
 class XInstance:
+    """
+    Element for include another XML object in XML object
+    """
+
+
     def __init__(self, name: str, instance: object, single: bool = False, rename: str = None):
         self.__name = name
         self.__instance = instance
@@ -167,7 +191,13 @@ class XMLTemplate:
 
 
     def create_xml(self, objects, rename=None, path: str = None):
-
+        """
+        Create xml tree for current objects
+        :param objects: list of objects, or single object
+        :param rename: name if you want rename tag
+        :param path: path for map tag
+        :return: lxml root with objects
+        """
         if not self.ROOT_NAME:
             raise NotImplementedError('ROOT_NAME not defined')
 
@@ -187,9 +217,12 @@ class XMLTemplate:
             remapObjects.append(self.__attribute_name_remap(obj))
         for key, instance in self.__dict__.items():
             if isinstance(instance, XElement):
-                if key in remapObjects[0].keys() and remapObjects[0][key] is not None:
-                    instance.value = remapObjects[0][key]
-                    root.append(instance.xmlElement)
+                if key in remapObjects[0].keys():  # and remapObjects[0][key] is not None:
+                    if not remapObjects[0][key] and instance.enum is not None:
+                        continue
+                    else:
+                        instance.value = remapObjects[0][key]
+                        root.append(instance.xmlElement)
             elif isinstance(instance, XAttribElement):
                 for lang in remapObjects:
                     if key in lang:  # and lang[key] is not None
@@ -227,7 +260,12 @@ class XMLTemplate:
         return root
 
 
-    def import_xml(self, root):
+    def import_xml(self, root) -> list:
+        """
+        Import xml and create objects from given root
+        :param root: root of lxml tree
+        :return: list of objects
+        """
         if not self.OBJECT_TYPE:
             raise NotImplementedError('OBJECT_TYPE not defined')
         if not self.ROOT_NAME:
@@ -277,6 +315,11 @@ class XMLTemplate:
 
 
     def create_image(self, map: Map, path: str):
+        """
+        Create image, if exporting map
+        :param map: Map object 
+        :param path: path to source map        
+        """
         directory = os.path.dirname(path)
 
         resourcesDir = os.path.join(directory, 'resources')
@@ -285,8 +328,6 @@ class XMLTemplate:
 
         source = os.path.join('resources', 'maps', 'exportedMap-{}.png'.format(map.id))
         destination = os.path.join(resourcesDir, map.XMLMap)
-        # print(source)
-        # print(destination)
         shutil.copy2(source, destination)
 
 

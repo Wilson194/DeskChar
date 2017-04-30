@@ -1,3 +1,4 @@
+from data.DAO.interface.IPlayerTreeDAO import IPlayerTreeDAO
 from data.database.Database import Database
 from structure.enums.ObjectType import ObjectType
 from structure.enums.NodeType import NodeType
@@ -6,7 +7,7 @@ from structure.tree.NodeObject import NodeObject
 from structure.tree.Node import Node
 
 
-class PlayerTreeDAO:
+class PlayerTreeDAO(IPlayerTreeDAO):
     """
     DAO for tree widget
     """
@@ -30,6 +31,12 @@ class PlayerTreeDAO:
 
 
     def get_nodes_search(self, targetType: ObjectType, text: str):
+        """
+        Get nodes witch name contain searched text
+        :param targetType: Type of object in node
+        :param text: searching text
+        :return: list of nodes with text included
+        """
         data = self.database.select(self.TABLE_NAME, {'parent_type': targetType.value,
                                                       'name'       : ('like', '%' + text + '%')})
         return map_objects(data)
@@ -47,12 +54,10 @@ class PlayerTreeDAO:
 
     def get_children_objects(self, parentNodeId: int, contextType: ObjectType) -> list:
         """
-        Recursively find all child object of give type
-        :param targetType:
-        :param nodeId:
-        :param parentType:
-        :param objects:
-        :return:
+        Recursively find all child object of give type, only first level object (folders will be skipped and searching deep
+        :param parentNodeId parent node, where you finding
+        :param contextType object type of tree
+        :return: list of objects in tree
         """
 
         nodes = self.get_children_nodes(contextType, parentNodeId)
@@ -65,6 +70,7 @@ class PlayerTreeDAO:
                 objects.append(node)
 
         return objects
+
 
     def __get_children_objects(self, targetType, nodeId, parentType, objects: list = None, direct: bool = False):
         if objects is None:
@@ -92,7 +98,6 @@ class PlayerTreeDAO:
         """
         data = self.database.select(self.TABLE_NAME,
                                     {'parent_id': parent_id, 'parent_type': contextType.value})
-
 
         return map_objects(data)
 
@@ -152,6 +157,11 @@ class PlayerTreeDAO:
 
 
     def get_node_by_object(self, object: object):
+        """
+        Return node based on object
+        :param object: object that you finding
+        :return: ObjectNode with object 
+        """
         data = self.database.select(self.TABLE_NAME,
                                     {'target_id'  : object.id,
                                      'parent_type': object.object_type.value})

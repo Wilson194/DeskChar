@@ -6,10 +6,12 @@ import threading
 
 from presentation.dialogs.AddAnotherObject import AddAnotherObject
 from presentation.dialogs.TextDialog import TextDialog
+from structure.enums.Items import Items
 from structure.enums.NodeType import NodeType
 from business.managers.PlayerTreeManager import PlayerTreeManager
 from structure.enums.ObjectType import ObjectType
 from structure.items.Container import Container
+from structure.items.Item import Item
 from structure.tree.Folder import Folder
 from presentation.dialogs.NewTreeItem import NewTreeItem
 from presentation.Translate import Translate as TR
@@ -28,11 +30,12 @@ class TreeWidget(QtWidgets.QFrame):
     item_doubleclick_signal = QtCore.pyqtSignal(object)
 
 
-    def __init__(self, parent, data_type: ObjectType = None):
+    def __init__(self, parent, data_type: ObjectType = None, mainWindow=None):
         super().__init__(parent)
 
         self.tree_manager = PlayerTreeManager()
 
+        self.mainWindow = mainWindow
         self.__data_type = data_type
         self.checking = False
         self.export_menu = ExportMenu(self)
@@ -144,7 +147,7 @@ class TreeWidget(QtWidgets.QFrame):
             menu = QtWidgets.QMenu()
 
             if isinstance(item, NodeObject) and item.object.object_type is ObjectType.ITEM and (
-                    item.object.parent_id == -1 or item.object.parent_id == -2):
+                            item.object.parent_id == -1 or item.object.parent_id == -2):
                 pass
             else:
                 delete_action = QtWidgets.QAction(TR().tr('Delete'), menu)
@@ -183,6 +186,7 @@ class TreeWidget(QtWidgets.QFrame):
         # XXXXXXXXXXXXXXXXXX DELETE ACTION XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         if action.data() == 'delete':
             self.tree_manager.delete_node(node, targetObject)
+            # self.mainWindow.redraw_context_widget(None, None)
             self.draw_data()
         # XXXXXXXXXXXXXXXXXX NEW ITEM ACTION XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         elif action.data() == 'new':
@@ -410,7 +414,10 @@ class TreeWidget(QtWidgets.QFrame):
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self, TR().tr("File_select_open"),
                                                             "", types, options=options)
         if fileName:
-            self.tree_manager.import_from_xml(fileName, self.__data_type, parent, True)
+            try:
+                self.tree_manager.import_from_xml(fileName, self.__data_type, parent, True)
+            except:
+                TextDialog('Export failed')
             self.draw_data()
 
 
@@ -420,11 +427,15 @@ class TreeWidget(QtWidgets.QFrame):
         :param item: item clicked on
         """
         if item.data(0, 12).nodeType.value is not 1:
-            self.item_doubleclick_signal.emit(item)
-            if item.isExpanded():
-                item.setExpanded(False)
-            else:
-                item.setExpanded(True)
+            # Skip inventory and ground
+            obj = item.data(0, 12).object
+            if not (obj.object_type is ObjectType.ITEM and obj.type is Items.CONTAINER and (
+                    obj.parent_id == -1 or obj.parent_id == -2)):
+                self.item_doubleclick_signal.emit(item)
+        if item.isExpanded():
+            item.setExpanded(False)
+        else:
+            item.setExpanded(True)
 
 
 class ExportMenu(QtWidgets.QHBoxLayout):
@@ -462,6 +473,8 @@ class ExportMenu(QtWidgets.QHBoxLayout):
         button_exportHTML.clicked.connect(self.export_html_signal)
         button_cancel.clicked.connect(self.export_buttons_cancel_slot)
         self.export_menu_layout.addWidget(button_cancel)
+
+        button_exportHTML.setDisabled(True)
 
         self.__parent.frame_layout.insertLayout(1, self.export_menu_layout)
 

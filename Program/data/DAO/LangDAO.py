@@ -1,8 +1,9 @@
+from data.DAO.interface.ILangDAO import ILangDAO
 from data.database.Database import Database
 from structure.general.Lang import Lang
 
 
-class LangDAO:
+class LangDAO(ILangDAO):
     """
     DAO for lang
     """
@@ -42,7 +43,7 @@ class LangDAO:
         return self.__map_objects(data)[0] if len(data) > 0 else None
 
 
-    def create_lang(self, lang: Lang):
+    def create_lang(self, lang: Lang) -> int:
         """
         Create new lang
         :param lang: lang object

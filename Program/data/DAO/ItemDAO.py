@@ -31,6 +31,15 @@ class ItemDAO(DAO, IItemDAO):
 
 
     def create(self, item: Item, nodeParentId: int = None, contextType: ObjectType = None) -> int:
+        """
+        Create new Item, depend on item type, insert correct data
+        Items types:
+            Item, Armor, Container, MeleeWeapon, ThrowableWeapon, RangedWeapon, Money
+        :param item: Item object
+        :param nodeParentId: id of parent node in tree
+        :param contextType: Object type of tree, where item is located
+        :return: id of created item
+        """
         if not contextType:
             contextType = self.TYPE
 
@@ -122,6 +131,10 @@ class ItemDAO(DAO, IItemDAO):
 
 
     def update(self, item: Item):
+        """
+        Update item in database
+        :param item: Item object with new data
+        """
         strValues = {
             'name'       : item.name,
             'description': item.description
@@ -194,12 +207,21 @@ class ItemDAO(DAO, IItemDAO):
 
 
     def delete(self, item_id: int):
+        """
+        Delete Item from database and from translate
+        :param item_id: id of Item
+        """
         self.database.delete(self.DATABASE_TABLE, item_id)
         self.database.delete_where('translates',
                                    {'target_id': item_id, 'type': ObjectType.ITEM})
 
 
     def get_all(self, lang=None) -> list:
+        """
+        Get list of items for selected lang
+        :param lang: lang of items
+        :return: list of items
+        """
         if lang is None:  # TODO : default lang
             lang = 'cs'
         lines = self.database.select_all('Item')
@@ -212,9 +234,27 @@ class ItemDAO(DAO, IItemDAO):
 
 
     def get(self, item_id: int, lang=None, nodeId: int = None, contextType: ObjectType = None) -> Item:
+        """
+        Get Item , object transable attributes depends on lang
+        If nodeId and contextType is specified, whole object is returned (with all sub objects)
+        If not specified, only basic attributes are set.        
+        
+        Returned correct type of item, depend on database, possible classes are:
+                Item, Container, Armor, Money, MeleeWeapon, RangedWeapon, ThrowableWeapon
+        :param item_id: id of Item
+        :param lang: lang of object
+        :param nodeId: id of node in tree, where object is located
+        :param contextType: object type of tree, where is node
+        :return: Item object
+        """
         if lang is None:
             lang = 'cs'
-        data = dict(self.database.select(self.DATABASE_TABLE, {'ID': item_id})[0])
+        data = self.database.select(self.DATABASE_TABLE, {'ID': item_id})
+        if not data:
+            return None
+        else:
+            data = dict(data[0])
+
         tr_data = dict(self.database.select_translate(item_id, ObjectType.ITEM.value,
                                                       lang))
 

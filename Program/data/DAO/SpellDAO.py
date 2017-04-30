@@ -21,19 +21,18 @@ class SpellDAO(DAO, ISpellDAO):
 
     def create(self, spell: Spell, nodeParentId: int = None, contextType: ObjectType = None) -> int:
         """
-        Create new spell in database
+        Create new Spell
         :param spell: Spell object
-        :param nodeParentId: id of parent node
-         :param contextType:  Type of tab, where will be created
-
-        :return: id of autoincrement
+        :param nodeParentId: id of parent node in tree
+        :param contextType: Object type of tree, where item is located
+        :return: id of created Spell
         """
 
         if not contextType:
             contextType = self.TYPE
 
         intValues = {
-            'cast_time': spell.cast_time,
+            'cast_time': spell.cast_time if spell.cast_time else 0,
             'drd_class': spell.drd_class.value if spell.drd_class else None
         }
 
@@ -106,15 +105,23 @@ class SpellDAO(DAO, ISpellDAO):
 
     def get(self, spell_id: int, lang: str = None, nodeId: int = None, contextType: ObjectType = None) -> Spell:
         """
-        Get spell from database
-        :param spell_id: id of spell
-        :param lang: lang of spell
+        Get Spell , object transable attributes depends on lang
+        If nodeId and contextType is specified, whole object is returned (with all sub objects)
+        If not specified, only basic attributes are set.        
+        :param spell_id: id of Spell
+        :param lang: lang of object
+        :param nodeId: id of node in tree, where object is located
+        :param contextType: object type of tree, where is node
         :return: Spell object
         """
         if lang is None:  # TODO : default lang
             lang = 'cs'
 
-        data = dict(self.database.select(self.DATABASE_TABLE, {'ID': spell_id})[0])
+        data = self.database.select(self.DATABASE_TABLE, {'ID': spell_id})
+        if not data:
+            return None
+        else:
+            data = dict(data[0])
         tr_data = self.database.select_translate(spell_id, ObjectType.SPELL.value,
                                                  lang)
         drdClassIndex = data.get('drd_class', None)
@@ -130,9 +137,9 @@ class SpellDAO(DAO, ISpellDAO):
 
     def get_all(self, lang=None) -> list:
         """
-        Get list of all spells from database, only one lang
-        :param lang: lang code
-        :return: list of Spells
+        Get list of Spell for selected lang
+        :param lang: lang of Spell
+        :return: list of Spell
         """
         if lang is None:  # TODO : default lang
             lang = 'cs'

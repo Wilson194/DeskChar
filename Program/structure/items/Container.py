@@ -168,3 +168,11 @@ class Container(Item):
 
     def addThrowableWeapon(self, throwableWeapon: ThrowableWeapon):
         self.__throwableWeapons.append(throwableWeapon)
+
+
+    def __eq__(self, other):
+        if isinstance(other, Container):
+            if super().__eq__(other) and self.capacity == other.capacity:
+                return True
+
+        return False

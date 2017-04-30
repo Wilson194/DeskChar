@@ -3,6 +3,7 @@ from data.DAO.ItemDAO import ItemDAO
 from data.DAO.MapDAO import MapDAO
 from data.DAO.MonsterDAO import MonsterDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.interface.ILocationDAO import ILocationDAO
 from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
 from structure.enums.Alignment import Alignment
@@ -22,7 +23,7 @@ from structure.scenario.Scenario import Scenario
 from structure.tree.NodeObject import NodeObject
 
 
-class LocationDAO(DAO):
+class LocationDAO(DAO, ILocationDAO):
     DATABASE_TABLE = 'Location'
     DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.LOCATION
@@ -35,9 +36,11 @@ class LocationDAO(DAO):
 
     def create(self, location: Location, nodeParentId: int = None, contextType: ObjectType = None) -> int:
         """
-        Create new spell in database
-        :param location: Spell object
-        :return: id of autoincrement
+        Create new location        
+        :param location: Location object
+        :param nodeParentId: id of parent node in tree
+        :param contextType: Object type of tree, where item is located
+        :return: id of created location
         """
 
         if not contextType:
@@ -74,8 +77,8 @@ class LocationDAO(DAO):
 
     def update(self, location: Location):
         """
-        Update spell in database
-        :param location: Spell object with new data
+        Update location in database
+        :param location: Location object with new data
         """
         strValues = {
             'name'       : location.name,
@@ -87,8 +90,8 @@ class LocationDAO(DAO):
 
     def delete(self, location_id: int):
         """
-        Delete spell from database and all his translates
-        :param location_id: id of spell
+        Delete Location from database and from translate
+        :param location_id: id of Location
         """
         self.database.delete(self.DATABASE_TABLE, location_id)
         self.database.delete_where('translates',
@@ -97,14 +100,23 @@ class LocationDAO(DAO):
 
     def get(self, location_id: int, lang: str = None, nodeId: int = None, contextType: ObjectType = None) -> Location:
         """
-        Get spell from database
-        :param location_id: id of spell
-        :param lang: lang of spell
-        :return: Monster object
+        Get Location , object transable attributes depends on lang
+        If nodeId and contextType is specified, whole object is returned (with all sub objects)
+        If not specified, only basic attributes are set.        
+        :param location_id: id of Location
+        :param lang: lang of object
+        :param nodeId: id of node in tree, where object is located
+        :param contextType: object type of tree, where is node
+        :return: Location object
         """
         if lang is None:  # TODO : default lang
             lang = 'cs'
-        data = dict(self.database.select(self.DATABASE_TABLE, {'ID': location_id})[0])
+        data = self.database.select(self.DATABASE_TABLE, {'ID': location_id})
+        if not data:
+            return None
+        else:
+            data = dict(data[0])
+
         tr_data = dict(self.database.select_translate(location_id, self.TYPE.value,
                                                       lang))
 
@@ -172,9 +184,9 @@ class LocationDAO(DAO):
 
     def get_all(self, lang=None) -> list:
         """
-        Get list of all spells from database, only one lang
-        :param lang: lang code
-        :return: list of Spells
+        Get list of locations for selected lang
+        :param lang: lang of locations
+        :return: list of locations
         """
         if lang is None:  # TODO : default lang
             lang = 'cs'

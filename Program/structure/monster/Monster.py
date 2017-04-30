@@ -1,3 +1,4 @@
+from structure.enums.Alignment import Alignment
 from structure.enums.MonsterRace import MonsterRace
 from structure.enums.MonsterSize import MonsterSize
 from structure.enums.ObjectType import ObjectType
@@ -23,7 +24,7 @@ class Monster(Object):
                  viability: str = None, offense: str = None, defense: int = None,
                  endurance: int = None, rampancy: int = None, mobility: int = None,
                  perseverance: int = None, intelligence: int = None, charisma: int = None,
-                 alignment: int = None, experience: int = None, hp: int = None,
+                 alignment: Alignment = None, experience: int = None, hp: int = None,
                  monsterRace: MonsterRace = None, size: MonsterSize = None):
         super().__init__(id, lang, name, description)
 
@@ -355,3 +356,16 @@ class Monster(Object):
 
     def addThrowableWeapon(self, throwableWeapon: ThrowableWeapon):
         self.__throwableWeapons.append(throwableWeapon)
+
+
+    def __eq__(self, other):
+        if isinstance(other, Monster):
+            if super().__eq__(other) and self.viability == other.viability and self.offense == other.offense \
+                    and self.defense == other.defense and self.endurance == other.endurance and self.rampancy == other.rampancy \
+                    and self.mobility == other.mobility and self.perseverance == other.perseverance \
+                    and self.intelligence == other.intelligence and self.charisma == other.charisma \
+                    and self.alignment is other.alignment and self.experience == other.experience and self.hp == other.hp \
+                    and self.monsterRace is other.monsterRace and self.size is other.size:
+                return True
+
+        return False

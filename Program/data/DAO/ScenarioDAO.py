@@ -1,6 +1,6 @@
 from datetime import date
 from datetime import datetime
-
+import datetime as dd
 from data.DAO.AbilityDAO import AbilityDAO
 from data.DAO.CharacterDAO import CharacterDAO
 from data.DAO.EffectDAO import EffectDAO
@@ -8,26 +8,16 @@ from data.DAO.LocationDAO import LocationDAO
 from data.DAO.PartyCharacterDAO import PartyCharacterDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from data.DAO.SpellDAO import SpellDAO
-from data.database.Database import Database
+from data.DAO.interface.IScenarioDAO import IScenarioDAO
 from data.database.ObjectDatabase import ObjectDatabase
 from structure.character.PartyCharacter import PartyCharacter
-from structure.enums.Alignment import Alignment
-from structure.enums.MonsterRace import MonsterRace
 from structure.enums.ObjectType import ObjectType
-from structure.items.Armor import Armor
-from structure.items.Container import Container
-from structure.items.MeleeWeapon import MeleeWeapon
-from structure.items.Money import Money
-from structure.items.RangeWeapon import RangeWeapon
-from structure.items.ThrowableWeapon import ThrowableWeapon
-from structure.monster.Monster import Monster
-
 from data.DAO.DAO import DAO
 from structure.scenario.Scenario import Scenario
 from structure.tree.NodeObject import NodeObject
 
 
-class ScenarioDAO(DAO):
+class ScenarioDAO(DAO, IScenarioDAO):
     DATABASE_TABLE = 'Scenario'
     DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.SCENARIO
@@ -40,14 +30,19 @@ class ScenarioDAO(DAO):
 
     def create(self, scenario: Scenario, nodeParentId: int = None, contextType: ObjectType = None) -> int:
         """
-        Create new spell in database
-        :param scenario: Spell object
-        :return: id of autoincrement
+        Create new scenario
+        :param scenario: Scenario object
+        :param nodeParentId: id of parent node in tree
+        :param contextType: Object type of tree, where item is located
+        :return: id of created Scenario
         """
         if not contextType:
             contextType = self.TYPE
 
-        curDate = datetime.strptime(scenario.date, '%d/%m/%Y') if scenario.date else None
+        if isinstance(scenario.date, dd.date):
+            curDate = scenario.date
+        else:
+            curDate = datetime.strptime(scenario.date, '%d/%m/%Y') if scenario.date else None
         intValues = {
             'date': curDate.toordinal() if curDate else None
         }
@@ -86,8 +81,8 @@ class ScenarioDAO(DAO):
 
     def update(self, scenario: Scenario):
         """
-        Update spell in database
-        :param scenario: Spell object with new data
+        Update scenario in database
+        :param scenario: Scenario object with new data
         """
         intValues = {
             'date': scenario.date.toordinal() if scenario.date else None
@@ -104,8 +99,8 @@ class ScenarioDAO(DAO):
 
     def delete(self, scenario_id: int):
         """
-        Delete spell from database and all his translates
-        :param scenario_id: id of spell
+        Delete Scenario from database and all his translates
+        :param scenario_id: id of Scenario
         """
         self.database.delete(self.DATABASE_TABLE, scenario_id)
         self.database.delete_where('translates',
@@ -114,14 +109,23 @@ class ScenarioDAO(DAO):
 
     def get(self, scenario_id: int, lang: str = None, nodeId: int = None, contextType: ObjectType = None) -> Scenario:
         """
-        Get spell from database
-        :param scenario_id: id of spell
-        :param lang: lang of spell
-        :return: Monster object
+        Get Scenario , object transable attributes depends on lang
+        If nodeId and contextType is specified, whole object is returned (with all sub objects)
+        If not specified, only basic attributes are set.        
+        :param scenario_id: id of Scenario
+        :param lang: lang of object
+        :param nodeId: id of node in tree, where object is located
+        :param contextType: object type of tree, where is node
+        :return: Scenario object
         """
         if lang is None:  # TODO : default lang
             lang = 'cs'
-        data = dict(self.database.select(self.DATABASE_TABLE, {'ID': scenario_id})[0])
+        data = self.database.select(self.DATABASE_TABLE, {'ID': scenario_id})
+        if not data:
+            return None
+        else:
+            data = dict(data[0])
+
         tr_data = dict(self.database.select_translate(scenario_id, self.TYPE.value,
                                                       lang))
 
@@ -179,9 +183,9 @@ class ScenarioDAO(DAO):
 
     def get_all(self, lang=None) -> list:
         """
-        Get list of all spells from database, only one lang
-        :param lang: lang code
-        :return: list of Spells
+        Get list of Scenario for selected lang
+        :param lang: lang of Scenario
+        :return: list of Scenario
         """
         if lang is None:  # TODO : default lang
             lang = 'cs'

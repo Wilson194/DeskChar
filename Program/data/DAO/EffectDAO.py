@@ -18,12 +18,19 @@ class EffectDAO(DAO, IEffectDAO):
 
 
     def __init__(self):
-        self.database = Database(self.DATABASE_DRIVER)
-        self.obj_database = ObjectDatabase(self.DATABASE_DRIVER)
+        self.database = ObjectDatabase(self.DATABASE_DRIVER)
+        # self.obj_database = ObjectDatabase(self.DATABASE_DRIVER)
         self.treeDAO = PlayerTreeDAO()
 
 
     def create(self, effect: Effect, nodeParentId: int = None, contextType: ObjectType = None) -> int:
+        """
+        Create new effect
+        :param effect: Effect object
+        :param nodeParentId: id of parent node in tree
+        :param contextType: Object type of tree, where item is located
+        :return: id of created effect
+        """
         if not contextType:
             contextType = self.TYPE
 
@@ -45,7 +52,7 @@ class EffectDAO(DAO, IEffectDAO):
         id = self.database.insert(self.DATABASE_TABLE, intValues)
         effect.id = id
 
-        self.obj_database.insert_translate(strValues, effect.lang, id, self.TYPE)
+        self.database.insert_translate(strValues, effect.lang, id, self.TYPE)
 
         # Create node for tree structure
         node = NodeObject(None, effect.name, nodeParentId, effect)
@@ -57,6 +64,10 @@ class EffectDAO(DAO, IEffectDAO):
 
 
     def update(self, effect: Effect) -> None:
+        """
+        Update effect in database
+        :param effect: Effect object with new data
+        """
         if type(effect.active) is str:
             active = True if effect.active == 'true' else False
         else:
@@ -73,21 +84,39 @@ class EffectDAO(DAO, IEffectDAO):
         }
 
         self.database.update(self.DATABASE_TABLE, effect.id, intValues)
-        self.obj_database.update_translate(strValues, effect.lang, effect.id, self.TYPE)
+        self.database.update_translate(strValues, effect.lang, effect.id, self.TYPE)
 
 
     def delete(self, effect_id: int) -> None:
-        self.obj_database.delete(self.DATABASE_TABLE, effect_id)
+        """
+        Delete Effect from database and from translate
+        :param effect_id: id of effect
+        """
+        self.database.delete(self.DATABASE_TABLE, effect_id)
         self.database.delete_where('translates',
                                    {'target_id': effect_id, 'type': ObjectType.EFFECT})
 
 
     def get(self, effect_id: int, lang: str = None, nodeId: int = None, contextType: ObjectType = None) -> Effect:
+        """
+        Get Effect , object transable attributes depends on lang
+        If nodeId and contextType is specified, whole object is returned (with all sub objects)
+        If not specified, only basic attributes are set.        
+        :param effect_id: id of Effect
+        :param lang: lang of object
+        :param nodeId: id of node in tree, where object is located
+        :param contextType: object type of tree, where is node
+        :return: Effect object
+        """
         if lang is None:  # TODO : default lang
             lang = 'cs'
 
-        data = dict(self.database.select(self.DATABASE_TABLE, {'ID': effect_id})[0])
-        tr_data = self.database.select_translate(effect_id, ObjectType.EFFECT.value, lang)
+        data = self.database.select(self.DATABASE_TABLE, {'ID': effect_id})
+        if not data:
+            return None
+        else:
+            data = dict(data[0])
+        tr_data = self.database.select_translate(effect_id, self.TYPE.value, lang)
 
         index = data.get('targetType', 1) if data.get('targetType', 1) is not None else 1
         targetType = ModifierTargetTypes(index)
@@ -105,5 +134,17 @@ class EffectDAO(DAO, IEffectDAO):
         return effect
 
 
-    def get_all(self) -> list:
-        return []
+    def get_all(self, lang=None) -> list:
+        """
+        Get list of effects for selected lang
+        :param lang: lang of effects
+        :return: list of effects
+        """
+        if lang is None:  # TODO : default lang
+            lang = 'cs'
+        lines = self.database.select_all(self.DATABASE_TABLE)
+        effects = []
+        for line in lines:
+            character = self.get(line['ID'], lang)
+            effects.append(character)
+        return effects

@@ -127,11 +127,10 @@ class PlayerTreeManager:
         Delete node
         :param id: id of node
         """
-        if targetObject and targetObject.object_type is ObjectType.MODIFIER:
-            parentObject = node.object
-            EffectDAO().delete_link(parentObject, targetObject)
-        else:
-            self.treeDAO.delete_node(node.id)
+        self.treeDAO.delete_node(node.id)
+
+        if targetObject:
+            targetObject.DAO()().delete(targetObject.id)
 
 
     def get_node(self, id: int):

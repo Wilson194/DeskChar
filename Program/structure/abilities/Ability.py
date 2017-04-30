@@ -119,7 +119,7 @@ class Ability(Object):
         if not isinstance(other, Ability):
             return False
 
-        if super().__eq__(other) and self.__chance == other.chance:
+        if super().__eq__(other) and self.__chance == other.chance and self.__level == other.level:
             return True
 
         return False

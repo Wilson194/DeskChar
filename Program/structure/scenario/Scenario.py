@@ -262,3 +262,10 @@ class Scenario(Object):
         print('  Locations: ')
         for location in self.locations:
             location.printer(depth + 2)
+
+
+    def __eq__(self, other):
+        if isinstance(other, Scenario):
+            if super().__eq__(other) and self.date == other.date:
+                return True
+        return False

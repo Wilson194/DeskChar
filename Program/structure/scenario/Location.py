@@ -229,4 +229,9 @@ class Location(Object):
 
         print('{}   Items:'.format('  ' * depth))
         for item in self.items + self.containers + self.armors + self.meleeWeapons + self.rangedWeapons + self.moneyList + self.throwableWeapons:
-            item.printer(depth+2)
+            item.printer(depth + 2)
+
+
+    def __eq__(self, other):
+        if isinstance(other, Location):
+            return super().__eq__(other)

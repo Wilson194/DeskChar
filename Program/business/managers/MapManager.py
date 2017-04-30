@@ -34,6 +34,9 @@ class MapManager:
         extension = os.path.splitext(filePath)[1]
         name = 'map-{}{}'.format(str(map.id), extension)
 
+        if not os.path.exists(self.MAP_FOLDER):
+            os.mkdir(self.MAP_FOLDER)
+
         if os.path.exists(self.MAP_FOLDER + name):
             os.remove(self.MAP_FOLDER + name)
 

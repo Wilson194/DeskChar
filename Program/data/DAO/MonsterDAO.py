@@ -2,6 +2,7 @@ from data.DAO.AbilityDAO import AbilityDAO
 from data.DAO.ItemDAO import ItemDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from data.DAO.SpellDAO import SpellDAO
+from data.DAO.interface.IMonsterDAO import IMonsterDAO
 from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
 from structure.enums.Alignment import Alignment
@@ -20,7 +21,7 @@ from data.DAO.DAO import DAO
 from structure.tree.NodeObject import NodeObject
 
 
-class MonsterDAO(DAO):
+class MonsterDAO(DAO, IMonsterDAO):
     DATABASE_TABLE = 'Monster'
     DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.MONSTER
@@ -33,9 +34,11 @@ class MonsterDAO(DAO):
 
     def create(self, monster: Monster, nodeParentId: int = None, contextType: ObjectType = None) -> int:
         """
-        Create new spell in database
-        :param monster: Spell object
-        :return: id of autoincrement
+        Create new Monster
+        :param monster: Modifier object
+        :param nodeParentId: id of parent node in tree
+        :param contextType: Object type of tree, where item is located
+        :return: id of created monster
         """
 
         if not contextType:
@@ -86,8 +89,8 @@ class MonsterDAO(DAO):
 
     def update(self, monster: Monster):
         """
-        Update spell in database
-        :param spell: Spell object with new data
+        Update monster in database
+        :param monster: Monster object with new data
         """
         intValues = {
             'defense'     : monster.defense,
@@ -117,8 +120,8 @@ class MonsterDAO(DAO):
 
     def delete(self, monster_id: int):
         """
-        Delete spell from database and all his translates
-        :param spell_id: id of spell
+        Delete Monster from database and all his translates
+        :param monster_id: id of Monster
         """
         self.database.delete(self.DATABASE_TABLE, monster_id)
         self.database.delete_where('translates',
@@ -127,14 +130,22 @@ class MonsterDAO(DAO):
 
     def get(self, monster_id: int, lang: str = None, nodeId: int = None, contextType: ObjectType = None) -> Monster:
         """
-        Get spell from database
-        :param monster_id: id of spell
-        :param lang: lang of spell
+        Get Monster , object transable attributes depends on lang
+        If nodeId and contextType is specified, whole object is returned (with all sub objects)
+        If not specified, only basic attributes are set.        
+        :param monster_id: id of Monster
+        :param lang: lang of object
+        :param nodeId: id of node in tree, where object is located
+        :param contextType: object type of tree, where is node
         :return: Monster object
         """
         if lang is None:  # TODO : default lang
             lang = 'cs'
-        data = dict(self.database.select(self.DATABASE_TABLE, {'ID': monster_id})[0])
+        data = self.database.select(self.DATABASE_TABLE, {'ID': monster_id})
+        if not data:
+            return None
+        else:
+            data = dict(data[0])
         tr_data = self.database.select_translate(monster_id, ObjectType.MONSTER.value,
                                                  lang)
 
@@ -201,9 +212,9 @@ class MonsterDAO(DAO):
 
     def get_all(self, lang=None) -> list:
         """
-        Get list of all spells from database, only one lang
-        :param lang: lang code
-        :return: list of Spells
+        Get list of Monsters for selected lang
+        :param lang: lang of Monsters
+        :return: list of Monsters
         """
         if lang is None:  # TODO : default lang
             lang = 'cs'

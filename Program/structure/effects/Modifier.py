@@ -1,5 +1,6 @@
 from structure.enums.CharacterAttributes import CharacterAttributes
 from structure.enums.ItemsAttributes import ItemsAttributes
+from structure.enums.ModifierTargetTypes import ModifierTargetTypes
 from structure.enums.ObjectType import ObjectType
 from structure.general.Object import Object
 
@@ -15,7 +16,7 @@ class Modifier(Object):
                  valueType: object = None, value: int = None,
                  characterTargetAttribute: CharacterAttributes = None,
                  itemTargetAttribute: ItemsAttributes = None,
-                 targetType: ObjectType = None):
+                 targetType: ModifierTargetTypes = None):
         super().__init__(id, lang, name, description)
 
         self.__targetType = targetType
@@ -116,5 +117,22 @@ class Modifier(Object):
         self.__targetType = value
 
 
-    def printer(self, depth):
+    def printer(self, depth, full: bool = False):
         print('{} Modifier - {}'.format('  ' * depth, self.name))
+        if full:
+            print('{}    Target type: {}'.format("  " * depth, self.targetType))
+            print('{}    Item attribute: {}'.format("  " * depth, self.itemTargetAttribute))
+            print('{}    Character attribute: {}'.format("  " * depth, self.characterTargetAttribute))
+            print('{}    Value type: {}'.format("  " * depth, self.valueType))
+            print('{}    Value: {}'.format("  " * depth, self.value))
+
+
+    def __eq__(self, other):
+        # return True
+        if isinstance(other, Modifier):
+            if self.value == other.value and self.valueType == other.valueType \
+                    and self.characterTargetAttribute == other.characterTargetAttribute \
+                    and self.itemTargetAttribute == other.itemTargetAttribute and self.targetType == other.targetType:
+                return True
+
+        return False

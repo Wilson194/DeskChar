@@ -95,14 +95,17 @@ class TabWidget(QtWidgets.QFrame):
 
         for layout in self.layouts_changed:
             layout.save_data()
+
         self.layouts_changed.clear()
         Sync().delete_data('Input_synchronize')
-        item = treeItem.data(0, 11)
 
-        if isinstance(item, Map):
-            self.mainWindow.redraw_context_widget(ObjectType.MAP, treeItem)
-        else:
-            self.change_object(item.id, ObjectType(item.object_type))
+        if treeItem:
+            item = treeItem.data(0, 11)
+
+            if isinstance(item, Map):
+                self.mainWindow.redraw_context_widget(ObjectType.MAP, treeItem)
+            else:
+                self.change_object(item.id, ObjectType(item.object_type))
 
 
     def data_changed_slot(self, layout: Layout):

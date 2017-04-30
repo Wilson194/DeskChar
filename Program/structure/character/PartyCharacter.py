@@ -102,4 +102,21 @@ class PartyCharacter(Object):
 
 
     def __eq__(self, other):
+        if isinstance(other, PartyCharacter):
+            if super().__eq__(other) and self.MACAddress == other.MACAddress and self.deviceName == other.deviceName:
+                return True
         return False
+
+
+    def printer(self, depth: int, full: bool = False):
+        print('{}PartyCharacter - {}'.format(depth * '  ', self.deviceName))
+        print('{}   Character:'.format(depth * '  ', self.deviceName))
+
+        if full:
+            print('{}   deviceName: {}'.format(depth * '  ', self.deviceName))
+            print('{}   MACAddress: {}'.format(depth * '  ', self.MACAddress))
+
+        if self.character:
+            self.character.printer(depth, full)
+        else:
+            print('{}      None'.format(depth * '  '))

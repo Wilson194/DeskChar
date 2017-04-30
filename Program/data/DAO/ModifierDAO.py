@@ -28,6 +28,16 @@ class ModifierDAO(DAO, IModifierDAO):
 
 
     def create(self, modifier: Modifier, nodeParentId: int = None, contextType: ObjectType = None) -> int:
+        """
+        Create new Modifier
+        :param modifier: Modifier object
+        :param nodeParentId: id of parent node in tree
+        :param contextType: Object type of tree, where item is located
+        :return: id of created Modifier
+        """
+        if not contextType:
+            contextType = self.TYPE
+
         if modifier.valueType is ModifierValueTypes.TYPE_ARMOR_SIZE:
             value = ArmorSize.by_name(ArmorSize, modifier.value).value
         elif modifier.valueType is ModifierValueTypes.TYPE_WEAPON_HANDLING:
@@ -63,14 +73,10 @@ class ModifierDAO(DAO, IModifierDAO):
 
 
     def update(self, modifier: Modifier) -> None:
-        # if modifier.valueType is ModifierValueTypes.TYPE_ARMOR_SIZE:
-        #     value = ArmorSize.by_name(ArmorSize, modifier.value).value
-        # elif modifier.valueType is ModifierValueTypes.TYPE_WEAPON_HANDLING:
-        #     value = Handling.by_name(Handling, modifier.value).value
-        # elif modifier.valueType is ModifierValueTypes.TYPE_WEAPON_WEIGHT:
-        #     value = WeaponWeight.by_name(WeaponWeight, modifier.value).value
-        # else:
-        #     value = modifier.value
+        """
+        Update modifier in database
+        :param modifier: Modifier object with new data
+        """
 
         intValues = {
             'value'                   : modifier.value if type(modifier.value) is int else modifier.value.value,
@@ -90,16 +96,35 @@ class ModifierDAO(DAO, IModifierDAO):
 
 
     def delete(self, modifier_id: int) -> None:
+        """
+        Delete Modifier from database and all his translates
+        :param modifier_id: id of Modifier
+        """
         self.obj_database.delete(self.DATABASE_TABLE, modifier_id)
         self.database.delete_where('translates',
                                    {'target_id': modifier_id, 'type': ObjectType.MODIFIER})
 
 
     def get(self, modifier_id: int, lang: str = None, nodeId: int = None, contextType: ObjectType = None) -> Modifier:
+        """
+        Get Modifier , object transable attributes depends on lang
+        If nodeId and contextType is specified, whole object is returned (with all sub objects)
+        If not specified, only basic attributes are set.        
+        :param modifier_id: id of Modifier
+        :param lang: lang of object
+        :param nodeId: id of node in tree, where object is located
+        :param contextType: object type of tree, where is node
+        :return: Modifier object
+        """
         if lang is None:
             lang = 'cs'  # TODO: default lang
 
-        data = dict(self.obj_database.select(self.DATABASE_TABLE, {'ID': modifier_id})[0])
+        data = self.obj_database.select(self.DATABASE_TABLE, {'ID': modifier_id})
+        if not data:
+            return None
+        else:
+            data = dict(data[0])
+
         tr_data = dict(self.database.select_translate(modifier_id, ObjectType.MODIFIER.value, lang))
 
         targetTypeIndex = data.get('targetType', None)
@@ -132,15 +157,18 @@ class ModifierDAO(DAO, IModifierDAO):
         return modifier
 
 
-    def get_all(self) -> list:
-        return []
+    def get_all(self, lang: str = None) -> list:
+        """
+        Get list of modifiers for selected lang
+        :param lang: lang of modifiers
+        :return: list of modifiers
+        """
+        if lang is None:  # TODO : default lang
+            lang = 'cs'
+        lines = self.database.select_all('Item')
 
-
-        # def get_link(self, effectId):
-        #     data = self.database.select('Effect_modifier', {'effect_id': effectId})
-        #
-        #     modifiers = []
-        #     for i in data:
-        #         modifiers.append(self.get(i['modifier_id']))
-        #
-        #     return modifiers
+        modifiers = []
+        for line in lines:
+            item = self.get(line['ID'], lang)
+            modifiers.append(item)
+        return modifiers

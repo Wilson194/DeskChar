@@ -1,11 +1,14 @@
 import unittest
 from data.database.Database import *
+from data.database.ObjectDatabase import ObjectDatabase
 
 
 class TestDatabase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.database = Database(':memory:')
+        cls.database = ObjectDatabase(':memory:')
+        cls.database.drop_table('Character')
+        cls.database.drop_table('Translate')
 
         columns = [
             Column('ID', 'INTEGER', True),
@@ -17,17 +20,23 @@ class TestDatabase(unittest.TestCase):
         cls.database.create_table('Character', columns)
 
 
+    @classmethod
+    def tearDownClass(cls):
+        database = Database('unitTests.db')
+        ObjectDatabase(':memory:').drop_table('Character')
+
+
     def test_insert(self):
         values = {
-            'Name': 'Wilson',
-            'Age': 25,
+            'Name'   : 'Wilson',
+            'Age'    : 25,
             'Agility': 50
         }
         self.database.insert('Character', values)
 
         values = {
-            'Name': 'John',
-            'Age': 26,
+            'Name'   : 'John',
+            'Age'    : 26,
             'Agility': 40
         }
         self.database.insert('Character', values)
@@ -40,15 +49,15 @@ class TestDatabase(unittest.TestCase):
 
     def test_delete(self):
         values = {
-            'Name': 'Wilson',
-            'Age': 25,
+            'Name'   : 'Wilson',
+            'Age'    : 25,
             'Agility': 50
         }
         self.database.insert('Character', values)
 
         values = {
-            'Name': 'John',
-            'Age': 26,
+            'Name'   : 'John',
+            'Age'    : 26,
             'Agility': 40
         }
         self.database.insert('Character', values)
@@ -62,15 +71,15 @@ class TestDatabase(unittest.TestCase):
 
     def test_select(self):
         values = {
-            'Name': 'Wilson',
-            'Age': 25,
+            'Name'   : 'Wilson',
+            'Age'    : 25,
             'Agility': 50
         }
         self.database.insert('Character', values)
 
         values = {
-            'Name': 'John',
-            'Age': 26,
+            'Name'   : 'John',
+            'Age'    : 26,
             'Agility': 40
         }
         self.database.insert('Character', values)
@@ -93,7 +102,7 @@ class TestDatabase(unittest.TestCase):
             Foreign('Target', 'Character', 'ID')
         ]
 
-        self.database.create_table('Translate', columns,foreigns)
+        self.database.create_table('Translate', columns, foreigns)
 
 
     def test_invalid_column_type(self):

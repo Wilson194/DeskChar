@@ -9,6 +9,7 @@ class Database(metaclass=Singleton):
 
 
     def __init__(self, database_name):
+        self.databaseName = database_name
         self.connection = sqlite3.connect(database_name)
         self.connection.row_factory = sqlite3.Row
         self.connection.execute('PRAGMA foreign_keys = ON;')
@@ -18,11 +19,15 @@ class Database(metaclass=Singleton):
         self.__sql_many_state = False
 
 
-    def set_many(self, value: bool):
+    def set_many(self, value: bool) -> None:
+        """
+        Set index many to value, if True, commands will be add to stack
+        :param value: True to activate, False to deactivate
+        """
         self.__sql_many_state = value
 
 
-    def create_table(self, name: str, columns=None, foreigns=None):
+    def create_table(self, name: str, columns=None, foreigns=None) -> None:
         """
         Create table in database
         :param name: name of table
@@ -50,7 +55,7 @@ class Database(metaclass=Singleton):
         self.cursor.execute(sql)
 
 
-    def truncate_table(self, table_name: str):
+    def truncate_table(self, table_name: str) -> None:
         """
         Truncate table
         :param table_name: table name
@@ -59,7 +64,7 @@ class Database(metaclass=Singleton):
         self.cursor.execute(sql)
 
 
-    def add_column(self, table_name: str, column):
+    def add_column(self, table_name: str, column) -> None:
         """
         Add column to table
         :param table_name: table name
@@ -69,13 +74,14 @@ class Database(metaclass=Singleton):
         self.cursor.execute(sql)
 
 
-    def drop_table(self, table_name: str):
+    def drop_table(self, table_name: str) -> None:
         """
         Drop data from table
         :param table_name: name of table
         """
-        sql = 'DROP TABLE ' + table_name
+        sql = 'DROP TABLE IF EXISTS ' + table_name
         self.cursor.execute(sql)
+        self.connection.commit()
 
 
     def insert(self, table_name: str, values: dict, not_many=False) -> int:
@@ -100,7 +106,11 @@ class Database(metaclass=Singleton):
         return self.cursor.lastrowid
 
 
-    def insert_many_execute(self):
+    def insert_many_execute(self) -> None:
+        """
+        Execute many. Execute all command in stack
+        :return: 
+        """
         self.connection.isolation_level = None
         self.cursor.execute('BEGIN TRANSACTION')
         for i in self.__sql_buffer.split(';'):

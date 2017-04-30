@@ -14,6 +14,7 @@ from structure.enums.Races import Races
 from structure.items.Container import Container
 from data.DAO.DAO import DAO
 from structure.tree.NodeObject import NodeObject
+from presentation.Translate import Translate as TR
 
 
 class CharacterDAO(DAO, ISpellDAO):
@@ -29,9 +30,11 @@ class CharacterDAO(DAO, ISpellDAO):
 
     def create(self, character: Character, nodeParentId: int = None, contextType: ObjectType = None) -> int:
         """
-        Create new spell in database
+        Create new character
         :param character: Character object
-        :return: id of autoincrement
+        :param nodeParentId: id of parent node in tree
+        :param contextType: Object type of tree, where item is located
+        :return: id of created character
         """
         if contextType is None:
             contextType = self.TYPE
@@ -81,14 +84,14 @@ class CharacterDAO(DAO, ISpellDAO):
             EffectDAO().create(effect, nodeId, contextType)
 
         if character.inventory is None:
-            c = Container(None, None, 'Inventory', None, -1)
+            c = Container(None, None, TR().tr('Inventory'), None, -1)
             inventoryId = ItemDAO().create(c, nodeId, contextType)
         else:
             character.inventory.parent_id = -1
             inventoryId = ItemDAO().create(character.inventory, nodeId, contextType)
 
         if character.ground is None:
-            c = Container(None, None, 'Ground', None, -2)
+            c = Container(None, None, TR().tr('Ground'), None, -2)
             groundId = ItemDAO().create(c, nodeId, contextType)
         else:
             character.ground.parent_id = -2
@@ -136,8 +139,8 @@ class CharacterDAO(DAO, ISpellDAO):
 
     def delete(self, character_id: int):
         """
-        Delete spell from database and all his translates
-        :param character_id: id of spell
+        Delete character from database and from translate
+        :param character_id: id of character
         """
         self.database.delete(self.DATABASE_TABLE, character_id)
         self.database.delete_where('translates',
@@ -146,15 +149,24 @@ class CharacterDAO(DAO, ISpellDAO):
 
     def get(self, character_id: int, lang: str = None, nodeId: int = None, contextType: ObjectType = None) -> Character:
         """
-        Get spell from database
-        :param character_id: id of spell
-        :param lang: lang of spell
-        :return: Spell object
+        Get Character , object transable attributes depends on lang
+        If nodeId and contextType is specified, whole object is returned (with all sub objects)
+        If not specified, only basic attributes are set.        
+        :param character_id: id of Character
+        :param lang: lang of object
+        :param nodeId: id of node in tree, where object is located
+        :param contextType: object type of tree, where is node
+        :return: Character object
         """
         if lang is None:  # TODO : default lang
             lang = 'cs'
 
-        data = dict(self.database.select(self.DATABASE_TABLE, {'ID': character_id})[0])
+        data = self.database.select(self.DATABASE_TABLE, {'ID': character_id})
+        if not data:
+            return None
+        else:
+            data = dict(data[0])
+
         tr_data = self.database.select_translate(character_id, ObjectType.CHARACTER.value,
                                                  lang)
 
@@ -203,9 +215,9 @@ class CharacterDAO(DAO, ISpellDAO):
 
     def get_all(self, lang=None) -> list:
         """
-        Get list of all spells from database, only one lang
-        :param lang: lang code
-        :return: list of Spells
+        Get list of characters for selected lang
+        :param lang: lang of characters
+        :return: list of characters
         """
         if lang is None:  # TODO : default lang
             lang = 'cs'

@@ -144,17 +144,18 @@ class MapWidget(QtWidgets.QFrame):
         if self.map:
             self.save_map()
 
-        if item.data(0, 11).object_type is not ObjectType.MAP:
-            self.mainWindow.redraw_context_widget(item.data(0, 11).object_type, item)
-        else:
+        if item:
+            if item.data(0, 11).object_type is not ObjectType.MAP:
+                self.mainWindow.redraw_context_widget(item.data(0, 11).object_type, item)
+            else:
 
-            self.enable_tool_bar()
-            map = MapDAO().get(item.data(0, 11).id)
-
-            if self.map and self.map.id == map.id:
+                self.enable_tool_bar()
                 map = MapDAO().get(item.data(0, 11).id)
-            self.map = map
-            self.redraw()
+
+                if self.map and self.map.id == map.id:
+                    map = MapDAO().get(item.data(0, 11).id)
+                self.map = map
+                self.redraw()
 
 
     def item_delete_slot(self, mapItem):
@@ -521,6 +522,8 @@ class MapItemDraw(QGraphicsPixmapItem):
         if choice:
             self.mapItem.name = data.get('name')
             self.mapItem.description = data.get('description')
+            toolTip = self.mapItem.name + '\n\n  ' + self.mapItem.description
+            self.setToolTip(toolTip)
 
 
     def keyReleaseEvent(self, keyEvent):

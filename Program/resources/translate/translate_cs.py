@@ -212,7 +212,7 @@ translate = {
     'Hp'                        : 'Životy',
     'Monster_race'              : 'Rasa',
     'Monster_size'              : 'Velikost',
-    'Agility'                   : 'Pohyblivost',
+    'Agility'                   : 'Obratnost',
     'Toughness'                 : 'Odolnost',
     'Age'                       : 'Věk',
     'Height'                    : 'Výška',
@@ -257,13 +257,18 @@ translate = {
 
     'About'                     : 'O aplikaci',
 
+    'Inventory'                 : 'Inventář',
+    'Ground'                    : 'Zem',
+
 
     'About_text'                : '''
-Aplikace deskchar slouží jako podpůrná aplikace pro balíček mobchar pro hru Dračí doupě. 
+<p>Aplikace <b>Deskchar</b> slouží jako podpůrná aplikace pro balíček <b>Mobchar</b> pro hru Dračí doupě. 
 Je možné zde vytvářet šablony pro základní balíček pro hráče a také vytvářet rozlehlé dobrodružství pro pány jeskyně.
-Nově je možné vytvářet i jednoduché mapy s popisky.
-        
-Vývojáři:
-    Jan Horáček
+Nově je možné vytvářet i jednoduché mapy s popisky.</p>
+<br>        
+<b>Vývojáři</b>:
+<li>
+    <ul>Jan Horáček</ul>
+</li>
     ''',
 }

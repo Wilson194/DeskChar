@@ -1,12 +1,12 @@
+from data.DAO.interface.IMessageDAO import IMessageDAO
 from data.database.Database import Database
 from structure.character.Message import Message
-from structure.character.PartyCharacter import PartyCharacter
 from structure.enums.ObjectType import ObjectType
 from data.DAO.DAO import DAO
 from datetime import datetime, date
 
 
-class MessageDAO(DAO):
+class MessageDAO(DAO, IMessageDAO):
     DATABASE_TABLE = 'Message'
     DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.MESSAGE
@@ -18,8 +18,8 @@ class MessageDAO(DAO):
 
     def create(self, message: Message) -> int:
         """
-        Create new spell in database
-        :param character: Character object
+        Create new message in database
+        :param message: Message object
         :return: id of autoincrement
         """
         curDate = datetime.strptime(message.date, '%d/%m/%Y %H:%M:%S') if message.date else None
@@ -45,8 +45,8 @@ class MessageDAO(DAO):
 
     def update(self, message: Message):
         """
-        Update spell in database
-        :param character: Character object with new data
+        Update message in database
+        :param message: Message object with new data
         """
         if type(message.isMine) is str:
             isMine = True if message.isMine == 'true' else False
@@ -62,20 +62,20 @@ class MessageDAO(DAO):
         self.database.update(self.DATABASE_TABLE, message.id, intValues)
 
 
-    def delete(self, character_id: int):
+    def delete(self, message_id: int):
         """
-        Delete spell from database and all his translates
-        :param character_id: id of spell
+        Delete Message from database and all his translates
+        :param message_id: id of Message
         """
-        self.database.delete(self.DATABASE_TABLE, character_id)
+        self.database.delete(self.DATABASE_TABLE, message_id)
 
 
     def get(self, message_id: int, lang: str = None) -> Message:
         """
-        Get spell from database
-        :param character_id: id of spell
+        Get Message from database
+        :param message_id: id of Message
         :param lang: lang of spell
-        :return: Spell object
+        :return: Message object
         """
         if lang is None:  # TODO : default lang
             lang = 'cs'
@@ -91,6 +91,11 @@ class MessageDAO(DAO):
 
 
     def get_by_party_character(self, partyCharacterId: int) -> list:
+        """
+        Get all messages for one party character
+        :param partyCharacterId: id of party character
+        :return: list of Messages
+        """
         select = self.database.select(self.DATABASE_TABLE, {'partyCharacterId': partyCharacterId})
 
         messages = []
@@ -107,9 +112,9 @@ class MessageDAO(DAO):
 
     def get_all(self, lang=None) -> list:
         """
-        Get list of all spells from database, only one lang
+        Get list of all messages from database, only one lang
         :param lang: lang code
-        :return: list of Spells
+        :return: list of messages
         """
         if lang is None:  # TODO : default lang
             lang = 'cs'

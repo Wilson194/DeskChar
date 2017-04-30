@@ -5,13 +5,21 @@ from structure.enums.ObjectType import ObjectType
 import os
 
 from operator import attrgetter
-from copy import deepcopy
 
 
 class ParserHandler:
-    def create_xml(self, data: list, path: str = None):
-        root = etree.Element('templates')
+    """
+    Class that handle import and export for and from XML
+    """
 
+
+    def create_xml(self, data: list, path: str = None):
+        """
+        Create xml file from objects
+        :param data: list of objects, full created
+        :param path: path where XML file will be created
+        """
+        root = etree.Element('templates')
         characters = []
         for node in data:
             if node.object.object_type == ObjectType.CHARACTER:
@@ -48,7 +56,12 @@ class ParserHandler:
                 out.write(etree.tostring(char, pretty_print=True, encoding='UTF-8').decode('UTF-8'))
 
 
-    def import_xml(self, file_path):
+    def import_xml(self, file_path) -> list:
+        """
+        Import object from xml file
+        :param file_path: file to file
+        :return: list of objects
+        """
         utf8_parser = etree.XMLParser(encoding='utf-8')
         root = etree.parse(file_path, utf8_parser).getroot()
         objects = []
@@ -75,6 +88,11 @@ class ParserHandler:
 
 
     def sort_tree(self, root):
+        """
+        Sort lxml tree by alphabet order
+        :param root: root object of tree
+        :return: root with sorted items
+        """
         children = list(root)
         newRoot = etree.Element(root.tag)
         newRoot.text = root.text

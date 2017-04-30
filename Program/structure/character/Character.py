@@ -333,4 +333,37 @@ class Character(Object):
 
 
     def __eq__(self, other):
+        if isinstance(other, Character):
+            if super().__eq__(other) and self.__agility == other.agility and self.__charisma == other.charisma \
+                    and self.__intelligence == other.intelligence and self.__mobility == other.mobility \
+                    and self.__strength == other.strength and self.__toughness == other.toughness and self.__age == other.age \
+                    and self.__height == other.height and self.__weight == other.weight and self.__level == other.level \
+                    and self.xp == other.xp and self.__maxHealth == other.maxHealth and self.__maxMana == other.maxMana \
+                    and self.__currentHealth == other.currentHealth and self.__currentMana == other.currentMana \
+                    and self.__drdClass is other.drdClass and self.__drdRace is other.drdRace \
+                    and self.__alignment == other.alignment:
+                return True
         return False
+
+
+    def printer(self, depth: int, full: bool = False):
+        print('{}Character - {}'.format("  " * depth, self.name))
+        if full:
+            print('{}   agility: {}'.format("  " * depth, self.agility))
+            print('{}   charisma: {}'.format("  " * depth, self.charisma))
+            print('{}   intelligence: {}'.format("  " * depth, self.intelligence))
+            print('{}   mobility: {}'.format("  " * depth, self.mobility))
+            print('{}   strength: {}'.format("  " * depth, self.strength))
+            print('{}   toughness: {}'.format("  " * depth, self.toughness))
+            print('{}   age: {}'.format("  " * depth, self.age))
+            print('{}   height: {}'.format("  " * depth, self.height))
+            print('{}   weight: {}'.format("  " * depth, self.weight))
+            print('{}   level: {}'.format("  " * depth, self.level))
+            print('{}   xp: {}'.format("  " * depth, self.xp))
+            print('{}   maxHealth: {}'.format("  " * depth, self.maxHealth))
+            print('{}   maxMana: {}'.format("  " * depth, self.maxMana))
+            print('{}   currentHealth: {}'.format("  " * depth, self.currentHealth))
+            print('{}   currentMana: {}'.format("  " * depth, self.currentMana))
+            print('{}   drdClass: {}'.format("  " * depth, self.drdClass))
+            print('{}   drdRace: {}'.format("  " * depth, self.drdRace))
+            print('{}   alignment: {}'.format("  " * depth, self.alignment))

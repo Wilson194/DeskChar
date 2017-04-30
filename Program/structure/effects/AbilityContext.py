@@ -1,5 +1,6 @@
 from structure.enums.CharacterAttributes import CharacterAttributes
 from structure.enums.ItemsAttributes import ItemsAttributes
+from structure.enums.ModifierValueTypes import ModifierValueTypes
 from structure.enums.ObjectType import ObjectType
 from structure.general.Object import Object
 
@@ -11,7 +12,7 @@ class AbilityContext(Object):
 
 
     def __init__(self, id: int = None, lang: str = None, name: str = None, description: str = None,
-                 valueType: object = None, value: int = None,
+                 valueType: ModifierValueTypes = None, value: int = None,
                  targetAttribute: CharacterAttributes = None):
         super().__init__(id, lang, name, description)
 
@@ -92,3 +93,10 @@ class AbilityContext(Object):
 
     def printer(self, depth):
         print('{} Context - {}'.format('  ' * depth, self.name))
+
+
+    def __eq__(self, other):
+        if isinstance(other, AbilityContext):
+            if self.value == other.value and self.valueType is other.valueType and self.targetAttribute is other.targetAttribute:
+                return True
+        return False

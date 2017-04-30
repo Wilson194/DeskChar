@@ -10,13 +10,19 @@ class DrdFile:
         pass
 
 
-    def create(self, path):
+    def create(self, path, database: str = 'test.db'):
         """
         Create a file with whole program backup
         :param path: 
+        :param database: 
         :return: 
         """
-        self.__dump_db()
+        self.__dump_db(database)
+        if os.path.basename(path).endswith('.drd'):
+            path = path
+        else:
+            path = os.path.join(os.path.dirname(path), os.path.basename(path) + '.drd')
+
         with zipfile.ZipFile(path, 'w') as myZip:
             myZip.write('database')
 
@@ -48,8 +54,12 @@ class DrdFile:
         shutil.rmtree('temp')
 
 
-    def __dump_db(self):
-        con = sqlite3.connect('test.db')
+    def __dump_db(self, database: str = 'test.db'):
+        """
+        Dump whole database to temp file. Setting table is skipped and structure of tables are included.
+        :param database: name of database, that you want to dump        
+        """
+        con = sqlite3.connect(database)
         con.row_factory = sqlite3.Row
         con.execute('PRAGMA ENCODING = `UTF-8`')
         data = '\n'.join(con.iterdump())
@@ -70,8 +80,13 @@ class DrdFile:
             f.write(data[18:])
 
 
-    def _load_db(self, path):
-        con = sqlite3.connect('test.db')
+    def _load_db(self, path, database: str = 'test.db'):
+        """
+        Delete current database and load new database from backup file
+        :param path: path, where backup file is stored
+        :param database: target database
+        """
+        con = sqlite3.connect(database)
 
         con.row_factory = sqlite3.Row
         con.execute('PRAGMA foreign_keys = OFF;')

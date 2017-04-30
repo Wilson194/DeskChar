@@ -16,16 +16,18 @@ class AbilityDAO(DAO, IAbilityDAO):
     TYPE = ObjectType.ABILITY
 
 
-    def __init__(self, ):
-        self.database = ObjectDatabase(self.DATABASE_DRIVER)
+    def __init__(self, databaseDriver: str = None):
+        self.database = ObjectDatabase(databaseDriver if databaseDriver else self.DATABASE_DRIVER)
         self.treeDAO = PlayerTreeDAO()
 
 
     def create(self, ability: Ability, nodeParentId: int = None, contextType: ObjectType = None) -> int:
         """
-        Create new ability in database
+        Create new ability
         :param ability: Ability object
-        :return: id of autoincrement
+        :param nodeParentId: id of parent node in tree
+        :param contextType: Object type of tree, where item is located
+        :return: id of created ability
         """
 
         if not contextType:
@@ -81,9 +83,10 @@ class AbilityDAO(DAO, IAbilityDAO):
 
     def delete(self, ability_id: int):
         """
-        Delete ability from database and all from translate
+        Delete ability from database and from translate
         :param ability_id: id of ability
         """
+
         self.database.delete(self.DATABASE_TABLE, ability_id)
         self.database.delete_where('translates',
                                    {'target_id': ability_id, 'type': ObjectType.ABILITY})
@@ -91,15 +94,24 @@ class AbilityDAO(DAO, IAbilityDAO):
 
     def get(self, ability_id: int, lang=None, nodeId: int = None, contextType: ObjectType = None) -> Ability:
         """
-        Get ability from database
+        Get ability , object transable attributes depends on lang
+        If nodeId and contextType is specified, whole object is returned (with all sub objects)
+        If not specified, only basic attributes are set.        
         :param ability_id: id of ability
-        :param lang: lang of ability
+        :param lang: lang of object
+        :param nodeId: id of node in tree, where object is located
+        :param contextType: object type of tree, where is node
         :return: Ability object
         """
         if lang is None:  # TODO: default lang
             lang = 'cs'
 
-        data = dict(self.database.select(self.DATABASE_TABLE, {'ID': ability_id})[0])
+        data = self.database.select(self.DATABASE_TABLE, {'ID': ability_id})
+        if not data:
+            return None
+        else:
+            data = dict(data[0])
+
         tr_data = self.database.select_translate(ability_id, ObjectType.ABILITY.value, lang)
 
         drd_class = Classes(data.get('drd_class')) if data.get('drd_class') is not None else None

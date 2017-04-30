@@ -3,6 +3,8 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 
 from business.managers.EffectManager import EffectManager
 from business.managers.ModifierManager import ModifierManager
+from data.DAO.EffectDAO import EffectDAO
+from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from presentation.layouts.Layout import Layout
 from structure.effects.Effect import Effect
 from structure.effects.Modifier import Modifier
@@ -103,6 +105,9 @@ class EffectLayout(Layout):
 
         header = self.table.horizontalHeader()
         header.setStretchLastSection(True)
+
+        # effectNode = PlayerTreeDAO().get_node_by_object(self.object)
+        # EffectDAO().get(self.object.id,self.object.lang,effectNode.id, effectNode)
 
         for i, modifier in enumerate(self.object.modifiers):
             self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(modifier.name))

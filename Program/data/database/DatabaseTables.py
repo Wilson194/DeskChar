@@ -1,6 +1,8 @@
 from data.database.Database import Database, Column, Foreign
 from sqlite3 import OperationalError
 
+from data.database.ObjectDatabase import ObjectDatabase
+
 
 class DatabaseTables:
     """
@@ -8,12 +10,12 @@ class DatabaseTables:
     """
 
 
-    def create_tables(self):
+    def create_tables(self, databaseName: str = 'test.db'):
         """
         Try to create all tables in database
         :return:
         """
-        database = Database('test.db')  # TODO
+        database = ObjectDatabase(databaseName)  # TODO
 
         # ///////////// Languages \\\\\\\\\\\\\\\\\\
 
@@ -98,9 +100,8 @@ class DatabaseTables:
 
         try:
             database.create_table('Ability', ability_columns)
-        except OperationalError:
+        except OperationalError :
             pass
-
         # ///////////// Ability context \\\\\\\\\\\\\\\\\\
 
         ability_context_columns = [

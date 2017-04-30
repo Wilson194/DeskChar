@@ -124,9 +124,9 @@ class Item(Object):
 
 
     def __eq__(self, other):
-        if super().__eq__(
-                other) and self.weight == other.weight and self.price == other.price:
-            return True
+        if isinstance(other, Item):
+            if super().__eq__(other) and self.weight == other.weight and self.price == other.price:
+                return True
 
         return False
 

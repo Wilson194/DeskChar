@@ -49,6 +49,10 @@ class MainWindow(QMainWindow):
 
 
     def redraw_central_widget(self, object_type: ObjectType):
+        if self.tabWidget:
+            self.tabWidget.tree_item_clicked(None)
+        if self.mapWidget:
+            self.mapWidget.tree_item_doubleclick_action(None)
         for i in range(self.centralWidget.layout().count()):
             if self.tabWidget:
                 self.tabWidget.destroy()
@@ -63,7 +67,7 @@ class MainWindow(QMainWindow):
         self.splitter = QtWidgets.QSplitter(self.centralWidget)
         self.splitter.setHandleWidth(15)
 
-        self.tree = TreeWidget(self.splitter, object_type)
+        self.tree = TreeWidget(self.splitter, object_type, self)
         # self.tree.show()
 
         if object_type is ObjectType.MAP:
@@ -101,6 +105,11 @@ class MainWindow(QMainWindow):
                 self.tree.item_doubleclick_signal.connect(self.mapWidget.tree_item_doubleclick_action)
                 if item:
                     self.mapWidget.tree_item_doubleclick_action(item)
+        elif object_type is None:
+            if self.mapWidget:
+                self.mapWidget.hide()
+            if self.tabWidget:
+                self.tabWidget.hide()
 
         else:
             if self.mapWidget:

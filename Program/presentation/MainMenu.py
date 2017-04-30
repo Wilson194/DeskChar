@@ -51,6 +51,7 @@ class MainMenu(QMenuBar):
         settings_action.setShortcut('Ctrl+T')
         settings_action.setStatusTip('Settings')
         settings_action.triggered.connect(self.settings_slot)
+        settings_action.setDisabled(True)
 
         file_menu = self.addMenu(TR().tr('Menu_file'))
         file_menu.addAction(open_action)
@@ -141,20 +142,7 @@ class MainMenu(QMenuBar):
 
     def about_action(self):
         # TextDialog(TR().tr('About_text'))
-        QtWidgets.QMessageBox.about(self, "About Image Viewer",
-                                    "<p>The <b>Image Viewer</b> example shows how to combine "
-                                    "QLabel and QScrollArea to display an image. QLabel is "
-                                    "typically used for displaying text, but it can also display "
-                                    "an image. QScrollArea provides a scrolling view around "
-                                    "another widget. If the child widget exceeds the size of the "
-                                    "frame, QScrollArea automatically provides scroll bars.</p>"
-                                    "<p>The example demonstrates how QLabel's ability to scale "
-                                    "its contents (QLabel.scaledContents), and QScrollArea's "
-                                    "ability to automatically resize its contents "
-                                    "(QScrollArea.widgetResizable), can be used to implement "
-                                    "zooming and scaling features.</p>"
-                                    "<p>In addition the example shows how to use QPainter to "
-                                    "print an image.</p>")
+        QtWidgets.QMessageBox.about(self,'About DeskChar', TR().tr('About_text'))
 
 
     def open_slot(self):

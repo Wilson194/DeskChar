@@ -1,3 +1,4 @@
+from structure.enums.ArmorSize import ArmorSize
 from structure.enums.Items import Items
 from structure.enums.ObjectType import ObjectType
 from structure.items.Item import Item
@@ -11,7 +12,7 @@ class Armor(Item):
     def __init__(self, id: int = None, lang=None, name: str = None,
                  description: str = None, parent_id: int = None,
                  price: int = None, quality: int = None,
-                 weightA: int = None, weightB: int = None, weightC: int = None, size: int = None,
+                 weightA: int = None, weightB: int = None, weightC: int = None, size: ArmorSize = None,
                  amount: int = 1):
         super().__init__(id, lang, name, description, parent_id, None, price, amount)
 
@@ -99,3 +100,11 @@ class Armor(Item):
     @size.setter
     def size(self, value):
         self.__size = value
+
+
+    def __eq__(self, other):
+        if isinstance(other, Armor):
+            if super().__eq__(other) and self.quality == other.quality and self.weightA == other.weightA \
+                    and self.weightB == other.weightB and self.weightC == other.weightC and self.size == other.size:
+                return True
+        return False

@@ -133,7 +133,7 @@ class ModifierLayout(Layout):
         elif ModifierTargetTypes(self.targetTypeInput.currentIndex()) is ModifierTargetTypes.CHARACTER:
             self.valueTypeInput.clear()
             self.valueTypeInput.addItem(TR().tr('Select_value'))
-            for value in [ModifierValueTypes.FROM_BASE, ModifierValueTypes.FROM_TOTAL, ModifierValueTypes.TO_TOTAL]:
+            for value in [ModifierValueTypes.TO_TOTAL, ModifierValueTypes.FROM_BASE, ModifierValueTypes.FROM_TOTAL]:
                 Qdata = {'value': value}
                 self.valueTypeInput.addItem(TR().tr(str(value)), QtCore.QVariant(Qdata))
             self.valueTypeInput.currentIndexChanged.connect(self.valueTypeChangedSlot)
@@ -186,7 +186,7 @@ class ModifierLayout(Layout):
 
             else:
                 self.valueTypeInput.addItem(TR().tr('Select_value'))
-                for value in [ModifierValueTypes.FROM_BASE, ModifierValueTypes.FROM_TOTAL, ModifierValueTypes.TO_TOTAL]:
+                for value in [ModifierValueTypes.TO_TOTAL, ModifierValueTypes.FROM_BASE, ModifierValueTypes.FROM_TOTAL]:
                     Qdata = {'value': value}
                     self.valueTypeInput.addItem(TR().tr(str(value)), QtCore.QVariant(Qdata))
                 self.valueTypeInput.currentIndexChanged.connect(self.valueTypeChangedSlot)
@@ -308,6 +308,7 @@ class ModifierLayout(Layout):
             else:
                 self.object.itemTargetAttribute = data[1]
             self.object.valueType = data[2]
+            print(data[2])
             self.object.value = data[3]
 
             self.modifier_manager.update(self.object)

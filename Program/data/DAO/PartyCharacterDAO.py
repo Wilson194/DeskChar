@@ -1,13 +1,14 @@
 from data.DAO.CharacterDAO import CharacterDAO
 from data.DAO.MessageDAO import MessageDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.interface.IPartyCharacterDAO import IPartyCharacterDAO
 from data.database.Database import Database
 from structure.character.PartyCharacter import PartyCharacter
 from structure.enums.ObjectType import ObjectType
 from data.DAO.DAO import DAO
 
 
-class PartyCharacterDAO(DAO):
+class PartyCharacterDAO(DAO, IPartyCharacterDAO):
     DATABASE_TABLE = 'PartyCharacter'
     DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.CHARACTER
@@ -19,14 +20,20 @@ class PartyCharacterDAO(DAO):
 
     def create(self, character: PartyCharacter, nodeParentId: int = None, contextType: ObjectType = None) -> int:
         """
-        Create new spell in database
-        :param character: Character object
-        :return: id of autoincrement
+        Create new PartyCharacter, if character given, linked with character and create character
+                                   if character is not given, only party character created and liked with scenario
+        :param character: PartyCharacter object
+        :param nodeParentId: id of parent node in tree
+        :param contextType: Object type of tree, where item is located
+        :return: id of created character
         """
+        if not contextType:
+            contextType = self.TYPE
+
         if character.character:
             if type(character.character) is dict:
                 character_id = CharacterDAO().create(character.character.popitem()[1], nodeParentId,
-                                                 contextType)  # TODO: default lang
+                                                     contextType)  # TODO: default lang
             else:
                 character_id = CharacterDAO().create(character.character, nodeParentId,
                                                      contextType)  # TODO: default lang
@@ -35,12 +42,14 @@ class PartyCharacterDAO(DAO):
 
         if nodeParentId:
             scenario = PlayerTreeDAO().get_node(nodeParentId).object
+        else:
+            scenario = None
 
         intValues = {
             'deviceName'  : character.deviceName,
             'MACAddress'  : character.MACAddress,
             'character_id': character_id,
-            'scenario_id' : scenario.id,
+            'scenario_id' : scenario.id if scenario else None,
             'name'        : character.name,
         }
 
@@ -56,8 +65,8 @@ class PartyCharacterDAO(DAO):
 
     def update(self, character: PartyCharacter):
         """
-        Update spell in database
-        :param character: Character object with new data
+        Update party PartyCharacter in database, update only party character, not Character
+        :param character: PartyCharacter object with new data
         """
         intValues = {
             'deviceName': character.deviceName,
@@ -70,18 +79,22 @@ class PartyCharacterDAO(DAO):
 
     def delete(self, character_id: int):
         """
-        Delete spell from database and all his translates
-        :param character_id: id of spell
+        Delete party character from database and all his translates
+        :param character_id: id of party character
         """
         self.database.delete(self.DATABASE_TABLE, character_id)
 
 
     def get(self, character_id: int, lang: str = None, nodeId: int = None, contextType: ObjectType = None) -> PartyCharacter:
         """
-        Get spell from database
-        :param character_id: id of spell
-        :param lang: lang of spell
-        :return: Spell object
+        Get Party Character by character id, object transable attributes depends on lang
+        If nodeId and contextType is specified, whole object is returned (with all sub objects)
+        If not specified, only basic attributes are set.        
+        :param character_id: id of Party Character
+        :param lang: lang of object
+        :param nodeId: id of node in tree, where object is located
+        :param contextType: object type of tree, where is node
+        :return: Party Character object
         """
         if lang is None:  # TODO : default lang
             lang = 'cs'
@@ -105,8 +118,13 @@ class PartyCharacterDAO(DAO):
         return character
 
 
-    def get_by_id(self, partyCharacterId: int, lang: str = None):
-
+    def get_by_id(self, partyCharacterId: int, lang: str = None) -> PartyCharacter:
+        """
+        Get party character by id, without character
+        :param partyCharacterId: party character ID
+        :param lang: lang of object
+        :return: Party character object
+        """
         data = dict(self.database.select(self.DATABASE_TABLE, {'ID': partyCharacterId})[0])
 
         character = PartyCharacter(data.get('ID'), lang, data['name'], None, data.get('deviceName', ''),
@@ -117,9 +135,9 @@ class PartyCharacterDAO(DAO):
 
     def get_all(self, lang=None) -> list:
         """
-        Get list of all spells from database, only one lang
+        Get list of all Party Characters from database, only one lang
         :param lang: lang code
-        :return: list of Spells
+        :return: list of Party Characters
         """
         if lang is None:  # TODO : default lang
             lang = 'cs'

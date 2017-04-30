@@ -1,8 +1,9 @@
+from data.DAO.interface.ISettingsDAO import ISettingsDAO
 from data.database.Database import Database
 from structure.general.Lang import Lang
 
 
-class SettingsDAO:
+class SettingsDAO(ISettingsDAO):
     """
     DAO for settings
     """
@@ -14,6 +15,14 @@ class SettingsDAO:
 
 
     def get_value(self, name: str, type=None):
+        """
+        Get value of setting from database, str and int values could be returned
+            Type could be str or int
+        If not specified, int is first
+        :param name: name of setting attribute
+        :param type: type of value that will be returned
+        :return: value of setting
+        """
         data = self.database.select(self.TABLE_NAME, {'name': name})
         if len(data) == 0:
             return None
@@ -30,7 +39,12 @@ class SettingsDAO:
         return strValue
 
 
-    def set_value(self, name: str, value):
+    def set_value(self, name: str, value) -> None:
+        """
+        Set value for setting, save to database
+        :param name: name of setting value
+        :param value: value of setting 
+        """
         data = self.database.select(self.TABLE_NAME, {'name': name})
         if len(data) == 0:
             if type(value) is int:
