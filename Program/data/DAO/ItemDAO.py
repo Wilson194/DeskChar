@@ -21,7 +21,6 @@ from structure.tree.NodeObject import NodeObject
 
 class ItemDAO(DAO, IItemDAO):
     DATABASE_TABLE = 'Item'
-    DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.ITEM
 
 

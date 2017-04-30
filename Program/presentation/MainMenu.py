@@ -7,6 +7,7 @@ from presentation.Translate import Translate as TR
 from presentation.dialogs.Settings import Settings
 from presentation.dialogs.TextDialog import TextDialog
 from structure.enums.ObjectType import ObjectType
+from presentation.Synchronizer import Synchronizer as Sync
 
 
 class MainMenu(QMenuBar):
@@ -32,13 +33,19 @@ class MainMenu(QMenuBar):
                               self)
         exit_action.setShortcut('Ctrl+Q')
         exit_action.setStatusTip('Exit application')
-        exit_action.triggered.connect(qApp.quit)
+        exit_action.triggered.connect(self.quit_slot)
 
         open_action = QAction(QIcon('resources/icons/open.png'), TR().tr('Menu_open'),
                               self)
         open_action.setShortcut('Ctrl+O')
         open_action.setStatusTip('Open file')
         open_action.triggered.connect(self.open_slot)
+
+        save_as_action = QAction(QIcon('resources/icons/save.png'), TR().tr('Menu_save_as'),
+                                 self)
+        save_as_action.setShortcut('Ctrl+Alt+S')
+        save_as_action.setStatusTip('Save file as')
+        save_as_action.triggered.connect(self.save_as_slot)
 
         save_action = QAction(QIcon('resources/icons/save.png'), TR().tr('Menu_save'),
                               self)
@@ -54,8 +61,10 @@ class MainMenu(QMenuBar):
         settings_action.setDisabled(True)
 
         file_menu = self.addMenu(TR().tr('Menu_file'))
+
         file_menu.addAction(open_action)
         file_menu.addAction(save_action)
+        file_menu.addAction(save_as_action)
         file_menu.addAction(settings_action)
         file_menu.addSeparator()
         file_menu.addAction(exit_action)
@@ -142,7 +151,7 @@ class MainMenu(QMenuBar):
 
     def about_action(self):
         # TextDialog(TR().tr('About_text'))
-        QtWidgets.QMessageBox.about(self,'About DeskChar', TR().tr('About_text'))
+        QtWidgets.QMessageBox.about(self, 'About DeskChar', TR().tr('About_text'))
 
 
     def open_slot(self):
@@ -155,9 +164,10 @@ class MainMenu(QMenuBar):
         if fileName:
             DrdFile().open(fileName)
             self.templates_menu_signal.emit(ObjectType.SCENARIO)
+            Sync().save_data('Opened_file', fileName)
 
 
-    def save_slot(self):
+    def save_as_slot(self):
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         types = "DrD Files (*.drd)"
@@ -165,5 +175,35 @@ class MainMenu(QMenuBar):
                                                             "", types, options=options)
 
         if fileName:
+            Sync().save_data('Opened_file', fileName)
             DrdFile().create(fileName)
             TextDialog('File saved')
+
+        return fileName
+
+
+    def save_slot(self):
+        fileName = Sync().get_data('Opened_file')
+        if fileName:
+            DrdFile().create(fileName)
+            return True
+        else:
+            return self.save_as_slot()
+
+
+    def quit_slot(self):
+        quit_msg = TR().tr('Quit_text')
+        reply = QtWidgets.QMessageBox.question(self, TR().tr('Sure_quit'),
+                                               quit_msg,
+                                               QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Save)
+
+        if reply == QtWidgets.QMessageBox.Yes:
+            qApp.quit()
+        elif reply == QtWidgets.QMessageBox.Save:
+            response = self.save_slot()
+            if response:
+                qApp.quit()
+            else:
+                pass
+        else:
+            pass

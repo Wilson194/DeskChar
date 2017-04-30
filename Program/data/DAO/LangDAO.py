@@ -8,10 +8,11 @@ class LangDAO(ILangDAO):
     DAO for lang
     """
     TABLE_NAME = 'languages'
+    DATABASE_DRIVER = "file::memory:?cache=shared"  # TODO: Database
 
 
     def __init__(self):
-        self.database = Database('test.db')
+        self.database = Database(self.DATABASE_DRIVER)
 
 
     def get_all_langs(self) -> list:

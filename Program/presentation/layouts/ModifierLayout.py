@@ -271,7 +271,7 @@ class ModifierLayout(Layout):
             return False, []
 
 
-    def map_data(self, modifier: Modifier):
+    def map_data(self, modifier: Modifier, treeNode=None):
         """
         Mapa data from object to inputs in layout
         :param modifier: Spell object

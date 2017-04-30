@@ -13,7 +13,6 @@ from structure.tree.NodeObject import NodeObject
 
 class EffectDAO(DAO, IEffectDAO):
     DATABASE_TABLE = 'Effect'
-    DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.EFFECT
 
 

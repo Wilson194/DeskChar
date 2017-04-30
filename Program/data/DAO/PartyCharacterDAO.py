@@ -10,7 +10,6 @@ from data.DAO.DAO import DAO
 
 class PartyCharacterDAO(DAO, IPartyCharacterDAO):
     DATABASE_TABLE = 'PartyCharacter'
-    DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.CHARACTER
 
 

@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from PyQt5 import QtWidgets, QtGui, QtCore
 from business.managers.AbilityManager import AbilityManager
+from data.DAO.AbilityDAO import AbilityDAO
 from structure.abilities.Ability import Ability
 from structure.enums.Races import Races
 from structure.enums.Classes import Classes
 from presentation.layouts.Layout import Layout
+from presentation.Translate import Translate as TR
 
 
 class AbilityLayout(Layout):
@@ -15,9 +17,9 @@ class AbilityLayout(Layout):
 
     def __init__(self, parent):
         super().__init__(parent)
+        self.__parent = parent
 
         self.init_ui()
-
         self.ability_manager = AbilityManager()
         self.object = None
 
@@ -47,10 +49,13 @@ class AbilityLayout(Layout):
         self.description_input = self.text_box(self.input_grid, 'Description', 0, 4)
         self.chance_input = self.text_box(self.input_grid, 'Chance', 0, 5)
 
+        self.table = QtWidgets.QTableWidget(self.__parent)
+        self.input_grid.addWidget(self.table, 6, 0, 1, 2)
+
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, ability: Ability):
+    def map_data(self, ability: Ability, treeNode=None):
         """
         Mapa data from object to inputs in layout
         :param ability: Ability object
@@ -63,6 +68,8 @@ class AbilityLayout(Layout):
         self.level_input.setValue(ability.level if ability.level else 1)
         class_index = ability.drd_class.value if ability.drd_class is not None else 0
         race_index = ability.drd_race.value if ability.drd_race is not None else 0
+
+        self.__set_table_data(treeNode)
 
         self.class_input.setCurrentIndex(class_index)
         self.race_input.setCurrentIndex(race_index)
@@ -82,3 +89,26 @@ class AbilityLayout(Layout):
         self.object.drd_race = Races(race_index) if race_index > 0 else None
 
         self.ability_manager.update_ability(self.object)
+
+
+    def __set_table_data(self, treeNode):
+        self.table.setColumnCount(4)
+
+        heades = [TR().tr('Name'), TR().tr('Target_attribute_type'), TR().tr('Value_type'), TR().tr('Value')]
+        self.table.setHorizontalHeaderLabels(heades)
+
+        header = self.table.horizontalHeader()
+        header.setStretchLastSection(True)
+
+        # print(treeNode)
+        ability = AbilityDAO().get(self.object.id, self.object.lang, treeNode.id, treeNode.context)
+
+        self.table.setRowCount(len(ability.contexts))
+
+        for i, context in enumerate(ability.contexts):
+            self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(context.name))
+            self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(TR().tr((context.targetAttribute))))
+
+            self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(TR().tr((context.valueType))))
+
+            self.table.setItem(i, 3, QtWidgets.QTableWidgetItem(str(context.value)))

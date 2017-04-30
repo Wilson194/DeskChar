@@ -52,7 +52,7 @@ class SpellLayout(Layout):
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, spell: Spell):
+    def map_data(self, spell: Spell, treeNode=None):
         """
         Mapa data from object to inputs in layout
         :param spell: Spell object

@@ -10,7 +10,7 @@ class DrdFile:
         pass
 
 
-    def create(self, path, database: str = 'test.db'):
+    def create(self, path, database: str = 'file::memory:?cache=shared'):  # TODO:database
         """
         Create a file with whole program backup
         :param path: 
@@ -54,12 +54,12 @@ class DrdFile:
         shutil.rmtree('temp')
 
 
-    def __dump_db(self, database: str = 'test.db'):
+    def __dump_db(self, database: str = "file::memory:?cache=shared"):  # TODO : database
         """
         Dump whole database to temp file. Setting table is skipped and structure of tables are included.
         :param database: name of database, that you want to dump        
         """
-        con = sqlite3.connect(database)
+        con = sqlite3.connect(database, uri=True)
         con.row_factory = sqlite3.Row
         con.execute('PRAGMA ENCODING = `UTF-8`')
         data = '\n'.join(con.iterdump())
@@ -80,13 +80,13 @@ class DrdFile:
             f.write(data[18:])
 
 
-    def _load_db(self, path, database: str = 'test.db'):
+    def _load_db(self, path, database: str = "file::memory:?cache=shared"):  # TODO : Database
         """
         Delete current database and load new database from backup file
         :param path: path, where backup file is stored
         :param database: target database
         """
-        con = sqlite3.connect(database)
+        con = sqlite3.connect(database, uri=True)
 
         con.row_factory = sqlite3.Row
         con.execute('PRAGMA foreign_keys = OFF;')

@@ -63,7 +63,7 @@ class EffectLayout(Layout):
         self.addLayout(self.inputGrid)
 
 
-    def map_data(self, effect: Effect):
+    def map_data(self, effect: Effect, treeNode=None):
         """
         Mapa data from object to inputs in layout
         :param effect: Spell object
@@ -73,7 +73,7 @@ class EffectLayout(Layout):
         self.nameInput.setPlainText(effect.name)
         self.descriptionInput.setPlainText(effect.description)
         self.activeInput.setChecked(effect.active)
-        self.__set_table_data()
+        self.__set_table_data(treeNode)
 
         targetTypeIndex = effect.targetType.value
         self.targetInput.setCurrentIndex(targetTypeIndex)
@@ -95,9 +95,8 @@ class EffectLayout(Layout):
         self.effect_manager.update_effect(self.object)
 
 
-    def __set_table_data(self):
+    def __set_table_data(self, treeNode):
         self.table.setColumnCount(5)
-        self.table.setRowCount(len(self.object.modifiers))
 
         heades = [TR().tr('Name'), TR().tr('Target_type'), TR().tr('Target_attribute_type'),
                   TR().tr('Value_type'), TR().tr('Value')]
@@ -106,10 +105,12 @@ class EffectLayout(Layout):
         header = self.table.horizontalHeader()
         header.setStretchLastSection(True)
 
-        # effectNode = PlayerTreeDAO().get_node_by_object(self.object)
-        # EffectDAO().get(self.object.id,self.object.lang,effectNode.id, effectNode)
+        # print(treeNode)
+        effect = EffectDAO().get(self.object.id, self.object.lang, treeNode.id, treeNode.context)
 
-        for i, modifier in enumerate(self.object.modifiers):
+        self.table.setRowCount(len(effect.modifiers))
+
+        for i, modifier in enumerate(effect.modifiers):
             self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(modifier.name))
             self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(TR().tr((modifier.targetType))))
             if modifier.itemTargetAttribute is not None:

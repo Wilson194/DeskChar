@@ -48,7 +48,7 @@ class MoneyLayout(Layout):
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, item: Money):
+    def map_data(self, item: Money, treeNode=None):
         """
         Mapa data from object to inputs in layout
         :param item: Item object

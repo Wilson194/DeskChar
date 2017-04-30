@@ -6,6 +6,7 @@ translate = {
     'Menu_open'                 : '&Otevřít',
     'Menu_help'                 : '&Nápověda',
     'Menu_about'                : '&O aplikaci',
+    'Menu_save_as'              : 'Uložit jako',
     'Menu_save'                 : 'Uložit',
     'Menu_settings'             : 'Nastavení',
 
@@ -271,4 +272,7 @@ Nově je možné vytvářet i jednoduché mapy s popisky.</p>
     <ul>Jan Horáček</ul>
 </li>
     ''',
+
+    'Quit_text'                 : 'Opravdu chcete ukončit program? <br> Některé vaše práce může být <b>ztracena</b>!',
+    'Sure_quit'                 : 'Opravdu ukončit?'
 }

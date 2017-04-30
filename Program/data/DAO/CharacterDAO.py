@@ -19,7 +19,6 @@ from presentation.Translate import Translate as TR
 
 class CharacterDAO(DAO, ISpellDAO):
     DATABASE_TABLE = 'Character'
-    DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.CHARACTER
 
 

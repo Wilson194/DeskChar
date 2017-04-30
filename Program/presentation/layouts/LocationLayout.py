@@ -46,7 +46,7 @@ class LocationLayout(Layout):
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, monster: Monster):
+    def map_data(self, monster: Monster, treeNode=None):
         """
         Mapa data from object to inputs in layout
         :param monster: Monster object

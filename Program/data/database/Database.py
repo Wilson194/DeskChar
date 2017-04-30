@@ -10,7 +10,7 @@ class Database(metaclass=Singleton):
 
     def __init__(self, database_name):
         self.databaseName = database_name
-        self.connection = sqlite3.connect(database_name)
+        self.connection = sqlite3.connect(database_name, uri=True)
         self.connection.row_factory = sqlite3.Row
         self.connection.execute('PRAGMA foreign_keys = ON;')
         self.connection.execute('PRAGMA ENCODING = `UTF-8`')
@@ -204,7 +204,7 @@ class Database(metaclass=Singleton):
         :param lang: lang
         :return: dictionary of (name, value)
         """
-        sql = "SELECT * FROM translates WHERE target_id = " + str(target_id)
+        sql = "SELECT name,value FROM translates WHERE target_id = " + str(target_id)
         sql += " AND type = '" + str(type) + "'"
         sql += " AND lang = '" + lang + "'"
 

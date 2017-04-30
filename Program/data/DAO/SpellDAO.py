@@ -10,7 +10,6 @@ from structure.tree.NodeObject import NodeObject
 
 class SpellDAO(DAO, ISpellDAO):
     DATABASE_TABLE = 'Spell'
-    DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.SPELL
 
 

@@ -11,7 +11,6 @@ import os
 
 class MapDAO(DAO, IMapDAO):
     DATABASE_TABLE = 'Map'
-    DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.MAP
 
 

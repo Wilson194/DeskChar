@@ -53,7 +53,7 @@ class TreeWidget(QtWidgets.QFrame):
         :param key_event: key event
         """
         if key_event.key() == QtCore.Qt.Key_Return:
-            if isinstance(self.treeWidget.selectedItems()[0].data(0, 12), NodeObject):
+            if self.treeWidget.selectedItems() and  isinstance(self.treeWidget.selectedItems()[0].data(0, 12), NodeObject):
                 self.item_doubleclick_signal.emit(self.treeWidget.selectedItems()[0])
 
 
@@ -301,6 +301,7 @@ class TreeWidget(QtWidgets.QFrame):
         """
 
         expanded_indexes = {}
+
         it = QtWidgets.QTreeWidgetItemIterator(self.treeWidget)
         while it.value():
             node_id = it.value().data(0, 12).id
@@ -310,6 +311,7 @@ class TreeWidget(QtWidgets.QFrame):
         self.treeWidget.clear()
 
         items = self.tree_manager.get_tree(self.__data_type)
+
         self.set_items(items)
 
         it = QtWidgets.QTreeWidgetItemIterator(self.treeWidget)
@@ -320,7 +322,7 @@ class TreeWidget(QtWidgets.QFrame):
             it += 1
 
 
-    def set_items(self, items: list, parent=None):
+    def set_items(self, items: list, parent=None, recursion=1):
         """
         Create item tree in widget
         :param items: object items
@@ -345,14 +347,14 @@ class TreeWidget(QtWidgets.QFrame):
                 self.set_items(item.children, tree_item)
 
             else:
-                icon = item.object.icon
-                object_icon = QtGui.QIcon(icon)
 
+                icon = item.object.icon
+                object_icon = QtGui.QIcon(icon)  # TODO buff icons
                 tree_item.setIcon(0, object_icon)
                 tree_item.setFlags(
                     tree_item.flags() | QtCore.Qt.ItemIsUserCheckable)
 
-                self.set_items(item.children, tree_item)
+                self.set_items(item.children, tree_item, recursion + 1)
 
                 tree_item.setData(0, 11, QtCore.QVariant(item.object))
 
@@ -430,7 +432,7 @@ class TreeWidget(QtWidgets.QFrame):
             # Skip inventory and ground
             obj = item.data(0, 12).object
             if not (obj.object_type is ObjectType.ITEM and obj.type is Items.CONTAINER and (
-                    obj.parent_id == -1 or obj.parent_id == -2)):
+                            obj.parent_id == -1 or obj.parent_id == -2)):
                 self.item_doubleclick_signal.emit(item)
         if item.isExpanded():
             item.setExpanded(False)

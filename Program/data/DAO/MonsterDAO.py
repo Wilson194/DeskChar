@@ -23,7 +23,6 @@ from structure.tree.NodeObject import NodeObject
 
 class MonsterDAO(DAO, IMonsterDAO):
     DATABASE_TABLE = 'Monster'
-    DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.MONSTER
 
 

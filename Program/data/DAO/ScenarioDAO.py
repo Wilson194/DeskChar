@@ -19,7 +19,6 @@ from structure.tree.NodeObject import NodeObject
 
 class ScenarioDAO(DAO, IScenarioDAO):
     DATABASE_TABLE = 'Scenario'
-    DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.SCENARIO
 
 

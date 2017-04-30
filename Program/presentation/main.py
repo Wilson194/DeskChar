@@ -8,6 +8,7 @@ from structure.enums.ObjectType import ObjectType
 from presentation.widgets.TreeWidget import TreeWidget
 from presentation.widgets.TabWidget import TabWidget
 from presentation.Toolbar import ToolBar
+from presentation.Translate import Translate as TR
 
 
 class MainWindow(QMainWindow):
@@ -21,6 +22,25 @@ class MainWindow(QMainWindow):
         self.tree = None
 
         self.init_ui()
+
+
+    def closeEvent(self, event):
+
+        quit_msg = TR().tr('Quit_text')
+        reply = QtWidgets.QMessageBox.question(self, TR().tr('Sure_quit'),
+                                               quit_msg,
+                                               QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No | QtWidgets.QMessageBox.Save)
+
+        if reply == QtWidgets.QMessageBox.Yes:
+            event.accept()
+        elif reply == QtWidgets.QMessageBox.Save:
+            response = self.menuWidget().save_slot()
+            if response:
+                event.accept()
+            else:
+                event.ignore()
+        else:
+            event.ignore()
 
 
     def init_ui(self):

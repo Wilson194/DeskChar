@@ -8,10 +8,11 @@ class SettingsDAO(ISettingsDAO):
     DAO for settings
     """
     TABLE_NAME = 'Settings'
+    DATABASE_DRIVER = "file::memory:?cache=shared" # TODO: Database
 
 
     def __init__(self):
-        self.database = Database('test.db')
+        self.database = Database(self.DATABASE_DRIVER)
 
 
     def get_value(self, name: str, type=None):

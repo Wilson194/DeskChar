@@ -51,7 +51,7 @@ class ScenarioLayout(Layout):
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, scenario: Scenario):
+    def map_data(self, scenario: Scenario, treeNode=None):
         """
         Mapa data from object to inputs in layout
         :param scenario: Monster object

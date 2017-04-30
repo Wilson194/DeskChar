@@ -7,6 +7,7 @@ from presentation.layouts.Layout import Layout
 from structure.enums.ObjectType import ObjectType
 from presentation.Synchronizer import Synchronizer as Sync
 from structure.map.Map import Map
+from structure.tree.Node import Node
 
 
 class TabWidget(QtWidgets.QFrame):
@@ -25,6 +26,7 @@ class TabWidget(QtWidgets.QFrame):
 
         self.target_id = target_id
         self.target_type = target_type
+        self.target_node = None
 
         self.mainWindow = mainWindow
 
@@ -65,7 +67,7 @@ class TabWidget(QtWidgets.QFrame):
                 lang = self.lang_manager.get_lang_by_code(one.lang)
                 tab_text = lang.name + ' (' + lang.code + ')'
                 layout = one.layout()(tab)
-                layout.map_data(one)
+                layout.map_data(one, self.target_node)
                 tab.setLayout(layout)
                 self.tab_widget.insertTab(self.tab_bar.count(), tab, tab_text)
                 layout.data_changed_signal.connect(self.data_changed_slot)
@@ -75,7 +77,7 @@ class TabWidget(QtWidgets.QFrame):
             self.tab_widget.insertTab(self.tab_bar.count(), self.new_tab, '+')
 
 
-    def change_object(self, target_id: int, target_type: ObjectType):
+    def change_object(self, target_id: int, target_type: ObjectType, treeNode: Node = None):
         """
         change object that mapped on tabs
         :param target_id: id of object
@@ -84,6 +86,7 @@ class TabWidget(QtWidgets.QFrame):
         self.tab_widget.clear()
         self.target_id = target_id
         self.target_type = target_type
+        self.target_node = treeNode
         self.init_data()
 
 
@@ -101,11 +104,12 @@ class TabWidget(QtWidgets.QFrame):
 
         if treeItem:
             item = treeItem.data(0, 11)
+            node = treeItem.data(0, 12)
 
             if isinstance(item, Map):
                 self.mainWindow.redraw_context_widget(ObjectType.MAP, treeItem)
             else:
-                self.change_object(item.id, ObjectType(item.object_type))
+                self.change_object(item.id, ObjectType(item.object_type), node)
 
 
     def data_changed_slot(self, layout: Layout):

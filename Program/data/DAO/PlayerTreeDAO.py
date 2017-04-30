@@ -12,10 +12,11 @@ class PlayerTreeDAO(IPlayerTreeDAO):
     DAO for tree widget
     """
     TABLE_NAME = 'player_tree_structure'
+    DATABASE_DRIVER = "file::memory:?cache=shared"  # TODO: database
 
 
     def __init__(self):
-        self.database = Database('test.db')
+        self.database = Database(self.DATABASE_DRIVER)
 
 
     def get_root_nodes(self, target_type: ObjectType) -> list:
@@ -181,7 +182,7 @@ def map_objects(data: dict) -> list:
             obj = Folder(row['ID'], row['name'], row['parent_id'])
         elif row['type'] is NodeType.OBJECT.value:
             target_object = ObjectType(row['target_type']).instance().DAO()().get(row['target_id'])
-            obj = NodeObject(row['ID'], row['name'], row['parent_id'], target_object)
+            obj = NodeObject(row['ID'], row['name'], row['parent_id'], target_object, ObjectType(row['parent_type']))
         else:
             obj = None
         nodes.append(obj)

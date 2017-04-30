@@ -10,7 +10,7 @@ class DatabaseTables:
     """
 
 
-    def create_tables(self, databaseName: str = 'test.db'):
+    def create_tables(self, databaseName: str = "file::memory:?cache=shared"):  # TODO: Database
         """
         Try to create all tables in database
         :return:
@@ -100,7 +100,7 @@ class DatabaseTables:
 
         try:
             database.create_table('Ability', ability_columns)
-        except OperationalError :
+        except OperationalError:
             pass
         # ///////////// Ability context \\\\\\\\\\\\\\\\\\
 

@@ -12,7 +12,6 @@ from structure.tree.NodeObject import NodeObject
 
 class AbilityDAO(DAO, IAbilityDAO):
     DATABASE_TABLE = 'Ability'
-    DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.ABILITY
 
 

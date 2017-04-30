@@ -1,90 +1,21 @@
-<character>
-  <age>24</age>
-  <agility>20</agility>
-  <alignment>LAWFUL_GOOD</alignment>
-  <charisma>35</charisma>
-  <class>MAGICIAN</class>
-  <currentHealth>20</currentHealth>
-  <currentMana>90</currentMana>
-  <description lang="cs">Postava Wilson</description>
-  <ground>
-    <amount>1</amount>
-    <capacity>0</capacity>
-    <description lang="cs"></description>
-    <id>25</id>
-    <name lang="cs">Ground</name>
-    <parentId>-2</parentId>
-    <price>0</price>
-    <weight>0</weight>
-  </ground>
-  <height>195</height>
-  <id>3</id>
-  <intelligence>40</intelligence>
-  <inventory>
-    <amount>1</amount>
-    <capacity>0</capacity>
-    <description lang="cs"></description>
-    <id>24</id>
-    <items>
-      <armor>
-        <amount>1</amount>
-        <description lang="cs">Plášť</description>
-        <effects>
-          <effect>
-            <active>true</active>
-            <description lang="cs">Ochrana pláště</description>
-            <id>8</id>
-            <modifiers>
-              <modifier>
-                <id>14</id>
-                <itemAttribute>WEAPON_DEFENCE</itemAttribute>
-                <targetType>AFFECTS_ARMOR</targetType>
-                <value>15</value>
-                <valueType>FROM_TOTAL</valueType>
-              </modifier>
-            </modifiers>
-            <name lang="cs">Ochrana</name>
-            <targetType>AFFECTS_ARMOR</targetType>
-          </effect>
-        </effects>
-        <id>27</id>
-        <name lang="cs">Plášť</name>
-        <parentId>0</parentId>
-        <price>50</price>
-        <quality>20</quality>
-        <size>B</size>
-        <weightA>12</weightA>
-        <weightB>12</weightB>
-        <weightC>15</weightC>
-      </armor>
-    </items>
-    <name lang="cs">Inventory</name>
-    <parentId>-1</parentId>
-    <price>0</price>
-    <weight>0</weight>
-  </inventory>
-  <level>13</level>
-  <maxHealth>20</maxHealth>
-  <maxMana>150</maxMana>
-  <mobility>20</mobility>
-  <name lang="cs">Wilson</name>
-  <race>ELF</race>
-  <spells>
-    <spell>
-      <castTime>1</castTime>
-      <class>MAGICIAN</class>
-      <description lang="cs">Ohnivá koule</description>
-      <duration lang="cs">1</duration>
-      <id>5</id>
-      <manaContinual lang="cs">0</manaContinual>
-      <manaInitial lang="cs">10</manaInitial>
-      <name lang="cs">Ohnivá koule</name>
-      <range lang="cs">10 sáhů</range>
-      <scope lang="cs">1 sáh</scope>
-    </spell>
-  </spells>
-  <strength>20</strength>
-  <toughness>18</toughness>
-  <weight>87</weight>
-  <xp>1555</xp>
-</character>
+<templates>
+  <spell>
+    <castTime>4</castTime>
+    <class>MAGICIAN</class>
+    <description lang="cs">sadf</description>
+    <description lang="en"></description>
+    <duration lang="cs">asdf</duration>
+    <duration lang="en"></duration>
+    <id>1</id>
+    <manaContinual lang="cs">asdf</manaContinual>
+    <manaContinual lang="en"></manaContinual>
+    <manaInitial lang="cs">sadf</manaInitial>
+    <manaInitial lang="en"></manaInitial>
+    <name lang="cs">Kouzlod</name>
+    <name lang="en">Spell</name>
+    <range lang="cs">asdf</range>
+    <range lang="en"></range>
+    <scope lang="cs">asdf</scope>
+    <scope lang="en"></scope>
+  </spell>
+</templates>

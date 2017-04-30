@@ -58,7 +58,7 @@ class ThrowableWeaponLayout(Layout):
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, item: ThrowableWeapon):
+    def map_data(self, item: ThrowableWeapon, treeNode=None):
         """
         Mapa data from object to inputs in layout
         :param item: Item object

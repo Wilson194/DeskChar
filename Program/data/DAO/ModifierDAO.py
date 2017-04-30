@@ -17,7 +17,6 @@ from structure.tree.NodeObject import NodeObject
 
 class ModifierDAO(DAO, IModifierDAO):
     DATABASE_TABLE = 'Modifier'
-    DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.MODIFIER
 
 

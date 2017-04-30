@@ -9,7 +9,7 @@ from structure.map.MapItem import MapItem
 
 class MapItemDAO(IMapItemDAO):
     DATABASE_TABLE = 'Map_item'
-    DATABASE_DRIVER = 'test.db'
+    DATABASE_DRIVER = "file::memory:?cache=shared"  # TODO: Database
     TYPE = ObjectType.MAP_ITEM
 
 

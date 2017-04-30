@@ -8,7 +8,6 @@ from datetime import datetime, date
 
 class MessageDAO(DAO, IMessageDAO):
     DATABASE_TABLE = 'Message'
-    DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.MESSAGE
 
 

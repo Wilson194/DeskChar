@@ -25,7 +25,6 @@ from structure.tree.NodeObject import NodeObject
 
 class LocationDAO(DAO, ILocationDAO):
     DATABASE_TABLE = 'Location'
-    DATABASE_DRIVER = 'test.db'
     TYPE = ObjectType.LOCATION
 
 

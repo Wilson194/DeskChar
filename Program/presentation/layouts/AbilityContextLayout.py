@@ -3,6 +3,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 
 from business.managers.AbilityContextManager import AbilityContextManager
 from business.managers.ModifierManager import ModifierManager
+from data.DAO.AbilityContextDAO import AbilityContextDAO
 from presentation.layouts.Layout import Layout
 from structure.effects.AbilityContext import AbilityContext
 from structure.effects.Modifier import Modifier
@@ -62,7 +63,7 @@ class AbilityContextLayout(Layout):
         self.addLayout(self.inputGrid)
 
 
-    def map_data(self, context: AbilityContext):
+    def map_data(self, context: AbilityContext, treeNode=None):
         """
         Mapa data from object to inputs in layout
         :param context: Spell object
@@ -89,9 +90,10 @@ class AbilityContextLayout(Layout):
         targetAttributeIndex = self.targetAttributeInput.currentIndex()
         valueTypeIndex = self.valueTypeInput.currentIndex()
 
-        self.object.targetAttribute = CharacterAttributes(
-            targetAttributeIndex) if targetAttributeIndex != 0 else None
+        self.object.targetAttribute = CharacterAttributes(targetAttributeIndex) if targetAttributeIndex != 0 else None
         self.object.valueType = ModifierValueTypes(valueTypeIndex) if valueTypeIndex != 0 else None
         self.object.value = self.valueInput.value()
 
         self.contextManager.update(self.object)
+
+
