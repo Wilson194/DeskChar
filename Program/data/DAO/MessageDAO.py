@@ -1,3 +1,4 @@
+from data.DAO.SettingsDAO import SettingsDAO
 from data.DAO.interface.IMessageDAO import IMessageDAO
 from data.database.Database import Database
 from structure.character.Message import Message
@@ -76,8 +77,8 @@ class MessageDAO(DAO, IMessageDAO):
         :param lang: lang of spell
         :return: Message object
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
 
         data = dict(self.database.select(self.DATABASE_TABLE, {'ID': message_id})[0])
 
@@ -115,8 +116,8 @@ class MessageDAO(DAO, IMessageDAO):
         :param lang: lang code
         :return: list of messages
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
         lines = self.database.select_all(self.DATABASE_TABLE)
         characters = []
         for line in lines:

@@ -2,6 +2,7 @@ from data.DAO.AbilityDAO import AbilityDAO
 from data.DAO.EffectDAO import EffectDAO
 from data.DAO.ItemDAO import ItemDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.SettingsDAO import SettingsDAO
 from data.DAO.SpellDAO import SpellDAO
 from data.DAO.interface.ISpellDAO import ISpellDAO
 from data.database.ObjectDatabase import ObjectDatabase
@@ -157,8 +158,8 @@ class CharacterDAO(DAO, ISpellDAO):
         :param contextType: object type of tree, where is node
         :return: Character object
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
 
         data = self.database.select(self.DATABASE_TABLE, {'ID': character_id})
         if not data:
@@ -218,8 +219,8 @@ class CharacterDAO(DAO, ISpellDAO):
         :param lang: lang of characters
         :return: list of characters
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
         lines = self.database.select_all(self.DATABASE_TABLE)
         characters = []
         for line in lines:

@@ -1,9 +1,9 @@
 from data.DAO.AbilityDAO import AbilityDAO
 from data.DAO.ItemDAO import ItemDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.SettingsDAO import SettingsDAO
 from data.DAO.SpellDAO import SpellDAO
 from data.DAO.interface.IMonsterDAO import IMonsterDAO
-from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
 from structure.enums.Alignment import Alignment
 from structure.enums.MonsterRace import MonsterRace
@@ -138,8 +138,8 @@ class MonsterDAO(DAO, IMonsterDAO):
         :param contextType: object type of tree, where is node
         :return: Monster object
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
         data = self.database.select(self.DATABASE_TABLE, {'ID': monster_id})
         if not data:
             return None
@@ -215,8 +215,8 @@ class MonsterDAO(DAO, IMonsterDAO):
         :param lang: lang of Monsters
         :return: list of Monsters
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
         lines = self.database.select_all(self.DATABASE_TABLE)
         items = []
         for line in lines:

@@ -5,6 +5,7 @@ from structure.enums.ArmorSize import ArmorSize
 from structure.items.Armor import Armor
 from structure.items.Item import Item
 from presentation.layouts.Layout import Layout
+from structure.tree.NodeObject import NodeObject
 
 
 class ArmorLayout(Layout):
@@ -53,10 +54,11 @@ class ArmorLayout(Layout):
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, item: Armor,treeNode=None):
+    def map_data(self, item: Armor, treeNode: NodeObject = None) -> None:
         """
         Mapa data from object to inputs in layout
-        :param item: Item object
+        :param item: Armor object
+        :param treeNode: node in tree widget, if its need to get whole object
         """
         self.object = item
 
@@ -74,7 +76,7 @@ class ArmorLayout(Layout):
         self.amount_input.setValue(item.amount if item.amount else 1)
 
 
-    def save_data(self):
+    def save_data(self) -> None:
         """
         Update data in object from inputs and update in manager
         """

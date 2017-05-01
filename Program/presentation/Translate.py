@@ -1,3 +1,4 @@
+from data.DAO.SettingsDAO import SettingsDAO
 from structure.general.Singleton import Singleton
 
 
@@ -9,7 +10,7 @@ class Translate(metaclass=Singleton):
 
     def __init__(self, lang_code=None):
         if lang_code is None:
-            lang_code = 'cs'
+            lang_code = SettingsDAO().get_value('language', str)
         variables = {}
         templatesVariables = {}
 

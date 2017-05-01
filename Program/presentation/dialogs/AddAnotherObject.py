@@ -13,6 +13,7 @@ from structure.tree.Node import Node
 class AddAnotherObject(QtWidgets.QDialog):
     """
     Dialog for import object of another type to tree
+    Allow inline searching and multi select
     """
 
 

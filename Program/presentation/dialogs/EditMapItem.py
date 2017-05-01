@@ -10,7 +10,7 @@ from structure.map.MapItem import MapItem
 
 class EditMapItem(QtWidgets.QDialog):
     """
-    Dialog for creating new item in tree widget
+    Dialog for edit mapItem in map widget
     """
 
 
@@ -60,6 +60,7 @@ class EditMapItem(QtWidgets.QDialog):
     def get_inputs(self) -> dict:
         """
         Get inputs from dialog
+            return name and description
         :return: dictionary of data (name,value)
         """
 

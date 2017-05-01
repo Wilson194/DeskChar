@@ -10,14 +10,14 @@ class DatabaseTables:
     """
 
 
-    def create_tables(self, databaseName: str = "file::memory:?cache=shared"):  # TODO: Database
+    def create_tables(self, databaseName: str = "file::memory:?cache=shared"):
         """
         Try to create all tables in database
         :return:
         """
-        database = ObjectDatabase(databaseName)  # TODO
+        database = ObjectDatabase(databaseName)
 
-        # ///////////// Languages \\\\\\\\\\\\\\\\\\
+        # /////////////////////////////////// Languages \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         languages_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -30,7 +30,7 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// Translate \\\\\\\\\\\\\\\\\\
+        # /////////////////////////////// Translate \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         translate_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -51,7 +51,7 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// Items \\\\\\\\\\\\\\\\\\
+        # //////////////////////////// Items \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         item_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -88,7 +88,7 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// Ability \\\\\\\\\\\\\\\\\\
+        # //////////////////////////// Ability \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         ability_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -102,7 +102,7 @@ class DatabaseTables:
             database.create_table('Ability', ability_columns)
         except OperationalError:
             pass
-        # ///////////// Ability context \\\\\\\\\\\\\\\\\\
+        # //////////////////////////// Ability context \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         ability_context_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -116,7 +116,7 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// Spell \\\\\\\\\\\\\\\\\\
+        # //////////////////////////// Spell \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         spell_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -129,7 +129,7 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// Modifier \\\\\\\\\\\\\\\\\\
+        # //////////////////////////// Modifier \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         modifier_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -146,7 +146,7 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// Effect \\\\\\\\\\\\\\\\\\
+        # //////////////////////////// Effect \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         modifier_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -159,7 +159,7 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// Character \\\\\\\\\\\\\\\\\\
+        # //////////////////////////// Character \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         character_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -183,8 +183,6 @@ class DatabaseTables:
             Column('currentHealth', 'INTEGER'),
             Column('inventoryId', 'INTEGER'),
             Column('groundId', 'INTEGER'),
-
-
         ]
 
         try:
@@ -192,7 +190,7 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// Party character \\\\\\\\\\\\\\\\\\
+        # //////////////////////////// Party character \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         party_character_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -208,7 +206,7 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// Messages \\\\\\\\\\\\\\\\\\
+        # //////////////////////////// Messages \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         message_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -224,7 +222,7 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// Monster \\\\\\\\\\\\\\\\\\
+        # //////////////////////////// Monster \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         monster_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -248,7 +246,7 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// Scenario \\\\\\\\\\\\\\\\\\
+        # //////////////////////////// Scenario \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         scenario_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -260,7 +258,7 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// Location \\\\\\\\\\\\\\\\\\
+        # //////////////////////////// Location \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         location_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -272,7 +270,7 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// Player tree structure \\\\\\\\\\\\\\\\\\
+        # //////////////////////////// Player tree structure \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         structure_columns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -293,7 +291,7 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// Map \\\\\\\\\\\\\\\\\\\
+        # //////////////////////////// Map \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         mapColumns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -307,7 +305,7 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// MapItem \\\\\\\\\\\\\\\\\\\
+        # //////////////////////////// MapItem \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         mapItemColumns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -333,7 +331,7 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// Settings \\\\\\\\\\\\\\\\\\
+        # //////////////////////////// Settings \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         settingsColumns = [
             Column('ID', 'INTEGER', True, False, True),
@@ -348,8 +346,10 @@ class DatabaseTables:
         except OperationalError:
             pass
 
-        # ///////////// Initialize Languages \\\\\\\\\\\\\\\\\\
+        # //////////////////////////// Initialize Languages \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         data = database.select('languages', {'code': 'cs'})
         if len(data) == 0:
             database.insert('languages', {'name': 'Čeština', 'code': 'cs'})
             database.insert('languages', {'name': 'Angličtina', 'code': 'en'})
+
+        database.insert('Settings', {'name': 'language', 'str_value': 'cs'})

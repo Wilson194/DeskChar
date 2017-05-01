@@ -8,6 +8,7 @@ from structure.enums.MonsterRace import MonsterRace
 from structure.enums.MonsterSize import MonsterSize
 from structure.monster.Monster import Monster
 from structure.scenario.Scenario import Scenario
+from structure.tree.NodeObject import NodeObject
 
 
 class ScenarioLayout(Layout):
@@ -51,10 +52,11 @@ class ScenarioLayout(Layout):
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, scenario: Scenario, treeNode=None):
+    def map_data(self, scenario: Scenario, treeNode: NodeObject = None) -> None:
         """
         Mapa data from object to inputs in layout
-        :param scenario: Monster object
+        :param scenario: Scenario object
+        :param treeNode: node in tree widget, if its need to get whole object
         """
         self.object = scenario
         self.nameInput.setPlainText(self.object.name)
@@ -69,7 +71,7 @@ class ScenarioLayout(Layout):
         self.dateInput.setDate(date)
 
 
-    def save_data(self):
+    def save_data(self) -> None:
         """
         Update data in object from inputs and update in manager
         """
@@ -78,6 +80,5 @@ class ScenarioLayout(Layout):
 
         self.object.date = self.dateInput.date().toPyDate()
         # print(self.dateInput.date().toPyDate().strftime('%Y/%m/%d'))
-
 
         self.manager.update_scenario(self.object)

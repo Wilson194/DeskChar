@@ -3,6 +3,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from business.managers.ItemManager import ItemManager
 from presentation.layouts.Layout import Layout
 from structure.items.Money import Money
+from structure.tree.NodeObject import NodeObject
 
 
 class MoneyLayout(Layout):
@@ -48,10 +49,11 @@ class MoneyLayout(Layout):
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, item: Money, treeNode=None):
+    def map_data(self, item: Money, treeNode: NodeObject = None) -> None:
         """
         Mapa data from object to inputs in layout
-        :param item: Item object
+        :param item: Money object
+        :param treeNode: node in tree widget, if its need to get whole object
         """
         self.object = item
         self.header.setText(item.name)

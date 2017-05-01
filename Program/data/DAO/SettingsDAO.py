@@ -8,7 +8,7 @@ class SettingsDAO(ISettingsDAO):
     DAO for settings
     """
     TABLE_NAME = 'Settings'
-    DATABASE_DRIVER = "file::memory:?cache=shared" # TODO: Database
+    DATABASE_DRIVER = "file::memory:?cache=shared"
 
 
     def __init__(self):

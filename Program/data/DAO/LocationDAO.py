@@ -3,11 +3,9 @@ from data.DAO.ItemDAO import ItemDAO
 from data.DAO.MapDAO import MapDAO
 from data.DAO.MonsterDAO import MonsterDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.SettingsDAO import SettingsDAO
 from data.DAO.interface.ILocationDAO import ILocationDAO
-from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
-from structure.enums.Alignment import Alignment
-from structure.enums.MonsterRace import MonsterRace
 from structure.enums.ObjectType import ObjectType
 from structure.items.Armor import Armor
 from structure.items.Container import Container
@@ -15,11 +13,9 @@ from structure.items.MeleeWeapon import MeleeWeapon
 from structure.items.Money import Money
 from structure.items.RangeWeapon import RangeWeapon
 from structure.items.ThrowableWeapon import ThrowableWeapon
-from structure.monster.Monster import Monster
 
 from data.DAO.DAO import DAO
 from structure.scenario.Location import Location
-from structure.scenario.Scenario import Scenario
 from structure.tree.NodeObject import NodeObject
 
 
@@ -108,8 +104,8 @@ class LocationDAO(DAO, ILocationDAO):
         :param contextType: object type of tree, where is node
         :return: Location object
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
         data = self.database.select(self.DATABASE_TABLE, {'ID': location_id})
         if not data:
             return None
@@ -187,8 +183,8 @@ class LocationDAO(DAO, ILocationDAO):
         :param lang: lang of locations
         :return: list of locations
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
         lines = self.database.select_all(self.DATABASE_TABLE)
         items = []
         for line in lines:

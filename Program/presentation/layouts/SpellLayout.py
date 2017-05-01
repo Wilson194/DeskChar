@@ -4,6 +4,7 @@ from business.managers.SpellManager import SpellManager
 from structure.enums.Classes import Classes
 from presentation.layouts.Layout import Layout
 from structure.spells.Spell import Spell
+from structure.tree.NodeObject import NodeObject
 
 
 class SpellLayout(Layout):
@@ -52,10 +53,11 @@ class SpellLayout(Layout):
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, spell: Spell, treeNode=None):
+    def map_data(self, spell: Spell, treeNode: NodeObject = None) -> None:
         """
         Mapa data from object to inputs in layout
         :param spell: Spell object
+        :param treeNode: node in tree widget, if its need to get whole object
         """
         self.object = spell
         self.header.setText(spell.name)
@@ -72,7 +74,7 @@ class SpellLayout(Layout):
         self.class_input.setCurrentIndex(class_index)
 
 
-    def save_data(self):
+    def save_data(self) -> None:
         """
         Update data in object from inputs and update in manager
         """

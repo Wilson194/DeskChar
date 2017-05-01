@@ -1,8 +1,9 @@
+from business.managers.interface.ILangManager import ILangManager
 from data.DAO.LangDAO import LangDAO
 from structure.general.Lang import Lang
 
 
-class LangManager:
+class LangManager(ILangManager):
     """
     Manager for langs operations
     """

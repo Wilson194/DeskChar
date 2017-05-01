@@ -1,5 +1,6 @@
 from PyQt5.QtCore import QPointF
 
+from data.DAO.SettingsDAO import SettingsDAO
 from data.DAO.interface.IMapItemDAO import IMapItemDAO
 from data.database.Database import Database
 from structure.enums.MapItem import MapItemType
@@ -9,7 +10,7 @@ from structure.map.MapItem import MapItem
 
 class MapItemDAO(IMapItemDAO):
     DATABASE_TABLE = 'Map_item'
-    DATABASE_DRIVER = "file::memory:?cache=shared"  # TODO: Database
+    DATABASE_DRIVER = "file::memory:?cache=shared"
     TYPE = ObjectType.MAP_ITEM
 
 
@@ -94,8 +95,8 @@ class MapItemDAO(IMapItemDAO):
         :param lang: lang of map items
         :return: list of map items
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
         lines = self.database.select_all(self.DATABASE_TABLE)
         mapItems = []
         for line in lines:

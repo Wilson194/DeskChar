@@ -42,6 +42,8 @@ class NewTreeItem(QtWidgets.QDialog):
             name = TR().tr(str(obj().object_type) if obj().object_type != ObjectType.ITEM else str(obj().type))
             self.type_input.addItem(name, QtCore.QVariant(data))
 
+        self.type_input.setCurrentIndex(1)
+
         self.name_label = QtWidgets.QLabel(self)
         self.name_label.setText(TR().tr('Name') + ' :')
         self.layout.addWidget(self.name_label, 1, 0)

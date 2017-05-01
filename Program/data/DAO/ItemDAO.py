@@ -1,6 +1,7 @@
 from data.DAO.DAO import DAO
 from data.DAO.EffectDAO import EffectDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.SettingsDAO import SettingsDAO
 from data.DAO.interface.IItemDAO import IItemDAO
 from data.database.ObjectDatabase import ObjectDatabase
 from structure.enums.ArmorSize import ArmorSize
@@ -221,8 +222,8 @@ class ItemDAO(DAO, IItemDAO):
         :param lang: lang of items
         :return: list of items
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
         lines = self.database.select_all('Item')
 
         items = []
@@ -247,7 +248,7 @@ class ItemDAO(DAO, IItemDAO):
         :return: Item object
         """
         if lang is None:
-            lang = 'cs'
+            lang = SettingsDAO().get_value('language', str)
         data = self.database.select(self.DATABASE_TABLE, {'ID': item_id})
         if not data:
             return None

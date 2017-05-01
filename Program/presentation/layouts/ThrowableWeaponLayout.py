@@ -5,6 +5,7 @@ from structure.enums.Races import Races
 from structure.enums.WeaponWeight import WeaponWeight
 from presentation.layouts.Layout import Layout
 from structure.items.ThrowableWeapon import ThrowableWeapon
+from structure.tree.NodeObject import NodeObject
 
 
 class ThrowableWeaponLayout(Layout):
@@ -51,17 +52,18 @@ class ThrowableWeaponLayout(Layout):
         self.rangeMedium_input = self.spin_box(self.input_grid, 'RangeMedium', 0, 8, True)
         self.rangeHigh_input = self.spin_box(self.input_grid, 'RangeHigh', 0, 9, True)
         self.defence_input = self.spin_box(self.input_grid, 'Defence', 0, 10, True)
-        self.weapon_weight_input = self.combo_box(self.input_grid, 'WeaponWeight', WeaponWeight, 0,11, True, haveNone=False)
-        self.racial_input = self.combo_box(self.input_grid, 'Racial', Races, 0,12, True)
+        self.weapon_weight_input = self.combo_box(self.input_grid, 'WeaponWeight', WeaponWeight, 0, 11, True, haveNone=False)
+        self.racial_input = self.combo_box(self.input_grid, 'Racial', Races, 0, 12, True)
         self.amount_input = self.spin_box(self.input_grid, 'Amount', 0, 13, True)
 
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, item: ThrowableWeapon, treeNode=None):
+    def map_data(self, item: ThrowableWeapon, treeNode: NodeObject = None) -> None:
         """
         Mapa data from object to inputs in layout
-        :param item: Item object
+        :param item: Throwable weapon  object
+        :param treeNode: node in tree widget, if its need to get whole object
         """
         self.object = item
         self.header.setText(item.name)
@@ -81,11 +83,11 @@ class ThrowableWeaponLayout(Layout):
         weaponWeightIndex = item.weaponWeight.value if item.weaponWeight is not None else 1
         racialIndex = item.racial.value if item.racial is not None else 0
 
-        self.weapon_weight_input.setCurrentIndex(weaponWeightIndex-1)
+        self.weapon_weight_input.setCurrentIndex(weaponWeightIndex - 1)
         self.racial_input.setCurrentIndex(racialIndex)
 
 
-    def save_data(self):
+    def save_data(self) -> None:
         """
         Update data in object from inputs and update in manager
         """
@@ -103,7 +105,7 @@ class ThrowableWeaponLayout(Layout):
         self.object.amount = self.amount_input.value()
 
         weponWeightIndex = self.weapon_weight_input.currentIndex()
-        self.object.weaponWeight = WeaponWeight(weponWeightIndex+1)
+        self.object.weaponWeight = WeaponWeight(weponWeightIndex + 1)
 
         racialIndex = self.racial_input.currentIndex()
         self.object.racial = Races(racialIndex) if racialIndex > 0 else None

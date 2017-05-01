@@ -4,6 +4,11 @@ from data.database.ObjectDatabase import ObjectDatabase
 
 
 class TestDatabase(unittest.TestCase):
+    """
+    Testing basic operations with database
+    """
+
+
     @classmethod
     def setUpClass(cls):
         cls.database = ObjectDatabase(':memory:')
@@ -27,6 +32,10 @@ class TestDatabase(unittest.TestCase):
 
 
     def test_insert(self):
+        """
+        Test insert to database
+        :return: 
+        """
         values = {
             'Name'   : 'Wilson',
             'Age'    : 25,
@@ -48,6 +57,10 @@ class TestDatabase(unittest.TestCase):
 
 
     def test_delete(self):
+        """
+        Test delete data from database
+        :return: 
+        """
         values = {
             'Name'   : 'Wilson',
             'Age'    : 25,
@@ -70,6 +83,10 @@ class TestDatabase(unittest.TestCase):
 
 
     def test_select(self):
+        """
+        Test select data from database
+        :return: 
+        """
         values = {
             'Name'   : 'Wilson',
             'Age'    : 25,
@@ -91,6 +108,10 @@ class TestDatabase(unittest.TestCase):
 
 
     def test_foreign_key(self):
+        """
+        Test foreign key in database
+        :return: 
+        """
         columns = [
             Column('ID', 'INTEGER', True, False, True),
             Column('Name', 'TEXT', False, True),
@@ -106,6 +127,10 @@ class TestDatabase(unittest.TestCase):
 
 
     def test_invalid_column_type(self):
+        """
+        Test creating invalid Column in database
+        :return: 
+        """
         with self.assertRaises(ValueError):
             Column('Jmeno', 'VARCHAR')
 

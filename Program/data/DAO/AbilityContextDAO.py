@@ -1,5 +1,6 @@
 from data.DAO.DAO import DAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.SettingsDAO import SettingsDAO
 from data.DAO.interface.IAbilityContextDAO import IAbilityContextDAO
 from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
@@ -98,7 +99,7 @@ class AbilityContextDAO(DAO, IAbilityContextDAO):
         :return: Ability context object
         """
         if lang is None:
-            lang = 'cs'  # TODO: default lang
+            lang = SettingsDAO().get_value('language', str)
 
         data = self.obj_database.select(self.DATABASE_TABLE, {'ID': context_id})
         if not data:
@@ -123,8 +124,8 @@ class AbilityContextDAO(DAO, IAbilityContextDAO):
         :param lang: lang of objects
         :return: list of Ability context
         """
-        if lang is None:  # TODO: default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
         lines = self.database.select_all(self.DATABASE_TABLE)
 
         items = []

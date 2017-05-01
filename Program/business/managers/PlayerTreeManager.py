@@ -1,11 +1,12 @@
 from business.managers.LangManager import LangManager
+from business.managers.interface.IPlayerTreeManager import IPlayerTreeManager
 from data.DAO.AbilityDAO import AbilityDAO
 from data.DAO.EffectDAO import EffectDAO
 from data.DAO.ItemDAO import ItemDAO
-from data.DAO.ModifierDAO import ModifierDAO
-from data.database.ObjectDatabase import ObjectDatabase
+from data.DAO.SettingsDAO import SettingsDAO
 from data.html.HtmlHandler import HtmlHandler
 from data.xml.ParserHandler import ParserHandler
+from structure.general.Object import Object
 from structure.tree.NodeObject import NodeObject
 from structure.tree.Folder import Folder
 from structure.enums.NodeType import NodeType
@@ -14,7 +15,7 @@ from data.DAO.PlayerTreeDAO import PlayerTreeDAO
 from structure.enums.ObjectType import ObjectType
 
 
-class PlayerTreeManager:
+class PlayerTreeManager(IPlayerTreeManager):
     """
     Tree manager for tree widget
     """
@@ -40,6 +41,12 @@ class PlayerTreeManager:
 
 
     def search_tree_nodes(self, object_type: ObjectType, text: str) -> list:
+        """
+        Search tree nodes by object type and text, its for finding
+        :param object_type: object type (context)
+        :param text: text that should be included
+        :return: list of root
+        """
         roots = self.treeDAO.get_nodes_search(object_type, text)
 
         for root in roots:
@@ -67,19 +74,17 @@ class PlayerTreeManager:
         return node
 
 
-    def create_folder(self, name: str, contextType: ObjectType, parentId: int = None):
+    def create_folder(self, name: str, contextType: ObjectType, parentId: int = None) -> Node:
         """
-        Create new node
-        :param node_type: Node type
+        Create new node        
         :param name:  name of node
-        :param parent_id: parent id
-        :param objectContext: Type of object
-        :param target_object: instance of target object
-        :return: New node object
+        :param contextType: Context type
+        :param parentId: Id of parent node        
+        :return: New node folder object
         """
 
         node = Folder(None, name, parentId)
-        id = self.treeDAO.insert_node(node, contextType)  # TODO : remove object_type
+        id = self.treeDAO.insert_node(node, contextType)
         node.id = id
 
         return node
@@ -122,10 +127,11 @@ class PlayerTreeManager:
                 self.treeDAO.insert_node(node, parentType)
 
 
-    def delete_node(self, node, targetObject):
+    def delete_node(self, node, targetObject: Object):
         """
         Delete node
-        :param id: id of node
+        :param node: Node that you want to delete
+        :param targetObject: Target object, that will be deleted too
         """
         self.treeDAO.delete_node(node.id)
 
@@ -150,11 +156,12 @@ class PlayerTreeManager:
         self.treeDAO.update_node(node)
 
 
-    def update_node_parent(self, node: int, parentId: int, context: ObjectType) -> bool:
+    def update_node_parent(self, node: Node, parentId: int, context: ObjectType) -> bool:
         """
         Update parent of node, check if parent is Folder
-        :param nodeId: id of node
+        :param node: Node object
         :param parentId: parent id
+        :param context: Context Type
         :return:
         """
         updated = False
@@ -198,7 +205,7 @@ class PlayerTreeManager:
                     else:
                         return False
 
-        if isinstance(node, Folder):  # TODO
+        if isinstance(node, Folder):
             return True
         else:
             if node.object.object_type is context:
@@ -208,6 +215,11 @@ class PlayerTreeManager:
 
 
     def have_tree_children(self, node) -> bool:
+        """
+        Find out if node have children
+        :param node: tree node
+        :return: True if have children, False otherwise
+        """
         while node is not None:
             if isinstance(node, Folder):
                 if node.parent_id is None:
@@ -242,7 +254,13 @@ class PlayerTreeManager:
         return node.object
 
 
-    def export_to_html(self, selected: list, path: str):
+    def export_to_html(self, selected: list, path: str) -> None:
+        """
+        Export data to HTML
+        :param selected:  list of selected items
+        :param path: path to file, where it will be created
+        :return: 
+        """
         exporting = []
         for id in selected:
             node = self.treeDAO.get_node(id)
@@ -265,11 +283,11 @@ class PlayerTreeManager:
         ParserHandler().create_xml(exporting, path)
 
 
-    def import_from_xml(self, file_path, parentType, parent=None, strict: bool = False):
+    def import_from_xml(self, file_path, parentType: ObjectType, parent=None, strict: bool = False):
         """
         Import templates from XML file
         :param file_path: path to XML file
-        :param type:
+        :param parentType:
         :param strict:
         :param parent: parent node id
         """
@@ -278,9 +296,10 @@ class PlayerTreeManager:
         # ObjectDatabase('test.db').set_many(True)
 
         for languages in objects:
-            if 'cs' in languages:
-                leaderObject = languages.pop('cs')  # TODO default language
-                leaderCode = 'cs'
+            defLang = SettingsDAO().get_value('language', str)
+            if defLang in languages:
+                leaderObject = languages.pop(defLang)
+                leaderCode = defLang
 
             else:
                 leader = languages.popitem()
@@ -302,21 +321,16 @@ class PlayerTreeManager:
                 lang.id = leaderId
                 leaderObject.DAO()().update(lang)
 
-        # ObjectDatabase('test.db').insert_many_execute()
-        # ObjectDatabase('test.db').set_many(False)
-
-
-    def create_tree_dependences(self, objects: list, parentId: int, parentType: object):
-        for item in objects:
-            node = NodeObject(None, item.name, parentId, item)
-            nodeId = self.treeDAO.insert_node(node, parentType)
-
-            for value in item.__dict__.values():
-                if type(value) is list:
-                    self.create_tree_dependences(value, nodeId, parentType)
+                # ObjectDatabase('test.db').insert_many_execute()
+                # ObjectDatabase('test.db').set_many(False)
 
 
     def tree_folder(self, node: Node) -> bool:
+        """
+        Function found if node is folder in root of tree
+        :param node: target node
+        :return: True if is folder, False otherwise
+        """
         while node.parent_id:
             parentNode = self.get_node(node.parent_id)
             if isinstance(parentNode, Folder):

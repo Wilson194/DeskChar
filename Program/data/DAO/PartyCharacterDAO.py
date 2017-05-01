@@ -1,6 +1,7 @@
 from data.DAO.CharacterDAO import CharacterDAO
 from data.DAO.MessageDAO import MessageDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.SettingsDAO import SettingsDAO
 from data.DAO.interface.IPartyCharacterDAO import IPartyCharacterDAO
 from data.database.Database import Database
 from structure.character.PartyCharacter import PartyCharacter
@@ -95,8 +96,8 @@ class PartyCharacterDAO(DAO, IPartyCharacterDAO):
         :param contextType: object type of tree, where is node
         :return: Party Character object
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
 
         select = self.database.select(self.DATABASE_TABLE, {'character_id': character_id})
 
@@ -138,8 +139,8 @@ class PartyCharacterDAO(DAO, IPartyCharacterDAO):
         :param lang: lang code
         :return: list of Party Characters
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
         lines = self.database.select_all(self.DATABASE_TABLE)
         characters = []
         for line in lines:

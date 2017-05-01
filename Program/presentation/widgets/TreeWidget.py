@@ -1,30 +1,23 @@
-import time
 from PyQt5 import QtCore, QtGui
 from PyQt5 import QtWidgets
-
-import threading
-
 from presentation.dialogs.AddAnotherObject import AddAnotherObject
 from presentation.dialogs.TextDialog import TextDialog
 from structure.enums.Items import Items
 from structure.enums.NodeType import NodeType
 from business.managers.PlayerTreeManager import PlayerTreeManager
 from structure.enums.ObjectType import ObjectType
-from structure.items.Container import Container
-from structure.items.Item import Item
 from structure.tree.Folder import Folder
 from presentation.dialogs.NewTreeItem import NewTreeItem
 from presentation.Translate import Translate as TR
 
-# from presentation.dialogs.LoadingBar import LoadingBar
 from structure.tree.NodeObject import NodeObject
 
 
 class TreeWidget(QtWidgets.QFrame):
     """
     Tree widget for tree structure for templates (Spells, Items, Abilities, ...)
-    data(0,5) -> ID
-    data(0,6) -> Type
+    data(0,11) -> Object in Node
+    data(0,12) -> Node object
     """
 
     item_doubleclick_signal = QtCore.pyqtSignal(object)
@@ -47,13 +40,13 @@ class TreeWidget(QtWidgets.QFrame):
         self.draw_data()
 
 
-    def keyPressEvent(self, key_event):
+    def keyPressEvent(self, key_event) -> None:
         """
         Map key shortcuts
         :param key_event: key event
         """
         if key_event.key() == QtCore.Qt.Key_Return:
-            if self.treeWidget.selectedItems() and  isinstance(self.treeWidget.selectedItems()[0].data(0, 12), NodeObject):
+            if self.treeWidget.selectedItems() and isinstance(self.treeWidget.selectedItems()[0].data(0, 12), NodeObject):
                 self.item_doubleclick_signal.emit(self.treeWidget.selectedItems()[0])
 
 
@@ -96,7 +89,7 @@ class TreeWidget(QtWidgets.QFrame):
         self.init_context_menu()
 
 
-    def custom_drop_event(self, event: object):
+    def custom_drop_event(self, event: object) -> None:
         """
         Custom drop event, call base drop event and update structure of tre
         :param event: drop event
@@ -108,7 +101,7 @@ class TreeWidget(QtWidgets.QFrame):
         self.draw_data()
 
 
-    def update_structure(self, node: object, parent_id: int = None):
+    def update_structure(self, node: object, parent_id: int = None) -> None:
         """
         Update sructure of tree (recursion)
         :param node: Current node in tree
@@ -122,7 +115,7 @@ class TreeWidget(QtWidgets.QFrame):
             self.update_structure(node.child(n), node.data(0, 12).id)
 
 
-    def init_context_menu(self):
+    def init_context_menu(self) -> None:
         """
         Prepare tree items for contest menu
         """
@@ -131,7 +124,7 @@ class TreeWidget(QtWidgets.QFrame):
         self.treeWidget.itemDoubleClicked.connect(self.double_click_item_slot)
 
 
-    def openMenu(self, position):
+    def openMenu(self, position) -> None:
         """
         Create contest menu items
         :param position: selected item in tree
@@ -188,6 +181,7 @@ class TreeWidget(QtWidgets.QFrame):
             self.tree_manager.delete_node(node, targetObject)
             # self.mainWindow.redraw_context_widget(None, None)
             self.draw_data()
+            self.mainWindow.tabWidget.clear_tab_widget()
         # XXXXXXXXXXXXXXXXXX NEW ITEM ACTION XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         elif action.data() == 'new':
             data, choice = NewTreeItem.get_data(
@@ -349,7 +343,7 @@ class TreeWidget(QtWidgets.QFrame):
             else:
 
                 icon = item.object.icon
-                object_icon = QtGui.QIcon(icon)  # TODO buff icons
+                object_icon = QtGui.QIcon(icon)
                 tree_item.setIcon(0, object_icon)
                 tree_item.setFlags(
                     tree_item.flags() | QtCore.Qt.ItemIsUserCheckable)
@@ -387,7 +381,11 @@ class TreeWidget(QtWidgets.QFrame):
             TextDialog('Export complete')
 
 
-    def export_html_slot(self):
+    def export_html_slot(self) -> None:
+        """
+        Slot for xport all selected objects to HTML files
+        :return: 
+        """
         it = QtWidgets.QTreeWidgetItemIterator(self.treeWidget)
         checked_items = []
         while it.value():

@@ -3,6 +3,7 @@ import os
 import shutil
 from lxml import etree
 
+from data.DAO.SettingsDAO import SettingsDAO
 from structure.map.Map import Map
 
 
@@ -179,7 +180,8 @@ class XInstance:
         else:
             for a in attr:
                 o = self.__instance().import_xml(a)
-                attrList.append(o['cs'])  # TODO: default lang
+                defaultLang = SettingsDAO().get_value('language', str)
+                attrList.append(o[defaultLang])
             for obj in objects.values():
                 setattr(obj, name, attrList)
         return objects
@@ -282,7 +284,8 @@ class XMLTemplate:
             objects[lang] = obj
 
         if len(objects) == 0:
-            objects['cs'] = self.OBJECT_TYPE.instance()(None, 'cs')  # TODO: default lang
+            defaultLang = SettingsDAO().get_value('language', str)
+            objects[defaultLang] = self.OBJECT_TYPE.instance()(None, defaultLang)
 
         # Remap instances for easy finding
         xInstances = {}
@@ -299,7 +302,7 @@ class XMLTemplate:
 
         for attr in root:
             if attr.tag in xInstances:
-                if attr.tag == 'id':  # TODO: remap id
+                if attr.tag == 'id':
                     continue
 
                 if type(xInstances[attr.tag]) is dict:

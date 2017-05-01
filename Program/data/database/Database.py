@@ -196,7 +196,7 @@ class Database(metaclass=Singleton):
         return self.cursor.execute(sql).fetchall()
 
 
-    def select_translate(self, target_id, type, lang) -> dict:
+    def select_translate(self, target_id: int, type: int, lang: str) -> dict:
         """
         Select all data from translate table for target
         :param target_id: id of target object

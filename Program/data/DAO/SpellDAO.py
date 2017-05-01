@@ -1,4 +1,5 @@
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.SettingsDAO import SettingsDAO
 from data.DAO.interface.ISpellDAO import ISpellDAO
 from data.database.ObjectDatabase import ObjectDatabase
 from structure.enums.Classes import Classes
@@ -113,8 +114,8 @@ class SpellDAO(DAO, ISpellDAO):
         :param contextType: object type of tree, where is node
         :return: Spell object
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
 
         data = self.database.select(self.DATABASE_TABLE, {'ID': spell_id})
         if not data:
@@ -140,8 +141,8 @@ class SpellDAO(DAO, ISpellDAO):
         :param lang: lang of Spell
         :return: list of Spell
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
         lines = self.database.select_all(self.DATABASE_TABLE)
         items = []
         for line in lines:

@@ -1,6 +1,4 @@
 import unittest
-from data.database.Database import *
-from data.database.ObjectDatabase import ObjectDatabase
 from data.drdFile.drdFile import DrdFile
 import os
 import zipfile
@@ -8,6 +6,11 @@ import shutil
 
 
 class TestDrdFile(unittest.TestCase):
+    """
+    Test with create new drd file from database
+    """
+
+
     @classmethod
     def setUpClass(cls):
         pass
@@ -26,6 +29,10 @@ class TestDrdFile(unittest.TestCase):
 
 
     def test_create(self):
+        """
+        Create new .drd file
+        :return: 
+        """
         DrdFile().create('tests/resources/test.drd', 'unitTests.db')
 
         self.assertTrue(os.path.isfile('tests/resources/test.drd'))

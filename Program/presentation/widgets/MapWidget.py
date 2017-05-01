@@ -68,9 +68,9 @@ class MapWidget(QtWidgets.QFrame):
         self.frameLayout.addWidget(self.grview)
 
 
-    def init_bar(self):
+    def init_bar(self) -> None:
         """
-        Init function bar
+        Init function bar, set to right side of widget
         :return: 
         """
         toolbar = QToolBar()
@@ -120,7 +120,7 @@ class MapWidget(QtWidgets.QFrame):
         toolbar.addAction(self.addObject_action)
 
 
-    def enable_tool_bar(self):
+    def enable_tool_bar(self) -> None:
         """
         Enable tool bar actions
         """
@@ -135,7 +135,7 @@ class MapWidget(QtWidgets.QFrame):
         self.addObject_action.setEnabled(True)
 
 
-    def tree_item_doubleclick_action(self, item):
+    def tree_item_doubleclick_action(self, item) -> None:
         """
         Slot for double click on map at tree widget
         :param item: item in tree widget
@@ -158,14 +158,19 @@ class MapWidget(QtWidgets.QFrame):
                 self.redraw()
 
 
-    def item_delete_slot(self, mapItem):
+    def item_delete_slot(self, mapItem) -> None:
+        """
+        Slot for deleting map item from map. Deleted from map and updated in database
+        :param mapItem: map item, that you want to delete
+        :return: 
+        """
         # mapItem.number
         self.map.mapItemDraws.remove(self.map.mapItemDraws[mapItem.number - 1])
         MapItemDAO().delete(mapItem.mapItem.id)
         # self.redraw()
 
 
-    def save_map(self):
+    def save_map(self) -> None:
         """
         Save image of map
         :return:
@@ -174,9 +179,10 @@ class MapWidget(QtWidgets.QFrame):
         self.save_map_action()
 
 
-    def redraw(self):
+    def redraw(self) -> None:
         """
         Redraw scene in widget
+        Whole scene is cleared and new map and map items is draw 
         """
         self.scene.clear()
         if self.map.mapFile:
@@ -192,9 +198,9 @@ class MapWidget(QtWidgets.QFrame):
             self.map.addMapItemDraws(item)
 
 
-    def open_map_action(self):
+    def open_map_action(self) -> None:
         """
-        Open image with map slot
+        Open image with map slot, if some map is here, old one is deleted
         """
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self.mainWindow, "Open File",
                                                             QtCore.QDir.currentPath())
@@ -209,21 +215,21 @@ class MapWidget(QtWidgets.QFrame):
             self.grview.fitInView(self.scene.itemsBoundingRect(), Qt.KeepAspectRatio)
 
 
-    def zoom_in_action(self):
+    def zoom_in_action(self) -> None:
         """
         Zoom in whole map widget
         """
         self.grview.scale(1.2, 1.2)
 
 
-    def zoom_out_action(self):
+    def zoom_out_action(self) -> None:
         """
         Zoom out whole map widget
         """
         self.grview.scale(0.8, 0.8)
 
 
-    def add_item_action(self):
+    def add_item_action(self) -> None:
         """
         Add item to map
         :return:
@@ -242,7 +248,7 @@ class MapWidget(QtWidgets.QFrame):
             self.map.addMapItemDraws(item)
 
 
-    def add_monster_action(self):
+    def add_monster_action(self) -> None:
         """
         Add monster to map
         :return:
@@ -261,7 +267,7 @@ class MapWidget(QtWidgets.QFrame):
             self.map.addMapItemDraws(item)
 
 
-    def add_room_action(self):
+    def add_room_action(self) -> None:
         """
         Add room to map
         :return:
@@ -280,7 +286,7 @@ class MapWidget(QtWidgets.QFrame):
             self.map.addMapItemDraws(item)
 
 
-    def add_object_action(self):
+    def add_object_action(self) -> None:
         """
         Add object to map
         :return:
@@ -298,13 +304,22 @@ class MapWidget(QtWidgets.QFrame):
 
             self.map.addMapItemDraws(item)
 
-    def edit_info_action(self):
+
+    def edit_info_action(self) -> None:
+        """
+        Edit map info, when click on edit button        
+        """
         data, choice = EditMapItem.get_data(None, self.map)
         if choice:
             self.map.name = data['name']
             self.map.description = data['description']
 
+
     def save_map_action(self):
+        """
+        Save whole map action. This action create image from map
+        :return: 
+        """
         self.scene.clearSelection()
         self.scene.setSceneRect(self.scene.itemsBoundingRect())
 
@@ -327,6 +342,7 @@ class MapWidget(QtWidgets.QFrame):
 class MapItemDraw(QGraphicsPixmapItem):
     """
     Class for handling icon on scene
+    Its graphical class for map item
     """
     HANDLE_SIZE = 8
 
@@ -517,7 +533,12 @@ class MapItemDraw(QGraphicsPixmapItem):
         self.setPixmap(npix)
 
 
-    def mouseDoubleClickEvent(self, mouseEvent):
+    def mouseDoubleClickEvent(self, mouseEvent) -> None:
+        """
+        Execute when double click on item
+        :param mouseEvent: event of mouse
+        :return: 
+        """
         data, choice = EditMapItem.get_data(None, self.mapItem)
         if choice:
             self.mapItem.name = data.get('name')
@@ -526,7 +547,12 @@ class MapItemDraw(QGraphicsPixmapItem):
             self.setToolTip(toolTip)
 
 
-    def keyReleaseEvent(self, keyEvent):
+    def keyReleaseEvent(self, keyEvent) -> None:
+        """
+        Event when some key on keyboard ispressed
+        :param keyEvent: key event
+        :return: 
+        """
         if keyEvent.key() == QtCore.Qt.Key_Delete:
             quit_msg = "Are you sure you want to delete this?"
             reply = QtWidgets.QMessageBox.question(None, 'Message',

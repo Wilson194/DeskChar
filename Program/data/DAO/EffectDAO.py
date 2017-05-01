@@ -1,6 +1,7 @@
 from data.DAO.DAO import DAO
 from data.DAO.ModifierDAO import ModifierDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.SettingsDAO import SettingsDAO
 from data.DAO.interface.IEffectDAO import IEffectDAO
 
 from data.database.Database import Database
@@ -107,8 +108,8 @@ class EffectDAO(DAO, IEffectDAO):
         :param contextType: object type of tree, where is node
         :return: Effect object
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
 
         data = self.database.select(self.DATABASE_TABLE, {'ID': effect_id})
         if not data:
@@ -139,8 +140,8 @@ class EffectDAO(DAO, IEffectDAO):
         :param lang: lang of effects
         :return: list of effects
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
         lines = self.database.select_all(self.DATABASE_TABLE)
         effects = []
         for line in lines:

@@ -9,7 +9,7 @@ from structure.enums.ObjectType import ObjectType
 
 class NewMapItem(QtWidgets.QDialog):
     """
-    Dialog for creating new item in tree widget
+    Dialog for creating new map item in map widget
     """
 
 
@@ -56,6 +56,7 @@ class NewMapItem(QtWidgets.QDialog):
     def get_inputs(self) -> dict:
         """
         Get inputs from dialog
+                return name and description
         :return: dictionary of data (name,value)
         """
 

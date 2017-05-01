@@ -1,8 +1,10 @@
+from business.managers.interface.ITabWidgetManager import ITabWidgetManager
 from data.DAO.ItemDAO import ItemDAO
+from data.DAO.SettingsDAO import SettingsDAO
 from structure.enums.ObjectType import ObjectType
 
 
-class TabWidgetManager:
+class TabWidgetManager(ITabWidgetManager):
     """
     Manager for Tab widget
     """
@@ -23,7 +25,7 @@ class TabWidgetManager:
         langs = target_type.instance().DAO()().get_languages(target_id)
 
         if not langs:
-            langs.append('cs')  # TODO default
+            langs.append(SettingsDAO().get_value('language', str))
 
         for lang in langs:
             object = target_type.instance().DAO()().get(target_id, lang)

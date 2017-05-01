@@ -24,8 +24,12 @@ class MainWindow(QMainWindow):
         self.init_ui()
 
 
-    def closeEvent(self, event):
-
+    def closeEvent(self, event) -> None:
+        """
+        Rewrite close event for disable quit without prompt about save. 
+        :param event: Event
+        :return: 
+        """
         quit_msg = TR().tr('Quit_text')
         reply = QtWidgets.QMessageBox.question(self, TR().tr('Sure_quit'),
                                                quit_msg,
@@ -44,6 +48,10 @@ class MainWindow(QMainWindow):
 
 
     def init_ui(self):
+        """
+        Init basic ui of main Window
+        :return: 
+        """
         self.setWindowTitle('DeskChar')
         self.setWindowIcon(QtGui.QIcon('resources/icons/char.png'))
 
@@ -68,7 +76,12 @@ class MainWindow(QMainWindow):
         self.show()
 
 
-    def redraw_central_widget(self, object_type: ObjectType):
+    def redraw_central_widget(self, object_type: ObjectType) -> None:
+        """
+        Redraw whole central widget, draw tree widget and map or tab widget.
+        :param object_type: Type of object (MAP, ITEM, SPELL, ...)
+        :return: 
+        """
         if self.tabWidget:
             self.tabWidget.tree_item_clicked(None)
         if self.mapWidget:
@@ -108,7 +121,14 @@ class MainWindow(QMainWindow):
         self.show()
 
 
-    def redraw_context_widget(self, object_type: ObjectType, item):
+    def redraw_context_widget(self, object_type: ObjectType, item) -> None:
+        """
+        Redraw only content widget (map or tab widget). Tree widget will be same
+        You need this function, when click on map in scenario tree
+        :param object_type: Type of object to redraw (MAP,ITEM,SPELL...)
+        :param item: item, that you want to show in new widget
+        :return: 
+        """
         if object_type is ObjectType.MAP:
             self.tabWidget.hide()
             bars = self.findChildren(QtWidgets.QToolBar, 'MapToolbar')

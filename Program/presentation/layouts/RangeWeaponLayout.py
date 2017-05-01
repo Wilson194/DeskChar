@@ -5,6 +5,7 @@ from presentation.layouts.Layout import Layout
 from structure.enums.Races import Races
 from structure.enums.WeaponWeight import WeaponWeight
 from structure.items.RangeWeapon import RangeWeapon
+from structure.tree.NodeObject import NodeObject
 
 
 class RangeWeaponLayout(Layout):
@@ -57,10 +58,11 @@ class RangeWeaponLayout(Layout):
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, item: RangeWeapon, treeNode=None):
+    def map_data(self, item: RangeWeapon, treeNode: NodeObject = None) -> None:
         """
         Mapa data from object to inputs in layout
-        :param item: Item object
+        :param item: Ranged weapon object
+        :param treeNode: node in tree widget, if its need to get whole object
         """
         self.object = item
         self.header.setText(item.name)
@@ -77,13 +79,13 @@ class RangeWeaponLayout(Layout):
         self.amount_input.setValue(item.amount if item.amount else 1)
 
         weapon_weight_index = item.weaponWeight.value if item.weaponWeight is not None else 1
-        self.weapon_weight_input.setCurrentIndex(weapon_weight_index-1)
+        self.weapon_weight_input.setCurrentIndex(weapon_weight_index - 1)
 
         racial_index = item.racial.value if item.racial is not None else 0
         self.racial_input.setCurrentIndex(racial_index)
 
 
-    def save_data(self):
+    def save_data(self) -> None:
         """
         Update data in object from inputs and update in manager
         """
@@ -100,7 +102,7 @@ class RangeWeaponLayout(Layout):
         self.object.amount = self.amount_input.value()
 
         weapon_weight_index = self.weapon_weight_input.currentIndex()
-        self.object.weaponWeight = WeaponWeight(weapon_weight_index+1)
+        self.object.weaponWeight = WeaponWeight(weapon_weight_index + 1)
 
         racial_index = self.racial_input.currentIndex()
         self.object.racial = Races(racial_index) if racial_index > 0 else None

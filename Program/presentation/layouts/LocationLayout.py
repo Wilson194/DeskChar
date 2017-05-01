@@ -5,6 +5,8 @@ from business.managers.LocationManager import LocationManager
 from business.managers.ScenarioManager import ScenarioManager
 from presentation.layouts.Layout import Layout
 from structure.monster.Monster import Monster
+from structure.scenario.Location import Location
+from structure.tree.NodeObject import NodeObject
 
 
 class LocationLayout(Layout):
@@ -46,17 +48,18 @@ class LocationLayout(Layout):
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, monster: Monster, treeNode=None):
+    def map_data(self, location: Location, treeNode: NodeObject = None) -> None:
         """
         Mapa data from object to inputs in layout
-        :param monster: Monster object
+        :param location: Monster object
+        :param treeNode: node in tree widget, if its need to get whole object
         """
-        self.object = monster
+        self.object = location
         self.nameInput.setPlainText(self.object.name)
         self.descriptionInput.setPlainText(self.object.description)
 
 
-    def save_data(self):
+    def save_data(self) -> None:
         """
         Update data in object from inputs and update in manager
         """

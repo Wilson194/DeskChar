@@ -38,6 +38,16 @@ import datetime
 
 
 class TestDAO(unittest.TestCase):
+    """
+    This tests set will test all DAO objects.
+    Testing:
+        Create new object
+        Get object from database
+        Update object
+        Delete object
+    """
+
+
     @classmethod
     def setUpClass(cls):
         cls.database = Database('unitTests.db')
@@ -51,6 +61,10 @@ class TestDAO(unittest.TestCase):
 
 
     def test_ability(self):
+        """
+        Test ability DAO
+        :return: 
+        """
         DAO = AbilityDAO('unitTests.db')
 
         ability = Ability(None, 'cs', 'Find steps', 'You can find steps everywhere', '10% in wood', Races.ELF, Classes.RANGER, 2)
@@ -82,6 +96,10 @@ class TestDAO(unittest.TestCase):
 
 
     def test_character(self):
+        """
+        Test character DAO
+        :return: 
+        """
         DAO = CharacterDAO()
 
         character = Character(None, 'cs', 'Wilson', 'Character Wilson', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, Classes.RANGER,
@@ -112,6 +130,10 @@ class TestDAO(unittest.TestCase):
 
 
     def test_effect(self):
+        """
+        Test effect DAO
+        :return: 
+        """
         DAO = EffectDAO()
 
         effect = Effect(None, 'cs', 'Magic defence', 'Magic defence for armor', ModifierTargetTypes.ARMOR, True)
@@ -140,6 +162,10 @@ class TestDAO(unittest.TestCase):
 
 
     def test_spell(self):
+        """
+        Test Spell DAO
+        :return: 
+        """
         DAO = SpellDAO()
 
         spell = Spell(None, 'cs', 'Fireball', 'Mighty fireball', '8', '5', '2', '12', 2, '15', Classes.MAGICIAN)
@@ -168,6 +194,10 @@ class TestDAO(unittest.TestCase):
 
 
     def test_item(self):
+        """
+        Test item DAO
+        :return: 
+        """
         DAO = ItemDAO()
 
         item = Armor(None, 'cs', 'Chain armor', 'Big armor', None, 15, 35, 10, 15, 20, ArmorSize.B, 1)
@@ -196,6 +226,10 @@ class TestDAO(unittest.TestCase):
 
 
     def test_monster(self):
+        """
+        Test monster DAO
+        :return: 
+        """
         DAO = MonsterDAO()
 
         monster = Monster(None, 'cs', 'Gorgona', 'Mocná gorgona', '1', '2', 3, 4, 5, 6, 7, 8, 9, Alignment.LAWFUL_EVIL, 11, 12,
@@ -226,6 +260,10 @@ class TestDAO(unittest.TestCase):
 
 
     def test_modifier(self):
+        """
+        Test modifier DAO
+        :return: 
+        """
         DAO = ModifierDAO()
 
         modifier = Modifier(None, 'cs', None, None, ModifierValueTypes.TO_TOTAL, 25, CharacterAttributes.STRENGTH, None,
@@ -256,6 +294,10 @@ class TestDAO(unittest.TestCase):
 
 
     def test_context(self):
+        """
+        Test ability Context DAO
+        :return: 
+        """
         DAO = AbilityContextDAO()
 
         context = AbilityContext(None, 'cs', None, None, ModifierValueTypes.FROM_BASE, 25, CharacterAttributes.STRENGTH)
@@ -284,6 +326,10 @@ class TestDAO(unittest.TestCase):
 
 
     def test_location(self):
+        """
+        Test location DAO
+        :return: 
+        """
         DAO = LocationDAO()
 
         location = Location(None, 'cs', 'Dark wood', 'Big dark wood with dangerous thief')
@@ -312,6 +358,10 @@ class TestDAO(unittest.TestCase):
 
 
     def test_scenario(self):
+        """
+        Test scenario DAO
+        :return: 
+        """
         DAO = ScenarioDAO()
 
         scenario = Scenario(None, 'cs', 'Scenario', 'Big scenario', datetime.date.fromordinal(6542))

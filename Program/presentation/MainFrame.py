@@ -1,8 +1,12 @@
-from PyQt5.QtWidgets import QFrame, QHBoxLayout, QGridLayout
-from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QFrame, QGridLayout
 
 
 class MainFrame(QFrame):
+    """
+    Class for main frame of main Window
+    """
+
+
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent

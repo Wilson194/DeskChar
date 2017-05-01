@@ -7,6 +7,7 @@ from data.DAO.EffectDAO import EffectDAO
 from data.DAO.LocationDAO import LocationDAO
 from data.DAO.PartyCharacterDAO import PartyCharacterDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.SettingsDAO import SettingsDAO
 from data.DAO.SpellDAO import SpellDAO
 from data.DAO.interface.IScenarioDAO import IScenarioDAO
 from data.database.ObjectDatabase import ObjectDatabase
@@ -117,8 +118,8 @@ class ScenarioDAO(DAO, IScenarioDAO):
         :param contextType: object type of tree, where is node
         :return: Scenario object
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
         data = self.database.select(self.DATABASE_TABLE, {'ID': scenario_id})
         if not data:
             return None
@@ -186,8 +187,8 @@ class ScenarioDAO(DAO, IScenarioDAO):
         :param lang: lang of Scenario
         :return: list of Scenario
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
         lines = self.database.select_all(self.DATABASE_TABLE)
         items = []
         for line in lines:

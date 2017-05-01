@@ -4,7 +4,7 @@ from structure.enums.ObjectType import ObjectType
 
 
 class DAO:
-    DATABASE_DRIVER = "file::memory:?cache=shared"  # TODO: Database
+    DATABASE_DRIVER = "file::memory:?cache=shared"
     DATABASE_TABLE = None
     TYPE = None
 

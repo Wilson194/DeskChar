@@ -5,6 +5,9 @@ from structure.enums.ObjectType import ObjectType
 
 
 class ToolBar(QToolBar):
+    """
+    Class for tool bar with basic action for open templates slot
+    """
     templates_tool_signal = QtCore.pyqtSignal(ObjectType)
 
 
@@ -16,6 +19,10 @@ class ToolBar(QToolBar):
 
 
     def init_ui(self):
+        """
+        Init basic UI of toolBar
+        :return: 
+        """
         toolbar = self.__parent.addToolBar('TemplateToolBar')
 
         spell_action = QAction(QIcon(ObjectType.SPELL.icon()), 'Spells', self.__parent)
@@ -40,10 +47,6 @@ class ToolBar(QToolBar):
 
         character_action = QAction(QIcon(ObjectType.CHARACTER.icon()), 'Character', self.__parent)
         toolbar.addAction(character_action)
-
-
-
-
 
         spell_action.triggered.connect(
             lambda: self.templates_tool_signal.emit(ObjectType.SPELL))
@@ -93,5 +96,3 @@ class ToolBar(QToolBar):
 
         map_action.triggered.connect(
             lambda: self.templates_tool_signal.emit(ObjectType.MAP))
-
-

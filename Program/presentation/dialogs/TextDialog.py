@@ -3,6 +3,11 @@ from presentation.Translate import Translate as TR
 
 
 class TextDialog:
+    """
+    Simple text dialog with teext and ok button
+    """
+
+
     def __init__(self, text, icon=None):
         msg = QtWidgets.QMessageBox()
         if icon:

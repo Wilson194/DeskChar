@@ -12,7 +12,7 @@ class PlayerTreeDAO(IPlayerTreeDAO):
     DAO for tree widget
     """
     TABLE_NAME = 'player_tree_structure'
-    DATABASE_DRIVER = "file::memory:?cache=shared"  # TODO: database
+    DATABASE_DRIVER = "file::memory:?cache=shared"
 
 
     def __init__(self):
@@ -73,7 +73,16 @@ class PlayerTreeDAO(IPlayerTreeDAO):
         return objects
 
 
-    def __get_children_objects(self, targetType, nodeId, parentType, objects: list = None, direct: bool = False):
+    def __get_children_objects(self, targetType, nodeId: int, parentType: ObjectType, objects: list = None, direct: bool = False):
+        """
+        Private function, return all children object of target node
+        :param targetType: Object type
+        :param nodeId: id of target node
+        :param parentType: Context type
+        :param objects: list of object for recursion
+        :param direct: if true, only first level child will be add to object list 
+        :return: list of children
+        """
         if objects is None:
             objects = []
 

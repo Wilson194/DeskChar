@@ -11,6 +11,7 @@ from structure.enums.ModifierTargetTypes import ModifierTargetTypes
 from structure.enums.ModifierValueTypes import ModifierValueTypes
 from structure.enums.WeaponWeight import WeaponWeight
 from presentation.Translate import Translate as TR
+from structure.tree.NodeObject import NodeObject
 
 
 class ModifierLayout(Layout):
@@ -195,10 +196,10 @@ class ModifierLayout(Layout):
                 self.valueInput.show()
 
 
-    def valueTypeChangedSlot(self, index):
+    def valueTypeChangedSlot(self, index: int):
         """
-
-        :param index:
+        Slot is called wher value type is changed
+        :param index: index of value type
         :return:
         """
         valuesType = ModifierValueTypes(self.valueTypeInput.currentIndex()) if self.valueTypeInput.currentIndex() > 0 else None
@@ -234,7 +235,7 @@ class ModifierLayout(Layout):
 
     def valueSetTypeSlot(self, index):
         """
-
+        Slot that called when value is changed
         :param index:
         :return:
         """
@@ -271,10 +272,11 @@ class ModifierLayout(Layout):
             return False, []
 
 
-    def map_data(self, modifier: Modifier, treeNode=None):
+    def map_data(self, modifier: Modifier, treeNode: NodeObject = None):
         """
         Mapa data from object to inputs in layout
-        :param modifier: Spell object
+        :param modifier: Modifier object
+        :param treeNode: node in tree widget, if its need to get whole object
         """
         self.object = modifier
         self.header.setText(modifier.name)

@@ -26,6 +26,10 @@ class Settings(QtWidgets.QDialog):
 
 
     def init_data(self):
+        """
+        Init settings data from database
+        :return: 
+        """
         langId = self.DAO.get_value('language', int)
         self.lang = self.langDAO.get_lang(langId) if langId else self.langDAO.get_lang(1)
 
@@ -61,7 +65,11 @@ class Settings(QtWidgets.QDialog):
         self.layout.addWidget(self.buttonBox, 3, 0, 1, 2, QtCore.Qt.AlignHCenter)
 
 
-    def lang_button_slot(self):
+    def lang_button_slot(self) -> None:
+        """
+        Slot activate when click on language button
+        :return: 
+        """
         data, result = NewLangTab.get_data()
         if result:
             self.lang = self.langDAO.get_lang(data['id'])
@@ -69,19 +77,33 @@ class Settings(QtWidgets.QDialog):
             self.langButton.setText(buttonText)
 
 
-    def save_slot(self):
+    def save_slot(self) -> None:
+        """
+        Slot activate when click on save button
+        :return: 
+        """
         self.DAO.set_value('language', self.lang.id)
         self.DAO.set_value('language', self.lang.code)
         self.accept()
 
 
     @staticmethod
-    def get_data(parent=None):
+    def get_data(parent=None) -> None:
+        """
+        Static method to create dialog from presenation
+        :param parent: parent widget for dialog
+        :return: 
+        """
         dialog = Settings(parent)
         dialog.exec_()
 
 
 class QHLine(QtWidgets.QFrame):
+    """
+    Horizontal line
+    """
+
+
     def __init__(self):
         super().__init__()
         self.setFrameShape(QtWidgets.QFrame.HLine)

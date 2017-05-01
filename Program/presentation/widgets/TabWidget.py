@@ -77,9 +77,20 @@ class TabWidget(QtWidgets.QFrame):
             self.tab_widget.insertTab(self.tab_bar.count(), self.new_tab, '+')
 
 
-    def change_object(self, target_id: int, target_type: ObjectType, treeNode: Node = None):
+    def clear_tab_widget(self) -> None:
+        """
+        Function that clear context of tabWidget
+        :return: 
+        """
+        self.layouts_changed.clear()
+        Sync().delete_data('Input_synchronize')
+        self.tab_widget.clear()
+
+
+    def change_object(self, target_id: int, target_type: ObjectType, treeNode: Node = None) -> None:
         """
         change object that mapped on tabs
+        :param treeNode: node in tree for target object
         :param target_id: id of object
         :param target_type: type object
         """
@@ -90,10 +101,10 @@ class TabWidget(QtWidgets.QFrame):
         self.init_data()
 
 
-    def tree_item_clicked(self, treeItem):
+    def tree_item_clicked(self, treeItem) -> None:
         """
         Function for mapping tree item click
-        :param item: tree item in tree widget, has data
+        :param treeItem: tree item in tree widget, has data
         """
 
         for layout in self.layouts_changed:
@@ -112,7 +123,7 @@ class TabWidget(QtWidgets.QFrame):
                 self.change_object(item.id, ObjectType(item.object_type), node)
 
 
-    def data_changed_slot(self, layout: Layout):
+    def data_changed_slot(self, layout: Layout) -> None:
         """
         Function slot for add layout changes
         :param layout: changed layout
@@ -121,7 +132,7 @@ class TabWidget(QtWidgets.QFrame):
             self.layouts_changed.append(layout)
 
 
-    def tab_clicked(self, i: int):
+    def tab_clicked(self, i: int) -> None:
         """
         Action when click on tab
         :param i: num of tab you click on
@@ -148,11 +159,17 @@ class TabWidget(QtWidgets.QFrame):
                 new_tab.setLayout(obj.layout()(new_tab))
                 new_tab.layout().object = obj
                 new_tab.layout().data_changed_signal.connect(self.data_changed_slot)
+
         else:
             pass
 
 
-    def tab_right_clicked(self, i: int):
+    def tab_right_clicked(self, i: int) -> None:
+        """
+        Slot for right click on tab
+        :param i: index of tab
+        :return: 
+        """
         print('right', i)
 
 
@@ -169,13 +186,23 @@ class TabBar(QtWidgets.QTabBar):
         self.previousMiddleIndex = -1
 
 
-    def mousePressEvent(self, mouseEvent):
+    def mousePressEvent(self, mouseEvent) -> None:
+        """
+        Mouse press button on tab 
+        :param mouseEvent: mouse event
+        :return: 
+        """
         if mouseEvent.button() in (QtCore.Qt.LeftButton, QtCore.Qt.RightButton):
             self.previousIndex = self.tabAt(mouseEvent.pos())
         QtWidgets.QTabBar.mousePressEvent(self, mouseEvent)
 
 
-    def mouseReleaseEvent(self, mouseEvent):
+    def mouseReleaseEvent(self, mouseEvent) -> None:
+        """
+        Mouse release event on tab
+        :param mouseEvent: mouseEvent
+        :return: 
+        """
         if self.previousIndex == self.tabAt(mouseEvent.pos()):
             if mouseEvent.button() == QtCore.Qt.LeftButton:
                 self.clicked.emit(self.previousIndex)

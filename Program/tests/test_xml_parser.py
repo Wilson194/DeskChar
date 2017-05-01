@@ -20,6 +20,12 @@ from structure.spells.Spell import Spell
 
 
 class TestXMLParser(unittest.TestCase):
+    """
+    Test XML parser. Test import and export XML file.
+    XML file is tested based on prepared template
+    """
+
+
     @classmethod
     def setUpClass(cls):
         pass
@@ -32,6 +38,10 @@ class TestXMLParser(unittest.TestCase):
 
 
     def test_parse(self):
+        """
+        Test parse prepared template.
+        :return: 
+        """
         objects = ParserHandler().import_xml('tests/resources/character.xml')
 
         character = objects[0]['cs']
@@ -99,6 +109,10 @@ class TestXMLParser(unittest.TestCase):
 
 
     def test_export(self):
+        """
+        Test create new XML template same as prepared one
+        :return: 
+        """
         character = Character(3, 'cs', 'Wilson', 'Postava Wilson', 20, 35, 40, 20, 20, 18, 24, 195, 87, 13, 1555, 20, 150,
                               Classes.MAGICIAN, Races.ELF, Alignment.LAWFUL_GOOD, 20, 90)
 

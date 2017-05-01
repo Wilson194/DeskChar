@@ -25,7 +25,7 @@ class Layout(QtWidgets.QVBoxLayout):
         self.data_changed_signal.emit(self)
 
 
-    def synchronize(self, input: object):
+    def synchronize(self, input: object) -> None:
         """
         Create synchronization of this input through lang tabs
          Dont forget delete data when changed object!
@@ -47,7 +47,7 @@ class Layout(QtWidgets.QVBoxLayout):
             input.stateChanged.connect(lambda: self.save_synchronize_data_slot(input))
 
 
-    def save_synchronize_data_slot(self, obj):
+    def save_synchronize_data_slot(self, obj) -> None:
         """
         Slot for synchronize data when data is changed
         :param obj: object with changed input
@@ -62,8 +62,7 @@ class Layout(QtWidgets.QVBoxLayout):
                 one.setChecked(obj.checkState())
 
 
-    def text_line(self, grid: object, name: str, xposition: int, yposition: int,
-                  synchronize: bool = False, xspan: int = 1,
+    def text_line(self, grid: object, name: str, xposition: int, yposition: int, synchronize: bool = False, xspan: int = 1,
                   yspan: int = 1) -> QtWidgets.QLabel:
         """
         Widget for text line input
@@ -72,6 +71,8 @@ class Layout(QtWidgets.QVBoxLayout):
         :param xposition: grid position x
         :param yposition:  grid position y
         :param synchronize: bool, if true, value is synchronized trough all languages
+        :param xspan: Number of span columns
+        :param yspan: Number of span rows
         :return: input object
         """
         label = QtWidgets.QLabel()
@@ -87,8 +88,7 @@ class Layout(QtWidgets.QVBoxLayout):
         return input
 
 
-    def text_box(self, grid: object, name: str, xposition: int, yposition: int,
-                 synchronize: bool = False, xspan: int = 1,
+    def text_box(self, grid: object, name: str, xposition: int, yposition: int, synchronize: bool = False, xspan: int = 1,
                  yspan: int = 1) -> QtWidgets.QPlainTextEdit:
         """
         Widget for text box
@@ -97,6 +97,8 @@ class Layout(QtWidgets.QVBoxLayout):
         :param xposition: grid position x
         :param yposition: grid position y
         :param synchronize: bool, if true, value is synchronized trough all languages
+        :param xspan: Number of span columns
+        :param yspan: Number of span rows
         :return: input object
         """
         label = QtWidgets.QLabel()
@@ -112,9 +114,8 @@ class Layout(QtWidgets.QVBoxLayout):
         return input
 
 
-    def combo_box(self, grid: object, name: str, data: object, xposition: int, yposition: int,
-                  synchronize: bool = False, xspan: int = 1,
-                  yspan: int = 1, haveNone: bool = True) -> QtWidgets.QComboBox:
+    def combo_box(self, grid: object, name: str, data: object, xposition: int, yposition: int, synchronize: bool = False,
+                  xspan: int = 1, yspan: int = 1, haveNone: bool = True) -> QtWidgets.QComboBox:
         """
         Widget for combobox
         :param grid: parent grid
@@ -123,6 +124,9 @@ class Layout(QtWidgets.QVBoxLayout):
         :param xposition: grid position x
         :param yposition: grid position y
         :param synchronize: bool, if true, value is synchronized trough all languages
+        :param xspan: Number of span columns
+        :param yspan: Number of span rows
+        :param haveNone: If True, combo box have select option value on position 0
         :return: input object
         """
         label = QtWidgets.QLabel(TR().tr(name) + ':')
@@ -151,8 +155,8 @@ class Layout(QtWidgets.QVBoxLayout):
         :param xposition: grid position x
         :param yposition: grid position y
         :param synchronize: bool, if true, value is synchronized trough all languages
-        :param yspan: 
-        :param xspan:
+        :param xspan: Number of span columns
+        :param yspan: Number of span rows
         :return: input object
         """
         label = QtWidgets.QLabel()
@@ -170,9 +174,19 @@ class Layout(QtWidgets.QVBoxLayout):
         return input
 
 
-    def date_box(self, grid: object, name: str, xposition: int, yposition: int,
-                 synchronize: bool = False, xspan: int = 1,
+    def date_box(self, grid: object, name: str, xposition: int, yposition: int, synchronize: bool = False, xspan: int = 1,
                  yspan: int = 1) -> QtWidgets.QDateEdit:
+        """
+        Box for input date, only date. Range of date is from 1.1.0100
+        :param grid: parent grid
+        :param name: Name of label
+        :param xposition: grid position x
+        :param yposition: grid position y
+        :param synchronize: bool, if true, value is synchronized trough all languages
+        :param xspan: Number of span columns
+        :param yspan: Number of span rows
+        :return: 
+        """
         label = QtWidgets.QLabel()
         label.setText(TR().tr(name) + ':')
         grid.addWidget(label, yposition, xposition, 1, 1)
@@ -189,8 +203,18 @@ class Layout(QtWidgets.QVBoxLayout):
 
 
     def check_box(self, grid: object, name: str, xposition: int, yposition: int,
-                  synchronize: bool = False, xspan: int = 1,
-                  yspan: int = 1) -> QtWidgets.QCheckBox:
+                  synchronize: bool = False, xspan: int = 1, yspan: int = 1) -> QtWidgets.QCheckBox:
+        """
+        Input check box. Have name and one check box.
+        :param grid: parent grid
+        :param name: Name of label
+        :param xposition: grid position x
+        :param yposition: grid position y
+        :param synchronize: bool, if true, value is synchronized trough all languages
+        :param xspan: Number of span columns
+        :param yspan: Number of span rows
+        :return: 
+        """
         label = QtWidgets.QLabel()
         label.setText(TR().tr(name) + ':')
         grid.addWidget(label, yposition, xposition, 1, 1)

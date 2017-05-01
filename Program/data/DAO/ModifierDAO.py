@@ -1,5 +1,6 @@
 from data.DAO.DAO import DAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.SettingsDAO import SettingsDAO
 from data.DAO.interface.IModifierDAO import IModifierDAO
 from data.database.Database import Database
 from data.database.ObjectDatabase import ObjectDatabase
@@ -116,7 +117,7 @@ class ModifierDAO(DAO, IModifierDAO):
         :return: Modifier object
         """
         if lang is None:
-            lang = 'cs'  # TODO: default lang
+            lang = SettingsDAO().get_value('language', str)
 
         data = self.obj_database.select(self.DATABASE_TABLE, {'ID': modifier_id})
         if not data:
@@ -162,8 +163,8 @@ class ModifierDAO(DAO, IModifierDAO):
         :param lang: lang of modifiers
         :return: list of modifiers
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
         lines = self.database.select_all('Item')
 
         modifiers = []

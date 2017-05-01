@@ -63,10 +63,11 @@ class AbilityContextLayout(Layout):
         self.addLayout(self.inputGrid)
 
 
-    def map_data(self, context: AbilityContext, treeNode=None):
+    def map_data(self, context: AbilityContext, treeNode=None) -> None:
         """
         Mapa data from object to inputs in layout
-        :param context: Spell object
+        :param context: Ability context object
+        :param treeNode: node in tree widget, if its need to get whole object
         """
         self.object = context
         self.header.setText(context.name)
@@ -81,7 +82,7 @@ class AbilityContextLayout(Layout):
         self.valueInput.setValue(value)
 
 
-    def save_data(self):
+    def save_data(self) -> None:
         """
         Update data in object from inputs and update in manager
         """
@@ -95,5 +96,3 @@ class AbilityContextLayout(Layout):
         self.object.value = self.valueInput.value()
 
         self.contextManager.update(self.object)
-
-

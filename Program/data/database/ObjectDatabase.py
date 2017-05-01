@@ -1,6 +1,7 @@
 from datetime import date
 
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.SettingsDAO import SettingsDAO
 from data.database.Database import *
 from structure.enums.AutoNumber import AutoNumber
 from structure.enums.ObjectType import ObjectType
@@ -18,8 +19,8 @@ class ObjectDatabase(Database):
         :param objectId: id ob object
         :param objectType: objectType of object
         """
-        if not lang:  # TODO: default lang
-            lang = 'cs'
+        if not lang:
+            lang = SettingsDAO().get_value('language', str)
 
         self.set_many(True)
         for name, value in strValues.items():

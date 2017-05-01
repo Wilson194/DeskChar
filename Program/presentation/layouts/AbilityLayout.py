@@ -7,6 +7,8 @@ from structure.enums.Races import Races
 from structure.enums.Classes import Classes
 from presentation.layouts.Layout import Layout
 from presentation.Translate import Translate as TR
+from structure.tree.Node import Node
+from structure.tree.NodeObject import NodeObject
 
 
 class AbilityLayout(Layout):
@@ -55,10 +57,11 @@ class AbilityLayout(Layout):
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, ability: Ability, treeNode=None):
+    def map_data(self, ability: Ability, treeNode: NodeObject = None) -> None:
         """
         Mapa data from object to inputs in layout
         :param ability: Ability object
+        :param treeNode: node in tree widget, if its need to get whole object
         """
         self.object = ability
         self.header.setText(ability.name)
@@ -75,7 +78,7 @@ class AbilityLayout(Layout):
         self.race_input.setCurrentIndex(race_index)
 
 
-    def save_data(self):
+    def save_data(self) -> None:
         """
         Update data in object from inputs and update in manager
         """
@@ -91,7 +94,11 @@ class AbilityLayout(Layout):
         self.ability_manager.update_ability(self.object)
 
 
-    def __set_table_data(self, treeNode):
+    def __set_table_data(self, treeNode: NodeObject) -> None:
+        """
+        Set data to table, in table should be list of ability Contexts
+        :param treeNode: Tree node where ability is located, need for find ability contexts        
+        """
         self.table.setColumnCount(4)
 
         heades = [TR().tr('Name'), TR().tr('Target_attribute_type'), TR().tr('Value_type'), TR().tr('Value')]

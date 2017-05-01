@@ -9,6 +9,7 @@ from structure.enums.Classes import Classes
 from presentation.layouts.Layout import Layout
 from structure.enums.Races import Races
 from structure.spells.Spell import Spell
+from structure.tree.NodeObject import NodeObject
 
 
 class CharacterLayout(Layout):
@@ -73,10 +74,11 @@ class CharacterLayout(Layout):
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, character: Character, treeNode=None):
+    def map_data(self, character: Character, treeNode: NodeObject = None) -> None:
         """
         Mapa data from object to inputs in layout
         :param character: character object
+        :param treeNode: node in tree widget, if its need to get whole object
         """
         self.object = character
         self.name_input.setPlainText(self.object.name)
@@ -110,7 +112,7 @@ class CharacterLayout(Layout):
         self.alignment_input.setCurrentIndex(alignmentIndex)
 
 
-    def save_data(self):
+    def save_data(self) -> None:
         """
         Update data in object from inputs and update in manager
         """

@@ -26,7 +26,7 @@ class MainMenu(QMenuBar):
 
     def init_ui(self):
         """
-        Init basic UI
+        Init basic UI. Init basic menu items (save, open, exit, etc. )
         :return:
         """
         exit_action = QAction(QIcon('resources/icons/exit.png'), TR().tr('Menu_exit'),
@@ -77,27 +77,24 @@ class MainMenu(QMenuBar):
         about_action.triggered.connect(self.about_action)
 
 
-    def init_player_ui(self):
+    def init_player_ui(self) -> None:
+        """
+        Init buttons in menu for creating templates and scenario
+        :return: 
+        """
         spell_templates = QAction(QIcon(ObjectType.SPELL.icon()), TR().tr('Menu.spell'), self)
         ability_templates = QAction(QIcon(ObjectType.ABILITY.icon()), TR().tr('Menu.ability'), self)
         item_templates = QAction(QIcon(ObjectType.ITEM.icon()), TR().tr('Menu.item'), self)
-        modifier_templates = QAction(QIcon(ObjectType.MODIFIER.icon()), TR().tr('Menu.modifier'),
-                                     self)
+        modifier_templates = QAction(QIcon(ObjectType.MODIFIER.icon()), TR().tr('Menu.modifier'), self)
         effect_templates = QAction(QIcon(ObjectType.EFFECT.icon()), TR().tr('Menu.effect'), self)
-        character_templates = QAction(QIcon(ObjectType.CHARACTER.icon()), TR().tr('Menu.character'),
-                                      self)
+        character_templates = QAction(QIcon(ObjectType.CHARACTER.icon()), TR().tr('Menu.character'), self)
 
-        monster_templates = QAction(QIcon(ObjectType.MONSTER.icon()), TR().tr('Menu.monster'),
-                                    self)
-        scenario_templates = QAction(QIcon(ObjectType.SCENARIO.icon()), TR().tr('Menu.scenario'),
-                                     self)
-        location_templates = QAction(QIcon(ObjectType.LOCATION.icon()), TR().tr('Menu.location'),
-                                     self)
-        map_templates = QAction(QIcon(ObjectType.MAP.icon()), TR().tr('Menu.map'),
-                                self)
+        monster_templates = QAction(QIcon(ObjectType.MONSTER.icon()), TR().tr('Menu.monster'), self)
+        scenario_templates = QAction(QIcon(ObjectType.SCENARIO.icon()), TR().tr('Menu.scenario'), self)
+        location_templates = QAction(QIcon(ObjectType.LOCATION.icon()), TR().tr('Menu.location'), self)
+        map_templates = QAction(QIcon(ObjectType.MAP.icon()), TR().tr('Menu.map'), self)
 
-        context_templates = QAction(QIcon(ObjectType.ABILITY_CONTEXT.icon()),
-                                    TR().tr('Menu.ability_context'), self)
+        context_templates = QAction(QIcon(ObjectType.ABILITY_CONTEXT.icon()), TR().tr('Menu.ability_context'), self)
 
         ability_templates.triggered.connect(
             lambda: self.templates_menu_signal.emit(ObjectType.ABILITY))
@@ -145,16 +142,27 @@ class MainMenu(QMenuBar):
         file_menu.addAction(map_templates)
 
 
-    def settings_slot(self):
+    def settings_slot(self) -> None:
+        """
+        Slot for settings button. Open settings widget
+        :return: 
+        """
         Settings.get_data()
 
 
-    def about_action(self):
-        # TextDialog(TR().tr('About_text'))
+    def about_action(self) -> None:
+        """
+        Open about widget, when clicked on about
+        :return: 
+        """
         QtWidgets.QMessageBox.about(self, 'About DeskChar', TR().tr('About_text'))
 
 
-    def open_slot(self):
+    def open_slot(self) -> None:
+        """
+        Slot for open new file from .drd file. Delete whole program data and init new program data from file
+        :return: 
+        """
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         types = "DrD Files (*.drd)"
@@ -167,7 +175,12 @@ class MainMenu(QMenuBar):
             Sync().save_data('Opened_file', fileName)
 
 
-    def save_as_slot(self):
+    def save_as_slot(self) -> str:
+        """
+        Slot for save ass action. This create new widget for select target file.
+        File will be created with .drd extension
+        :return: 
+        """
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         types = "DrD Files (*.drd)"
@@ -182,16 +195,26 @@ class MainMenu(QMenuBar):
         return fileName
 
 
-    def save_slot(self):
+    def save_slot(self) -> str:
+        """
+        Slot for save action. If data is opened from file, it will only save all to this file. 
+        Otherwise this function call save as action
+        :return: 
+        """
         fileName = Sync().get_data('Opened_file')
         if fileName:
             DrdFile().create(fileName)
-            return True
+            return fileName
         else:
             return self.save_as_slot()
 
 
-    def quit_slot(self):
+    def quit_slot(self) -> None:
+        """
+        Slot for quit action. 
+        Prompt before quit, if you sure to quit application, and youwant to save your data before.
+        :return: 
+        """
         quit_msg = TR().tr('Quit_text')
         reply = QtWidgets.QMessageBox.question(self, TR().tr('Sure_quit'),
                                                quit_msg,

@@ -1,11 +1,7 @@
 from abc import ABC, abstractmethod
 
-from structure.character.PartyCharacter import PartyCharacter
-from structure.effects.Modifier import Modifier
 from structure.enums.ObjectType import ObjectType
-from structure.monster.Monster import Monster
 from structure.scenario.Scenario import Scenario
-from structure.spells.Spell import Spell
 
 
 class IScenarioDAO(ABC):

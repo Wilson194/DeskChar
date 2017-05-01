@@ -6,6 +6,7 @@ from structure.enums.Races import Races
 from structure.enums.WeaponWeight import WeaponWeight
 from presentation.layouts.Layout import Layout
 from structure.items.MeleeWeapon import MeleeWeapon
+from structure.tree.NodeObject import NodeObject
 
 
 class MeleeWeaponLayout(Layout):
@@ -58,10 +59,11 @@ class MeleeWeaponLayout(Layout):
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, item: MeleeWeapon, treeNode=None):
+    def map_data(self, item: MeleeWeapon, treeNode: NodeObject = None) -> None:
         """
         Mapa data from object to inputs in layout
-        :param item: Item object
+        :param item: MeleeWeapon object
+        :param treeNode: node in tree widget, if its need to get whole object
         """
         self.object = item
         self.header.setText(item.name)
@@ -80,12 +82,12 @@ class MeleeWeaponLayout(Layout):
         weapon_weight_index = item.weaponWeight.value if item.weaponWeight is not None else 1
         racial_index = item.racial.value if item.racial is not None else 0
 
-        self.handling_input.setCurrentIndex(handling_index-1)
-        self.weapon_weight_input.setCurrentIndex(weapon_weight_index-1)
+        self.handling_input.setCurrentIndex(handling_index - 1)
+        self.weapon_weight_input.setCurrentIndex(weapon_weight_index - 1)
         self.racial_input.setCurrentIndex(racial_index)
 
 
-    def save_data(self):
+    def save_data(self) -> None:
         """
         Update data in object from inputs and update in manager
         """
@@ -104,8 +106,8 @@ class MeleeWeaponLayout(Layout):
         weapon_weight_index = self.weapon_weight_input.currentIndex()
         racial_index = self.racial_input.currentIndex()
 
-        self.object.handling = Handling(handling_index+1)
-        self.object.weaponWeight = WeaponWeight(weapon_weight_index+1)
+        self.object.handling = Handling(handling_index + 1)
+        self.object.weaponWeight = WeaponWeight(weapon_weight_index + 1)
         self.object.racial = Races(racial_index) if racial_index > 0 else None
 
         self.item_manager.update(self.object)

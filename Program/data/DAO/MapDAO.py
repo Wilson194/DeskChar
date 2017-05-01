@@ -1,6 +1,7 @@
 from data.DAO.DAO import DAO
 from data.DAO.MapItemDAO import MapItemDAO
 from data.DAO.PlayerTreeDAO import PlayerTreeDAO
+from data.DAO.SettingsDAO import SettingsDAO
 from data.DAO.interface.IMapDAO import IMapDAO
 from data.database.Database import Database
 from structure.enums.ObjectType import ObjectType
@@ -122,8 +123,8 @@ class MapDAO(DAO, IMapDAO):
         :param lang: lang of maps
         :return: list of maps
         """
-        if lang is None:  # TODO : default lang
-            lang = 'cs'
+        if lang is None:
+            lang = SettingsDAO().get_value('language', str)
         lines = self.database.select_all(self.DATABASE_TABLE)
         maps = []
         for line in lines:

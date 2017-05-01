@@ -15,6 +15,7 @@ from structure.enums.ModifierTargetTypes import ModifierTargetTypes
 from structure.enums.ModifierValueTypes import ModifierValueTypes
 from structure.enums.WeaponWeight import WeaponWeight
 from presentation.Translate import Translate as TR
+from structure.tree.NodeObject import NodeObject
 
 
 class EffectLayout(Layout):
@@ -63,10 +64,11 @@ class EffectLayout(Layout):
         self.addLayout(self.inputGrid)
 
 
-    def map_data(self, effect: Effect, treeNode=None):
+    def map_data(self, effect: Effect, treeNode: NodeObject = None) -> None:
         """
         Mapa data from object to inputs in layout
-        :param effect: Spell object
+        :param effect: Effect object
+        :param treeNode: node in tree widget, if its need to get whole object
         """
         self.object = effect
         self.header.setText(effect.name)
@@ -79,7 +81,7 @@ class EffectLayout(Layout):
         self.targetInput.setCurrentIndex(targetTypeIndex)
 
 
-    def save_data(self):
+    def save_data(self) -> None:
         """
         Update data in object from inputs and update in manager
         """
@@ -95,7 +97,11 @@ class EffectLayout(Layout):
         self.effect_manager.update_effect(self.object)
 
 
-    def __set_table_data(self, treeNode):
+    def __set_table_data(self, treeNode) -> None:
+        """
+        Set data to table, in table should be list of Modifiers
+        :param treeNode: Tree node where ability is located, need for find Modifiers        
+        """
         self.table.setColumnCount(5)
 
         heades = [TR().tr('Name'), TR().tr('Target_type'), TR().tr('Target_attribute_type'),

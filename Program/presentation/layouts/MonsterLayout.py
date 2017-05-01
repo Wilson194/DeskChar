@@ -12,6 +12,7 @@ from structure.enums.MonsterRace import MonsterRace
 from structure.enums.MonsterSize import MonsterSize
 from structure.monster.Monster import Monster
 from structure.spells.Spell import Spell
+from structure.tree.NodeObject import NodeObject
 
 
 class MonsterLayout(Layout):
@@ -69,10 +70,11 @@ class MonsterLayout(Layout):
         self.addLayout(self.input_grid)
 
 
-    def map_data(self, monster: Monster, treeNode=None):
+    def map_data(self, monster: Monster, treeNode: NodeObject = None) -> None:
         """
         Mapa data from object to inputs in layout
         :param monster: Monster object
+        :param treeNode: node in tree widget, if its need to get whole object
         """
         self.object = monster
         self.nameInput.setPlainText(self.object.name)
@@ -100,7 +102,7 @@ class MonsterLayout(Layout):
         self.sizeInput.setCurrentIndex(sizeIndex)
 
 
-    def save_data(self):
+    def save_data(self) -> None:
         """
         Update data in object from inputs and update in manager
         """
