@@ -92,7 +92,7 @@ Poslední šestá kapitola se věnuje testování. Popis druhů testů, detailn�
 \end{introduction}
 
 \chapter{Úvod do problematiky}
-
+Tato kapitola se zabývá základním úvodem do problematiky. Ve stručnosti představí hru dračí doupě a její základní pravidla a principy hraní. Číst této kapitoly je také věnována popisu průběh vytváření dobrodružství.
 	\section{Cíl práce}
 Cílem této práce je vytvořit desktopovou aplikaci, které rozšíří již existují balíček mobilních aplikací MobChar o nové funkcionality. Hlavním účelem aplikace je vytváření dobrodružství pro Dračí doupě a vytváření šablon pro mobilní aplikace MobChar. Pomocí strukturovaných XML souborů bude možné přenášet rozsáhlá dobrodružství do mobilní aplikace. \par
 Někteří hráči dračího doupěte si stále potrpí pouze na papírovou verzi dobrodružství a proto aplikace mimo jiné bude umožňovat exportovat veškeré šablony a dobrodružství do formát HTML, jehož formát bude přizpůsoben pro přehledný tisk. 
@@ -129,7 +129,9 @@ Po vyhodnocení těchto akcí přichází na řadu ostatní hráči nebo přípa
 
 
 \chapter{Současný stav}
-	\section{Projekt MobChar}	
+V této kapitole se práce věnuje popisu současného stavu. Popisuje již existující aplikace, se kterými program bude spolupracovat. Dále popisuje souběžně vznikající balíček pro Pány jeskyně, se kterým úzce spolupracuje. V poslední části se věnuje již existující aplikacím, které by tato aplikace měla nahradit.
+
+\section{Projekt MobChar}	
 Aplikace MobChar vznikla jako samostatná aplikace, která měla sloužit jako osobní deník hráče pro hru Dračí doupě. Postupem času se rozšiřovala a měnila základní struktura. Nynější stav již umožňuje vytváření rozšíření pro další hry na hrdiny jako jsou například Dungeons~\&~Dragons. V této chvíli jsou již plně funkční rozšíření pro Dračí doupě a Dungeons~\&~Dragons a vznikají další.
 
 \subsection{Balíček pro Dračí doupě}
@@ -150,6 +152,7 @@ Díky rozsáhlé komunitě okolo her na hrdiny, jako jsou Dračí doupě a Dunge
 
 
 \chapter{Analýza}
+Tato třetí kapitola se věnuje analýze celé problematiky. Jsou zde analyzovány veškeré požadavky na aplikaci a také jednotlivé scénáře využití aplikace neboli business procesy.  V poslední částí je zde dopodrobna rozebrán datový model celé aplikace  a navrhnut model architektury. 
 %% -*-*-*-*-*-*-*-*-*--* Požadavky *-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 	\section{Požadavky}
 Sběr požadavků je jedna z~prvních činností, které se musí provést na začátku analýzy projektu. Je zapotřebí sepsat veškeré funkční a nefunkční požadavky, na základě kterých bude vznikat návrh a výsledný program. Na základě požadavků je možné vytvořit první odhady rozsahu projektu a jeho ceny. Tento odhad je velice nepřesný, ale zákazníci vyžadují předběžnou cenu, již na základě jejich požadavků na program. 
@@ -157,9 +160,10 @@ Sběr požadavků je jedna z~prvních činností, které se musí provést na za
 \subsection{Funkční požadavky}
 Funkční požadavky jsou rozděleny do dvou částí, funkcionalita pro hráče a funkcionalita pro pána jeskyně. Tyto sekce jsou rozdělené, protože popisují stejný program, ale z pohledu jiného uživatele.
 \subsubsection{Funkcionalita pro hráče}
-Funkční požadavky, které program bude poskytovat zejména pro hráče pro práci se šablonami.\\
-\\
-\textbf{Tvorba a editace šablon pro MobChar:} program bude umožňovat vytvářet nové šablony pro mobilní aplikaci MobChar. Bude také umožňovat editovat stávající šablony nebo případně i vybrané šablony smazat. Jednotlivé šablony lze přehledně uspořádat do stromové struktury.\\
+Funkční požadavky, které program bude poskytovat zejména pro hráče pro práci se šablonami.
+\begin{description}
+
+\item[Tvorba a editace šablon pro MobChar] Program bude umožňovat vytvářet nové šablony pro mobilní aplikaci MobChar. Bude také umožňovat editovat stávající šablony nebo případně i vybrané šablony smazat. Jednotlivé šablony lze přehledně uspořádat do stromové struktury.\\
 \\
 Šablony se kterými bude možné pracovat:
 				\begin{itemize}
@@ -167,19 +171,21 @@ Funkční požadavky, které program bude poskytovat zejména pro hráče pro pr
 					\item Předměty
 					\item Schopnosti
 					\item Efekty
-				\end{itemize}
-\textbf{Export šablon pro mobilní aplikaci MobChar:} program bude umožňovat jednoduchý a hromadný export vybraných šablon pro mobilní aplikaci MobChar ve formátu XML.\\
-\\
-\textbf{Import šablon z~mobilní aplikace MobChar:} program bude umožňovat import XML šablon, které se dají vytvořit v~mobilní aplikaci MobChar. Šablony se přidají do databáze a následně je bude možné editovat.\\
-\\
-\textbf{Ukládání šablon do souboru:} program bude umožňovat ukládat veškeré vytvořené šablony do společného xml souboru, který bude možné opět do programu načíst a nahrát veškeré šablony. Soubor bude sloužit pro jednoduché ukládání práce a sdílení šablon.
+				\end{itemize}		
+\item[Export šablon pro mobilní aplikaci MobChar] Program bude umožňovat jednoduchý a hromadný export vybraných šablon pro mobilní aplikaci MobChar ve formátu XML.
 
+\item[Import šablon z~mobilní aplikace MobChar] Program bude umožňovat import XML šablon, které se dají vytvořit v~mobilní aplikaci MobChar. Šablony se přidají do databáze a následně je bude možné editovat.
+
+\item[Ukládání šablon do souboru] Program bude umožňovat ukládat veškeré vytvořené šablony do společného xml souboru, který bude možné opět do programu načíst a nahrát veškeré šablony. Soubor bude sloužit pro jednoduché ukládání práce a sdílení šablon.
+\end{description}
 \subsubsection{Funkcionalita pro Pána jeskyně}
-Funkční požadavky, které program bude poskytovat zejména pro Pána jeskyně pro vytváření nových dobrodružství.\\
-\\
-\textbf{Tvorba a editace dobrodružství:} program bude umožňovat vytváření nových a editaci stávajících dobrodružství. K dobrodružství se dají přiřadit veškeré potřebné objekty, které se v aplikaci dají vytvořit. Celé dobrodružství lze členit do přehledné stromové struktury. V případě potřeby se jednotlivá dobrodružství nebo jejich části dají smazat.\\
-\\
-\textbf{Tvorba a editace mapy pro dobrodružství:} program bude umožňovat vytvářet a~editovat mapy pro dobrodružství. Na mapu bude možné umisťovat jednotlivé objekty, které jsou rozděleny do 4 kategorií:
+Funkční požadavky, které program bude poskytovat zejména pro Pána jeskyně pro vytváření nových dobrodružství.
+\begin{description}
+
+
+\item[Tvorba a editace dobrodružství] Program bude umožňovat vytváření nových a editaci stávajících dobrodružství. K dobrodružství se dají přiřadit veškeré potřebné objekty, které se v aplikaci dají vytvořit. Celé dobrodružství lze členit do přehledné stromové struktury. V případě potřeby se jednotlivá dobrodružství nebo jejich části dají smazat.
+
+\item[Tvorba a editace mapy pro dobrodružství] Program bude umožňovat vytvářet a~editovat mapy pro dobrodružství. Na mapu bude možné umisťovat jednotlivé objekty, které jsou rozděleny do 4 kategorií:
 \begin{itemize}
 \item Monster - objekt, který reprezentuje příšeru nebo cizí postavu
 \item Room - objekt, který reprezentuje místnost nebo oblast a její popis
@@ -187,22 +193,24 @@ Funkční požadavky, které program bude poskytovat zejména pro Pána jeskyně
 \item Object - objekt, který reprezentuje ostatní  objekty na mapě (tajné dveře, páky atd.)
 \end{itemize}
 Jednotlivé objekty navíc obsahují název a a jejich popis
-\\
-\\
-\textbf{Tvorba a~editace příšer pro dobrodružství:} program bude umožňovat vytváření nových a~editaci již existujících příšer pro dobrodružství nebo případné smazání některých nepovedených či nepotřebných šablon. Příšery půjdou seskupovat do stromové struktury pro větší přehlednost.\\
-\\
-\textbf{Tvorba a~editace postav pro dobrodružství:} program bude umožňovat vytváření nových postav a editaci již existujících. Postavy půjdou seskupovat do stromové struktury pro větší přehlednost.\\
-\\
-\textbf{Exportování dobrodružství pro mobilní aplikaci MobChar:} celé dobrodružství půjde exportovat ve formátu xml se strukturou, kterou podporuje mobilní aplikace MobChar pro pána jeskyně.\\
-\\
-\textbf{Importování a~exportování dobrodružství pro sdílení:} celé dobrodružství včetně všech přiřazených objektů půjde exportovat do jednoho xml souboru, který následně bude možné do aplikace znovu nahrát. Soubor bude sloužit pro ukládání práce a~případné sdílení s~ostatními pány jeskyně.\\
-\\
-\textbf{Export dobrodružství pro tisk:} Aplikace bude umožňovat exportování celého dobrodružství do přehledného formátu, který je vhodný pro tisk. 
-\subsection{Nefunkční požadavky}\label{sec:funkcni_pozadavky}
 
-\textbf{Podpora operačních systémů Windows a Linux:} program půjde spustit pod operačnímy systémy Windows a Linux. U operačního systému Windows budou podporovány všechny verze, které jsou novější než Windows XP. Program bude spustitelný pomocí exe souboru. U operačního systému Linux budou podporovány standardní linuxové distribuce. Program bude spustitelný pomocí bash souboru.\\
-\\
-\textbf{Jazyková podpora:} program bude umožňovat přepínání jazyků a případnou lokalizaci pro další jazyky. V základu bude podporován český jazyk a anglický jazyk.
+\item[Tvorba a~editace příšer pro dobrodružství] Program bude umožňovat vytváření nových a~editaci již existujících příšer pro dobrodružství nebo případné smazání některých nepovedených či nepotřebných šablon. Příšery půjdou seskupovat do stromové struktury pro větší přehlednost.
+
+\item[Tvorba a~editace postav pro dobrodružství] Program bude umožňovat vytváření nových postav a editaci již existujících. Postavy půjdou seskupovat do stromové struktury pro větší přehlednost.
+
+\item[Exportování dobrodružství pro mobilní aplikaci MobChar] Celé dobrodružství půjde exportovat ve formátu xml se strukturou, kterou podporuje mobilní aplikace MobChar pro pána jeskyně.
+
+\item[Importování a~exportování dobrodružství pro sdílení] Celé dobrodružství včetně všech přiřazených objektů půjde exportovat do jednoho xml souboru, který následně bude možné do aplikace znovu nahrát. Soubor bude sloužit pro ukládání práce a~případné sdílení s~ostatními pány jeskyně.
+
+\item[Export dobrodružství pro tisk] Aplikace bude umožňovat exportování celého dobrodružství do přehledného formátu, který je vhodný pro tisk. 
+\end{description}
+\subsection{Nefunkční požadavky}\label{sec:funkcni_pozadavky}
+\begin{description}
+
+\item[Podpora operačních systémů Windows a Linux] Program půjde spustit pod operačnímy systémy Windows a Linux. U operačního systému Windows budou podporovány všechny verze, které jsou novější než Windows XP. Program bude spustitelný pomocí exe souboru. U operačního systému Linux budou podporovány standardní linuxové distribuce. Program bude spustitelný pomocí bash souboru.
+
+\item[Jazyková podpora] Program bude umožňovat přepínání jazyků a případnou lokalizaci pro další jazyky. V základu bude podporován český jazyk a anglický jazyk.
+\end{description}
 %% -*-*-*-*-*-*-*-*-*--* Business procesy *-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 	\section{Business procesy}
 Business proces (někdy též nazývaný podnikový nebo obchodní proces) je tok práce nebo činnosti. Dají se zaznamenávat pomocí textu nebo přehledných modelů. Modely business procesů se snaží přehledně do diagramu zanést jednotlivé procesy, které bude uživatel s danou aplikací nebo doménou provádět. Já jsem zvolil UML diagram aktivit pro zachycení business procesů v mé práci.
@@ -218,34 +226,95 @@ Diagram na obrázku \ref{fig:bp_sablony} popisuje základní proces práce se š
 	\includegraphics[width=0.8\textwidth]{images/business_dobrodruzstvi}
 	\caption[Business proces vytváření dobrodružství]{Model bussines procesů vytváření dobrodružství}\label{fig:bp_dobrodruzsvi}
 \end{figure}
-Diagram \ref{fig:bp_dobrodruzsvi} popisuje proces, při kterém vzniká nové dobrodružství. Jak už jsem dříve zmiňoval, tak dobrodružství je také šablona. Protože se jedná o hlavní šablonu, která v sobě obsahuje větší počet šablon různých druhů, rozhodl jsem se vytváření dobrodružství popsat více do podrobna. Na začátku procesu vytvoříme nové dobrodružství nebo importujeme již existující a dále budeme upravovat již stávající hodnoty. V bodě \texttt{Vytváření a editace objektů} se jedná o bussines proces popsaný v kapitole \ref{sec:vytvareni_sablon},ve kterém vytvoříme veškeré potřebné objekty, které budou součástí dobrodružství. Do dobrodružství veškeré šablony přidáme a rozřadíme podle potřeby ( podle částí dobrodružství, podle typu šablony atd.). Když máme veškeré úpravy hotové, můžeme výsledné dobrodružství exportovat. Zde si můžeme vybrat zda budeme exportovat dobrodružství pro tisk do formátu PDF nebo pro MobChar ve formátu XML.\\
-\\
-\textbf{Formát pro tisk:} Vybereme části, které chceme exportovat (nemusíme exportovat celé dobrodružství naráz) a provedeme export. Vytvoří se nám přehledný PDF soubor který následně můžeme vytisknout nebo nahrát do zařízení, které umí pracovat s formátem PDF.\\
-\\
-\textbf{Formát pro MobChar:} Při exportu do formátu XML se vždy exportuje celé dobrodružství. Nedají se vybrat pouze některé části. Aplikace vytvoří XML soubor. Uživatel následně získaný soubor nahraje do zařízení a importuje ho do aplikace. Takto vytvořené dobrodružství je určené pro MobChar rozšíření pro Pána jeskyně.
+Diagram \ref{fig:bp_dobrodruzsvi} popisuje proces, při kterém vzniká nové dobrodružství. Jak už jsem dříve zmiňoval, tak dobrodružství je také šablona. Protože se jedná o hlavní šablonu, která v sobě obsahuje větší počet šablon různých druhů, rozhodl jsem se vytváření dobrodružství popsat více do podrobna. Na začátku procesu vytvoříme nové dobrodružství nebo importujeme již existující a dále budeme upravovat již stávající hodnoty. V bodě \texttt{Vytváření a editace objektů} se jedná o bussines proces popsaný v kapitole \ref{sec:vytvareni_sablon},ve kterém vytvoříme veškeré potřebné objekty, které budou součástí dobrodružství. Do dobrodružství veškeré šablony přidáme a rozřadíme podle potřeby ( podle částí dobrodružství, podle typu šablony atd.). Když máme veškeré úpravy hotové, můžeme výsledné dobrodružství exportovat. Zde si můžeme vybrat zda budeme exportovat dobrodružství pro tisk do formátu PDF nebo pro MobChar ve formátu XML.
+\begin{description}
+
+\item[Formát pro tisk] Vybereme části, které chceme exportovat (nemusíme exportovat celé dobrodružství naráz) a provedeme export. Vytvoří se nám přehledný HTML soubor, který následně můžeme vytisknout nebo nahrát do zařízení, které umí pracovat s formátem HTML, na což nám stačí obyčejný webový prohlížeč.
+
+\item[Formát pro MobChar] Při exportu do formátu XML se vždy exportuje celé dobrodružství. Nedají se vybrat pouze některé části. Aplikace vytvoří XML soubor. Uživatel následně získaný soubor nahraje do zařízení a importuje ho do aplikace. 
+Takto vytvořené dobrodružství je určené pro MobChar rozšíření pro Pána jeskyně.
+
+\end{description}
+
+\subsection{Tvorba mapy}
+\begin{figure}\centering
+	\includegraphics[width=0.8\textwidth]{images/business_mapa}
+	\caption[Proces vytváření mapy]{Proces vytváření mapy}\label{fig:bp_mapa}
+\end{figure}	
+Diagram na obrázku \ref{fig:bp_mapa} popisuje proces vytváření mapy pro dobrodružství. Na začátku se vytvoří nová mapa a nastaví se její základní údaje, což je jméno a popis. V další části se do mapy vloží podkladový obrázek, který bude sloužit jako základ mapy. Tento obrázek se dá kdykoliv změnit, čímž se původní obrázek smaže a nahradí novým. \par
+
+Následuje část, ve které se do mapy přidávají jednotlivé objekty. Vybereme požadovaný objekt a uvedeme u něj jméno a základní popis. Objekt se přidá na mapu. Upravíme jeho velikost a umístění na mapě pomocí klasické práce s obrázkem. Tuto činnost opakuje, dokud nejsou všechny potřebné objekty na svém místě. Následuje uložení mapy a rozložení předmětů. Po uložení rozložení automaticky následuje vygenerování nového obrázku z mapy, který se používá při exportu pro mobilní aplikaci.
 
 %% -*-*-*-*-*-*-*-*-*--* Případy užití *-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-	\section{Případy užití}
-Případy užití popisují jednotlivé činnosti, které uživatel provádí, při práci s~aplikací. Diagram byl rozdělen na tři hlavní části pro větší přehlednost.
+	\section{Případy užití}	
+Případy užití popisují jednotlivé scénáře využití aplikace, které uživatel může využívat. Diagram byl rozdělen na tři hlavní části pro větší přehlednost.
+
 \subsection{Práce se šablonami}
-\begin{figure}\centering
-	\includegraphics[width=0.8\textwidth]{images/usecase_sablony.pdf}
-	\caption[Případy užití pro šablony]{Případy užití pro práci se šablonami}\label{fig:uc_sablony}
-\end{figure}
+	\begin{figure}\centering
+		\includegraphics[width=0.8\textwidth]{images/usecase-sablony.pdf}
+		\caption[Případy užití pro šablony]{Případy užití pro práci se šablonami}			\label{fig:uc_sablony}
+	\end{figure}
 
-Množina případů užití týkající se práce se šablonami namodelovaná na obrázku \ref{fig:uc_sablony}, se týká veškeré práce se šablonami. Dobrodružství a postavy jsou složené z jednotlivých šablon, které se dají využít i samostatně. Samotné dobrodružství a postavy mají stejný formát jako šablony a navíc můžou obsahovat základní šablony (například postavy můžou mít u sebe zbraně).\\
-\\
-\textbf{Vytváření a editace šablon:} uživatel si bude moci vytvořit nové šablony nebo editovat stávající. Veškeré parametry, které je možné do šablony zapsat, lze jednoduše upravovat v přehledném formuláři. Uživatel si může vytvořit libovolný počet šablon, které se na základě návazností sdružují do větších celků (dobrodružství, postava).\\
-\\
-\textbf{Import šablon z XML souboru:} program bude umožňovat import šablon ze strukturovaných XML souborů, které vytváří mobilní aplikace MobChar a také samotný program. Importované šablony se přidají do databáze a lze s nimi následně provádět stejné činnosti jako s nově vytvořenými. Import je možný buď hromadný, který se pokusí ze souboru dostat veškeré dostupné informace a přidat je do aplikace na příslušná místa, nebo lokální import, který ze souboru vytáhne pouze šablony o daném typu.\\
-\\
-\textbf{Sdružování šablon do skupin:} veškeré šablony půjde rozřazovat do stromové struktury pro větší přehlednost a jednoduší práci s nimi. Pomocí vytváření složek a jednoduchého drag and drop systému bude rozřazování velice jednoduché a intuitivní. Díky rozřazení do složek je následná práce se šablonami velice usnadněná, ať už se jedná o export nebo přiřazování do rodičovských šablon.\\
-\\
-\textbf{Export šablon:} veškeré vytvořené šablony lze z aplikace exportovat. K dispozici jsou různé druhy exportu. První možnost je export pro mobilní aplikace MobChar. Aplikace vytvoří strukturované XML soubory, které odpovídají formátu, který používá mobilní aplikace MobChar. Další možností exportu je PDF formát, který slouží pro tisknutí šablon do přehledného almanachu, který umožní využít šablony i hráčům, kteří mobilní aplikaci nemají nebo ji nechtějí použít. Poslední možnost exportu, je klasické uložení celého stavu šablon do jednoho xml souboru, který bude využívat stejnou strukturu šablon. \\
-\\
-\textbf{Tvorba překladů šablon:} ke každé šabloně vytvořené nebo importované do aplikace lze vytvořit neomezený počet překladů. Překlady se vytváří v rámci jedné šablony, pomocí přehledného přepínaní mezi jazyky. Veškeré hodnoty, pro které překlad nemá smysl (číselné hodnoty, povolání, atd.) budou synchronizování napříč všemi jazyky.\\
-\\
+Množina případů užití týkající se práce se šablonami namodelovaná na obrázku \ref{fig:uc_sablony}, se týká veškeré práce se šablonami. Dobrodružství a postavy jsou složené z jednotlivých šablon, které se dají využít i samostatně. Samotné dobrodružství a postavy mají stejný formát jako šablony a navíc můžou obsahovat základní šablony (například postavy můžou mít u sebe zbraně).
+\begin{description}
+\item[Vytváření a editace šablon] Uživatel si bude moci vytvořit nové šablony nebo editovat stávající. Veškeré parametry, které je možné do šablony zapsat, lze jednoduše upravovat v přehledném formuláři. Uživatel si může vytvořit libovolný počet šablon, které se na základě návazností sdružují do větších celků (dobrodružství, postava).
 
+\item[Import šablon z XML souboru] Program bude umožňovat import šablon ze strukturovaných XML souborů, které vytváří mobilní aplikace MobChar a také samotný program. Importované šablony se přidají do databáze a lze s nimi následně provádět stejné činnosti jako s nově vytvořenými. Import je možný buď hromadný, který se pokusí ze souboru dostat veškeré dostupné informace a přidat je do aplikace na příslušná místa, nebo lokální import, který ze souboru vytáhne pouze šablony o daném typu.
+
+\item[Sdružování šablon do skupin] Veškeré šablony půjde rozřazovat do stromové struktury pro větší přehlednost a jednoduší práci s nimi. Pomocí vytváření složek a jednoduchého drag and drop systému bude rozřazování velice jednoduché a intuitivní. Díky rozřazení do složek je následná práce se šablonami velice usnadněná, ať už se jedná o export nebo přiřazování do rodičovských šablon.
+
+\item[Export šablon] Veškeré vytvořené šablony lze z aplikace exportovat. K dispozici jsou různé druhy exportu. První možnost je export pro mobilní aplikace MobChar. Aplikace vytvoří strukturované XML soubory, které odpovídají formátu, který používá mobilní aplikace MobChar. Další možností exportu je PDF formát, který slouží pro tisknutí šablon do přehledného almanachu, který umožní využít šablony i hráčům, kteří mobilní aplikaci nemají nebo ji nechtějí použít. Poslední možnost exportu, je klasické uložení celého stavu šablon do jednoho xml souboru, který bude využívat stejnou strukturu šablon. 
+
+\item[Tvorba překladů šablon] Ke každé šabloně vytvořené nebo importované do aplikace lze vytvořit neomezený počet překladů. Překlady se vytváří v rámci jedné šablony, pomocí přehledného přepínaní mezi jazyky. Veškeré hodnoty, pro které překlad nemá smysl (číselné hodnoty, povolání, atd.) budou synchronizování napříč všemi jazyky.
+\end{description}
+
+\subsection{Tvorba dobrodružství}
+	\begin{figure}\centering
+		\includegraphics[width=1\textwidth]{images/usecase-dobrodruzstvi.pdf}
+		\caption[Případy užití pro dobrodružstvím]{Případy užití pro práci s dobrodružstvím}			\label{fig:uc_sablony}
+	\end{figure}
+	
+	\begin{description}
+		\item[Uložení dobrodružství do souboru]
+Celé dobrodružství, včetně veškerých šablon, které se v aplikaci nachází, je možné uložit do jednoho souboru s příponou drd. Tento soubor obsahuje všechny vyplněné údaje šablon a také veškeré obrázky map. V tomto formátu se ukládají i mapy ve formátu, který umožňuje plné obnovení a následnou editaci. 
+
+		\item[Nahrání dobrodružství ze souboru]
+V aplikaci je možné otevřít soubor s příponou drd, která obsahuje celé uložené dobrodružství včetně všech šablon. Tento formát také umožňuje plné obnovení map, včetně veškerých objektů na mapě. Mapy a celé dobrodružství je nadále možné upravovat. Do aplikace se dá nahrát pouze jeden soubor drd, všechny ostatní data v aplikaci jsou smazána.
+ 
+		\item[Rozdělení na části do stromové struktury]
+		Všechny části dobrodružství je možné rozdělovat do přehledné stromové struktury. Každý objekt má množinu objektů, které může obsahovat. Mimo to se dají vytvářet složky, které můžou obsahovat všechny objekty. Třídění objektů probíhá pomocí systému drag\&drop. Pokud se pokusíte přesunou objekt na místo, kde nesmí být, tak se struktura nezmění. 
+		
+		\item[Tvorba a editace dobrodružství]
+V aplikaci je možné vytvořit neomezené množství dobrodružství. Dobrodružství se skládají z jednotlivých lokací, které dobrodružství rozdělují na logické celky a  předmětů, kouzel a schopností, které jsou společné pro celé dobrodružství. Do dobrodružství jdou přidávat předpřipravené šablony ostatních objektů. 
+
+		\item[Editace objektů přímo pro dobrodružství]
+Po přidání objektu ze šablony do dobrodružství, se vytvoří nový objekt pomocí hluboké kopie. Veškerá data se zkopírují do nového objektu. Tento objekt je pak možné přímo ze záložky dobrodružství editovat a ukládat. Podle druhu objektu se otevře příslušný layout pro danou šablonu.
+
+		\item[Export dobrodružství]
+		Celé dobrodružství je možné vyexportovat do strukturovaného formátu XML, který podporuje mobilní aplikace MobChar. K vyexportovanému dobrodružství se připojí složka resources, ve které se nachází veškeré mapy použité v dobrodružství. 
+		
+		\item[Import dobrodružství]
+		Dobrodružství je také možné ze strukturovaného XML souboru importovat. Z jednoho souboru lze nahrát pouze jedno dobrodružství. Při importu dobrodružství do aplikace se do dobrodružství nepřidají mapy, protože XML soubor v sobě neobsahuje údaje, které by umožňovali mapu editovat. Do aplikace je možné importovat libovolné množství dobrodružství
+	\end{description}
+	
+\subsection{Tvorba mapy}
+	\begin{figure}\centering
+		\includegraphics[width=1\textwidth]{images/usecase-mapa.pdf}
+		\caption[Případy užití pro mapu]{Případy užití pro prácí s mapou}				\label{fig:uc_sablony}
+	\end{figure}
+	
+	\begin{description}
+		\item[Vytvoření mapy]
+		\item[Práce s objekty na mapě]
+Na mapu je možné přidávat jednotlivé objekty. Objekty jsou rozděleny na čtyři základní druhy. Object \texttt{monster}, který reprezentuje na mapě nestvůry a všechny postavy. Object \texttt{item} reprezentuje na mapě všechny předměty, ať už se jedná o truhlu s pokladem nebo tajné klíče, či nádoby. Další object je \texttt{room}, který slouží k popisu místností a lokací. Poslední objekt je \texttt{general}, který zastupuje všechny ostatní obejkty na mapě, které je potřeba na mapě zaznamenat. Všem objektům je možné měnit velikost a umístit je na konkrétní místo na mapě.
+
+		\item[Přidání podkladové mapy]
+Základním prvkem mapy je podkladový obrázek, který tvoří základní rozložení mapy. Program podporuje základní druhy obrázků jpg, gif a png. Na mapě se může nacházet pouze jeden podkladový obrázek, pokud na mapě již nějaký se nachází a přidáme další, původní obrázek je smazán. Obrázek je upraven na velikost okna. 
+		
+		\item[Export mapy]
+Mapu je možné exportoval to formátu XML nebo do formátu HTML. Formát XML je převážně určen poro mobilní aplikaci MobChar. Soubor XML je vytvořen včetně přiložené složky \texttt{resources}, která obsahuje veškeré vytvořené mapy ve formátu png. V XML souboru se nachází seznam objektů, které jsou umístěné na mapě včetně jejích čísla, jména a popisu. Tyto údaje využívá mobilní aplikace. Při exportu do formátu HTML, se vytvoří stránka, jejiž hlavní část tvoří obrázek s mapou, pod kterou se nachází seznam všech objektů.
+
+	\end{description}
 %% -*-*-*-*-*-*-*-*-*--* Doménový model *-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 	\section{Doménový model}
 Doménový model má za úkol popsat strukturu tříd v aplikaci a jejich vazby mezi nimi. Pro zaznamenání se využívá UML diagram. Diagram nepopisuje jednotlivé funkce tříd ani proměnné, které slouží k implementaci tříd, ale zachycuje pouze základní strukturu.
@@ -311,6 +380,7 @@ Pro datovou vrstvu se používají takzvané \clqq data access objects\crqq (DAO
 
 
 \chapter{Návrh}
+Čtvrtá kapitole se věnuje návrhu aplikace. Je zde popsán základní model databáze a také popsána struktura hlavních částí formátu XML. Na konci kapitoly se nachází sekvenční diagram a také model nasazení celé aplikace. 
 	\section{Model databáze}
 	\begin{figure}\centering
 	\includegraphics[width=0.8\textwidth]{images/basic_database}
@@ -371,9 +441,10 @@ Diagram nasazení zobrazuje způsob rozdělení systému na samostatné části 
 
 Na diagramu \ref{fig:model_nasazeni} můžeme vidět, že software je určený pro počítače a funkční pod operačními systémy Windows a Linux (verze operačního systému jsou uvedeny v sekci nefunkční požadavky \ref{sec:funkcni_pozadavky}). Aplikace je napsaná v jazyce Python a zabalená do spustitelného balíčku, který nevyžaduje žádné speciální požadavky na systém. Veškeré potřebné knihovny a prostředí má uložené v balíčku. Databáze SQLite běží v rámci tohoto balíčku také a nepotřebuje žádné dodatečné prostředí.
 
-\chapter{Realizace}
+\chapter{Implementace}
+Pátá kapitola se věnuje samotné implementaci programu. Je zde popsaný použitý programovací jazyk a využité knihovny.  Dále jsou zde popsány využité nástroje pro tvorba celé bakalářské práce. V poslední části jsou popsané problémy, které vznikly při programování aplikace. Některé problémy byli zjištěny na základě testování, které je popsáno v další kapitole.
 \section{Použitý programovací jazyk}
-
+TODO: PYTHON
 
 \section{Využité knihovny}
 Samotný programovací jazyk je omezen pouze na základní funkce. Abychom veškeré funkce a možnosti nemuseli psát znovu, využijeme některé knihovny. Programovací jazyk Python je známý velkým množstvím knihoven, které rozšiřují základní funkcionalitu například o programování grafického rozhraní a další. 
@@ -392,7 +463,7 @@ Dalším důležitým kritériem pro výběr knihovny byla aktuálnost a vydáv�
 
 Knihovna PyGame, jak již napovídá její název, se specializuje převážně na tvorbu počítačových her. Má rozsáhlé možnosti animací a herních prvků, které jsou důležité převážně ve hrách. Knihovna neumí vytvářet přehledné grafické rozhraní aplikace, proto jsem ji ze seznamu také vyřadil.\par
 
-Poslední z čtveřice knihoven je PyQt. Knihovna se zaměřuje na tvorbu přehledných grafických rozhraní pro programy, což je přesně to co je zapotřebí. Navíc má velice moderní a přehledný vzhled, což bylo jedno z hlavních kritérii pří výběru. Aktualizace k této knihovně jsou vydávány pravidelně a nejnovější verze PyQt5 je určena pro Python 3. Proto jsem se rozhodl zvolit tuto knihovnu pro můj program.
+Poslední ze čtveřice knihoven je PyQt. Knihovna se zaměřuje převážně na tvorbu přehledných grafických rozhraní pro desktopové programy na různé operační systémy, což je přesně to co je zapotřebí. Navíc má velice moderní vzhled, což bylo jedno z hlavních kritérii pří výběru. Aktualizace k této knihovně jsou vydávány pravidelně a nejnovější a stále aktualizovaná verze PyQt5 je určena pro Python 3. Proto byla tato knihovna zvolena jako nejlepší volba pro tvorbu uživatelského rozhraní. Přesněji byla využita verze knihovny 5.8.
 \subsection{Knihovna pro tvorbu HTML almanachů}
 \begin{listing}[htbp]
 \caption{\label{code:jinja}Ukázka syntaxe šablonovacího systé	mu Jinja}
@@ -416,10 +487,12 @@ Jednou z dalších funkčností programu je generování HTML almanachů, které
 
 Mezi nejpoužívanější šablonovací systémy patří například Mako \cite{mako}, Django templates a Jinja \cite{jinja}. Python podporuje i~velice jednoduchý a základní šablonovací systém nativně. Tento systém je však opravdu velice jednoduchý, nepodporuje žádné podmínky ani cykly a hodí se spíše pro vytváření přehledných výstupů do konzole. Velice rozšířený šablonovací systém je Mako. Jedná se o~výchozí šablonovací systém pro webové frameworky pro Python. Tento nástroj je velice mocný a zvládne velké množství různých funkcí. Bohužel je spíše zaměřený pro tvorbu webových aplikací a práce není příliš přizpůsobená pouze pro tvorbu statických ofline stránek.\par
 
+Jinja a Django templates jsou velice podobné šablonovací systémy, která mají velice podobnou syntaxi. Hlavní nevýhodou Django templates je nutnost instalace celého webového frameworku Django, aby bylo možné šablony zkompilovat a vytvořit výsledný HTML soubor. Proto byl vybrán šablonovací systém Jinja, který je velice populární a existuje pro něj přehledná dokumentace. Je také velice rychlí, takže i~velké množství šablon, se vytvoří během chvilky. Na ukázce části šablony\ref{code:jinja} můžete vidět ukázku syntaxe. Jak je vidět, syntaxe je velice podobná syntaxi Pythonu, což velice zjednodušuje práci. Mimo jiné Jinja také podporuje rozdělení šablon do jednotlivých souborů, což velice zpřehledňuje vytváření a editaci šablon. Díky takto vytvořeným šablonám si sami uživatelé výsledné šablony můžou upravit dle libosti a podle jejich potřeb. 
+
 \subsection{Ostatní knihovny}
 Krom rozšiřujících knihoven byly také použity základní knihovny, které Python poskytuje. Mezi nejpoužívanější patří knihovna shutil, která umožňuje snadné kopírování souborů a vytváření složek. Dále knihovna datetime, která slouží pro uchávání času a exportování do potřebných formátů a také základní knihovny os a sys, které slouží pro základní práci s operačním systémem, jako je například kontrola existence souborů, nebo správa návratových kódů aplikace.
 
-Jinja a Django templates jsou velice podobné šablonovací systémy, která mají velice podobnou syntaxi. Hlavní nevýhodou Django templates je nutnost instalace celého webového frameworku Django, aby bylo možné šablony zkompilovat a vytvořit výsledný HTML soubor. Proto jsem se rozhodl pro šablonovací systém Django, který je velice populární a existuje pro něj přehledná dokumentace. Je také velice rychlí, takže i~velké množství šablon, se vytvoří během chvilky. Na ukázce části šablony\ref{code:jinja} můžeme vidět ukázku syntaxe. Jak je vidět, syntaxe je velice podobná Pythonu, což velice urychluje práci. Mimo jiné Jinja také podporuje rozdělení šablon do jednotlivých souborů, což velice zpřehledňuje vytváření a editaci šablon.
+
 
 \section{Použité nástroje}
 V této sekci jsou vypsány veškeré použité nástroje, které byly použity při vytváření bakalářské práce.
@@ -550,6 +623,29 @@ Při základní implementaci se časová náročnost pohybovala v řádu sekund,
 
 Po zmenšení ikon více jak na jednu pětinu, jsem snížili dobu překreslování na méně než vteřinu, což již je přijatelná hodnota, ne však ideální. Pro ještě větší urychlení bylo zapotřebí upravit některé principy překreslování. Pokud bychom chtěli dosáhnout ještě lepšího výsledku, bylo by zapotřebí upravit některé principy překreslování stromové struktury a při změně dat nepřekreslovat celý strom, ale pouze jeho změněnou část. Jelikož však časová náročnost vzniká až při velice vysokém počtu elementů ve stromové struktuře, bylo toto řešení problému odsunutu do další verze aplikace. 
 	\subsection{Problém s křížovými závislosti}
+Další problém který vznikl, se týká problému křížových závislostí modulů nebo tříd. Jazyk Python je především používaný jako skriptovací jazyk. Při tvoření velkých projektů, které jsou přehledně rozděleny na velké množství modulů může vznikat problém s křížovými závislosti. Python pro importování jiných tříd neboli modulů používá dvě syntaxe.
+
+\begin{listing}[htbp]
+%\caption{\label{code:import1}První způsob importu}
+\begin{minted}[]{python}
+import data.database.Database
+
+data.database.Database().select(...)
+\end{minted}
+\end{listing}
+
+Při tomto druhu importu nevznikají problémy s křížovými závislostmi, bohužel se při každém použití daného modulu nebo dané třídy musí pro její definici použít celá cesta. Při poměrně rozsáhlé adresářové struktuře, která byla využita v tomto projektu, se psaní celých cest stane nepříjemné a také velice nepřehledné. Proto pro takto velké projekty je tento způsob nepoužitelný.
+
+\begin{listing}[htbp]
+%\caption{\label{code:import1}První způsob importu}
+\begin{minted}[]{python}
+from data.database.Database import Database
+
+Database().select(...)
+\end{minted}
+\end{listing}
+O proti tomu pokud použijeme tento druhý způsob, již nemusíme psát celé cesty k třídám, což velice zkrátí zápis. Bohužel pokud nám zde vzniknou křížové závislosti, Python si s tím již neumí poradit. Jediná možnost, jak se tomuto problému vyvarovat, je použití lokálních importů. Jedná se o stejné importy jako v případě jedna nebo dvě, ale importy se nenachází na začátku souboru, jak jsme běžně zvyklí, ale přímo v konkrétní funkci, kde daný modul potřebujeme. V takovém případě Python provede import požadovaného modulu až ve chvíli zavolání funkce a nevznikají problémy s křížovou závislostí. Nicméně z hlediska přehlednosti kódu, by se veškeré importy, pokud je to možné, měli psát na začátek souboru. 
+
 \chapter{Testování}
 	\section{Unit testy}	
 		\subsection{Testování databáze}
@@ -573,15 +669,16 @@ ahoj svete
 \chapter{Seznam použitých zkratek}
 % \printglossaries
 \begin{description}
-	\item[HnH] Hra na hrdiny
-	\item[DrD] Dračí doupě
-	\item[RPG] Role-playing game
-	\item[PJ] Pán jeskyně
 	\item[DAO] Data access object
-	\item[MobChar] Mobile character
 	\item[DeskChar] Desktop character
+	\item[DrD] Dračí doupě
 	\item[enum] Enumeration
-	\item[HTML] HyperText Markup Language
+	\item[HnH] Hra na hrdiny
+	\item[HTML] Hypertext Markup Language
+	\item[MobChar] Mobile character
+	\item[PJ] Pán jeskyně
+	\item[RPG] Role-playing game
+	\item[XML] Extensible Markup Language
 \end{description}
 
  
@@ -593,6 +690,9 @@ ahoj svete
 \begin{figure}
 	\dirtree{%
 		.1 readme.txt\DTcomment{stručný popis obsahu CD}.
+		.1 doc\DTcomment{dokumentace}.
+		.2 model.eap\DTcomment{Soubor veškeré modelové dokumentace}.
+		.2 UserGuide.pdf\DTcomment{Uživatelská příručka}.
 		.1 exe\DTcomment{adresář se spustitelnou formou implementace}.
 		.1 src.
 		.2 impl\DTcomment{zdrojové kódy implementace}.
