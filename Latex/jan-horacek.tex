@@ -247,7 +247,12 @@ Následuje část, ve které se do mapy přidávají jednotlivé objekty. Vybere
 
 %% -*-*-*-*-*-*-*-*-*--* Případy užití *-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 	\section{Případy užití}	
-Případy užití popisují jednotlivé scénáře využití aplikace, které uživatel může využívat. Diagram byl rozdělen na tři hlavní části pro větší přehlednost.
+	\begin{figure}\centering
+		\includegraphics[width=1\textwidth]{images/pokryti.pdf}
+		\caption[Tabulka pokrytí požadavků případy užití]{Tabulka pokrytí požadavků případy užití}
+		\label{fig:pokryti}
+	\end{figure}
+Případy užití popisují jednotlivé scénáře využití aplikace, které uživatel může využívat. Diagram byl rozdělen na tři hlavní části pro větší přehlednost. Na obrázku \ref{fig:pokryti} pak můžeme vidět tabulku pokrytí požadavků případy užití.
 
 \subsection{Práce se šablonami}
 	\begin{figure}\centering
@@ -305,11 +310,16 @@ Po přidání objektu ze šablony do dobrodružství, se vytvoří nový objekt 
 	
 	\begin{description}
 		\item[Vytvoření mapy]
+V aplikaci je možné vytvořit libovolné množství map, které se následně dají přiřadit do jednotlivých lokací. Každá mapa má svůj název a základní popis. Mapy je možné jako veškeré objekty rozřazovat do stromové struktury. 
+
 		\item[Práce s objekty na mapě]
 Na mapu je možné přidávat jednotlivé objekty. Objekty jsou rozděleny na čtyři základní druhy. Object \texttt{monster}, který reprezentuje na mapě nestvůry a všechny postavy. Object \texttt{item} reprezentuje na mapě všechny předměty, ať už se jedná o truhlu s pokladem nebo tajné klíče, či nádoby. Další object je \texttt{room}, který slouží k popisu místností a lokací. Poslední objekt je \texttt{general}, který zastupuje všechny ostatní obejkty na mapě, které je potřeba na mapě zaznamenat. Všem objektům je možné měnit velikost a umístit je na konkrétní místo na mapě.
 
 		\item[Přidání podkladové mapy]
-Základním prvkem mapy je podkladový obrázek, který tvoří základní rozložení mapy. Program podporuje základní druhy obrázků jpg, gif a png. Na mapě se může nacházet pouze jeden podkladový obrázek, pokud na mapě již nějaký se nachází a přidáme další, původní obrázek je smazán. Obrázek je upraven na velikost okna. 
+Základním prvkem mapy je podkladový obrázek, který tvoří základní rozložení mapy. Program podporuje základní druhy obrázků jpg, gif a png. Na mapě se může nacházet pouze jeden podkladový obrázek, pokud na mapě již nějaký se nachází a přidáme další, původní obrázek je smazán. Obrázek je upraven na velikost okna.
+
+		\item[Úprava mapy]
+Každou mapu je také možné upravovat. Mapa se ukládá v editovatelném formátu. Všechny objekty se dají z mapy smazat a veškeré hodnoty objektů se dají upravit. Podkladová mapa se dá také kdykoliv upravit.  
 		
 		\item[Export mapy]
 Mapu je možné exportoval to formátu XML nebo do formátu HTML. Formát XML je převážně určen poro mobilní aplikaci MobChar. Soubor XML je vytvořen včetně přiložené složky \texttt{resources}, která obsahuje veškeré vytvořené mapy ve formátu png. V XML souboru se nachází seznam objektů, které jsou umístěné na mapě včetně jejích čísla, jména a popisu. Tyto údaje využívá mobilní aplikace. Při exportu do formátu HTML, se vytvoří stránka, jejiž hlavní část tvoří obrázek s mapou, pod kterou se nachází seznam všech objektů.
@@ -323,7 +333,8 @@ Doménový model má za úkol popsat strukturu tříd v aplikaci a jejich vazby 
 	\includegraphics[width=0.8\textwidth]{images/domain_struktura}
 	\caption[Analytický doménový model stromové struktury]{Analytický doménový model stromové struktury}\label{fig:dm_stromova_struktura}
 \end{figure}
-Diagram na obrázku \ref{fig:dm_stromova_struktura} popisuje strukturu objektů, které slouží pro uchování všech objektů (šablon) a jejich rozřazení do stromové struktury. Veškeré šablony využívají tuto stromovou strukturu. Třída Folder (složka) slouží pouze k rozřazování jednotlivých objektů do skupin. Složka má pouze jméno a může obsahovat libovolný počet složek nebo objektů. ObjektNode pak slouží k uchování šablony samotné. Dolní část objektů na obrázku (Item, Spell, atd.) jsou objekty, které jsou totožné s aplikací MobChar a slouží k uchování šablon pro základní aplikaci a využívají se i v aplikaci pro Pána jeskyně. Pokud vás zajímá podrobnější popis těchto objektů, nahlédněte do bakalářské práce týkající se MobCharu \cite{Weberova_2017}. Oproti tomu, objekty na pravé straně diagramu (Map item, Scenario, atd.) jsou objekty, které slouží převážně k vytvoření dobrodružství. Jejich podrobnějšímu popisu se věnuji dále.\par
+Diagram na obrázku \ref{fig:dm_stromova_struktura} popisuje strukturu objektů, které slouží pro uchování všech objektů (šablon) a jejich rozřazení do stromové struktury. Veškeré šablony využívají tuto stromovou strukturu. Třída \texttt{Folder} (složka) slouží pouze k rozřazování jednotlivých objektů do skupin. Složka má pouze jméno a může obsahovat libovolný počet složek nebo objektů. \texttt{ObjektNode} pak slouží k uchování šablony samotné. Dolní část objektů na obrázku (\texttt{Item}, \texttt{Spell}, atd.) jsou objekty, které jsou totožné s aplikací MobChar a slouží k uchování šablon pro základní aplikaci a využívají se i v aplikaci pro Pána jeskyně. Pokud vás zajímá podrobnější popis těchto objektů, nahlédněte do bakalářské práce týkající se MobCharu \cite{Weberova_2017}. Oproti tomu, objekty na pravé straně diagramu (\texttt{Map item}, \texttt{Scenario}, atd.) jsou objekty, které slouží převážně k vytvoření dobrodružství. Jejich podrobnější popis se nachází dále v textu.\par
+
 Veškeré objekty můžou mít potomky. Systém složek slouží pouze pro přehledné uspořádání. Každý objekt má definované objekty, které může mít jako potomky. Tento systém slouží pro ukládání závislostí, například dobrodružství může obsahovat mnoho lokací, příšer, map. Některé objekty, jako například kouzla a schopnosti, žádné potomky mít nesmějí. Veškeré vazby mezi objekty jsou zachyceny pouze ve stromové struktuře, aby bylo zabráněno duplikování informací.
 \subsection{Dobrodružství}
 \begin{figure}\centering
@@ -336,7 +347,6 @@ Celé dobrodružství je členěné do lokací, které se navíc můžou do sebe
 
 
 
-
 	\section{Návrh řešení architektury}
 \begin{figure}\centering
 	\includegraphics[width=0.8\textwidth]{images/architektura}
@@ -344,13 +354,19 @@ Celé dobrodružství je členěné do lokací, které se navíc můžou do sebe
 \end{figure}
 Model architektury popisuje formální popis systému, případně jeho detailní plán na úrovni komponent vedoucí k jeho implementaci. Hlavním účelem modelu architektury je popsání hlavních komponent programu a popisu způsobu komunikace mezi nimi.\par
 
-Zvolil jsem třívrstvou architekturu z důvodu dobré přehlednosti a jednoduchém nahrazení jedné z části, bez zásahu do ostatních vrstev. Veškeré vrstvy mezi sebou komunikují na základě definovaného rozhraní.\\
+Byla zvolena relaxovaná třívrstvá architektura. Relaxovaná třívrstvá architektura zajišťuje dobrou přehlednost projektu a také snadnou nahraditelnost celé vrstvy programu, například při přechodu na jinou databázi. V některých případech však striktní trojvrstvá architektura zbytečně duplikuje kód, proto byla zvolena relaxovaná trojvrstvá architektura. Veškeré vrstvy mezi sebou komunikují na základě rozhraní definovaného interfaci.\\
 \subsection{Vrstvy}
-\textbf{Prezentační vrstva} zobrazuje informace pro uživatele. Jedná se o grafickou část celé aplikace. Kontroluje zadané vstupy, nijak však získaná data nezpracovává.\\
-\\
-\textbf{Business vrstva} je základní logická část aplikace. Leží zde jádro aplikace, její logika a funkce pro zpracování dat.\\
-\\
-\textbf{Datová vrstva} je vrstva, která se stará o práci s daty. Zajišťuje komunikaci s databází a práci s XML soubory. Jejím základním úkolem je získat data z databáze nebo XML a převést je na objekty a také objekty vytvořené v aplikaci uložit do databáze nebo případně do XML souborů. \\
+\begin{description}
+	\item[Prezentační vrstva] Prezentační vrstva slouží k zobrazení informací pro uživatele. Jedné se o grafickou část celé aplikace. Jejím hlavním úkolem je získávat od uživatele data a naopak uživateli data přehledně zobrazovat. 
+	
+	\item[Business vrstva] Business vrstva tvoří hlavní spojení mezi datovou a prezentační vrstvou. Business vrstva by se měla starat o veškeré logické operace s objekty, které by správně neměli provádět ani datová ani prezentační vrstva.
+	
+	\item[Datová vrstva] Hlavním úkolem datové vrstvy je zajistit persistenci dat pro aplikace a také operace s externími soubory. Datová vrstva zajišťuje ukládání dat do databáze a také získávání potřebných dat. Mimo to datová vrstva zajišťuje práci s se soubory XML, HTML a drd. 
+	
+\end{description}
+
+
+
 \subsection{Rozhraní}
 Mezi vrstvami jsou definovaná rozhraní, která je nutné dodržet. Rozhraní začínají velkým písmenem I, konkrétní implementace daného rozhraní obvykle má stejný název, pouze bez počátečního písmena I.\par
 
@@ -362,7 +378,9 @@ Pro datovou vrstvu se používají takzvané \clqq data access objects\crqq (DAO
 \\
 \textbf{IMapDAO} se stará o ukládání veškerých dat, která se týkají map. Rozhraní je společné pro všechny druhy map (grafické, jednoduché, obrázkové)\\
 \\
-\textbf{ILangDAO} se stará o ukládání jazyků, které jsou v aplikaci použity. Nejedná se o překlady prezentační vrstvy, ale o jazyky vytvořené pro překlady šablon. Rozhraní se nestará o ukládání samotných překladů, pouze o jejich jazyky.
+\textbf{ILangDAO} se stará o ukládání jazyků, které jsou v aplikaci použity. Nejedná se o překlady prezentační vrstvy, ale o jazyky vytvořené pro překlady šablon. Rozhraní se nestará o ukládání samotných překladů, pouze o jejich jazyky.\\
+\\
+\textbf{ISettingsDAO} se stará o ukládání veškerého nastavení aplikace. 
 
 \subsubsection*{Manager třídy}
 \textbf{IObjectManager} navazuje na IObjectDAO. Jedná se opět o skupinu tříd pro veškeré základní objekty (ISpellManager, IAbilityManager, atd.). Rozhraní definuje, jak přijímá data z prezentační vrstvy. Základní funkcionalita spočívá ve zpracování dat z prezentační vrstvy a vytvoření kompletního objektu, se kterým se dále pracuje nebo se pošle na datovou vrstvu pro uložení.\\
@@ -372,6 +390,8 @@ Pro datovou vrstvu se používají takzvané \clqq data access objects\crqq (DAO
 \textbf{IMapManager} se stará o zpracování dat ohledně mapy. Převádí zobrazenou mapu pro uživatele na formu, ve které se dá snadno uložit do databáze. Propojuje veškeré šablony s mapou.\\
 \\
 \textbf{ILangManager} se stará o zpracování dat z prezentační vrstvy ohledně jazyků.\\
+\\
+\textbf{ISettingsManager} se stará o zpracování dat získané z widgetu pro nastavení a předání správných dat datové vrstvě.\\
 \\
 \textbf{ITabManager} se stará o vytváření překladových záložek pro prezentační vrstvu. Toto rozhraní nemá DAO rozhraní, protože veškeré informace které potřebuje, získá přímo z konkrétních IObjectDAO tříd. Jejím hlavním úkolem je zpracování všech překladů jedné šablony a připravení objektů pro uložení.\\
 
@@ -647,11 +667,47 @@ Database().select(...)
 O proti tomu pokud použijeme tento druhý způsob, již nemusíme psát celé cesty k třídám, což velice zkrátí zápis. Bohužel pokud nám zde vzniknou křížové závislosti, Python si s tím již neumí poradit. Jediná možnost, jak se tomuto problému vyvarovat, je použití lokálních importů. Jedná se o stejné importy jako v případě jedna nebo dvě, ale importy se nenachází na začátku souboru, jak jsme běžně zvyklí, ale přímo v konkrétní funkci, kde daný modul potřebujeme. V takovém případě Python provede import požadovaného modulu až ve chvíli zavolání funkce a nevznikají problémy s křížovou závislostí. Nicméně z hlediska přehlednosti kódu, by se veškeré importy, pokud je to možné, měli psát na začátek souboru. 
 
 \chapter{Testování}
-	\section{Unit testy}	
+Poslední kapitola se věnuje testování vyvinuté aplikace. Testování aplikace bylo provedeno pomocí jednotkových testů a uživatelských testů. V kapitole je dopodrobna popsán způsob testování a rozebrány testované části. U obou skupin testů je popsán jejich účel, průběh testování a výsledky.
+	\section{Jednotkové testy}
+Jednotkové testy se zaměřují na testování jedné konkrétní třídy a její funkcionalit. Testy by měli fungovat nezávisle na na ostatních třídách. Pokud se například testuje funkcionalita databáze, neměli by testy nijak ovlivnit produkční databázi. Unit testy byly rozděleny do 4 skupin po logických celcích. K tvorbě jednotkových testů pro Python se používá knihovna \texttt{unittest}.
+
 		\subsection{Testování databáze}
+První skupina testů se věnuje přímému testování operací s databází. 
+			\subsubsection*{Účel}
+Tato skupina testů má za úkol otestovat třídu \texttt{Database}, která má na starosti základní operace s databází. Testují se základní operace jako jsou \texttt{SELECT}, \texttt{DROP}, \texttt{DELETE} nebo \texttt{INSERT}. Testování probíhá na oddělené databázi, aby nedošlo k poškození aplikační databáze. 			
+
+			\subsubsection*{Výsledky}
+Tato skupina testů byla velice nápomocná při odhalování rychlostních problémů celé aplikace. Při spuštění testů je možné i vidět doba, za kterou se jednotlivé testy provedly, což napomohlo k nalezení nejpomalejší části práce s databází a následné přesunutí databáze do paměti.
+
 		\subsection{Testování DAO tříd}
+Další skupina testů se zabývá testováním důležitých DAO tříd. Některé třídy nejsou testované, protože je nelze testovat samostatně.
+			\subsubsection*{Účel}
+Hlavním účelem této skupiny testů je odhalení chyb při vytváření objektů z databáze a ukládání objektů do databáze. V testech se testují základní operace všech DAO tříd co ž jsou \texttt{create}, \texttt{insert}, \texttt{update} a \texttt{delete}. Pro každou daotřídu se provede několik operací a výsledné objekty se porovnávají, zda jsou správně vytvořené, případně data v databázi upravené. Testy se provádí na stejné struktuře databáze na jaké běží aplikace, ale z důvodu neovlivnění dat aplikace běží v jiné databázi.
+			
+			\subsubsection*{Výsledky}
+Na základě testování DAO tříd bylo odhaleno mnoho chyb při mapování dat na objekty. Převážně se jednalo o špatné přiřazování hodnot do objektu. Takto odhalené chyby by se bez těchto testů velmi špatně odhalovali.			
+
 		\subsection{Testování importu a exportu XML}
-		\subsection{Testování vytváření .drd souboru}
+Třetí skupina testů se zabývá kontrolou správné práce s XML soubory.
+
+			\subsubsection*{Účel}
+Hlavním účelem těchto testů je kontrola správné práce s XML soubory jak při importu do aplikace tak při exportu z aplikace. \par
+
+Při testování XML souborů do aplikace se využívá připravené šablony. V aplikaci se pustí import dat pro danou šablonu a kontrolují se výsledné objekty, které při importu vzniknout. Data se kontrolují pouze na základě objektu, neukládají se do databáze. Kontrolují se veškeré hodnoty všech objektů, kromě hodnoty \texttt{id}, která se může měnit. Samozřejmě se také kontroluje správné zanořování objektů. \par
+
+Při exportu objektů do XML souboru se kontroluje struktura výsledného XML souboru. Aby bylo možné výsledné soubory porovnávat, vzorový soubor a výstupní soubor jsou patřičně seřazeny podle abecedy. Kontroluje se přítomnost všech potřebných tagů, které aplikace MobChar vyžaduje a také jejich hodnot.
+
+			\subsubsection*{Výsledky}
+Na základě testování práce s XML soubory bylo odhaleno množství chyb, které by se dali snadno odhalit při uživatelksých testech, ale při tomto testování je snadnější odhalit konkrétní chybu a není potřeba zdlouhavě komunikovat s mobilní aplikací. Díky těmto testům bylo výrazně sníženo množství chyb, které se museli opravovat na základě uživatelských testů. 
+
+	\subsection{Testování .drd souboru}
+Poslední skupina testů testuje vytváření .drd souboru a jeho správný obsah.
+
+			\subsubsection*{Účel}
+Hlavním účelem těchto testů je kontrola vytváření a správného obsahu souboru .drd. Testy využívají připravené databáze, ze které soubor vytvoří. Soubor se vytvoří do dočasné složky, kde se také rozbalí. Zkontrolují se veškerá přítomná data která jsou tvořena z databázového souboru a složky s mapami. Po skončení testů se veškeré dočasné soubory smažou, aby neovlivnili další puštění testů.
+
+			\subsubsection*{Výsledek}
+Na základě těchto testů máme zajištěno, snadné odhalení potencionální chyby, pokud bychom změnily strukturu adresářů nebo jiný větší zásah do aplikace. Výsledný soubor by šel samozřejmě i nahrát, ale poničili bychom data stávající aplikace.
 
 \section{Uživatelské testování}
 ahoj svete
