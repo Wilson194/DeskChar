@@ -3,6 +3,7 @@
 *.out
 *.gz
 *.to
+*.dvi
 *.aux
 *.pyc
 *.toc
@@ -10,3 +11,7 @@
 *.ldb
 *.bbl
 *.blg
+vlna32.exe
+Program/resources/maps
+_minted*
+build
