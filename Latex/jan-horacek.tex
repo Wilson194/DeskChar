@@ -210,7 +210,7 @@ Jednotlivé objekty navíc obsahují informaci o názvu a jeho popis.
 \item[Export dobrodružství pro tisk] Aplikace bude umožňovat exportování celého dobrodružství do přehledného formátu, který je vhodný pro tisk. 
 \end{description}
 
-\subsection{Nefunkční požadavky}\label{sec:funkcni_pozadavky}
+\subsection{Nefunkční požadavky}\label{sec:nefunkcni_pozadavky}
 Nefunkční požadavky vymezují převážně nároky na hardware, software nebo například nároky na výkonnost aplikace. 
 \begin{description}
 \item[Podpora operačních systémů Windows a Linux] Program půjde spustit pod operačními systémy Windows a Linux. U operačního systému Windows budou podporovány všechny verze, které jsou novější než Windows XP. Program bude spustitelný pomocí exe souboru. U operačního systému Linux budou podporovány standardní linuxové distribuce. Program bude spustitelný pomocí bash souboru.
@@ -408,96 +408,100 @@ Pro datovou vrstvu se používají takzvané \clqq data access objects\crqq (DAO
 
 
 \chapter{Návrh}
-Čtvrtá kapitole se věnuje návrhu aplikace. Je zde popsán základní model databáze a také popsána struktura hlavních částí formátu XML. Na konci kapitoly se nachází sekvenční diagram a také model nasazení celé aplikace. 
+Čtvrtá kapitola se věnuje návrhu vytvořené aplikace. Je zde popsán základní model databáze a také popsána struktura hlavních částí formátu XML. Následně je zde pomocí sekvenčního diagramu popsán základní princip zobrazení šablon. V~poslední část této kapitoly je popsán diagram nasazení. 
 	\section{Model databáze}
 	\begin{figure}\centering
 	\includegraphics[width=0.8\textwidth]{images/basic_database}
 	\caption[Základní model databáze]{Základní model databáze}\label{fig:db_basic}
 	\end{figure}
-	Pro realizaci aplikace DeskChar jsem vybral databázi \texttt{SQLite}, která je jednoduchá a nepotřebuje žádný složitý externí software pro běh. Na druhou stranu zvládá veškeré potřebné operace, jako jsou cizí klíče a kaskádové mazání záznamů. Pro vytváření a práci se stromovou strukturou je kaskádové mazání nedocenitelný pomocník. \par
+	Pro realizaci aplikace DeskChar byla vybrána databázi \texttt{SQLite}, která je jednoduchá a nepotřebuje žádný složitý externí software pro běh. Na druhou stranu zvládá veškeré potřebné operace, jako jsou cizí klíče a kaskádové mazání záznamů. Pro vytváření a práci se stromovou strukturou je kaskádové mazání nedocenitelný pomocník. \par
 
-Diagram na obrázku \ref{fig:db_basic} je zjednodušený pro větší přehlednost. Na diagramu je zachycena základní struktura a princip závislostí v~databázi. Kompletní model databáze se nachází v~příloze.\par
+Diagram na obrázku \ref{fig:db_basic} je zjednodušený pro větší přehlednost. Na diagramu je zachycena základní struktura a princip závislostí v~databázi. Kompletní model databáze se nachází na přiloženém CD.\par
 
-Z důvodu vícejazyčnosti šablon, bylo zapotřebí navrhnout strukturu databáze, která dokáže uložit neomezený počet jazykových překladů. Na obrázku \ref{fig:db_basic} můžeme vidět základní strukturu databáze. Údaj o jazyku, ve kterém je daný překlad vytvořen, je uložen v tabulce \texttt{Languages}, který je navázán na tabulku \texttt{Translate} cizím klíčem code. Primárním klíče každého jazyka je textový kód, který je unikátní. V tabulce \texttt{Translate} pak nalezneme veškeré textové řetězce, které se nacházejí v objektech. Jeden záznam tabulky \texttt{Translate} je přiřazen ke konkrétnímu objektu pomocí dvojice klíčů target\_type, který určuje o jaký objekt (tabulku v databázi) se jedná, a \texttt{target\_id}, který určuje konkrétní záznam v tabulce (ukazuje na primární atributů \texttt{ID} v tabulce). Informace o překladu jsou uloženy ve dvojici atributů \texttt{name} a \texttt{value}, které slouží jako slovník, jejich jazyk určuje atribut \texttt{lang}. Takto zvolený návrh databáze umožňuje neomezený počet jazyků a jednoduchou rozšiřitelnost.\par
+Z důvodu vícejazyčnosti šablon, bylo zapotřebí navrhnout strukturu databáze, která dokáže uložit neomezený počet jazykových překladů. Na obrázku \ref{fig:db_basic} můžeme vidět základní strukturu databáze. Údaj o jazyku, ve kterém je daný překlad vytvořen, je uložen v tabulce \texttt{Languages}, který je navázán na tabulku \texttt{Translate} cizím klíčem code. Primárním klíče každého jazyka je textový kód, který je unikátní. V tabulce \texttt{Translate} pak nalezneme veškeré textové řetězce, které se nacházejí v objektech. Jeden záznam tabulky \texttt{Translate} je přiřazen ke konkrétnímu objektu pomocí dvojice hodnot \texttt{target\_type}, který určuje o jaký objekt (tabulku v databázi) se jedná, a \texttt{target\_id}, který určuje konkrétní záznam v tabulce (ukazuje na primární atribut \texttt{ID} v tabulce). Informace o překladu jsou uloženy ve dvojici hodnot \texttt{name} a \texttt{value}, které slouží jako slovník, jejich jazyk určuje hodnota \texttt{lang}. Takto zvolený návrh databáze umožňuje neomezený počet jazyků a jednoduchou rozšiřitelnost.\par
 
-Druhá část diagramu se týká stromové struktury, která se používá pro všechny objekty v aplikaci. Tabulka \texttt{Tree\_structure} slouží pro zaznamenávání stromové struktury pro veškeré objekty. Do tabulky se ukládají dva druhy uzlů, složky a objekty. Atribut type určuje, o který druh uzlu se jedná. Pomocí cizího klíče \texttt{parent\_id}, vzniká stromová struktura. Zde se využívá kaskádové mazání - pokud se smaže záznam, který má pod sebou navázané další záznamy pomocí cizího klíče, smažou se tyto záznamy také automaticky v databázi. Tento princip udržuje tabulku konzistentní a nevznikají žádné záznamy, které se již nepoužívají. Každý uzel, který je typu object, ukazuje pomocí dvojice klíčů \texttt{target\_type}, který určuje tabulku v databázi, a \texttt{target\_id} na záznam v ostatních tabulkách. V diagramu je to naznačené zjednodušeně, kde tabulka \texttt{Object} zastupuje tabulky všech objektů (Spell, Item, atd.). \par
+Druhá část diagramu se týká stromové struktury, která se používá pro všechny objekty v aplikaci. Tabulka \texttt{Tree\_structure} slouží pro zaznamenávání stromové struktury pro veškeré objekty. Do tabulky se ukládají dva druhy uzlů, složky a objekty. Hodnota \texttt{type} určuje, o který druh uzlu se jedná, zda o složku nebo o objekt. Pomocí cizího klíče \texttt{parent\_id}, vzniká stromová struktura. Zde se využívá kaskádové mazání - pokud se smaže záznam, který má pod sebou navázané další záznamy pomocí cizího klíče, smažou se tyto záznamy také automaticky v databázi. Tento princip udržuje tabulku konzistentní a nevznikají žádné záznamy, které se již nepoužívají. Každý uzel, který je typu object, ukazuje pomocí dvojice hodnot \texttt{target\_type}, která určuje tabulku v databázi, a \texttt{target\_id} na záznam v ostatních tabulkách. V diagramu je tento princip naznačen zjednodušeně, kde tabulka \texttt{Object} zastupuje tabulky všech objektů (\texttt{Spell}, \texttt{Item}, atd.). \par
 
-Poslední problém návrhu databáze se skrýval v návrhu ukládání vazeb mezi jednotlivými objekty. V úvahu připadali dvě možnosti. První možnost byla zachytit veškeré vazby mezi objekty pomocí tabulek relations, které by obsahovaly pouze dvojici klíčů z obou tabulek. Toto řešení by bylo rychlé a jednoduché na používání, bohužel se u některých vazeb nedalo použít samotné. Například u dobrodružství se podřazené objekty můžou sdružovat dále do složek, čehož by se pouze pomocí těchto vazeb nedalo docílit. Musela se zde navíc využít stromová struktura použitá pro všechny šablony a jejich základní rozřazení, čímž by vznikaly duplicitní data. Duplicitní data sebou nesou dva základní problémy. První z nich je samozřejmě větší množství dat, které je potřebné uložit. V tomto případě by se však nejednalo o drastický nárůst, který by dělal problém. Druhý a závažnější problém se týká aktuálnosti dat. Bylo by zapotřebí udržovat veškeré údaje aktuální a stejné, což by mělo velké nároky na složitost ukládání a zpomalovalo by to některé operace, které je zapotřebí, aby aplikace prováděla okamžitě (například drag and drop rozřazování). Z těchto důvodů jsem se rozhodl zvolit druhou možnost, kde veškeré vazby mezi objekty jsou uloženy pouze ve stromové struktuře popsané výše. Problém bude vznikat při operacích exportu, kde bude vazbu mezi objekty dohledávat ze stromové struktury. Tyto operace se však neprovádí tak často a není zde velký důraz na okamžitou odezvu. 
+Poslední problém návrhu databáze se skrýval v návrhu ukládání vazeb mezi jednotlivými objekty. V úvahu připadali dvě možnosti. První možnost byla zachytit veškeré vazby mezi objekty pomocí tabulek \texttt{relations}, které by obsahovaly pouze dvojici klíčů z obou tabulek. Toto řešení by bylo rychlé a jednoduché na používání, bohužel by se u některých vazeb nedalo použít samotně. Například u dobrodružství se podřazené objekty můžou sdružovat dále do složek, čehož by se pouze pomocí těchto vazeb nedalo docílit. Musela by se zde navíc využít stromová struktura použitá pro všechny šablony a jejich základní rozřazení, čímž by vznikaly duplicitní data. Duplicitní data sebou nesou dva základní problémy. První z nich je samozřejmě větší množství dat, které je potřebné uložit. V tomto případě by se však nejednalo o drastický nárůst, který by dělal problém. Druhý a závažnější problém se týká aktuálnosti dat. Bylo by zapotřebí udržovat veškeré údaje aktuální a stejné, což by mělo velké nároky na složitost ukládání a zpomalovalo by to některé operace, které je zapotřebí, aby aplikace prováděla okamžitě (například drag\&drop rozřazování). Z těchto důvodů jsem se rozhodl zvolit druhou možnost, kde veškeré vazby mezi objekty jsou uloženy pouze ve stromové struktuře popsané výše. Problém bude vznikat při operacích exportu, kde bude nutné vazbu mezi objekty dohledávat ze stromové struktury. Tyto operace se však neprovádí tak často a není zde velký důraz na okamžitou odezvu. 
 
 	\section{Model XML souborů}
-S~doménovým modelem úzce souvisí návrh struktury xml souborů. Struktura těchto souborů je velmi důležitá. Na základě této definované struktury bude probíhat komunikace s~mobilní aplikací MobChar. Formát základních šablon předmětů, kouzel, schopností, efektů a~postav, byl převzat z~původní aplikace MobChar pro hráče, aby byla zachována konzistence mezi aplikacemi. Dále se zaměřuji pouze na nové části, což jsou příšery a dobrodružství. Pokud vás zajímá struktura základních šablon, nahlédněte do bakalářky týkající se aplikace MobChar\cite{Weberova_2017} nebo do přiložené kompletní dokumentace.\par
+S~doménovým modelem úzce souvisí návrh struktury XML souborů. Struktura těchto souborů je velmi důležitá. Na základě této definované struktury bude probíhat komunikace s~mobilní aplikací MobChar. Formát základních šablon předmětů, kouzel, schopností, efektům modifikátorů a postav, byl převzat z~původní aplikace MobChar pro hráče, aby byla zachována konzistence mezi aplikacemi. Dále se zaměřuji pouze na nově navržené části, což jsou příšery, lokace, mapy a dobrodružství. Pokud vás zajímá struktura základních šablon, nahlédněte do bakalářky týkající se aplikace MobChar\cite{Weberova_2017} nebo do přiložené kompletní dokumentace.\par
 
-Strukturu XML jsem namodeloval diagramem, který se normálně využívá pro modelování tříd. Pro tento případ vypovídající hodnota diagramu je dostačující a jasně zadefinovává strukturu xml. Entity v diagramu které jsou znázorněné žlutou barvou znázorňují již konkrétní XML tag, který uvnitř obsahuje pouze hodnotu a žádné další vnořené tagy. Oproti tomu bílé entity znázorňují pouze obalující tag, který uvnitř obsahuje strukturu další tagů. Každá entita v diagramu znázorňuje jeden tag ve výsledném XML dokumentu. Parcialita a kardinalita v diagramu znázorňuje povinnost případně množství tagů, které se na daném místě v XML souboru můžou objevit. Kořenový tag je vždy označen textem  \uv{ROOT} .
+Strukturu XML byla namodelována diagramem, který se normálně využívá pro modelování tříd. Pro tento případ vypovídající hodnota diagramu je dostačující a jasně zadefinovává strukturu XML. Entity v diagramu které jsou znázorněné žlutou barvou znázorňují již konkrétní XML tag, který uvnitř obsahuje pouze hodnotu a žádné další vnořené tagy. Oproti tomu bílé entity znázorňují pouze obalující tag, který uvnitř obsahuje strukturu další tagů. Každá entita v diagramu znázorňuje jeden tag ve výsledném XML dokumentu. Parcialita a kardinalita v diagramu znázorňuje povinnost a případně množství tagů, které se na daném místě v XML souboru můžou objevit. Parcialita vztahu určuje, zda se jsou vnořené tagy povinné či nikoliv. V některých případech nemusí být všechny tagy přítomny. Kardinalita určuje, zda na stejné úrovni se těchto tagů může vyskytovat více. Kořenový tag je vždy označen textem  \uv{ROOT} .
 
 \subsection{Dobrodružství}
 \begin{figure}\centering
-	\includegraphics[width=0.8\textwidth]{images/scenarioXML}
+	\includegraphics[width=1\textwidth]{images/scenarioXML}
 	\caption[Model XML souhoru dobrodružství]{Model XML souhoru dobrodružství}\label{fig:xml_scenario}
 \end{figure}
-Struktura xml souboru pro dobrodružství je velice podobná doménovému modelu dobrodružství, jak můžeme vidět na obrázku \ref{fig:xml_scenario}. První z odlišností si můžeme všimnout tagu \texttt{metaData}. Tato data využívá pouze mobilní aplikace MobChar a slouží pro ukládání metadat ohledně připojených uživatelů. Tyto údaje v aplikaci nejdou nijak upravovat a pouze se ukládají pro udržení informace při importu a exportu. \par
+Struktura XML souboru pro dobrodružství je velice podobná doménovému modelu dobrodružství \ref{fig:dm_scenario}, jak můžeme vidět na obrázku \ref{fig:xml_scenario}. Model XML však má dopodrobna namodelovány veškeré atributy objektů. \par
 
-Další odlišnost se nachází u \texttt{scenarioCharacter} . Z důvodu zachování historie cizích postav napříč lokacemi, se v lokacích nachází pouze link na postavu, která je definovaná pro celé dobrodružství. Jedná se o seznam tagů se jménem \texttt{link}, který má obsah pouze identifikátor konkrétní cizí postavy. \par
+Obecný princip, který se používá ve všech navržených XML souborech je obalení tagů, které se na dané úrovni můžou vyskytovat vícekrát, rodičovským tagem, jehož jediným cílem je zpřehlednit XML soubor. Tento tag je zpravidla pojmenován jako množné číslo objektů, které obaluje (například pro skupinu tagů \texttt{Spell} se obalující tag jmenuje \texttt{Spells}).
 
-Poslední významný rozdíl se týká rozdělení předmětů. Předměty jsou rozděleny na 7 kategorií. V aplikaci je dělení stejné, nicméně zde každý předmět má vlastní kořenový tag, čímž je jasně definován. Pokud vás zajímá přesný popis jednotlivých předmětů, můžete nahlédnout do přiložené dokumentace. \\
+Pro potřeby správného rozeznání předmětů při importu jsou předměty rozděleny do 7 kategorii, do stejných kategorií, které byly navrženy pro původní aplikaci MobChar. Zde se struktura od původního návrhu šablon lehce změnila. Každá kategorie předmětů již nemá vlastní obalující tag, ale všechny předměty jsou sloučené pod jedním tagem \texttt{items}. \par
+
+Posledním výrazným rozdílem je jiný název proc postavy, které se nacházejí v lokacích. Jelikož se jedná o stejný objekt, se stejnou XML strukturou, ale v rámci celého dobrodružství mají tyto postavy lehce jiný význam, bylo zapotřebí tyto postavy oddělit, aby nebylo nutné se o druhu rozhodovat na základě rodičovského tagu. Proto obalující tag pro postavy, které se nachází v lokacích byl pojmenován \texttt{scenarioCharacter}. 
 
 \subsection{Příšery}
 \begin{figure}\centering
-	\includegraphics[width=0.8\textwidth]{images/monsterXML}
+	\includegraphics[width=1\textwidth]{images/monsterXML}
 	\caption[Model XML souhoru příšery]{Model XML souhoru příšery}\label{fig:xml_monster}
 \end{figure}
-Druhý nově zadefinovaný formát xml souborů se týká příšer. Příšery jsou samozřejmě součástí dobrodružství, jak jste mohli vidět na obrázku \ref{fig:xml_scenario}. Na obrázku \ref{fig:xml_monster} můžeme vidět detailní strukturu souboru. Struktura je podobná postavám, také obsahuje seznam předmětů, schopností a kouzel. Také obsahuje tag race, který určuje rasu příšery, ale jedná se o odlišné rasy než pro postavy. Pro určení rasy příšer jsme hledali kompromis, mezi dostatečnou vypovídající hodnotou a konzistencí oproti velkému množství ras, které by se velice rychle stalo nepřehledné. Uživatel si samozřejmě může příšery rozřadit podle libosti na základě stromové struktury nebo případně v popisku příšery. Proto jsme se rozhodli rasy příšer omezit pouze na základních sedm, které můžete vidět na obrázku. Hlavní důvod rozdělení příšer od klasických postav byl v rozdílných atributech. Pro počítání výsledku soubojů se používají jiné atributy než u postav. 
+Druhá nově zadefinovaná struktura XML souborů se týká příšer. Příšery jsou samozřejmě součástí dobrodružství, jak jste mohli vidět na obrázku \ref{fig:xml_scenario}. Na obrázku \ref{fig:xml_monster} můžeme vidět detailní strukturu souboru. Struktura souboru je podobná struktuře postav, také obsahuje seznam předmětů, schopností a kouzel. Obsahuje tag \texttt{race}, který určuje rasu příšery, ale jedná se o odlišné rasy než pro postavy. Pro určení rasy příšer jsme hledali kompromis, mezi dostatečnou vypovídající hodnotou a konzistencí oproti velkému množství ras, které by se velice rychle stalo nepřehledné. Uživatel si samozřejmě může příšery rozřadit podle libosti na základě stromové struktury nebo případně v popisku příšery. Proto jsme se rozhodli rasy příšer omezit pouze na základních sedm, které můžete vidět na obrázku. Jedním z hlavních důvodů, proč pro příšery nemohl být použit stejný model jako pro postavy je rozdílná množina základních atributů. Hlavní důvod rozdělení příšer od klasických postav byl v rozdílných atributech. Pro počítání výsledku soubojů se používají jiné atributy než u postav. 
 
 
 
 	\section{Model komunikace}
 	\begin{figure}\centering
-	\includegraphics[width=0.8\textwidth]{images/comunication_main}
+	\includegraphics[width=1\textwidth]{images/comunication_main}
 	\caption[Model komunikace pro hlavní obrazovku]{Model komunikace pro hlavní obrazovku}\label{fig:comunication_main}
 	\end{figure}
-Nejčastější operaci prezentační vrstvy je práce se stromovou strukturou a vytváření překladů. Pro znázornění komunikace mezi vrstvami jsem vytvořil sekvenční diagram, který znázorňuje komunikaci mezi jednotlivými třídami prezentační vrstvy. Na diagramu \ref{fig:comunication_main} můžeme vidět základní dvě činnosti. Vybrání konkrétního typu šablon , které zobrazí stromovou strukturu a zobrazení hlavního widgetu pro vytváření šablon po vybrání konkrétní položky ve stromové struktuře.\par
+Mezi nejčastější operaci prezentační vrstvy patří práce se stromovou strukturou. Na diagramu \ref{fig:comunication_main} můžeme vidět základní dvě činnosti. Vybrání konkrétního typu šablon, které zobrazí stromovou strukturu a zobrazení hlavního widgetu pro vytváření šablon po vybrání konkrétní položky ve stromové struktuře.\par
 
-Uživatel v menu klikne na požadovaný druh šablon. Tím se zavolá funkce \texttt{Redraw}, která má na starosti vykreslení stromové struktury ve widgetu. Potřebná data získá z \texttt{TreeManageru} po zavolání funkce \texttt{getTreeRoots}, která má na starosti, vytvoření kompletního stromu uzlů, přičemž vrací seznam kořenových uzlů. \texttt{TreeWidget} z tohoto listu pomocí rekurze vykreslí celý strom. \texttt{TreeManager} získává data z konkrétní DAO třídy (v diagramu zjednodušena jako \texttt{ObjectDAO}). Objekty navěšené na uzly stromu můžou být různé, takže třída \texttt{TreeManager} volá více DAO tříd.\par
+Uživatel v menu klikne na požadovaný druh šablon. Tím se zavolá funkce \texttt{Redraw}, která má na starosti vykreslení stromové struktury ve widgetu. Potřebná data získá z \texttt{TreeManageru} po zavolání funkce \texttt{getTreeRoots}, která má na starosti, vytvoření kompletního stromu uzlů, přičemž vrací seznam kořenových uzlů. \texttt{TreeWidget} z tohoto listu pomocí rekurze vykreslí celý strom. \texttt{TreeManager} získává data z konkrétní DAO třídy (v diagramu zjednodušena jako \texttt{ObjectDAO}). Objekty navěšené na uzly stromu můžou být různé, takže třída \texttt{TreeManager} volá více různých DAO tříd.\par
 
-Druhá část diagramu se týká vykreslení hlavní části obrazovky, kde se vytváří samotné šablony a jejich překlady. Uživatel v \texttt{TreeWidgetu} dvakrát klikne na nějaký uzel. Pokud se jedná o složku, funkce zavolá pouze rodičovskou funkci \texttt{TreeWidgetu}, což má za následek rozbalení obsahu složky. Pokud se jedná o objekt, zavolá se nad třídou \texttt{TabWidget} funkce \texttt{setObject} s parametrem object. Hned poté se zavolá funkce, která vykreslí všechna data. Data získá na základě nastaveného objektu, který si pamatuje vlastní DAO třídu. Třída vrátí seznam objektů, přičemž se jedná o jednu šablonu, ale ve všech jazycích, ve kterých byla vytvořena. \texttt{TabWidget} následně pro každý jazyk vykreslí jednu záložku, kde se dají hodnoty šablony upravovat nebo případně vytvořit nový překlad pro nový jazyk.
+Druhá část diagramu se týká vykreslení hlavní části obrazovky, kde se vytváří samotné šablony a jejich překlady. Uživatel ve stromové struktuře dvakrát klikne na nějaký uzel. Pokud se jedná o složku, funkce zavolá pouze rodičovskou funkci \texttt{TreeWidgetu}, což má za následek rozbalení obsahu složky. Pokud se jedná o objekt, zavolá se nad třídou \texttt{TabWidget} funkce \texttt{setObject} s parametrem \texttt{object}. Hned poté se zavolá funkce, která vykreslí všechna data. Data získá na základě nastaveného objektu, který si pamatuje vlastní DAO třídu. Třída vrátí seznam objektů, přičemž se jedná o jednu šablonu, ale ve všech jazycích, ve kterých byla vytvořena. \texttt{TabWidget} následně pro každý jazyk vykreslí jednu záložku, kde se dají hodnoty šablony upravovat nebo případně vytvořit nový překlad pro nový jazyk.
 	
 	\section{Model nasazení}
 	\begin{figure}\centering
-	\includegraphics[width=0.8\textwidth]{images/model_nasazeni}
+	\includegraphics[width=1\textwidth]{images/model_nasazeni}
 	\caption[Model nasazení]{Model nasazení}\label{fig:model_nasazeni}
 	\end{figure}
-Diagram nasazení zobrazuje způsob rozdělení systému na samostatné části a komunikační vazby mezi nimi, čímž definuje architekturu systému. Nalezneme zde veškeré komponenty systému a všechny potřebné části pro běh naší aplikace.\par
+Diagram nasazení zobrazuje způsob rozdělení systému na samostatné části a komunikační vazby mezi nimi, čímž definuje architekturu systému. Nalezneme zde veškeré komponenty systému a všechny potřebné části pro běh aplikace.\par
 
-Na diagramu \ref{fig:model_nasazeni} můžeme vidět, že software je určený pro počítače a funkční pod operačními systémy Windows a Linux (verze operačního systému jsou uvedeny v sekci nefunkční požadavky \ref{sec:funkcni_pozadavky}). Aplikace je napsaná v jazyce Python a zabalená do spustitelného balíčku, který nevyžaduje žádné speciální požadavky na systém. Veškeré potřebné knihovny a prostředí má uložené v balíčku. Databáze SQLite běží v rámci tohoto balíčku také a nepotřebuje žádné dodatečné prostředí.
+Na obrázku \ref{fig:model_nasazeni} můžeme vidět, že software je určený pro počítače a funkční pod operačními systémy Windows a Linux (verze operačního systému jsou uvedeny v sekci nefunkční požadavky \ref{sec:nefunkcni_pozadavky}). Aplikace je napsaná v jazyce Python a zabalená do spustitelného balíčku, který nevyžaduje žádné speciální požadavky na systém. Veškeré potřebné knihovny a prostředí má uložené v~balíčku. Databáze SQLite běží v rámci tohoto balíčku také a nepotřebuje žádné dodatečné prostředí.
 
 \chapter{Implementace}
-Pátá kapitola se věnuje samotné implementaci programu. Je zde popsaný použitý programovací jazyk a využité knihovny.  Dále jsou zde popsány využité nástroje pro tvorba celé bakalářské práce. V poslední části jsou popsané problémy, které vznikly při programování aplikace. Některé problémy byli zjištěny na základě testování, které je popsáno v další kapitole.
+Pátá kapitola se věnuje samotné implementaci programu. Je zde popsaný použitý programovací jazyk a využité knihovny.  Dále jsou zde popsány využité nástroje pro tvorbu celé bakalářské práce. V poslední části jsou popsané problémy, které vznikly při programování aplikace. Některé problémy byli zjištěny na základě testování, které je popsáno v další kapitole.
+
 \section{Použitý programovací jazyk}
-Jedním z nejdůležitějších rozhodnutí implementace je zvolení programovacího jazyku všech částí. Jelikož se jedná o desktopovou aplikaci, byla zvolena databáze typu sqlite, která je ideální pro práci na jedné stanici. \par
+Jedním z nejdůležitějších rozhodnutí implementace je zvolení programovacího jazyku všech částí. V mnoha případech je programovací jazyk zvolen ještě před začátkem analýzy, což však není ideální. Analýza aplikace by měla být nezávislá na programovacím jazyku. Jelikož se jedná o desktopovou aplikaci, byla zvolena databáze typu sqlite, která je ideální pro práci na jedné stanici. \par
+
 Jako hlavní programovací jazyk pro implementaci byl zvolen Python. Python je vysokoúrovňový skriptovací netypový programovací jazyk. I když se jedná o převážně scriptovací jazyk, díky velkému množství knihoven je velice snadné v něm psát i rozsáhlé grafické programy. Velké síla jazyka Python se skrývá v tom, že se jedná o netypový programovací jazyk, což v mnoha případech ulehčuje implementaci. \par
 
-Programovací jazyk Python je momentálně vyvíjen ve dvou oddělených a nezávislých větví a to Python verze 2 a Python verze 3. Pro tuto práci byla zvolena verze 3, která je modernější, většina nových knihoven vzniká právě pro verzi 3 a navíc umožňuje v základu více funkcí.
+Programovací jazyk Python je momentálně vyvíjen ve dvou oddělených a nezávislých větví a to Python verze 2 a Python verze 3. Pro tuto práci byla zvolena verze 3, která je modernější, většina nových knihoven vzniká právě pro verzi 3 a navíc umožňuje v základu více funkcionalit.
 
 \section{Využité knihovny}
-Samotný programovací jazyk je omezen pouze na základní funkce. Abychom veškeré funkce a možnosti nemuseli psát znovu, využijeme některé knihovny. Programovací jazyk Python je známý velkým množstvím knihoven, které rozšiřují základní funkcionalitu například o programování grafického rozhraní a další. 
+Samotný programovací jazyk je omezen pouze na základní funkce programovacího jazyku. Aby nebylo nutné již existující funkcionality psát znovu, využívají se dodatečné knihovny. Programovací jazyk Python je známý velkým množstvím knihoven, které rozšiřují základní funkcionalitu například o programování grafického rozhraní, matematické výpočty a mnoho dalšího. 
 \subsection{Knihovna pro práci s XML}
 
-Velká část programu se týká práce s XML šablonami. Bylo zapotřebí vybrat vhodnou knihovnu, která by veškerou práci co nejvíce usnadnila. Nejsnažší způsob vytváření rozsáhlých XML souborů přímo z objektů je pomocí mapování třídních atributů přímo na atributy v XML objektu. Bohužel taková knihovna, která by tuto funkcionalitu v základu podporovala pro Python neexistuje. Proto byla zvolena knihovna lxml\cite{lxml}, která umí základní parsování XML souborů a vytvoření stromového objektu ze získaných dat. Nad touto knihovnou bylo naprogramováno rozšíření pro mapování na objekty, které je blíže popsané dále v textu.
+Velká část programu se týká práce s XML šablonami. Bylo zapotřebí vybrat vhodnou knihovnu, která by veškerou práci co nejvíce usnadnila. Nejsnažší způsob vytváření rozsáhlých XML souborů přímo z objektů je pomocí mapování třídních atributů přímo na atributy v XML objektu. Bohužel taková knihovna, která by tuto funkcionalitu v základu podporovala pro Python neexistuje. Proto byla zvolena knihovna lxml\cite{lxml}, která umí základní parsování XML souborů a vytvoření stromového objektu ze získaných dat. Nad touto knihovnou bylo naprogramováno rozšíření pro mapování na objekty, které je blíže popsané dále v textu v sekci implementace.
 
 
 
 \subsection{Grafická knihovna}
-Pro Python existuje velké množství grafických knihoven. Některé jsou zaměřené na mobilní aplikace, některé hlavně pro webové rozhraní. Vybrat mezi takovým množstvím knihoven není lehké. Mezi nejznámější patří knihovny Kivy, PyGame, TkInter a PyQt. Knihoven existují desítky další, ale v této bakalářce se věnuji pouze nejzajímavějším z~nich.\par
+Pro Python existuje velké množství grafických knihoven. Některé jsou zaměřené na mobilní aplikace, některé hlavně pro webové rozhraní a spoustu jich se také zaměřuje na desktop. Vybrat mezi takovým množstvím knihoven není lehké. Mezi nejznámější patří knihovny Kivy, PyGame, TkInter a PyQt. Knihoven pro tvorbu grafického rozhraní existují desítky. Pro rozebrání všech však není v této práci místo a proto jsou zmíněné pouze nejpoužívanější z nich.\par
 
 Knihovna kivy je převážně zaměřené na dotykové displeje. Výsledný vzhled a veškeré widgety jsou pro to přizpůsobené a ovládání pomocí myši a klávesnice není tak intuitivní jako u~ostatních knihoven.\par
 
-Dalším důležitým kritériem pro výběr knihovny byla aktuálnost a vydávání nových aktualizací a samozřejmě podpora Python verze 3.0.*. Pro knihovna TkInter již dlouho nevychází nové aktualizace. Knihovna je velice jednoduchá a intuitivní, bohužel již několik let není aktuální. \par
+Dalším důležitým kritériem pro výběr knihovny byla aktuálnost a vydávání nových aktualizací a samozřejmě podpora Python verze 3.0.*. Pro knihovnu TkInter již dlouho nevychází nové aktualizace. Knihovna je velice jednoduchá a intuitivní, bohužel již několik let není aktuální, proto není příliš vhodná. \par
 
-Knihovna PyGame, jak již napovídá její název, se specializuje převážně na tvorbu počítačových her. Má rozsáhlé možnosti animací a herních prvků, které jsou důležité převážně ve hrách. Knihovna neumí vytvářet přehledné grafické rozhraní aplikace, proto jsem ji ze seznamu také vyřadil.\par
+Knihovna PyGame, jak již napovídá její název, se specializuje převážně na tvorbu počítačových her. Má rozsáhlé možnosti animací a herních prvků, které jsou důležité převážně ve hrách. Knihovna neumí vytvářet přehledné grafické rozhraní aplikace, proto byla ze seznamu také vyřazena.\par
 
 Poslední ze čtveřice knihoven je PyQt. Knihovna se zaměřuje převážně na tvorbu přehledných grafických rozhraní pro desktopové programy na různé operační systémy, což je přesně to co je zapotřebí. Navíc má velice moderní vzhled, což bylo jedno z hlavních kritérii pří výběru. Aktualizace k této knihovně jsou vydávány pravidelně a nejnovější a stále aktualizovaná verze PyQt5 je určena pro Python 3. Proto byla tato knihovna zvolena jako nejlepší volba pro tvorbu uživatelského rozhraní. Přesněji byla využita verze knihovny 5.8.
 \subsection{Knihovna pro tvorbu HTML almanachů}
 \begin{listing}[htbp]
-\caption{\label{code:jinja}Ukázka syntaxe šablonovacího systé	mu Jinja}
+\caption{\label{code:jinja}Ukázka syntaxe šablonovacího systému Jinja}
 \begin{minted}[]{jinja}
 {% extends "layout.html" %}
 
@@ -514,27 +518,28 @@ Poslední ze čtveřice knihoven je PyQt. Knihovna se zaměřuje převážně na
 
 \end{minted}
 \end{listing}
-Jednou z dalších funkčností programu je generování HTML almanachů, které budou uzpůsobené pro tisk. Bylo zapotřebí zvolit vhodný šablonovací systém, kterým z předem připravených HTML šablon vytvoří přehledné almanachy, které bude možné prohlížet v~libovolném webovém prohlížeči, kde lze využít křížových odkazů nebo je vytisknout a vzít kamkoliv sebou. Bylo zapotřebí zvolit vhodný šablonovací systém, který bude umožňovat nejen doplňování proměnných do textu, ale také podmínky a cykly.\par
+Jednou z dalších důležitých funkčností programu je generování HTML almanachů, které budou uzpůsobené pro tisk. Bylo zapotřebí zvolit vhodný šablonovací systém, kterým z předem připravených HTML šablon vytvoří přehledné almanachy, které bude možné prohlížet v~libovolném webovém prohlížeči, kde lze využít křížových odkazů nebo je vytisknout a vzít kamkoliv sebou. Bylo zapotřebí zvolit vhodný šablonovací systém, který bude umožňovat nejen doplňování proměnných do textu, ale také podmínky a cykly.\par
 
-Mezi nejpoužívanější šablonovací systémy patří například Mako \cite{mako}, Django templates a Jinja \cite{jinja}. Python podporuje i~velice jednoduchý a základní šablonovací systém nativně. Tento systém je však opravdu velice jednoduchý, nepodporuje žádné podmínky ani cykly a hodí se spíše pro vytváření přehledných výstupů do konzole. Velice rozšířený šablonovací systém je Mako. Jedná se o~výchozí šablonovací systém pro webové frameworky pro Python. Tento nástroj je velice mocný a zvládne velké množství různých funkcí. Bohužel je spíše zaměřený pro tvorbu webových aplikací a práce není příliš přizpůsobená pouze pro tvorbu statických ofline stránek.\par
+Mezi nejpoužívanější šablonovací systémy pro Python patří například Mako \cite{mako}, Django templates a Jinja \cite{jinja}. Python podporuje i~velice jednoduchý a základní šablonovací systém nativně. Tento systém je však opravdu velice jednoduchý, nepodporuje žádné podmínky ani cykly a hodí se spíše pro vytváření přehledných výstupů do konzole. Velice rozšířený šablonovací systém je Mako. Jedná se o~výchozí šablonovací systém pro webové frameworky pro Python. Tento nástroj je velice mocný a zvládne velké množství různých funkcí. Bohužel je spíše zaměřený pro tvorbu webových aplikací a práce není příliš přizpůsobená pouze pro tvorbu statických stránek.\par
 
 Jinja a Django templates jsou velice podobné šablonovací systémy, která mají velice podobnou syntaxi. Hlavní nevýhodou Django templates je nutnost instalace celého webového frameworku Django, aby bylo možné šablony zkompilovat a vytvořit výsledný HTML soubor. Proto byl vybrán šablonovací systém Jinja, který je velice populární a existuje pro něj přehledná dokumentace. Je také velice rychlí, takže i~velké množství šablon, se vytvoří během chvilky. Na ukázce části šablony\ref{code:jinja} můžete vidět ukázku syntaxe. Jak je vidět, syntaxe je velice podobná syntaxi Pythonu, což velice zjednodušuje práci. Mimo jiné Jinja také podporuje rozdělení šablon do jednotlivých souborů, což velice zpřehledňuje vytváření a editaci šablon. Díky takto vytvořeným šablonám si sami uživatelé výsledné šablony můžou upravit dle libosti a podle jejich potřeb. 
 
 \subsection{Ostatní knihovny}
-Krom rozšiřujících knihoven byly také použity základní knihovny, které Python poskytuje. Mezi nejpoužívanější patří knihovna shutil, která umožňuje snadné kopírování souborů a vytváření složek. Dále knihovna datetime, která slouží pro uchávání času a exportování do potřebných formátů a také základní knihovny os a sys, které slouží pro základní práci s operačním systémem, jako je například kontrola existence souborů, nebo správa návratových kódů aplikace.
+Krom rozšiřujících knihoven byly také použity základní knihovny, které Python poskytuje. Mezi nejpoužívanější patří knihovna shutil, která umožňuje snadné kopírování souborů a vytváření složek. Dále knihovna datetime, která slouží pro uchování času a exportování do potřebných formátů a také základní knihovny os a sys, které slouží pro základní práci s operačním systémem, jako je například kontrola existence souborů, nebo správa návratových kódů aplikace.
 
 
 
 \section{Použité nástroje}
-V této sekci jsou vypsány veškeré použité nástroje, které byly použity při vytváření bakalářské práce.
-\begin{description}
-\item[PyCharm] Pro vývoj kódu aplikace byl využit program PyCharm od české firmy JetBrains. Hlavní výhodou tohoto vývojového prostředí je velké množství editovacích nástrojů, které velice usnadňují práci a možnost rozšíření o další funkcionality. Mimo jiné také umožňuje snadné napojení na verzovací systémy jako jsou GIT nebo SVN. Během vývoje aplikace vzniklo několik nových verzí a byl vydán velký update pro rok 2017. Poslední použitá verze byla 2017.1.1.
+V této sekci jsou popsány veškeré použité nástroje, které byly použity při vytváření bakalářské práce.
 
-\item[Enterprise architect] Tento program slouží pro tvorbu rozsáhlých a přehledných diagramů, které se používají při vytváření analytické dokumentace a při návrhu aplikace. Aplikace umožňuje modelování veškerých UML diagramů, které jsou pro práci potřeba. Pro práci byla použita verze 12.0.1215
+\begin{description}
+\item[PyCharm] Pro vývoj kódu aplikace byl využit program PyCharm od české firmy JetBrains. Hlavní výhodou tohoto vývojového prostředí je velké množství editovacích nástrojů, které velice urychlují práci a možnost rozšíření o další funkcionality. Mimo jiné také umožňuje snadné napojení na verzovací systémy jako jsou GIT nebo SVN. Během vývoje aplikace vzniklo několik nových verzí a byl vydán velký update pro rok 2017. Poslední použitá verze byla 2017.1.1.
+
+\item[Enterprise architect] Tento program slouží pro tvorbu rozsáhlých a přehledných diagramů, které se používají při vytváření analytické dokumentace a při návrhu aplikace. Aplikace umožňuje modelování veškerých UML diagramů, které byly práci potřeba. Pro práci byla použita verze 12.0.1215
 
 \item[GIT] Důležitou částí vývoje je také zálohování a verzování programu. Pro tyto účely byl využit verzovací systém GIT, který umožňuje jednoduchou a přehlednou správu verzí a možnost ukládat data na vzdálený server z důvodu zálohování. Pro verzování této práce byl využit GIT pro Windows verze 2.10.0
 
-\item[MikTex] Celá textová část práce je psaná v jazyku Latex. Pro Windows existuje několik překladačů. Pro tuto práci byl zvolen program MikTex, který umožňuje jednoduchou a rychlou správu rozšiřujících balíčků, čím eliminuje problém s ručním stahováním potřebných balíčků. MikTex byl použit ve verzi 2.9.6210
+\item[MikTex] Celá textová část práce je psaná v jazyku \LaTeX. Pro Windows existuje několik překladačů. Pro tuto práci byl zvolen program MikTex, který umožňuje jednoduchou a rychlou správu rozšiřujících balíčků, čím eliminuje problém s ručním stahováním potřebných balíčků, což na operačním systému windows bývá problém. MikTex byl použit ve verzi 2.9.6210
 
 \item[TexMaker] Program TexMaker je velice přehledný a jednoduchý editor pro Latex. Umožňuje našeptávání syntaxe a také jednoduché zapnutí automatické opravy pro český jazyk, což nepodporují všechny editory. Pro práci byl využit TexMaker verze 4.5
 \end{description}
@@ -574,12 +579,17 @@ V této sekci jsou vypsány veškeré použité nástroje, které byly použity 
 \end{figure}
 Soubory v projektu jsou logicky rozdělené do složek pro snadnou orientaci v kódu. Na obrázku \ref{fig:struktura} je vyobrazena adresářová struktura celého projektu.  Projekt je rozdělen do 6 hlavních složek.
 \begin{description}
-\item[business] Složka business obsahuje všechny soubory týkající se business vrstvy. Soubory mají jméno složené z názvu objektu, kterého se třída týká, a slova manager. Složka obsahuje také podsložku interface, ve které se nacházejí veškeré interfaci pro business třídy.
-\item[data] Složka data obsahuje veškeré soubory týkající se datové vrstvy. Nachází se zde třídy DAO, které se nacházejí ve složce DAO a jejich název končí stejným klíčovým slovem. Dále jsou zde třídy, které se starají o import a export do formátů XML, HTML a DRD. Ve složce database se nachází třídy pro základní práci s databází.
-\item[presentation]Složka bussines obsahuje veškeré soubory, které definují prezentační vrstvu. Soubory jsou logicky rozdělené do složek a hlavní soubory prezentační vrstvy se nachází přímo ve složce presentation. Ve složce dialogs se nachází definice veškerých dialogů a vyskakovacích oken aplikace. Ve složce layouts se nachází definice editační okna pro editaci veškerých šablon. Složka widget obsahuje definice hlavních částí uživatelského rozhraní programu.
-\item[resources] Ve složce resources se nachází veškeré ikony a překlady pro aplikaci. Také se zde ukládají vygenerované výsledné mapy.
-\item[structure] Ve složce structure se nachází veškeré definice objektových tříd. Soubory jsou rozděleny do logických celků po složkách.
-\item[tests] Složka tests obsahuje definice veškerých testů aplikace. Soubory v této složce musí začínat prefixem test, aby bylo možné testy jednoduše hromadně pouštět. V podložce resources se nachází soubory, které jsou potřeba pro testování, například vzorový XML soubor se šablonami pro porovnání výstupu testů.
+\item[business] Složka \texttt{business} obsahuje všechny soubory týkající se business vrstvy. Soubory mají jméno složené z názvu objektu, kterého se třída týká, a slova manager. Složka obsahuje také podsložku interface, ve které se nacházejí veškeré interfaci pro business třídy.
+
+\item[data] Složka \texttt{data} obsahuje veškeré soubory týkající se datové vrstvy. Nachází se zde třídy DAO, které se nacházejí ve složce DAO a jejich název končí stejným klíčovým slovem. Dále jsou zde třídy, které se starají o import a export do formátů XML, HTML a .drd, které jsou rozřazeny do stejnojmenných složek. Ve složce \texttt{database} se nachází třídy pro základní práci s databází.
+
+\item[presentation]Složka \texttt{presenation} obsahuje veškeré soubory, které definují prezentační vrstvu. Soubory jsou logicky rozdělené do složek a hlavní soubory prezentační vrstvy se nachází přímo ve složce \texttt{presentation}. Ve složce \texttt{dialogs} se nachází definice veškerých dialogů a vyskakovacích oken aplikace. Ve složce \texttt{layouts} se nachází definice rozložení formulářů pro editaci veškerých šablon. Složka \texttt{widget} obsahuje definice hlavních částí uživatelského rozhraní programu.
+
+\item[resources] Ve složce \texttt{resources} se nachází veškeré ikony a překlady pro aplikaci. Také se zde ukládají vygenerované výsledné mapy a zdrojové podkladové mapy.
+
+\item[structure] Ve složce \texttt{structure} se nachází veškeré definice objektových tříd. Soubory jsou rozděleny do logických celků po složkách.
+
+\item[tests] Složka \texttt{tests} obsahuje definice veškerých testů aplikace. Jméno souborů v této složce musí začínat prefixem test, aby bylo možné testy jednoduše hromadně pouštět. V podsložce \texttt{resources} se nachází soubory, které jsou potřeba pro testování, například vzorový XML soubor se šablonami pro porovnání výstupu testů.
 \end{description}
 
 \section{Zajímavé části implementace}
@@ -616,45 +626,49 @@ class XMLEffect(XMLTemplate):
 \end{listing}
 	 V ukázce kódu  \ref{code:XML} můžeme vidět namapování objektů \texttt{Effect} a \texttt{Modifier} a jejich vzájemné provázání pomocí objektu \texttt{XIntance}. \par
 
-Rozšíření obsahuje tři základní třídy, \texttt{XElement}, \texttt{XAttribElement} a \texttt{XInstance}. Každá z těchto tříd reprezentuje jiný typ atributu v objektu.Kombinací těchto tří základních objektů, můžeme vytvořit velice komplexní XML soubor. \par
+Rozšíření obsahuje tři základní třídy, \texttt{XElement}, \texttt{XAttribElement} a \texttt{XInstance}. Každá z těchto tříd reprezentuje jiný typ atributu v objektu. Kombinací těchto tří základních objektů, můžeme vytvořit velice komplexní XML soubor. \par
 
-Třída \texttt{XElement} reprezentuje základní atribut, který nemá překlady. V XML se jedná o tag bez atributů a bez požadavků na zanořování. Jako parametry přijímá název tagu a volitelný atribut enum, díky kterému se hodnota tagu upraví na základě zvolené enum třídy. Posledním volitelným parametrem můžeme třídě říct, o jaký typ hodnoty se jedná, například pokud potřebujeme výstup naformátovat jako datum. \par
+Třída \texttt{XElement} reprezentuje základní atribut, který nemá překlady. V XML se jedná o tag bez atributů a bez vnořených tagů. Jako parametry přijímá název tagu a volitelný atribut \texttt{enum}, díky kterému se hodnota tagu upraví na základě zvolené enum třídy. Posledním volitelný parametre udává , o jaký typ hodnoty tagu se jedná, například pokud je zapotřebí výstup naformátovat jako datum je třídě předán parametr \texttt{date}. \par
 
-Třída XAttribElement reprezentuje tagy, které mohou navíc obsahovat atributy. Převážně se využívá atribut \texttt{lang}, který slouží pro definici jazyku překladu. Při importu šablony se tyto tagy vyhodnotí jako překladové a vytvoří se slovník hodnot podle jazyku. \par
+Třída XAttribElement reprezentuje tagy, které mohou navíc obsahovat atributy. Převážně se využívá atribut \texttt{lang}, který slouží pro definici jazyku překladu. Při importu šablony se tyto tagy vyhodnotí jako překladové a vytvoří se slovník hodnot, kde klíče slovníku určují jazyk a jeho hodnoty pak samotný objekt. \par
 
 Poslední třída XInstance reprezentuje vazbu na další mapovací třídu. Jako parametr komě jména, přijímá instanci cílové mapovací třídy. Objekt se při importu a exportu postará o rekurzivní provolání do dalších tříd. \par
 
-Třída \texttt{XMLTemplate}, ze které všechny mapovací třídy dědí, obsahuje dvě základní funkce, \texttt{import\_xml} a \texttt{create\_xml}. Funkce \texttt{import\_xml} načte XML soubor a vrátí seznam objektů, které se dále načítají do databáze.Jednotlivé objekty jsou navíc rozděleny do slovníku podle jazyků, aby bylo možné importovat více-jazyčné překlady. O proti tomu třída \texttt{create\_xml} přijímá seznam objektů, ze kterých vytvoří strukturovaný XML soubor. \par
+Třída \texttt{XMLTemplate}, ze které všechny mapovací třídy dědí, obsahuje dvě základní funkce, \texttt{import\_xml} a \texttt{create\_xml}. Funkce \texttt{import\_xml} načte XML soubor a vrátí seznam objektů, které se dále načítají do databáze. Jednotlivé objekty jsou navíc rozděleny do slovníku podle jazyků, aby bylo možné importovat vícejazyčné překlady. O proti tomu třída \texttt{create\_xml} přijímá seznam objektů, ze kterých vytvoří strukturovaný XML soubor. \par
 
-Každá definice XML objektu musí dědit ze třídy \texttt{XMLTemplate} a navíc mít definované třídní atributy \texttt{ROOT\_NAME}, který určuje název kořenového tagu a atribut \texttt{OBJECT\_TYPE}, který určuje, o který objekt aplikace se jedná. Dále musí obsahovat třídni funkci, která určí mapování atributů objektu na XML objekty. Princip mapování funguje na základě přiřazení třídního atributu, který definuje název atributu v objektu k mapovací XML třídě. 
+Každá definice XML objektu musí dědit ze třídy \texttt{XMLTemplate} a navíc mít definované třídní atributy \texttt{ROOT\_NAME}, který určuje název kořenového tagu a atribut \texttt{OBJECT\_TYPE}, který určuje, o který objekt aplikace se jedná. Dále musí obsahovat třídní funkci \texttt{\_\_init\_\_}, která určí mapování atributů objektu na XML objekty. Princip mapování funguje na základě přiřazení třídního atributu, který definuje název atributu v objektu k mapovací XML třídě. 
+
 	\subsection{Soubor pro ukládání dat v aplikaci}
-Jelikož bylo nutné přesunout databázi ze souborového uložení pouze do paměti, bylo zapotřebí navrhnout uložení stavu celé aplikace do souboru, ze kterého se veškeré data dají  snadno a rychle obnovit. Tento soubor neslouží pouze pro uložení rozpracované práce, ale také například pro sdílení dobrodružství pro ostatní uživatele. \par
+Jelikož bylo nutné přesunout databázi ze souborového uložení pouze do paměti, z důvodu zrychlení aplikace, bylo zapotřebí navrhnout strukturu souboru pro uložení stavu celé aplikace, ze kterého se veškeré data dají snadno a rychle obnovit. Tento soubor neslouží pouze pro uložení rozpracované práce, ale také například pro sdílení dobrodružství pro ostatní uživatele. \par
 
-Důležitá data aplikace se skládají ze dvou částí. První část je obsah databáze, kde jsou uloženy veškeré hodnoty, překlady a struktura všech šablon a objektů. Druhá část tvoří naimportovaní podklady pod mapu a uložené hotové mapy. Všechny tyto data a soubory je zapotřebí uložit do jednoho souboru, aby se s těmito daty dalo jednoduše pracovat. Jelikož soubor musí obsahovat i potřebné obrázky, není možné využít pouze textový formát ukládání. \par
+Důležitá data aplikace se skládají ze dvou částí. První část je obsah databáze, kde jsou uloženy veškeré hodnoty, překlady a struktura všech šablon a objektů. Druhá část tvoří importované podklady pod mapu a uložené hotové mapy. Všechny tyto data a soubory je zapotřebí uložit do jednoho souboru, aby se s těmito daty dalo jednoduše pracovat. Jelikož soubor musí obsahovat i potřebné obrázky, není možné využít pouze textový formát ukládání. \par
 
-Pro potřeby aplikace byl navržen nový soubor s tématickou koncovkou \texttt{.drd}. Struktura toho to souboru je velice jednoduchá. Jedná se o obyčejný zip archiv, kterému je změněna koncovka. V tomto archivu se nachází složka s veškerými obrázky a textový soubor, který v sobě obsahuje veškerá data z databáze. \par
+Pro potřeby aplikace byl navržen nový soubor s tématickou koncovkou \texttt{.drd}. Struktura tohoto souboru je velice jednoduchá. Jedná se o obyčejný zip archiv, kterému je změněna koncovka. V tomto archivu se nachází složka s veškerými obrázky a textový soubor, který v sobě obsahuje veškerá data z databáze. \par
 
-Při vytváření tohoto souboru se vytvoří kopie celé databáze, včetně struktury tabulek. Dále se zkopírují veškeré soubory ze složky \texttt{maps}, kde se nachází pouze používané obrázky map. Z těchto souborů se vytvoří zip archiv, kterému se následně změní koncovka na .drd. Při otevření tohoto souboru se naopak archiv rozbalí do dočasné složky, nakopírují se veškeré mapy do příslušné místo, spustí se SQL script, který vytvoří databázi a dočasné soubory se smaží. \par
+Při vytváření tohoto souboru se vytvoří kopie celé databáze, včetně struktury tabulek. Dále se zkopírují veškeré soubory ze složky \texttt{maps}, kde se nachází pouze používané obrázky map. Z těchto souborů se vytvoří zip archiv, kterému se následně změní koncovka na .drd. Při otevření tohoto souboru se naopak archiv rozbalí do dočasné složky, nakopírují se veškeré mapy na příslušné místo, spustí se SQL script, který vytvoří databázi a dočasné soubory se smaží. \par
 
 Tento systém podporuje pouze ukládání a nahrávání všech dat v aplikaci a neumožňuje částečné spojení dat z více souborů. Pro tyto účely se dá využít export do formátu XML a následný import těchto souborů. 
 
 
 \section{Vzniklé problémy při implementaci}
 Při implementaci vzniklo několik problému, které se v návrhu nedali odhalit a bylo zapotřebí, některé části návrhu upravit nebo naopak rozšířit. Některé problémy se týkali samotné implementace, což analýza ani návrh nijak nezachycuje. \par 
-Na základě uživatelských testů, které jsou popsány dále, vyšlo najevo, že největší problém aplikace se týkal rychlosti některých operací v aplikaci. Problém rychlosti se týkal převážně importu XML šablon do aplikace a překreslování stromové struktury šablon.
-	\subsection{Problém s rychlostí importu z XML souborů}
-Na základě následně provedených měření bylo zjištěno, že import velkých dobrodružství mohl trvat až několik desítek vteřin, což pro uživatele může být velmi otravné. Pro odhalení problému bylo provedeno podrobné měření částí kódu, aby byla nalezena problematická část kódu. Z měření bylo jasné, že problém způsobuje rychlost zápisu do databáze, který z důvodu získávání hodnot autoincrementu, nemohl být celý transakční, ale musel být rozložen na menší transakce. Hodnoty autoincrementu jsou důležité z důvodu mapování překladů na objekt. Tento problém byl vyřešen změnou umístění databáze. Z původního souboru, který se nacházel na pevném disku, byla celá databáze přesunuta do paměti. Tento přesun bohužel způsobil ztrátu veškerých neuložených dat po ukončení aplikace. \par 
 
-Aby byly ztráty dat eliminovány na minimum bylo současně do aplikace přidáno množství kontrolních dotazů v podobě vyskakujích oken, které informují uživatele o případně ztrátě dat. Dále byl tak zjednoduše a zrychlen systém ukládání a nahrávání drd souborů, díky kterým se při znovuotevření aplikace dají data nahrát velice rychle zpátky. 
+Na základě uživatelských testů, které jsou popsány dále, vyšlo najevo, že největší problém aplikace se týkal rychlosti některých operací v aplikaci. Problém rychlosti se týkal převážně importu XML šablon do aplikace a překreslování stromové struktury šablon.
+
+	\subsection{Problém s rychlostí importu z XML souborů}
+Na základě následně provedených měření bylo zjištěno, že import velkých dobrodružství mohl trvat až několik desítek vteřin, což pro uživatele může být velmi otravné. Pro odhalení problému bylo provedeno podrobné měření částí kódu, aby byla nalezena problematická část kódu. Z měření bylo jasné, že problém způsobuje rychlost zápisu do databáze, který z důvodu získávání hodnot přiřazené hodnoty \texttt{id} zd databáze, nemohl být celý transakční, ale musel být rozložen na menší transakce. Hodnota \texttt{ID} je důležitá z důvodu mapování překladů na objekt. Tento problém byl vyřešen změnou umístění databáze. Z původního souboru, který se nacházel na pevném disku, byla celá databáze přesunuta do paměti. Tento přesun bohužel způsobil ztrátu veškerých neuložených dat po ukončení aplikace. \par 
+
+Aby byly ztráty dat eliminovány na minimum bylo současně do aplikace přidáno množství kontrolních dotazů v podobě kontrolních oken, které informují uživatele o případně ztrátě dat. Dále byl také zjednodušen a zrychlen systém ukládání a nahrávání .drd souborů, díky kterým se při znovuotevření aplikace dají data nahrát velice rychle zpátky. 
 
 	\subsection{Problém s rychlostí překreslování stromové struktury}
-Jelikož aplikace umožňuje třídění veškerých šablon do přehledné stromové struktury pomocí jednoduchého drag\&drop systému, je zapotřebí aby tato akce netrvala příliš dlouho. Jelikož při změně struktury stromu, je zapotřebí překreslit celý obsah widgetu, který zobrazuje stromovou strukturu, je zapotřebí tuto akci velice optimalizovat, protože se velmi často provádí. \par
+Jelikož aplikace umožňuje třídění veškerých šablon do přehledné stromové struktury pomocí jednoduchého drag\&drop systému, je zapotřebí, aby tato akce netrvala příliš dlouho. Jelikož při změně struktury stromu, je zapotřebí překreslit celý obsah widgetu, který zobrazuje stromovou strukturu, je zapotřebí tuto akci velice optimalizovat, protože se velmi často provádí. \par
 
-Při základní implementaci se časová náročnost pohybovala v řádu sekund, při velkém množství uzlů ve stromové struktuře, což pro systém drag\&drop je naprosto nepřijatelné. Problém zde byl analyzován do nejmenších detailů, abychom dosáhli přijatelné časové náročnosti. Po důkladné analýze vyšlo najevo, že jeden z největších problémů je velikost zobrazovaných  ikon u jednotlivých položek. \par
+Při základní implementaci se časová náročnost pohybovala v řádu sekund, při velkém množství uzlů ve stromové struktuře, což pro systém drag\&drop je naprosto nepřijatelné. Problém zde byl analyzován do nejmenších detailů, aby bylo dosaženo přijatelné časové náročnosti. Po důkladné analýze vyšlo najevo, že jeden z největších problémů je velikost zobrazovaných ikon u jednotlivých položek. \par
 
-Po zmenšení ikon více jak na jednu pětinu, jsem snížili dobu překreslování na méně než vteřinu, což již je přijatelná hodnota, ne však ideální. Pro ještě větší urychlení bylo zapotřebí upravit některé principy překreslování. Pokud bychom chtěli dosáhnout ještě lepšího výsledku, bylo by zapotřebí upravit některé principy překreslování stromové struktury a při změně dat nepřekreslovat celý strom, ale pouze jeho změněnou část. Jelikož však časová náročnost vzniká až při velice vysokém počtu elementů ve stromové struktuře, bylo toto řešení problému odsunutu do další verze aplikace. 
+Po zmenšení ikon více jak na jednu pětinu, byla doba překreslování snížena na méně než vteřinu, což již je přijatelná hodnota, ne však ideální. Pro ještě větší urychlení bylo zapotřebí upravit některé principy překreslování. Pokud by bylo nutné dosáhnout ještě lepšího výsledku, bylo by zapotřebí upravit některé principy překreslování stromové struktury a při změně dat nepřekreslovat celý strom, ale pouze jeho změněnou část. Jelikož však časová náročnost vzniká až při velice vysokém počtu elementů ve stromové struktuře, bylo toto řešení problému odsunutu do další verze aplikace. 
+
 	\subsection{Problém s křížovými závislosti}
-Další problém který vznikl, se týká problému křížových závislostí modulů nebo tříd. Jazyk Python je především používaný jako skriptovací jazyk. Při tvoření velkých projektů, které jsou přehledně rozděleny na velké množství modulů může vznikat problém s křížovými závislosti. Python pro importování jiných tříd neboli modulů používá dvě syntaxe.
+Další problém který vznikl, se týká problému křížových závislostí modulů nebo tříd. Jazyk Python je především používaný jako skriptovací jazyk, při kterém se obvykle pracuje pouze v jednom souboru, kde importování jiných souborů není potřeba. Při tvoření velkých projektů, které jsou přehledně rozděleny na velké množství modulů může vznikat problém s křížovými závislosti. Python pro importování jiných tříd neboli modulů používá dvě syntaxe.
 
 \begin{listing}[htbp]
 %\caption{\label{code:import1}První způsob importu}
@@ -680,7 +694,7 @@ O proti tomu pokud použijeme tento druhý způsob, již nemusíme psát celé c
 \chapter{Testování}
 Poslední kapitola se věnuje testování vyvinuté aplikace. Testování aplikace bylo provedeno pomocí jednotkových testů a uživatelských testů. V kapitole je dopodrobna popsán způsob testování a rozebrány testované části. U obou skupin testů je popsán jejich účel, průběh testování a výsledky.
 	\section{Jednotkové testy}
-Jednotkové testy se zaměřují na testování jedné konkrétní třídy a její funkcionalit. Testy by měli fungovat nezávisle na na ostatních třídách. Pokud se například testuje funkcionalita databáze, neměli by testy nijak ovlivnit produkční databázi. Unit testy byly rozděleny do 4 skupin po logických celcích. K tvorbě jednotkových testů pro Python se používá knihovna \texttt{unittest}.
+Jednotkové testy se zaměřují na testování jedné konkrétní třídy a její funkcionalit. Testy by měly fungovat nezávisle na na ostatních třídách. Pokud se například testuje funkcionalita databáze, neměly by testy nijak ovlivnit produkční databázi. Unit testy byly rozděleny do 4 skupin po logických celcích. K tvorbě jednotkových testů pro Python se používá knihovna \texttt{unittest}.
 
 		\subsection{Testování databáze}
 První skupina testů se věnuje přímému testování operací s databází. 
@@ -688,12 +702,12 @@ První skupina testů se věnuje přímému testování operací s databází.
 Tato skupina testů má za úkol otestovat třídu \texttt{Database}, která má na starosti základní operace s databází. Testují se základní operace jako jsou \texttt{SELECT}, \texttt{DROP}, \texttt{DELETE} nebo \texttt{INSERT}. Testování probíhá na oddělené databázi, aby nedošlo k poškození aplikační databáze. 			
 
 			\subsubsection*{Výsledky}
-Tato skupina testů byla velice nápomocná při odhalování rychlostních problémů celé aplikace. Při spuštění testů je možné i vidět doba, za kterou se jednotlivé testy provedly, což napomohlo k nalezení nejpomalejší části práce s databází a následné přesunutí databáze do paměti.
+Tato skupina testů byla velice nápomocná při odhalování rychlostních problémů celé aplikace. Při spuštění testů je možné vidět i dobu, za kterou se jednotlivé testy provedly, což napomohlo k nalezení nejpomalejší části práce s databází a následné přesunutí databáze do paměti.
 
 		\subsection{Testování DAO tříd}
 Další skupina testů se zabývá testováním důležitých DAO tříd. Některé třídy nejsou testované, protože je nelze testovat samostatně.
 			\subsubsection*{Účel}
-Hlavním účelem této skupiny testů je odhalení chyb při vytváření objektů z databáze a ukládání objektů do databáze. V testech se testují základní operace všech DAO tříd co ž jsou \texttt{create}, \texttt{insert}, \texttt{update} a \texttt{delete}. Pro každou daotřídu se provede několik operací a výsledné objekty se porovnávají, zda jsou správně vytvořené, případně data v databázi upravené. Testy se provádí na stejné struktuře databáze na jaké běží aplikace, ale z důvodu neovlivnění dat aplikace běží v jiné databázi.
+Hlavním účelem této skupiny testů je odhalení chyb při vytváření objektů z databáze a ukládání objektů do databáze. V testech se testují základní operace všech DAO tříd což jsou \texttt{create}, \texttt{insert}, \texttt{update} a \texttt{delete}. Pro každou DAO třídu se provede několik operací a výsledné objekty se porovnávají, zda jsou správně vytvořené, případně data v databázi upravené. Testy se provádí na stejné struktuře databáze na jaké běží aplikace, ale z důvodu neovlivnění dat aplikace běží v jiné databázi.
 			
 			\subsubsection*{Výsledky}
 Na základě testování DAO tříd bylo odhaleno mnoho chyb při mapování dat na objekty. Převážně se jednalo o špatné přiřazování hodnot do objektu. Takto odhalené chyby by se bez těchto testů velmi špatně odhalovali.			
@@ -709,7 +723,7 @@ Při testování XML souborů do aplikace se využívá připravené šablony. V
 Při exportu objektů do XML souboru se kontroluje struktura výsledného XML souboru. Aby bylo možné výsledné soubory porovnávat, vzorový soubor a výstupní soubor jsou patřičně seřazeny podle abecedy. Kontroluje se přítomnost všech potřebných tagů, které aplikace MobChar vyžaduje a také jejich hodnot.
 
 			\subsubsection*{Výsledky}
-Na základě testování práce s XML soubory bylo odhaleno množství chyb, které by se dali snadno odhalit při uživatelksých testech, ale při tomto testování je snadnější odhalit konkrétní chybu a není potřeba zdlouhavě komunikovat s mobilní aplikací. Díky těmto testům bylo výrazně sníženo množství chyb, které se museli opravovat na základě uživatelských testů. 
+Na základě testování práce s XML soubory bylo odhaleno množství chyb, které by se dali snadno odhalit při uživatelských testech, ale při tomto testování je snadnější odhalit konkrétní chybu a není potřeba zdlouhavě komunikovat s mobilní aplikací. Díky těmto testům bylo výrazně sníženo množství chyb, které se museli opravovat na základě uživatelských testů. 
 
 	\subsection{Testování .drd souboru}
 Poslední skupina testů testuje vytváření .drd souboru a jeho správný obsah.
@@ -718,7 +732,7 @@ Poslední skupina testů testuje vytváření .drd souboru a jeho správný obsa
 Hlavním účelem těchto testů je kontrola vytváření a správného obsahu souboru .drd. Testy využívají připravené databáze, ze které soubor vytvoří. Soubor se vytvoří do dočasné složky, kde se také rozbalí. Zkontrolují se veškerá přítomná data která jsou tvořena z databázového souboru a složky s mapami. Po skončení testů se veškeré dočasné soubory smažou, aby neovlivnili další puštění testů.
 
 			\subsubsection*{Výsledek}
-Na základě těchto testů máme zajištěno, snadné odhalení potencionální chyby, pokud bychom změnily strukturu adresářů nebo jiný větší zásah do aplikace. Výsledný soubor by šel samozřejmě i nahrát, ale poničili bychom data stávající aplikace.
+Na základě těchto testů máme zajištěno, snadné odhalení potencionální chyby, pokud bychom změnily strukturu adresářů nebo jiný větší zásah do aplikace.
 
 \section{Uživatelské testování}
 Další možností testování aplikace jsou uživatelské testy. Uživatelské testy mají simulovat praktické využití aplikace. Na rozdíl od jednotkových testů, kde veškerou funkcionalitu testuje počítač, uživatelské testy provádějí lidé. Uživatelské testy se provádějí na základě připravených scénářů. \par
@@ -829,6 +843,8 @@ Bez ohledu na nalezené drobné chyby byli všichni testovací uživatelé s apl
 			.2 model.eap\DTcomment{Soubor veškeré modelové dokumentace}.
 			.2 UserGuide.pdf\DTcomment{Uživatelská příručka}.
 		.1 exe\DTcomment{adresář se spustitelnou formou implementace}.
+			.2 Windows\DTcomment{Spustitelná verze pro Windows}.
+			.2 Linux\DTcommnet{Spustitelná verze pro Linux}.
 		.1 src.
 			.2 impl\DTcomment{zdrojové kódy implementace}.
 			.2 thesis\DTcomment{zdrojová forma práce ve formátu \LaTeX}.
