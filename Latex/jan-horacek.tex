@@ -48,16 +48,24 @@
 \acknowledgements{Rád bych poděkoval svému vedoucímu práce Ing. Zdeňkovi Rybolovi za odborný dohled a neustálé vedení mé práce správným směrem. Dále bych rád poděkoval Šárce Sochorové za vytvořeních grafiky pro mojí aplikaci. V neposlední řadě bych rád poděkoval svým kolegům Matějovi Shánělovi a Šárce Weberové, za dobrou spolupráci a užitečné řady. Nakonec bych poděkoval své rodině a přátelům, že i v době vytváření práce mě stále podporovali a pomáhali.}
 
 
-\abstractCS{Cílem této práce je hráčům Dračího doupěte, a~zejména Pánu jeskyně, usnadnit vytváření dobrodružství, postav a~předmětů pomocí jednoduché desktopové aplikace. Hlavní výhodou aplikace je možnost exportování dobrodružství pro mobilní aplikaci MobChar pro Pána jeskyně a exportování do přehledného PDF vhodné pro tisk a hraní Dračího doupěte bez mobilů a jiných zařízení. V práci jsem vytvořil aplikaci, ve které je možné pomocí grafického rozhraní vytvářet mapy dobrodružství propojené s~příšerami a předměty, které se dají na mapě najít. Veškeré výtvory se ukládají pro případné další použití. Můžete si vytvářet sbírku příšer a předmětů, které můžete i~sdílet s~ostatními Pány jeskyně, a tak se nechat inspirovat ostatními.  Hlavní přínos této aplikace je pro hráče Dračího doupěte, kteří by rádi využili moderní technologie pro tvorbu svého dobrodružství. Někteří hráči jistě ocení možnost sdílení dobrodružství s ostatními nadšenci, anebo naopak se rádi nechají inspirovat ostatními hráči. Pomocí databáze již dříve vytvořených příšer a předmětů bude velice snadné vytvářet nové a ještě zábavnější dobrodružství.}
+\abstractCS{Cílem této práce je hráčům Dračího doupěte, a zejména Pánu jeskyně, usnadnit vytváření dobrodružství, postav a předmětů pomocí jednoduché desktopové aplikace. Hlavní výhodou aplikace je možnost exportování dobrodružství pro mobilní aplikaci MobChar pro Pána jeskyně a exportování do přehledného HTML formátu vhodné pro tisk a hraní Dračího doupěte bez mobilů a jiných zařízení. V práci byla vytvořena aplikace, ve které je možné pomocí grafického rozhraní vytvářet rozsáhlá dobrodružství plná lokací, map, předmětů, nestvůr a mnohého dalšího. \par
 
-\abstractEN{Sem doplňte ekvivalent abstraktu Vaší práce v~angličtině.}
+V první části je vypracovaná důkladná analýza problém a již existujících aplikací. Na základě analýzy je vytvořen návrh aplikace, který se převážně zaměřuje na nejdůležitější funkcionalitu aplikace, což je tvorba XML a HTML výstupních souborů. \par
+
+Na základě analýzy a návrhu je vytvořena implementace aplikace. V poslední fázi je aplikace důkladně otestována, aby byla zaručena výsledná kvalita a splnění požadavků. \par
+
+Všechny zdrojové kódy, dokumentace, spustitelný program a uživatelská příručka jsou umístěné na přiloženém CD.
+
+   }
+
+\abstractEN{}
 
 \placeForDeclarationOfAuthenticity{V~Praze}
 \declarationOfAuthenticityOption{4} %volba Prohlášení (číslo 1-6)
 
 \keywordsCS{desktopová aplikace, hra na hrdiny, MobChar, Dračí doupě, rozšíření, herní scéna, tvorba dobrodružství, Python, SQLite, XML\newpage}
 
-\keywordsEN{desktop application, heroes games, MobChar, Dračí doupě, extension, desktop games, story creation, Python, SQLite, XML}
+\keywordsEN{desktop application, heroes games, MobChar, Dračí doupě, extension, desktop games, scenario creation, Python, SQLite, XML}
 
 \begin{document}
 
@@ -804,7 +812,16 @@ Bez ohledu na nalezené drobné chyby byli všichni testovací uživatelé s apl
 
 % --------------------------------------------Conclusion--------------------------------------
 \begin{conclusion}
-	%sem napište závěr Vaší práce
+Cílem této práce bylo vytvořit desktopovou aplikaci DeskChar pro všechny hráče Dračího doupěte v souladu se standardy softwarového inženýrství. \par
+
+V první fázi vývoje aplikace byla vytvořena analýza již existujících aplikací, se kterými výsledná aplikace spolupracuje. Byly analyzovány všechny požadavky na aplikaci a vytvořeny scénáře užívání. Na základě této analýzy vznikl podrobný návrh realizace. Dopodrobna byl popsán návrh tříd, databáze a architektury celého programu. \par
+
+Na základě analýzy a návrhu byl program implementován, včetně veškeré dokumentace a popisu tříd. Následně pomocí jednotkových a uživatelských testů byla ověřena funkcionalita celé aplikace a splnění všech analyzovaných požadavků. Po dokončení celé implementace vznikla k aplikaci uživatelská příručka, která budoucím uživatelům usnadní práci s aplikací. Uživatelská příručka je k nalezení na přiloženém CD. \par
+
+Vytvořením aplikace podle standardů softwarového inženýrství a dodáním plné dokumentace a uživatelské příručky bylo splněno zadání bakalářské práce. \par
+
+Vzniklá aplikace je pouze ve verzi 1.0 a má velký potenciál pro zlepšování. Hlavní směr vývoje pro verzi 2.0 by se měl týkat mapy. Ve verzi 1.0 je editor mapy pouze základní a aplikace zde nabízí velké množství pro zlepšení. 
+
 \end{conclusion}
 
 \bibliographystyle{resources/csn690}
@@ -844,7 +861,7 @@ Bez ohledu na nalezené drobné chyby byli všichni testovací uživatelé s apl
 			.2 UserGuide.pdf\DTcomment{Uživatelská příručka}.
 		.1 exe\DTcomment{adresář se spustitelnou formou implementace}.
 			.2 Windows\DTcomment{Spustitelná verze pro Windows}.
-			.2 Linux\DTcommnet{Spustitelná verze pro Linux}.
+			.2 Linux\DTcomment{Spustitelná verze pro Linux}.
 		.1 src.
 			.2 impl\DTcomment{zdrojové kódy implementace}.
 			.2 thesis\DTcomment{zdrojová forma práce ve formátu \LaTeX}.
