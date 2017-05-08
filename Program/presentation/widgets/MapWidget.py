@@ -93,7 +93,7 @@ class MapWidget(QtWidgets.QFrame):
         toolbar.addAction(self.zoomOut_action)
 
         # ------------------------------- Edit info  ----------------------------------
-        self.info_action = QAction(QIcon('resources/icons/heart.png'), TR().tr('Edit_info'), self.mainWindow,
+        self.info_action = QAction(QIcon('resources/icons/scroll.png'), TR().tr('Edit_info'), self.mainWindow,
                                    triggered=self.edit_info_action, shortcut='Ctrl+P', enabled=False)
         toolbar.addAction(self.info_action)
 

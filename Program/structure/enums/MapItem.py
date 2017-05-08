@@ -26,7 +26,7 @@ class MapItemType(AutoNumber):
         if self is MapItemType.MONSTER:
             return 'resources/icons/skull.png'
         if self is MapItemType.ROOM:
-            return 'resources/icons/map.png'
+            return 'resources/icons/location.png'
         if self is MapItemType.ITEM:
             return 'resources/icons/treasure.png'
 
