@@ -264,7 +264,8 @@ class PlayerTreeManager(IPlayerTreeManager):
         exporting = []
         for id in selected:
             node = self.treeDAO.get_node(id)
-            exporting.append(node.object)
+            obj = node.object.DAO()().get(node.object.id, None, node.id, node.object.object_type)
+            exporting.append(obj)
 
         HtmlHandler().create_html(exporting, path)
 

@@ -125,6 +125,7 @@ class AddAnotherObject(QtWidgets.QDialog):
         Slot for handling check items, because of searching, need store checked items in list
         :param item: current clicked item
         """
+        print(item)
         if item.checkState(0) == QtCore.Qt.Unchecked:
             node = self.treeManager.get_node(item.data(0, 5))
             if isinstance(node, Folder):

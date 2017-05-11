@@ -10,11 +10,17 @@ img.icon {
     width: 5em;
     height: 5em;
     padding-bottom: 0em;
+    margin-right: 1em;
 }
 
 dl {
     width: 50%;
     margin-top: 0.5em;
+}
+
+dl.singleDl{
+    columns: 1;
+    width: 70%;
 }
 
 dl.largeDL {
@@ -82,4 +88,23 @@ div.vertical-line {
     background-color: silver;
     height: 1px;
     float: left;
+    /*margin-top: 1em;*/
+    /*margin-bottom: 1em;*/
+}
+
+table.modifier {
+    width: 100%;
+    border: 1px solid grey;
+}
+
+table.modifier th {
+    border-bottom: 1px solid black;
+}
+
+table.modifier td {
+    text-align: center;
+}
+
+table.modifier tr:nth-child(even) {
+    background: ghostwhite;
 }

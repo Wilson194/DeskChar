@@ -1,0 +1,31 @@
+<h1> {{ object.name }}</h1>
+
+
+<img src="resources/maps/exportedMap-{{ object.id }}.png" />
+
+
+
+<br>
+<br>
+
+<table border="1" style="width: 100%">
+    <tr>
+        <th style="max-width: 30px"> X </th>
+        <th style="max-width: 30px"> # </th>
+        <th> {{ tr.trt('name') }}</th>
+        <th>{{ tr.trt('description') }}</th>
+    </tr>
+
+    {% for item in object.mapItems %}
+        <tr>
+            <td style="max-width: 30px"><img src="{{ item.itemType.icon() }}" style="width:20px"></td>
+            <td style="min-width: 30px; max-width: 30px; text-align: center"> <span style="font-size: 20px; text-align: center; font-weight: bold;"> {{ item.number }}</span> </td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.description }}</td>
+        </tr>
+    {% endfor %}
+
+</table>
+
+
+

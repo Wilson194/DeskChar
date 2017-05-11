@@ -14,6 +14,7 @@ class Translate(metaclass=Singleton):
         variables = {}
         templatesVariables = {}
 
+
         exec(open('resources/translate/translate_' + lang_code + '.py', encoding='utf-8').read(),
              variables)
 

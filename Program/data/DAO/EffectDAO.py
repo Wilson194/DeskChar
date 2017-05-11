@@ -75,7 +75,7 @@ class EffectDAO(DAO, IEffectDAO):
 
         intValues = {
             'targetType': effect.targetType.value if effect.targetType else None,
-            'active'    : int(active)
+            'active'    : int(active) if active else 0,
         }
 
         strValues = {

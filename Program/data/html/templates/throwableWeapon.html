@@ -1,14 +1,13 @@
-<div class="objectBlock">
-    <div class="iconAndName">
+ <div class="iconAndName">
         <p style="float: left;">
             <img class="icon" src="{{object.icon}}">
         </p>
 
-        <h3>{{object.name}}</h3>
+        <h3 id="{{ object.id }}">{{object.name}}</h3>
         <p> {{object.description}} </p>
     </div>
 
-    <dl>
+    <dl class="largeDL">
         <dt>{{tr.trt('weight')}}</dt>
         <dd> {{ object.weight }}</dd>
 
@@ -40,6 +39,5 @@
         <dd> {{ object.weaponWeight }}</dd>
 
     </dl>
-</div>
 <br>
 <br>

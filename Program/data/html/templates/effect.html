@@ -1,8 +1,49 @@
-{{ object.iconn }}
+<div class="iconAndName">
+    <p style="float: left;">
 
-{{ object.name }}
+        <img class="icon" src="{{ object.icon}}">
+    </p>
 
-{{ tr.target }} {{ object.target }}
+    <h3 id="{{ object.id }}">{{ object.name }}</h3>
+    {% autoescape false %}
+    <p> {{ object.description }}</p>
+    {% endautoescape %}
+</div>
+
+<div class="vertical-line" ></div>
+
+<dl class="singleDl">
+
+    <dt> {{ tr.trt('target') }}</dt>
+    <dd> {{ object.targetType }} </dd>
+
+</dl>
+
+<table class="modifier">
+    <tr>
+        <th>{{ tr.trt('name') }}</th>
+        <th>{{ tr.trt('modifTarget') }}</th>
+        <th>{{ tr.trt('attrTarget') }}</th>
+        <th>{{ tr.trt('valueType') }}</th>
+        <th>{{ tr.trt('value') }}</th>
+    </tr>
+    {% for modif in object.modifiers %}
+        <tr>
+
+            <td>{% if modif.name == None %} {{ '---' }} {% else %}{{ modif.name }}{% endif %}</td>
+            <td>{{ modif.targetType }}</td>
+            {% if modif.characterTargetAttribute %}
+                <td>{{ modif.characterTargetAttribute }}</td>
+            {% else %}
+                <td>{{ modif.itemTargetAttribute }}</td>
+            {% endif %}
+            <td>{{ modif.valueType }}</td>
+            <td>{{ modif.value }}</td>
+        </tr>
+    {% endfor %}
 
 
-{% for modifier in modifiers %}
+</table>
+
+<br>
+<br>

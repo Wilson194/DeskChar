@@ -3,13 +3,20 @@
 
         <img class="icon" src="{{ object.icon }}">
     </p>
-    <h3>{{ object.name }}</h3>
+    <h3 id="{{ object.id }}">{{ object.name }}</h3>
+    {% autoescape false %}
     <p>   {{ object.description }}  </p>
+    {% endautoescape %}
 </div>
 
-<dl>
+<br>
+<div class="vertical-line"></div>
+
+<dl class="singleDl">
     <dt>{{ tr.trt('chance') }} </dt>
+
     <dd>{{ object.chance }}</dd>
+
 
     <dt>{{ tr.trt('drd_race') }} </dt>
     <dd>{{ object.drd_race }}</dd>
@@ -18,5 +25,35 @@
     <dd>{{ object.drd_class }}</dd>
 
 
-
 </dl>
+
+<table class="modifier">
+    <tr>
+        <th>{{ tr.trt('name') }}</th>
+        <th>{{ tr.trt('attrTarget') }}</th>
+        <th>{{ tr.trt('valueType') }}</th>
+        <th>{{ tr.trt('value') }}</th>
+    </tr>
+    {% if object.context|length > 0 %}
+        {% for modif in object.contexts %}
+            <tr>
+
+                <td>{% if modif.name == None %} {{ '---' }} {% else %}{{ modif.name }}{% endif %}</td>
+                <td>{{ modif.targetAttribute }}</td>
+                <td>{{ modif.valueType }}</td>
+                <td>{{ modif.value }}</td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td>---</td>
+            <td>---</td>
+            <td>---</td>
+            <td>---</td>
+        </tr>
+    {% endif %}
+
+</table>
+
+<br>
+<br>

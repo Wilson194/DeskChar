@@ -1,9 +1,9 @@
 <div class="iconAndName">
     <p style="float: left;">
-        <img class="icon" src="{{object.icon}}">
+        <img class="icon" src="{{ object.icon }}">
     </p>
 
-    <h3>{{object.name}}</h3>
+    <h3 id="{{ object.id }}">{{ object.name }}</h3>
     <p> {{ object.description }} </p>
 </div>
 
@@ -57,15 +57,34 @@
 
 </dl>
 
-{% with objects = object.items + object.armors + object.containers + object.moneyList + object.meleeWeapons + object.rangedWeapons + object.throwableWeapons %}
-    {% include 'items.html' %}
-{% endwith %}
+<h2> Kouzla</h2>
 
-{% with objects = object.spells %}
-    {% include 'spells.html' %}
-{% endwith %}
+<ul>
+    {% for spell in object.spells %}
+        <li><a href="spells.html#{{ spell.id }}"> {{ spell.name }}</a></li>
+    {% endfor %}
+</ul>
 
-{% with objects = object.abilities %}
-    {% include 'abilities.html' %}
-{% endwith %}
+<h2> Schopnosti</h2>
 
+<ul>
+    {% for ability in object.abilities %}
+        <li><a href="abilities.html#{{ ability.id }}"> {{ ability.name }}</a></li>
+    {% endfor %}
+</ul>
+
+<h2> Efekty</h2>
+
+<ul>
+    {% for effect in object.effects %}
+        <li><a href="effects.html#{{ effect.id }}"> {{ effect.name }}</a></li>
+    {% endfor %}
+</ul>
+
+<h2>Předměty</h2>
+
+<ul>
+    {% with items= object.inventory.items + object.inventory.armors + object.inventory.containers + object.inventory.meleeWeapons + object.inventory.rangedWeapons + object.inventory.moneyList + object.inventory.throwableWeapons %}
+        {% include 'itemTree.html' %}
+    {% endwith %}
+</ul>

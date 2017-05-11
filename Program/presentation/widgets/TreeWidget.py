@@ -208,8 +208,10 @@ class TreeWidget(QtWidgets.QFrame):
         # XXXXXXXXXXXXXXXX ADD OBJECT FROM OTHER ACTION XXXXXXXXXXXXXXXXXXXXXXXX
         elif action.data() == 'add_object':
             data, ok = AddAnotherObject.get_data(node)
+            print(data)
             if ok:
                 for type, items in data.items():
+
                     for item in items:
                         nodeObject = self.tree_manager.get_node(item)
                         newObject = nodeObject.object.DAO()().get(nodeObject.object.id, None, nodeObject.id,
@@ -416,7 +418,8 @@ class TreeWidget(QtWidgets.QFrame):
         if fileName:
             try:
                 self.tree_manager.import_from_xml(fileName, self.__data_type, parent, True)
-            except:
+            except Exception as e:
+                print(e)
                 TextDialog('Export failed')
             self.draw_data()
 
@@ -474,7 +477,7 @@ class ExportMenu(QtWidgets.QHBoxLayout):
         button_cancel.clicked.connect(self.export_buttons_cancel_slot)
         self.export_menu_layout.addWidget(button_cancel)
 
-        button_exportHTML.setDisabled(True)
+        # button_exportHTML.setDisabled(True)
 
         self.__parent.frame_layout.insertLayout(1, self.export_menu_layout)
 

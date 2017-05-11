@@ -38,9 +38,11 @@ class DrdFile:
         :param path: 
         :return: 
         """
-        os.mkdir('temp', 777)
+        if not os.path.isdir('temp'):
+            os.mkdir('temp', 777)
 
-        shutil.rmtree('resources/maps')
+        if os.path.isdir('resources/maps'):
+            shutil.rmtree('resources/maps')
         os.mkdir('resources/maps')
 
         with zipfile.ZipFile(path) as myZip:

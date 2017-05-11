@@ -3,7 +3,7 @@
 
         <img class="icon" src="{{ object.icon }}">
     </p>
-    <h3 id="{{ object.id }}">{{ object.name }}</h3>
+    <h3>{{ object.name }}</h3>
     {% autoescape false %}
     <p>   {{ object.description }}  </p>
     {% endautoescape %}
@@ -13,18 +13,9 @@
 <div class="vertical-line"></div>
 
 <dl class="singleDl">
-    <dt>{{ tr.trt('modifTarget') }} </dt>
-
-    <dd>{{ object.targetType }}</dd>
-
     <dt>{{ tr.trt('attrTarget') }} </dt>
-    {% if object.characterTargetAttribute %}
-        <dd>{{ object.characterTargetAttribute }}</dd>
-    {% else %}
-        <dd>{{ object.itemTargetAttribute }}</dd>
-    {% endif %}
 
-
+    <dd>{{ object.targetAttribute }}</dd>
 
 
     <dt>{{ tr.trt('valueType') }} </dt>

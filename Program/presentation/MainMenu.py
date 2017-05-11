@@ -58,7 +58,7 @@ class MainMenu(QMenuBar):
         settings_action.setShortcut('Ctrl+T')
         settings_action.setStatusTip('Settings')
         settings_action.triggered.connect(self.settings_slot)
-        settings_action.setDisabled(True)
+        # settings_action.setDisabled(True)
 
         file_menu = self.addMenu(TR().tr('Menu_file'))
 
@@ -82,19 +82,22 @@ class MainMenu(QMenuBar):
         Init buttons in menu for creating templates and scenario
         :return: 
         """
-        spell_templates = QAction(QIcon(ObjectType.SPELL.icon()), TR().tr('Menu.spell'), self)
-        ability_templates = QAction(QIcon(ObjectType.ABILITY.icon()), TR().tr('Menu.ability'), self)
-        item_templates = QAction(QIcon(ObjectType.ITEM.icon()), TR().tr('Menu.item'), self)
-        modifier_templates = QAction(QIcon(ObjectType.MODIFIER.icon()), TR().tr('Menu.modifier'), self)
-        effect_templates = QAction(QIcon(ObjectType.EFFECT.icon()), TR().tr('Menu.effect'), self)
-        character_templates = QAction(QIcon(ObjectType.CHARACTER.icon()), TR().tr('Menu.character'), self)
+        spell_templates = QAction(QIcon(ObjectType.SPELL.icon()), TR().tr('Menu.spell'), self, shortcut='Alt+1')
+        item_templates = QAction(QIcon(ObjectType.ITEM.icon()), TR().tr('Menu.item'), self, shortcut='Alt+2')
+        ability_templates = QAction(QIcon(ObjectType.ABILITY.icon()), TR().tr('Menu.ability'), self, shortcut='Alt+3')
+        context_templates = QAction(QIcon(ObjectType.ABILITY_CONTEXT.icon()), TR().tr('Menu.ability_context'), self,
+                                    shortcut='Alt+4')
+        effect_templates = QAction(QIcon(ObjectType.EFFECT.icon()), TR().tr('Menu.effect'), self, shortcut='Alt+5')
+        modifier_templates = QAction(QIcon(ObjectType.MODIFIER.icon()), TR().tr('Menu.modifier'), self, shortcut='Alt+6')
 
-        monster_templates = QAction(QIcon(ObjectType.MONSTER.icon()), TR().tr('Menu.monster'), self)
-        scenario_templates = QAction(QIcon(ObjectType.SCENARIO.icon()), TR().tr('Menu.scenario'), self)
-        location_templates = QAction(QIcon(ObjectType.LOCATION.icon()), TR().tr('Menu.location'), self)
-        map_templates = QAction(QIcon(ObjectType.MAP.icon()), TR().tr('Menu.map'), self)
+        character_templates = QAction(QIcon(ObjectType.CHARACTER.icon()), TR().tr('Menu.character'), self, shortcut='Alt+7')
 
-        context_templates = QAction(QIcon(ObjectType.ABILITY_CONTEXT.icon()), TR().tr('Menu.ability_context'), self)
+        monster_templates = QAction(QIcon(ObjectType.MONSTER.icon()), TR().tr('Menu.monster'), self, shortcut='Alt+8')
+        scenario_templates = QAction(QIcon(ObjectType.SCENARIO.icon()), TR().tr('Menu.scenario'), self, shortcut='Alt+9')
+        location_templates = QAction(QIcon(ObjectType.LOCATION.icon()), TR().tr('Menu.location'), self, shortcut='Alt+0')
+        map_templates = QAction(QIcon(ObjectType.MAP.icon()), TR().tr('Menu.map'), self, shortcut='Alt+=')
+
+
 
         ability_templates.triggered.connect(
             lambda: self.templates_menu_signal.emit(ObjectType.ABILITY))
