@@ -603,6 +603,7 @@ FUNCTION {format.title}
   "title" bibinfo.check
   duplicate$ empty$ 'skip$
     {
+      emphasize
       select.language
     }
   if$
