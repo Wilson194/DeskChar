@@ -1,0 +1,50 @@
+<div class="iconAndName">
+    <p style="float: left;">
+        <img class="icon" src="{{ object.icon }}">
+    </p>
+
+    <h3 id="{{ object.id }}">{{ object.name }}</h3>
+    <p> {{ object.description }} </p>
+</div>
+
+
+
+<h2>Předměty</h2>
+
+<ul>
+    {% with items= object.items + object.armors + object.containers + object.meleeWeapons + object.rangedWeapons + object.moneyList + object.throwableWeapons %}
+        {% include 'itemTree.html' %}
+    {% endwith %}
+</ul>
+
+
+<h2> Mapy </h2>
+
+<ul>
+    {% for map in object.maps %}
+        <li><a href="maps.html#{{ map.id }}"> {{ map.name }}</a></li>
+    {% endfor %}
+</ul>
+
+<h2> Postavy </h2>
+
+<ul>
+    {% for character in object.characters %}
+        <li><a href="characters.html#{{ character.id }}"> {{ character.name }}</a></li>
+    {% endfor %}
+</ul>
+
+
+<h2> Příšery </h2>
+
+<ul>
+    {% for monster in object.monsters %}
+        <li><a href="monsters.html#{{ monster.id }}"> {{ monster.name }}</a></li>
+    {% endfor %}
+</ul>
+
+
+<h2> Lokace </h2>
+    {% with locations = object.locations %}
+        {% include 'locationTree.html' %}
+    {% endwith %}

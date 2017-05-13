@@ -151,7 +151,7 @@ class ItemDAO(DAO, IItemDAO):
                 'weightA': item.weightA,
                 'weightB': item.weightB,
                 'weightC': item.weightC,
-                'size'   : item.size.value,
+                'size'   : item.size.value if item.size else None,
 
             })
 

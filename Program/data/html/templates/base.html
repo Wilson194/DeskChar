@@ -25,9 +25,11 @@
     {% elif export == objectType.CHARACTER %}
         {% include 'characters.html' %}
     {% elif export == objectType.MONSTER %}
-        {% include 'monster.html' %}
+        {% include 'monsters.html' %}
     {% elif export == objectType.MAP %}
         {% include 'maps.html' %}
+    {% elif export == objectType.LOCATION %}
+        {% include 'locations.html' %}
     {% endif %}
 
 </body>

@@ -1,0 +1,10 @@
+<ul>
+    {% for location in locations %}
+        <li><a href="locations.html#{{ location.id }}">{{ location.name }}</a></li>
+
+        {% with locations = location.locations %}
+            {% include 'locationTree.html' %}
+        {% endwith %}
+
+    {% endfor %}
+</ul>

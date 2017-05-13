@@ -1,0 +1,82 @@
+<div class="iconAndName">
+    <p style="float: left;">
+        <img class="icon" src="{{ object.icon }}">
+    </p>
+
+    <h3 id="{{ object.id }}">{{ object.name }}</h3>
+    <p> {{ object.description }} </p>
+</div>
+
+<dl class="largeDL">
+
+
+    <dt> {{ tr.trt('viability') }}</dt>
+    <dd> {{ object.viability }}</dd>
+
+    <dt> {{ tr.trt('offense') }}</dt>
+    <dd> {{ object.offense }}</dd>
+
+    <dt> {{ tr.trt('defense') }}</dt>
+    <dd> {{ object.defense }}</dd>
+
+    <dt> {{ tr.trt('endurance') }}</dt>
+    <dd> {{ object.endurance }}</dd>
+
+    <dt> {{ tr.trt('rampancy') }}</dt>
+    <dd> {{ object.rampancy }}</dd>
+
+    <dt> {{ tr.trt('mobility') }}</dt>
+    <dd> {{ object.mobility }}</dd>
+
+    <dt> {{ tr.trt('perseverance') }}</dt>
+    <dd> {{ object.perseverance }}</dd>
+
+    <dt> {{ tr.trt('intelligence') }}</dt>
+    <dd> {{ object.intelligence }}</dd>
+
+    <dt> {{ tr.trt('charisma') }}</dt>
+    <dd> {{ object.charisma }}</dd>
+
+    <dt> {{ tr.trt('alignment') }}</dt>
+    <dd> {{ object.alignment }}</dd>
+
+    <dt> {{ tr.trt('experience') }}</dt>
+    <dd> {{ object.experience }}</dd>
+
+    <dt> {{ tr.trt('hp') }}</dt>
+    <dd> {{ object.hp }}</dd>
+
+    <dt> {{ tr.trt('monsterRace') }}</dt>
+    <dd> {{ object.monsterRace }}</dd>
+
+    <dt> {{ tr.trt('size') }}</dt>
+    <dd> {{ object.size }}</dd>
+
+
+
+</dl>
+
+<h2> Kouzla</h2>
+
+<ul>
+    {% for spell in object.spells %}
+        <li><a href="spells.html#{{ spell.id }}"> {{ spell.name }}</a></li>
+    {% endfor %}
+</ul>
+
+<h2> Schopnosti</h2>
+
+<ul>
+    {% for ability in object.abilities %}
+        <li><a href="abilities.html#{{ ability.id }}"> {{ ability.name }}</a></li>
+    {% endfor %}
+</ul>
+
+
+<h2>Předměty</h2>
+
+<ul>
+    {% with items= object.items + object.armors + object.containers + object.meleeWeapons + object.rangedWeapons + object.moneyList + object.throwableWeapons %}
+        {% include 'itemTree.html' %}
+    {% endwith %}
+</ul>

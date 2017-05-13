@@ -11,6 +11,8 @@ from presentation.dialogs.NewTreeItem import NewTreeItem
 from presentation.Translate import Translate as TR
 
 from structure.tree.NodeObject import NodeObject
+import sys
+import traceback
 
 
 class TreeWidget(QtWidgets.QFrame):
@@ -420,6 +422,7 @@ class TreeWidget(QtWidgets.QFrame):
                 self.tree_manager.import_from_xml(fileName, self.__data_type, parent, True)
             except Exception as e:
                 print(e)
+                traceback.print_exc(file=sys.stderr)
                 TextDialog('Export failed')
             self.draw_data()
 
