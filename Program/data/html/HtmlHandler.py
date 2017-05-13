@@ -176,7 +176,7 @@ class HtmlHandler:
         if root.object_type is ObjectType.SCENARIO:
             spells += root.spells
 
-            for location in root.lacations:
+            for location in root.locations:
                 spells += self.get_all_spells(location)
 
             for character in root.party:
@@ -210,7 +210,7 @@ class HtmlHandler:
         if root.object_type is ObjectType.SCENARIO:
             effects += root.effects
 
-            for location in root.lacations:
+            for location in root.locations:
                 effects += self.get_all_effects(location)
 
             for character in root.party:
@@ -238,7 +238,7 @@ class HtmlHandler:
         if root.object_type is ObjectType.SCENARIO:
             abilities += root.abilities
 
-            for location in root.lacations:
+            for location in root.locations:
                 abilities += self.get_all_abilities(location)
 
             for character in root.party:

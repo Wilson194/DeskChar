@@ -30,6 +30,8 @@
         {% include 'maps.html' %}
     {% elif export == objectType.LOCATION %}
         {% include 'locations.html' %}
+    {% elif export == objectType.SCENARIO %}
+        {% include 'scenarios.html' %}
     {% endif %}
 
 </body>
