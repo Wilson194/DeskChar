@@ -210,7 +210,6 @@ class TreeWidget(QtWidgets.QFrame):
         # XXXXXXXXXXXXXXXX ADD OBJECT FROM OTHER ACTION XXXXXXXXXXXXXXXXXXXXXXXX
         elif action.data() == 'add_object':
             data, ok = AddAnotherObject.get_data(node)
-            print(data)
             if ok:
                 for type, items in data.items():
 

@@ -72,7 +72,8 @@ class AddAnotherObject(QtWidgets.QDialog):
         treeWidget = QtWidgets.QTreeWidget(tab)
         layout.addWidget(treeWidget)
         treeWidget.header().close()
-        treeWidget.itemClicked.connect(self.item_check_slot)
+        # treeWidget.itemClicked.connect(self.item_check_slot)
+        treeWidget.itemChanged.connect(self.item_check_slot)
 
         searchBox = QtWidgets.QLineEdit(tab)
         layout.addWidget(searchBox)
@@ -125,7 +126,7 @@ class AddAnotherObject(QtWidgets.QDialog):
         Slot for handling check items, because of searching, need store checked items in list
         :param item: current clicked item
         """
-        print(item)
+
         if item.checkState(0) == QtCore.Qt.Unchecked:
             node = self.treeManager.get_node(item.data(0, 5))
             if isinstance(node, Folder):
@@ -164,7 +165,12 @@ class AddAnotherObject(QtWidgets.QDialog):
         Find currently selected tab and return ObjectType of that tab
         :return: NodeObject type of tab
         """
-        return self.__node.object.treeChildren[self.tabWidget.currentIndex()]
+        if NodeType.FOLDER in self.__node.object.treeChildren:
+            tabs = self.__node.object.treeChildren
+            tabs.remove(NodeType.FOLDER)
+        else:
+            tabs = self.__node.object.treeChildren
+        return tabs[self.tabWidget.currentIndex()]
 
 
     def get_inputs(self) -> dict:

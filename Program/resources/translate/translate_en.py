@@ -227,51 +227,54 @@ translate = {
 
     'DRAGON'                    : 'Dragon',
     'ANIMAL'                    : 'Animal',
-    'INSECT'                    : 'Hmyz',
-    'UNDEAD'                    : 'Nemrtvý',
-    'HUMANOID'                  : 'Humanoidní',
-    'MYTHIC'                    : 'Mýtický',
-    'OTHERS'                    : 'Ostatní',
+    'INSECT'                    : 'Insect',
+    'UNDEAD'                    : 'Undead',
+    'HUMANOID'                  : 'Humanoid',
+    'MYTHIC'                    : 'Mythic',
+    'OTHERS'                    : 'Others',
 
-    'A0'                        : 'Velikost A0',
-    'A'                         : 'Velikost A',
-    'B'                         : 'Velikost B',
-    'C'                         : 'Velikost C',
-    'D'                         : 'Velikost D',
-    'E'                         : 'Velikost E',
+    'A0'                        : 'Size A0',
+    'A'                         : 'Size A',
+    'B'                         : 'Size B',
+    'C'                         : 'Size C',
+    'D'                         : 'Size D',
+    'E'                         : 'Size E',
 
-    'name'                      : 'Jméno',
-    'description'               : 'Popis',
+    'name'                      : 'Name',
+    'description'               : 'Description',
 
-    'Add_monster'               : 'Přidat příšeru na mapu',
-    'Add_room'                  : 'Přidat místnost na mapu',
-    'Add_object_map'            : 'Přidat objekt na mapu',
-    'Add_item'                  : 'Přidat předmět na mapu',
+    'Add_monster'               : 'Add monster on map',
+    'Add_room'                  : 'Add room on map',
+    'Add_object_map'            : 'Add object on map',
+    'Add_item'                  : 'Add item on map',
 
 
-    'Open_map'                  : 'Přidat podkladouvou mapu',
-    'Zoom_in'                   : 'Přiblížit',
-    'Zoom_out'                  : 'Oddálit',
-    'Edit_information'          : 'Upravit informace',
-    'Edit_info'                 : 'Upravit popis mapy',
+    'Open_map'                  : 'Add underlying map',
+    'Zoom_in'                   : 'Zoom in',
+    'Zoom_out'                  : 'Zoom out',
+    'Edit_information'          : 'Edit information',
+    'Edit_info'                 : 'Edit map info',
 
-    'About'                     : 'O aplikaci',
+    'About'                     : 'About',
 
-    'Inventory'                 : 'Inventář',
-    'Ground'                    : 'Zem',
+    'Inventory'                 : 'Inventory',
+    'Ground'                    : 'Ground',
+
+
+    'Language_changed'          : 'You need to restart application for change UI language.',
 
 
     'About_text'                : '''
-<p>Aplikace <b>Deskchar</b> slouží jako podpůrná aplikace pro balíček <b>Mobchar</b> pro hru Dračí doupě. 
-Je možné zde vytvářet šablony pro základní balíček pro hráče a také vytvářet rozlehlé dobrodružství pro pány jeskyně.
-Nově je možné vytvářet i jednoduché mapy s popisky.</p>
+<p>Application <b>Deskchar</b> is support application for mobile application MobChar for game Dragon's Den. 
+It is possible to create templates for basic package for players. Other function is for creating great adventures for PJ.
+The new feature of this version is map editor. You can create simple maps with notes on it.</p>
 <br>        
-<b>Vývojáři</b>:
+<b>Developers</b>:
 <li>
     <ul>Jan Horáček</ul>
 </li>
     ''',
 
-    'Quit_text'                 : 'Opravdu chcete ukončit program? <br> Některé vaše práce může být <b>ztracena</b>!',
-    'Sure_quit'                 : 'Opravdu ukončit?'
+    'Quit_text'                 : 'Do you really want to quit the application? <br> Samo of your work can be <b>lost</b>!',
+    'Sure_quit'                 : 'Really quit?'
 }

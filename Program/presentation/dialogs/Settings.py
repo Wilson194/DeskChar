@@ -7,7 +7,7 @@ from data.DAO.SettingsDAO import SettingsDAO
 from presentation.dialogs.NewLangTab import NewLangTab
 from structure.enums.NodeType import NodeType
 from presentation.Translate import Translate as TR
-
+from presentation.dialogs.TextDialog import TextDialog
 
 class Settings(QtWidgets.QDialog):
     """
@@ -30,8 +30,8 @@ class Settings(QtWidgets.QDialog):
         Init settings data from database
         :return: 
         """
-        langId = self.DAO.get_value('language', int)
-        self.lang = self.langDAO.get_lang(langId) if langId else self.langDAO.get_lang(1)
+        langCode = self.DAO.get_value('language', str)
+        self.lang = self.langDAO.get_lang_by_code(langCode)
 
 
     def init_ui(self):
@@ -82,8 +82,12 @@ class Settings(QtWidgets.QDialog):
         Slot activate when click on save button
         :return: 
         """
-        self.DAO.set_value('language', self.lang.id)
+
+        oldCode = SettingsDAO().get_value('language')
+        if self.lang.code != oldCode:
+            TextDialog(TR().tr('Language_changed'))
         self.DAO.set_value('language', self.lang.code)
+
         self.accept()
 
 

@@ -310,7 +310,6 @@ class ModifierLayout(Layout):
             else:
                 self.object.itemTargetAttribute = data[1]
             self.object.valueType = data[2]
-            print(data[2])
             self.object.value = data[3]
 
             self.modifier_manager.update(self.object)

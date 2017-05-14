@@ -1,18 +1,32 @@
 from data.DAO.interface.ISettingsDAO import ISettingsDAO
-from data.database.Database import Database
-from structure.general.Lang import Lang
+
+import os
 
 
 class SettingsDAO(ISettingsDAO):
     """
     DAO for settings
     """
-    TABLE_NAME = 'Settings'
-    DATABASE_DRIVER = "file::memory:?cache=shared"
+    SETTINGS_FILE = 'resources/settings.py'
+
+    DEFAULT_SETTINGS = {
+        'language': 'cs'
+    }
 
 
     def __init__(self):
-        self.database = Database(self.DATABASE_DRIVER)
+
+        if os.path.isfile(self.SETTINGS_FILE):
+            variables = {}
+            exec(open(self.SETTINGS_FILE, encoding='utf-8').read(),
+                 variables)
+
+            self.settings = variables['settings']
+        else:
+            with open(self.SETTINGS_FILE, 'w')as f:
+                f.write(self.__dict_to_text(self.DEFAULT_SETTINGS))
+
+            self.settings = self.DEFAULT_SETTINGS
 
 
     def get_value(self, name: str, type=None):
@@ -24,20 +38,17 @@ class SettingsDAO(ISettingsDAO):
         :param type: type of value that will be returned
         :return: value of setting
         """
-        data = self.database.select(self.TABLE_NAME, {'name': name})
-        if len(data) == 0:
+
+        if name not in self.settings:
             return None
-        intValue = data[0]['int_value']
-        strValue = data[0]['str_value']
 
         if type is str:
-            return strValue
-        if type is int:
-            return intValue
-        if intValue:
-            return intValue
+            return str(self.settings[name])
 
-        return strValue
+        if type is int:
+            return int(self.settings[name])
+
+        return str(self.settings[name])
 
 
     def set_value(self, name: str, value) -> None:
@@ -46,15 +57,19 @@ class SettingsDAO(ISettingsDAO):
         :param name: name of setting value
         :param value: value of setting 
         """
-        data = self.database.select(self.TABLE_NAME, {'name': name})
-        if len(data) == 0:
-            if type(value) is int:
-                self.database.insert(self.TABLE_NAME, {'name': name, 'int_value': value})
-            else:
-                self.database.insert(self.TABLE_NAME, {'name': name, 'str_value': value})
-        else:
-            id = data[0]['ID']
-            if type(value) is int:
-                self.database.update(self.TABLE_NAME, id, {'int_value': value})
-            else:
-                self.database.update(self.TABLE_NAME, id, {'str_value': value})
+
+        self.settings[name] = value
+
+        with open(self.SETTINGS_FILE, 'w') as f:
+            f.write(self.__dict_to_text(self.settings))
+
+
+    def __dict_to_text(self, dictionary: dict) -> str:
+        text = 'settings = {\n'
+
+        for key, value in dictionary.items():
+            text += "'{}' : '{}',\n".format(key, value)
+
+        text += '}'
+
+        return text

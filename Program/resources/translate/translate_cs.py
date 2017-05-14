@@ -261,6 +261,7 @@ translate = {
     'Inventory'                 : 'Inventář',
     'Ground'                    : 'Zem',
 
+    'Language_changed'          : 'Pro změnu jazyka je zapotřebí program restartovat!',
 
     'About_text'                : '''
 <p>Aplikace <b>Deskchar</b> slouží jako podpůrná aplikace pro balíček <b>Mobchar</b> pro hru Dračí doupě. 
