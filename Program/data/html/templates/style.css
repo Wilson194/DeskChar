@@ -108,3 +108,41 @@ table.modifier td {
 table.modifier tr:nth-child(even) {
     background: ghostwhite;
 }
+
+div.columnWrapper{
+    display: flex;
+}
+
+div.columnLeft{
+    float: right;
+    width: 50%;
+}
+
+div.columnRight{
+    float: left;
+    width: 50%;
+
+}
+
+div.padder {
+    padding-left: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 25px;
+    margin-left: 0px;
+}
+
+li {
+    margin-top: 2px;
+}
+
+li a{
+    color: black;
+    text-decoration: none;
+}
+
+li a:hover{
+    text-decoration: underline;
+}

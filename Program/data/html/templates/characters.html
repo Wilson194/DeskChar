@@ -1,9 +1,9 @@
-<h1> Postavy</h1>
+<h1> {{ TR().trt('Characters') }}</h1>
 
 {% for object in objects %}
-
-    {% include 'character.html' %}
-
+    <div class="objectBlock">
+        {% include 'character.html' %}
+    </div>
 {% endfor %}
 
 

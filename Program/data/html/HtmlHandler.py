@@ -16,6 +16,7 @@ env = Environment(autoescape=True, loader=FileSystemLoader(os.path.join(os.path.
                                                                         'templates')))
 ICONS = ['ability.png', 'armor.png', 'axe.png', 'bag.png', 'book.png', 'bow.png', 'coin.png', 'crate.png', 'dagger.png',
          'drd.png', 'helmet.png', 'imp.png', 'location.png', 'map.png', 'skull.png', 'sword.png', 'tools.png', 'treasure.png',
+         'gemRed.png', 'gemGreen.png', 'effect.png', 'gold.png', 'silver.png', 'copper.png'
          ]
 
 
@@ -60,7 +61,9 @@ class HtmlHandler:
             objectType=ObjectType,
             itemType=Items,
             export=export,
-            tr=Translate()
+            tr=Translate(),
+            TR=Translate,
+            base=True
         )
 
         with open(destination, 'w', encoding='utf8') as file:
@@ -90,14 +93,28 @@ class HtmlHandler:
             maps += self.get_all_maps(obj)
             characters += self.get_all_characters(obj)
 
-        self.create_external_html(items, ObjectType.ITEM, destination, 'items.html')
-        self.create_external_html(spells, ObjectType.SPELL, destination, 'spells.html')
-        self.create_external_html(abilities, ObjectType.ABILITY, destination, 'abilities.html')
-        self.create_external_html(effects, ObjectType.EFFECT, destination, 'effects.html')
-        self.create_external_html(monsters, ObjectType.MONSTER, destination, 'monsters.html')
+        if objects[0].object_type is not ObjectType.ITEM:
+            self.create_external_html(items, ObjectType.ITEM, destination, 'items.html')
+
+        if objects[0].object_type is not ObjectType.SPELL:
+            self.create_external_html(spells, ObjectType.SPELL, destination, 'spells.html')
+
+        if objects[0].object_type is not ObjectType.ABILITY:
+            self.create_external_html(abilities, ObjectType.ABILITY, destination, 'abilities.html')
+
+        if objects[0].object_type is not ObjectType.EFFECT:
+            self.create_external_html(effects, ObjectType.EFFECT, destination, 'effects.html')
+
+        if objects[0].object_type is not ObjectType.MONSTER:
+            self.create_external_html(monsters, ObjectType.MONSTER, destination, 'monsters.html')
+
         self.create_external_html(locations, ObjectType.LOCATION, destination, 'locations.html')
-        self.create_external_html(maps, ObjectType.MAP, destination, 'maps.html')
-        self.create_external_html(characters, ObjectType.CHARACTER, destination, 'characters.html')
+
+        if objects[0].object_type is not ObjectType.MAP:
+            self.create_external_html(maps, ObjectType.MAP, destination, 'maps.html')
+
+        if objects[0].object_type is not ObjectType.CHARACTER:
+            self.create_external_html(characters, ObjectType.CHARACTER, destination, 'characters.html')
 
         for map in maps:
             source = os.path.join('resources', 'maps', 'exportedMap-{}.png'.format(map.id))
@@ -328,7 +345,9 @@ class HtmlHandler:
         characters = []
 
         if root.object_type is ObjectType.SCENARIO:
-            characters += root.party
+            for partyCharacter in root.party:
+                if partyCharacter.character:
+                    characters.append(partyCharacter.character)
 
             for location in root.locations:
                 characters += self.get_all_characters(location)
@@ -346,6 +365,9 @@ class HtmlHandler:
 
 
     def create_external_html(self, items, objectType, destination, filename):
+
+        items = list(set(items))
+        items.sort(key=lambda x: x.id)
         if len(items) > 0:
             html = render_template(
                 "base.html",
@@ -353,7 +375,9 @@ class HtmlHandler:
                 objectType=ObjectType,
                 itemType=Items,
                 export=objectType,
-                tr=Translate()
+                tr=Translate(),
+                TR=Translate,
+                base=False
             )
 
             itemFile = os.path.join(os.path.dirname(destination), filename)

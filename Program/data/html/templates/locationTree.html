@@ -1,6 +1,6 @@
 <ul>
     {% for location in locations %}
-        <li><a href="locations.html#{{ location.id }}">{{ location.name }}</a></li>
+        <li><a href="locations.html#{{ location.id }}"> <img style="height: 1em" src="{{ location.icon }}" /> {{ location.name }}</a> <span class="targetId">({{ location.id }})</span></li>
 
         {% with locations = location.locations %}
             {% include 'locationTree.html' %}

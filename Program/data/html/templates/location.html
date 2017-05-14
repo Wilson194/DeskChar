@@ -3,48 +3,83 @@
         <img class="icon" src="{{ object.icon }}">
     </p>
 
-    <h3 id="{{ object.id }}">{{ object.name }}</h3>
-    <p> {{ object.description }} </p>
+    <h3 id="{{ object.id }}">{% if not base %} {{ object.id }} - {% endif %}{{ object.name }}</h3>
+    {% autoescape false %}
+        <p> {{ object.description }} </p>
+    {% endautoescape %}
+</div>
+
+<br>
+<div class="vertical-line"></div>
+<br>
+<div class="columnWrapper">
+    <div class="columnLeft">
+        <div class="padder">
+            <h2> {{ TR().trt('Maps') }}</h2>
+            <ul>
+                {% for map in object.maps %}
+                    <li><a href="maps.html#{{ map.id }}"> <img style="height: 1em" src="{{ map.icon }}" /> {{ map.name }}</a> <span class="targetId">({{ map.id }})</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="columnRight">
+        <div class="padder">
+            <h2> {{ TR().trt('Characters') }}</h2>
+            <ul>
+                {% for character in object.characters %}
+                    <li><a href="characters.html#{{ character.id }}"> <img style="height: 1em" src="{{ character.icon }}" /> {{ character.name }}</a> <span class="targetId">({{ character.id }})</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="columnWrapper">
+
+    <div class="columnLeft">
+        <div class="padder">
+            <h2>{{ TR().trt('Monsters') }}</h2>
+            <ul>
+                {% for monster in object.monsters %}
+                    <li><a href="monsters.html#{{ monster.id }}"> <img style="height: 1em" src="{{ monster.icon }}" /> {{ monster.name }}</a> <span class="targetId">({{ monster.id }})</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="columnRight">
+        <div class="padder">
+            <h2> {{ TR().trt('Locations') }}</h2>
+            {% with locations = object.locations %}
+                {% include 'locationTree.html' %}
+            {% endwith %}
+        </div>
+    </div>
+
+
+</div>
+
+<div class="columnWrapper">
+
+    <div class="columnLeft">
+        <div class="padder">
+            <h2>{{ TR().trt('Items') }}</h2>
+            {% with items= object.items + object.armors + object.containers + object.meleeWeapons + object.rangedWeapons + object.moneyList + object.throwableWeapons %}
+                {% include 'itemTree.html' %}
+            {% endwith %}
+        </div>
+    </div>
+
+    <div class="columnRight">
+        <div class="padder">
+
+        </div>
+    </div>
+
+
 </div>
 
 
 
-<h2>Předměty</h2>
-
-<ul>
-    {% with items= object.items + object.armors + object.containers + object.meleeWeapons + object.rangedWeapons + object.moneyList + object.throwableWeapons %}
-        {% include 'itemTree.html' %}
-    {% endwith %}
-</ul>
-
-
-<h2> Mapy </h2>
-
-<ul>
-    {% for map in object.maps %}
-        <li><a href="maps.html#{{ map.id }}"> {{ map.name }}</a></li>
-    {% endfor %}
-</ul>
-
-<h2> Postavy </h2>
-
-<ul>
-    {% for character in object.characters %}
-        <li><a href="characters.html#{{ character.id }}"> {{ character.name }}</a></li>
-    {% endfor %}
-</ul>
-
-
-<h2> Příšery </h2>
-
-<ul>
-    {% for monster in object.monsters %}
-        <li><a href="monsters.html#{{ monster.id }}"> {{ monster.name }}</a></li>
-    {% endfor %}
-</ul>
-
-
-<h2> Lokace </h2>
-    {% with locations = object.locations %}
-        {% include 'locationTree.html' %}
-    {% endwith %}

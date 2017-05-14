@@ -15,20 +15,20 @@
 <dl class="singleDl">
     <dt>{{ tr.trt('modifTarget') }} </dt>
 
-    <dd>{{ object.targetType }}</dd>
+    <dd>{{ tr.trt(object.targetType) }}</dd>
 
     <dt>{{ tr.trt('attrTarget') }} </dt>
     {% if object.characterTargetAttribute %}
-        <dd>{{ object.characterTargetAttribute }}</dd>
+        <dd>{{ tr.trt(object.characterTargetAttribute) }}</dd>
     {% else %}
-        <dd>{{ object.itemTargetAttribute }}</dd>
+        <dd>{{ tr.trt(object.itemTargetAttribute) }}</dd>
     {% endif %}
 
 
 
 
     <dt>{{ tr.trt('valueType') }} </dt>
-    <dd>{{ object.valueType }}</dd>
+    <dd>{{ tr.trt(object.valueType) }}</dd>
 
     <dt>{{ tr.trt('value') }} </dt>
     <dd>{{ object.value }}</dd>

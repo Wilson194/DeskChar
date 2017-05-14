@@ -12,7 +12,9 @@
         <th style="max-width: 30px"> X </th>
         <th style="max-width: 30px"> # </th>
         <th> {{ tr.trt('name') }}</th>
-        <th>{{ tr.trt('description') }}</th>
+        {% autoescape false %}
+            <th>{{ tr.trt('description') }}</th>
+        {% endautoescape %}
     </tr>
 
     {% for item in object.mapItems %}

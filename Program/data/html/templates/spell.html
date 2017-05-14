@@ -4,9 +4,9 @@
         <img class="icon" src="{{ object.icon}}">
     </p>
 
-    <h3 id="{{ object.id }}">{{ object.name }}</h3>
+    <h3 id="{{ object.id }}">{% if not base %}{{ object.id }} - {% endif %}{{ object.name }}</h3>
     {% autoescape false %}
-    <p> {{ object.description }}</p>
+        <p> {{ object.description }}</p>
     {% endautoescape %}
 </div>
 
@@ -15,7 +15,7 @@
 <dl class="largeDL">
 
     <dt> {{ tr.trt('class') }}</dt>
-    <dd> {{ object.drd_class }} </dd>
+    <dd> {{ tr.trt(object.drd_class) }} </dd>
 
     <dt> {{ tr.trt('mana_cost_initial') }}</dt>
     <dd> {{ object.mana_cost_initial }} </dd>

@@ -1,6 +1,6 @@
 <ul>
     {% for item in items %}
-        <li><a href="items.html#{{ item.id }}">{{ item.name }}</a></li>
+        <li><a href="items.html#{{ item.id }}"> <img style="height: 1em" src="{{ item.icon }}" /> {{ item.name }}</a> <span class="targetId">({{ item.id }})</span></li>
         {% if item.type.value == 2 %}
             {% with items = item.armors + item.containers + item.moneyList + item.meleeWeapons + item.rangedWeapons + item.throwableWeapons + item.items %}
                 {% include 'itemTree.html' %}

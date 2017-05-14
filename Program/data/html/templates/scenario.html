@@ -4,55 +4,76 @@
     </p>
 
     <h3 id="{{ object.id }}">{{ object.name }}</h3>
-    <p> {{ object.description }} </p>
+    {% autoescape false %}
+        <p> {{ object.description }} </p>
+    {% endautoescape %}
 </div>
 
+<div class="columnWrapper">
+    <div class="columnLeft">
+        <div class="padder">
+            <h2> {{ TR().trt('Spells') }}</h2>
+            <ul>
+                {% for spell in object.spells %}
+                    <li><a href="spells.html#{{ spell.id }}"> <img style="height: 1em" src="{{ spell.icon }}" /> {{ spell.name }}</a> <span class="targetId">({{ spell.id }})</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="columnRight">
+        <div class="padder">
+            <h2> {{ TR().trt('Abilities') }}</h2>
+            <ul>
+                {% for ability in object.abilities %}
+                    <li><a href="abilities.html#{{ ability.id }}"> <img style="height: 1em" src="{{ ability.icon }}" /> {{ ability.name }}</a> <span class="targetId">({{ ability.id }})</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
 
+<div class="columnWrapper">
+    <div class="columnLeft">
+        <div class="padder">
+            <h2> {{ TR().trt('Effects') }}</h2>
+            <ul>
+                {% for effect in object.effects %}
+                    <li><a href="effects.html#{{ effect.id }}"> <img style="height: 1em" src="{{ effect.icon }}" /> {{ effect.name }}</a> <span class="targetId">({{ effect.id }})</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="columnRight">
+        <div class="padder">
+            <h2> {{ TR().trt('Party') }}</h2>
+            <ul>
+                {% for character in object.party %}
+                    <li><a href="characters.html#{{ character.id }}"> <img style="height: 1em" src="{{ character.icon }}" /> {{ character.name }}</a> <span class="targetId">({{ character.id }})</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
 
-<h2>Předměty</h2>
-
-<ul>
-    {% with items= object.items + object.armors + object.containers + object.meleeWeapons + object.rangedWeapons + object.moneyList + object.throwableWeapons %}
-        {% include 'itemTree.html' %}
-    {% endwith %}
-</ul>
-
-
-<h2> Kouzla </h2>
-
-<ul>
-    {% for spell in object.spells %}
-        <li><a href="maps.html#{{ spell.id }}"> {{ spell.name }}</a></li>
-    {% endfor %}
-</ul>
-
-<h2> Party </h2>
-
-<ul>
-    {% for character in object.party %}
-        <li><a href="characters.html#{{ character.id }}"> {{ character.name }}</a></li>
-    {% endfor %}
-</ul>
-
-
-<h2> Schopnosti </h2>
-
-<ul>
-    {% for ability in object.abilities %}
-        <li><a href="monsters.html#{{ ability.id }}"> {{ ability.name }}</a></li>
-    {% endfor %}
-</ul>
-
-<h2> Efekty </h2>
-
-<ul>
-    {% for effect in object.effects %}
-        <li><a href="monsters.html#{{ effect.id }}"> {{ effect.name }}</a></li>
-    {% endfor %}
-</ul>
-
-
-<h2> Lokace </h2>
-    {% with locations = object.locations %}
-        {% include 'locationTree.html' %}
-    {% endwith %}
+<div class="columnWrapper">
+    <div class="columnLeft">
+        <div class="padder">
+            <h2> {{ TR().trt('Items') }}</h2>
+            <ul>
+                {% with items = object.items %}
+                    {% include 'itemTree.html' %}
+                {% endwith %}
+            </ul>
+        </div>
+    </div>
+    <div class="columnRight">
+        <div class="padder">
+            <h2> {{ TR().trt('Locations') }}</h2>
+            <ul>
+                {% with locations = object.locations %}
+                    {% include 'locationTree.html' %}
+                {% endwith %}
+            </ul>
+        </div>
+    </div>
+</div>

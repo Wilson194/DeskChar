@@ -3,8 +3,10 @@
             <img class="icon" src="{{object.icon}}">
         </p>
 
-        <h3 id="{{ object.id }}">{{object.name}}</h3>
-        <p> {{object.description}} </p>
+        <h3 id="{{ object.id }}">{% if not base %} {{ object.id }} - {% endif %}{{object.name}}</h3>
+        {% autoescape false %}
+            <p> {{object.description}} </p>
+        {% endautoescape %}
     </div>
 
     <dl>

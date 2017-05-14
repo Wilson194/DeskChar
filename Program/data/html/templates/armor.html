@@ -3,8 +3,10 @@
             <img class="icon" src="{{object.icon}}">
         </p>
 
-        <h3 id="{{ object.id }}">{{object.name}}</h3>
-        <p> {{object.description}} </p>
+        <h3 id="{{ object.id }}">{% if not base %} {{ object.id }} - {% endif %}{{object.name}}</h3>
+        {% autoescape false %}
+            <p> {{object.description}} </p>
+        {% endautoescape %}
     </div>
 
     <dl>
@@ -27,7 +29,7 @@
         <dd> {{ object.weightC }}</dd>
 
         <dt>{{ tr.trt('size') }}</dt>
-        <dd> {{ object.size }}</dd>
+        <dd> {{ tr.trt(object.size) }}</dd>
 
 
     </dl>
