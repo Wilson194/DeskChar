@@ -45,7 +45,7 @@
 \authorFN{Horáček} %příjmení autora
 \authorWithDegrees{Jan Horáček} %jméno autora včetně současných akademických titulů
 \supervisor{Ing. Zdeněk Rybola}
-\acknowledgements{Rád bych poděkoval svému vedoucímu práce Ing. Zdeňkovi Rybolovi za odborný dohled a neustálé vedení mé práce správným směrem. Dále bych rád poděkoval Šárce Sochorové za vytvoření grafiky pro mojí aplikaci. V~neposlední řadě bych rád poděkoval svým kolegům Matějovi Shánělovi a Šárce Weberové, za dobrou spolupráci a užitečné rady. Nakonec bych poděkoval své rodině a přátelům, že i v~době vytváření práce mě stále podporovali a pomáhali mi.}
+\acknowledgements{Rád bych poděkoval svému vedoucímu práce Ing. Zdeňkovi Rybolovi za odborný dohled a neustálé vedení mé práce správným směrem. Dále bych rád poděkoval Bc. Šárce Sochorové za vytvoření grafiky pro mojí aplikaci. V~neposlední řadě bych rád poděkoval svým kolegům Matějovi Shánělovi a Šárce Weberové, za dobrou spolupráci a užitečné rady. Dále bych také rád poděkoval Bc. Tomáši Nováčkovi za poskytnutí korektury mé práce. Nakonec bych poděkoval své rodině a přátelům, že i v~době vytváření práce mě stále podporovali a pomáhali mi.}
 
 
 \abstractCS{Cílem této bakalářské práce bylo vytvořit desktopovou aplikaci, která by usnadňovala hraní Dračího doupěte -- jedné z~nejznámějších českých deskových her na hrdiny.\par
@@ -240,14 +240,14 @@ Nefunkční požadavky vymezují převážně nároky na hardware, software nebo
 Business proces (někdy též nazývaný podnikový nebo obchodní proces) popisuje tok práce nebo činnosti. Lze ho zaznamenávat pomocí textu nebo přehledných modelů. Modely business procesů se snaží přehledně do diagramu zanést jednotlivé procesy, které bude uživatel s~danou aplikací nebo doménou provádět. V~práci byl zvolen UML diagram aktivit pro zachycení business procesů.
 \subsection{Vytváření šablon} \label{sec:vytvareni_sablon}
 \begin{figure}\centering
-	\includegraphics[width=0.8\textwidth]{images/bussiness_sablony}
+	\includegraphics[width=1\textwidth]{images/bussiness_sablony}
 	\caption[Business proces vytváření šablon]{Model bussines procesů vytváření šablon}\label{fig:bp_sablony}
 \end{figure}
 Diagram na obrázku \ref{fig:bp_sablony} popisuje základní proces práce se šablonami. Proces popisuje vytváření šablon a následné nahrání do mobilní aplikace. Šablony vytvoříme v~programu nebo případně importujeme z~XML souboru vytvořeném buď aplikací DeskChar nebo například aplikací MobChar. Samozřejmě import a vytváření nových šablon lze kombinovat. Při tomto procesu nevzniká pouze jedna šablona, ale celý soubor šablon, obvykle jednoho typu. Následně jsou provedeny veškeré potřebné úpravy a vytvořené překlady (pokud jsou nějaké zapotřebí). Daná šablona je následně exportována do strukturovaného souboru XML ve~formátu, který podporuje aplikace MobChar. Uživatel mobilní aplikace si vytvořený soubor nahraje do zařízení a následně provede import do aplikace. Nyní je již možné s~novou šablonou pracovat.
 
 \subsection{Vytváření dobrodružství}
 \begin{figure}\centering
-	\includegraphics[width=0.8\textwidth]{images/business_dobrodruzstvi}
+	\includegraphics[width=1\textwidth]{images/business_dobrodruzstvi}
 	\caption[Business proces vytváření dobrodružství]{Model bussines procesů vytváření dobrodružství}\label{fig:bp_dobrodruzsvi}
 \end{figure}
 Diagram na obrázku \ref{fig:bp_dobrodruzsvi} popisuje proces, při kterém vzniká nové dobrodružství. Objekt dobrodružství se také řadí mezi šablony, protože má velice podobnou funkcionalitu. Protože se jedná o~hlavní šablonu, která v~sobě obsahuje větší počet šablon různých druhů, je proces vytváření dobrodružství popsán více dopodrobna. Na začátku procesu se vytvoří nové dobrodružství nebo se importuje již existující a dále se bude upravovat již stávající hodnoty. V~bodě \texttt{Vytváření a editace objektů} se jedná o~bussines proces popsaný v~kapitole \ref{sec:vytvareni_sablon},ve kterém se vytvoří veškeré potřebné objekty, které budou součástí dobrodružství. Veškeré šablony se do dobrodružství přidají a rozřadí se podle potřeby pro větší přehlednost (podle částí dobrodružství, podle typu šablony atd.). Když jsou veškeré úpravy hotové, lze výsledné dobrodružství exportovat. Zde si lze vybrat, zda dobrodružství exportovat pro tisk do formátu HTML nebo pro mobilní aplikaci MobChar ve strukturovaném formátu XML.
@@ -261,7 +261,7 @@ Diagram na obrázku \ref{fig:bp_dobrodruzsvi} popisuje proces, při kterém vzni
 
 \subsection{Tvorba mapy}
 \begin{figure}\centering
-	\includegraphics[width=0.8\textwidth]{images/business_mapa}
+	\includegraphics[width=1\textwidth]{images/business_mapa}
 	\caption[Proces vytváření mapy]{Proces vytváření mapy}\label{fig:bp_mapa}
 \end{figure}	
 Diagram na obrázku \ref{fig:bp_mapa} popisuje proces vytváření mapy pro dobrodružství. Na začátku se vytvoří nová mapa a nastaví se její základní údaje, což je jméno a popis. V~další části se do mapy vloží podkladový obrázek, který bude sloužit jako základ mapy. Tento obrázek se dá kdykoliv změnit, čímž se původní obrázek smaže a nahradí novým. \par
@@ -280,7 +280,7 @@ Případy užití popisují jednotlivé způsoby využití aplikace, které uži
 
 \subsection{Práce se šablonami}
 	\begin{figure}\centering
-		\includegraphics[width=0.8\textwidth]{images/usecase-sablony.pdf}
+		\includegraphics[width=1\textwidth]{images/usecase-sablony.pdf}
 		\caption[Případy užití pro šablony]{Případy užití pro práci se šablonami}			\label{fig:uc_sablony}
 	\end{figure}
 
@@ -377,7 +377,7 @@ Celé dobrodružství je členěné do lokací, které se navíc mohou do sebe z
 
 	\section{Řešení architektury}
 \begin{figure}\centering
-	\includegraphics[width=0.8\textwidth]{images/architektura}
+	\includegraphics[width=1\textwidth]{images/architektura}
 	\caption[Model architektury]{Model architektury}\label{fig:architektura}
 \end{figure}
 Model architektury popisuje formální strukturu systému, případně jeho detailní plán na úrovni komponent vedoucí k~jeho implementaci. Hlavním účelem modelu architektury je popsání hlavních vrstev programu a popis způsobu komunikace mezi nimi.\par
@@ -435,7 +435,7 @@ Pro datovou vrstvu se používají takzvané \clqq data access objects\crqq  ~(D
 Před návrhem je důležité zvolit programovací jazyk, aby některé principy byly v~tomto jazyku možné a daly se snadno použít. Pro tuto práci byl zvolen programovací jazyk Python. Důvody a popis jazyku Python je popsán v~implementační části \ref{programovaci_jazyk}. 
 	\section{Model databáze}
 	\begin{figure}\centering
-	\includegraphics[width=0.8\textwidth]{images/basic_database}
+	\includegraphics[width=1\textwidth]{images/basic_database}
 	\caption[Základní model databáze]{Základní model databáze}\label{fig:db_basic}
 	\end{figure}
 	Pro realizaci aplikace DeskChar byla vybrána databáze \textit{SQLite}, která je jednoduchá a nepotřebuje žádný složitý externí software pro běh. Na druhou stranu zvládá veškeré potřebné operace, jako jsou cizí klíče a kaskádové mazání záznamů. Pro vytváření a práci se stromovou strukturou je kaskádové mazání nedocenitelný pomocník. \par
