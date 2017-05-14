@@ -100,3 +100,6 @@ class AbilityContext(Object):
             if self.value == other.value and self.valueType is other.valueType and self.targetAttribute is other.targetAttribute:
                 return True
         return False
+
+    def __hash__(self):
+        return hash((self.object_type, self.id))

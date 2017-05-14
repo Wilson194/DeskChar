@@ -72,3 +72,6 @@ class Money(Item):
     @property
     def type(self):
         return self.__type
+
+    def __hash__(self):
+        return hash((self.object_type, self.id))

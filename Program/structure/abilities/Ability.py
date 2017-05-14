@@ -130,3 +130,8 @@ class Ability(Object):
         print('{} Contexts:'.format('  ' * depth))
         for context in self.contexts:
             context.printer(depth + 2)
+
+
+
+    def __hash__(self):
+        return hash((self.object_type, self.id))

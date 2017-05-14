@@ -120,3 +120,6 @@ class PartyCharacter(Object):
             self.character.printer(depth, full)
         else:
             print('{}      None'.format(depth * '  '))
+
+    def __hash__(self):
+        return hash((self.object_type, self.id))

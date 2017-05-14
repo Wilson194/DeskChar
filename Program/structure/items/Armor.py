@@ -108,3 +108,6 @@ class Armor(Item):
                     and self.weightB == other.weightB and self.weightC == other.weightC and self.size == other.size:
                 return True
         return False
+
+    def __hash__(self):
+        return hash((self.object_type, self.id))

@@ -176,3 +176,6 @@ class Container(Item):
                 return True
 
         return False
+
+    def __hash__(self):
+        return hash((self.object_type, self.id))

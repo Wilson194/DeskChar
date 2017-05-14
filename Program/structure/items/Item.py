@@ -137,3 +137,6 @@ class Item(Object):
             print('{}   Items:'.format('  ' * depth))
             for item in self.items + self.containers + self.armors + self.meleeWeapons + self.rangedWeapons + self.moneyList + self.throwableWeapons:
                 item.printer(depth + 2)
+
+    def __hash__(self):
+        return hash((self.object_type, self.id))

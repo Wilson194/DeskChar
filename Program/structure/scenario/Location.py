@@ -235,3 +235,6 @@ class Location(Object):
     def __eq__(self, other):
         if isinstance(other, Location):
             return super().__eq__(other)
+
+    def __hash__(self):
+        return hash((self.object_type, self.id))

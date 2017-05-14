@@ -69,3 +69,6 @@ class Object(ABC):
     @abstractmethod
     def __name__(self):
         return ['Object']
+
+    def __hash__(self):
+        return hash((self.object_type, self.id))

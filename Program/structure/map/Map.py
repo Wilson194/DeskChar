@@ -131,3 +131,6 @@ class Map(Object):
     @finalMapPath.setter
     def finalMapPath(self, value):
         self.__finalMapPath = value
+
+    def __hash__(self):
+        return hash((self.object_type, self.id))

@@ -156,3 +156,6 @@ class Spell(Object):
 
     def printer(self, depth):
         print('{}Spell - {}'.format("  " * depth, self.name))
+
+    def __hash__(self):
+        return hash((self.object_type, self.id))

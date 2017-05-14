@@ -120,3 +120,6 @@ class Effect(Object):
         print('{} Modificators: '.format('  ' * depth))
         for modifier in self.modifiers:
             modifier.printer(depth + 2)
+
+    def __hash__(self):
+        return hash((self.object_type, self.id))

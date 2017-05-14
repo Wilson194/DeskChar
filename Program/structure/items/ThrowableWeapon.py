@@ -167,3 +167,6 @@ class ThrowableWeapon(Item):
     @racial.setter
     def racial(self, value):
         self.__racial = value
+
+    def __hash__(self):
+        return hash((self.object_type, self.id))

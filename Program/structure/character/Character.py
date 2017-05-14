@@ -367,3 +367,6 @@ class Character(Object):
             print('{}   drdClass: {}'.format("  " * depth, self.drdClass))
             print('{}   drdRace: {}'.format("  " * depth, self.drdRace))
             print('{}   alignment: {}'.format("  " * depth, self.alignment))
+
+    def __hash__(self):
+        return hash((self.object_type, self.id))

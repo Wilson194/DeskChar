@@ -130,3 +130,6 @@ class MeleeWeapon(Item):
     @initiative.setter
     def initiative(self, value):
         self.__initiative = value
+
+    def __hash__(self):
+        return hash((self.object_type, self.id))
