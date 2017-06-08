@@ -48,7 +48,7 @@ class ArmorLayout(Layout):
         self.weightA_input = self.spin_box(self.input_grid, 'WeightA', 0, 4, True)
         self.weightB_input = self.spin_box(self.input_grid, 'WeightB', 0, 5, True)
         self.weightC_input = self.spin_box(self.input_grid, 'WeightC', 0, 6, True)
-        self.size_input = self.combo_box(self.input_grid, 'Size', ArmorSize, 0, 7, True)
+        self.size_input = self.combo_box(self.input_grid, 'Size', ArmorSize, 0, 7, True, haveNone=False)
         self.amount_input = self.spin_box(self.input_grid, 'Amount', 0, 8, True)
 
         self.addLayout(self.input_grid)
@@ -62,7 +62,7 @@ class ArmorLayout(Layout):
         """
         self.object = item
 
-        size = item.size.value if item.size else 0
+        size = item.size.value if item.size else 1
 
         self.header.setText(item.name)
         self.name_input.setPlainText(item.name)
@@ -72,7 +72,7 @@ class ArmorLayout(Layout):
         self.weightA_input.setValue(item.weightA if item.weightA else 0)
         self.weightB_input.setValue(item.weightB if item.weightB else 0)
         self.weightC_input.setValue(item.weightC if item.weightC else 0)
-        self.size_input.setCurrentIndex(size)
+        self.size_input.setCurrentIndex(size-1)
         self.amount_input.setValue(item.amount if item.amount else 1)
 
 
@@ -80,7 +80,7 @@ class ArmorLayout(Layout):
         """
         Update data in object from inputs and update in manager
         """
-        size = ArmorSize(self.size_input.currentIndex()) if self.size_input.currentIndex() > 0 else None
+        size = ArmorSize(self.size_input.currentIndex()+1)
 
         self.object.name = self.name_input.toPlainText()
         self.object.description = self.description_input.toPlainText()

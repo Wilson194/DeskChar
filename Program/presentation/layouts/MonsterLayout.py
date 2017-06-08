@@ -60,12 +60,12 @@ class MonsterLayout(Layout):
         self.perseveranceInput = self.spin_box(self.input_grid, 'Perseverance', 0, 8, True)
         self.intelligenceInput = self.spin_box(self.input_grid, 'Intelligence', 0, 9, True)
         self.charismaInput = self.spin_box(self.input_grid, 'Charisma', 0, 10, True)
-        self.alignmentInput = self.combo_box(self.input_grid, 'Alignment', Alignment, 0, 11, True)
+        self.alignmentInput = self.combo_box(self.input_grid, 'Alignment', Alignment, 0, 11, True, haveNone=False)
         self.experienceInput = self.spin_box(self.input_grid, 'Experience', 0, 12, True)
         self.hpInput = self.spin_box(self.input_grid, 'Hp', 0, 13, True)
 
-        self.raceInput = self.combo_box(self.input_grid, 'Monster_race', MonsterRace, 0, 14, True)
-        self.sizeInput = self.combo_box(self.input_grid, 'Monster_size', MonsterSize, 0, 15, True)
+        self.raceInput = self.combo_box(self.input_grid, 'Monster_race', MonsterRace, 0, 14, True, haveNone=False)
+        self.sizeInput = self.combo_box(self.input_grid, 'Monster_size', MonsterSize, 0, 15, True, haveNone=False)
 
         self.addLayout(self.input_grid)
 
@@ -93,13 +93,13 @@ class MonsterLayout(Layout):
         self.experienceInput.setValue(self.object.experience if self.object.experience else 0)
         self.hpInput.setValue(self.object.hp if self.object.hp else 0)
 
-        raceIndex = self.object.monsterRace.value if self.object.monsterRace else 0
-        sizeIndex = self.object.size.value if self.object.size else 0
-        alignmentIndex = self.object.alignment.value if self.object.alignment else 0
+        raceIndex = self.object.monsterRace.value if self.object.monsterRace else 1
+        sizeIndex = self.object.size.value if self.object.size else 1
+        alignmentIndex = self.object.alignment.value if self.object.alignment else 1
 
-        self.alignmentInput.setCurrentIndex(alignmentIndex)
-        self.raceInput.setCurrentIndex(raceIndex)
-        self.sizeInput.setCurrentIndex(sizeIndex)
+        self.alignmentInput.setCurrentIndex(alignmentIndex-1)
+        self.raceInput.setCurrentIndex(raceIndex-1)
+        self.sizeInput.setCurrentIndex(sizeIndex-1)
 
 
     def save_data(self) -> None:
@@ -125,8 +125,8 @@ class MonsterLayout(Layout):
         alignmentIndex = self.alignmentInput.currentIndex()
         raceIndex = self.raceInput.currentIndex()
         sizeIndex = self.sizeInput.currentIndex()
-        self.object.monsterRace = MonsterRace(raceIndex) if raceIndex != 0 else None
-        self.object.size = MonsterSize(sizeIndex) if sizeIndex != 0 else None
-        self.object.alignment = Alignment(alignmentIndex) if alignmentIndex != 0 else None
+        self.object.monsterRace = MonsterRace(raceIndex+1)
+        self.object.size = MonsterSize(sizeIndex+1)
+        self.object.alignment = Alignment(alignmentIndex+1)
 
         self.manager.update_monster(self.object)

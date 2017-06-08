@@ -1,6 +1,7 @@
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QMainWindow, QWidget, QGridLayout
 
+from data.DAO.SettingsDAO import SettingsDAO
 from presentation.MainMenu import MainMenu
 from presentation.StatusBar import StatusBar
 from presentation.widgets.MapWidget import MapWidget
@@ -9,6 +10,7 @@ from presentation.widgets.TreeWidget import TreeWidget
 from presentation.widgets.TabWidget import TabWidget
 from presentation.Toolbar import ToolBar
 from presentation.Translate import Translate as TR
+import os
 
 
 class MainWindow(QMainWindow):
@@ -72,6 +74,24 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.centralWidget)
         self.setGeometry(200, 50, 800, 800)
+
+        self.grview = QtWidgets.QGraphicsView()
+        self.grview.setRenderHints(self.grview.renderHints() | QtGui.QPainter.Antialiasing | QtGui.QPainter.SmoothPixmapTransform)
+        self.scene = QtWidgets.QGraphicsScene()
+
+        self.grview.setScene(self.scene)
+
+        img = 'resources/icons/goblin-{}.png'.format(SettingsDAO().get_value('language'))
+
+        if not os.path.isfile(img):
+            img = 'resources/icons/goblin-en.png'
+
+        noMap = QtGui.QPixmap(img)
+        self.scene.addPixmap(noMap)
+        self.grview.fitInView(self.scene.sceneRect(), QtCore.Qt.KeepAspectRatio)
+
+        self.grid_layout.addWidget(self.grview)
+
         # self.showMaximized()
         self.show()
 

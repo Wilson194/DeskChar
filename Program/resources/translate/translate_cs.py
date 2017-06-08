@@ -10,8 +10,8 @@ translate = {
     'Menu_save'                 : 'Uložit',
     'Menu_settings'             : 'Nastavení',
 
-    'Menu.spell'                : 'Šablony kouzel',
-    'Menu.ability'              : 'Šablony schopností',
+    'Menu.spell'                : 'Kouzla',
+    'Menu.ability'              : 'Schopnosti',
     'Menu.item'                 : 'Předměty',
     'Menu.templates'            : 'Šablony',
     'Menu.effect'               : 'Efekty',

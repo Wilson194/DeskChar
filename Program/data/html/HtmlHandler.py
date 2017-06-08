@@ -12,8 +12,7 @@ from structure.items import Container
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
-env = Environment(autoescape=True, loader=FileSystemLoader(os.path.join(os.path.dirname(__file__),
-                                                                        'templates')))
+env = Environment(autoescape=True, loader=FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates')))
 ICONS = ['ability.png', 'armor.png', 'axe.png', 'bag.png', 'book.png', 'bow.png', 'coin.png', 'crate.png', 'dagger.png',
          'drd.png', 'helmet.png', 'imp.png', 'location.png', 'map.png', 'skull.png', 'sword.png', 'tools.png', 'treasure.png',
          'gemRed.png', 'gemGreen.png', 'effect.png', 'gold.png', 'silver.png', 'copper.png'
@@ -26,7 +25,17 @@ def render_template(template_file, **kwargs):
 
 
 class HtmlHandler:
-    def create_html(self, objects, destination):
+    """
+    Class for creating HTML files
+    """
+
+
+    def create_html(self, objects: list, destination: str):
+        """
+        Create htmml file with all extended html
+        :param objects: list of object
+        :param destination: Target main file        
+        """
         # self.to_unicode(objects)
 
         resourcesFolder = os.path.join(os.path.dirname(destination), 'resources')
@@ -66,7 +75,14 @@ class HtmlHandler:
             base=True
         )
 
-        with open(destination, 'w', encoding='utf8') as file:
+        fileName = os.path.basename(destination)
+
+        if fileName.split('.')[-1] == '.html':
+            targetFile = destination
+        else:
+            targetFile = os.path.join(os.path.dirname(destination), os.path.basename(destination) + '.html')
+
+        with open(targetFile, 'w', encoding='utf8') as file:
             file.write(html)
 
         # ------------- Add other files -----------------------
@@ -123,12 +139,21 @@ class HtmlHandler:
 
 
     def to_unicode(self, objects):
+        """
+        Convert object text to unicode
+        :param objects: list of objects        
+        """
         for obj in objects:
             obj.name = obj.name.encode('utf8')
             obj.description = obj.description.encode('utf8')
 
 
-    def get_all_items(self, root: Object):
+    def get_all_items(self, root: Object) -> list:
+        """
+        Get all items from object, recursively
+        :param root: root objec
+        :return: list of items
+        """
         items = []
 
         # ------------------ Character -------------------------
@@ -188,7 +213,12 @@ class HtmlHandler:
         return items
 
 
-    def get_all_spells(self, root: Object):
+    def get_all_spells(self, root: Object) -> list:
+        """
+        Get all spells from object, recursively
+        :param root: root object
+        :return: list of spells
+        """
         spells = []
         if root.object_type is ObjectType.SCENARIO:
             spells += root.spells
@@ -222,7 +252,12 @@ class HtmlHandler:
         return spells
 
 
-    def get_all_effects(self, root: Object):
+    def get_all_effects(self, root: Object) -> list:
+        """
+        Get all effects from object, recursively
+        :param root: root object
+        :return: list of effects
+        """
         effects = []
         if root.object_type is ObjectType.SCENARIO:
             effects += root.effects
@@ -250,7 +285,12 @@ class HtmlHandler:
         return effects
 
 
-    def get_all_abilities(self, root: Object):
+    def get_all_abilities(self, root: Object) -> list:
+        """
+        Get all abilities from object, recursively
+        :param root: root object
+        :return: list of abilities
+        """
         abilities = []
         if root.object_type is ObjectType.SCENARIO:
             abilities += root.abilities
@@ -284,7 +324,12 @@ class HtmlHandler:
         return abilities
 
 
-    def get_all_monsters(self, root: Object):
+    def get_all_monsters(self, root: Object) -> list:
+        """
+        Get all monsters from object, recursively
+        :param root: root object
+        :return: list of monsters
+        """
         monsters = []
 
         if root.object_type is ObjectType.SCENARIO:
@@ -304,7 +349,12 @@ class HtmlHandler:
         return monsters
 
 
-    def get_all_locations(self, root: Object):
+    def get_all_locations(self, root: Object) -> list:
+        """
+        Get all locations from object, recursively
+        :param root: root object
+        :return: list of locations
+        """
         locations = []
 
         if root.object_type == ObjectType.SCENARIO:
@@ -322,7 +372,12 @@ class HtmlHandler:
         return locations
 
 
-    def get_all_maps(self, root: Object):
+    def get_all_maps(self, root: Object) -> list:
+        """
+        Get all maps from object, recursively
+        :param root: root object
+        :return: list of maps
+        """
         maps = []
 
         if root.object_type is ObjectType.SCENARIO:
@@ -341,7 +396,12 @@ class HtmlHandler:
         return maps
 
 
-    def get_all_characters(self, root: Object):
+    def get_all_characters(self, root: Object) -> list:
+        """
+        Get all characters from object, recursively
+        :param root: root object
+        :return: list of characters
+        """
         characters = []
 
         if root.object_type is ObjectType.SCENARIO:
@@ -364,8 +424,14 @@ class HtmlHandler:
         return characters
 
 
-    def create_external_html(self, items, objectType, destination, filename):
-
+    def create_external_html(self, items: list, objectType: ObjectType, destination: str, filename: str):
+        """
+        Create external html files for links
+        :param items: list of all items
+        :param objectType: Object type enum
+        :param destination: destination of main file
+        :param filename: name of new file        
+        """
         items = list(set(items))
         items.sort(key=lambda x: x.id)
         if len(items) > 0:
